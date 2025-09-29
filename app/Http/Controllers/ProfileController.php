@@ -1,16 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\County;
-use Illuminate\Http\Request;
 
-class CountyController extends Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\User;
+
+class ProfileController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $counties = County::orderBy('name')->get();
-
-        return view('counties.index', compact('counties'));
+        $profile = User::all();
+        return view('profile.index', compact('profile'));
     }
 
     /**
@@ -18,7 +22,7 @@ class CountyController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

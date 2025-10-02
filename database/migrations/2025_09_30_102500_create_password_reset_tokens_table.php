@@ -8,8 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->index();
+        Schema::create('password_reset_tokens', function (Blueprint $table)
+         {
+            $table->id();
+            $table->string('email', 150)->unique();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
@@ -20,3 +22,4 @@ return new class extends Migration
         Schema::dropIfExists('password_reset_tokens');
     }
 };
+    

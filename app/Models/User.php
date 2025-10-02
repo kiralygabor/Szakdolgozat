@@ -51,9 +51,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+     public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 
+    public function subscription()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
      public function verifyUser()
     {
         return $this->hasOne(VerifyUser::class);
+    }
+    public function category() {
+        return $this->hasOne(Category::class);
+    }
+        public function advertisments()
+    {
+        return $this->hasMany(Advertisment::class, 'employer', 'id');
     }
 }

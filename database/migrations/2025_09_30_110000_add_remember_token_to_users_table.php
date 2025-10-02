@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->rememberToken(); // adds nullable string(100) 'remember_token'
+            $table->rememberToken(); 
         });
     }
 

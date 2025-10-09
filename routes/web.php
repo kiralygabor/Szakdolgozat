@@ -13,8 +13,9 @@ Route::get('/', function () {
 Route::get('mainpage', [PagesController::class, 'mainpage'])->name('manpage');
 Route::get('index', [PagesController::class, 'index'])->name('index');
 Route::get('profile', [PagesController::class, 'profile'])->name('profile');
-
-
+Route::get('category', [PagesController::class, 'category'])->name('category');
+Route::get('howitworks', [PagesController::class, 'howitworks'])->name('howitworks');
+Route::get('tasks', [PagesController::class, 'tasks'])->name('tasks');
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post'); 

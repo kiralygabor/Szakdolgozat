@@ -20,4 +20,18 @@ class PagesController extends Controller
     {
         return view('pages.profile');
     }
+
+    public function category(): View 
+    {
+        return view('pages.category');
+    }
+     public function tasks(): View
+    {
+        return view('pages.tasks');
+    }
+    public function howitworks(): View
+    {
+        return view('pages.howitworks');
+    }
+ 
 }

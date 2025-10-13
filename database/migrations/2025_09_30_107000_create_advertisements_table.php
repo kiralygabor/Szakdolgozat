@@ -21,6 +21,7 @@ return new class extends Migration
             $table->char('title', 150);
             $table->text('description');
             $table->integer('price');
+            $table->char('location', 150);
             $table->dateTime('created_at');
             $table->dateTime('expiration_date');
             $table->enum('status', ['open', 'matched', 'closed'])->default('open');

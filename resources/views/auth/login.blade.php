@@ -104,7 +104,7 @@
       </div>
 
       <!-- Remember Me + Forgot Password -->
-      <div class="remember-forgot">a
+      <div class="remember-forgot">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe">
           <label class="form-check-label text-secondary" for="rememberMe">Remember me</label>

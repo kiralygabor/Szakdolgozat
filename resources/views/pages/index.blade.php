@@ -1,32 +1,7 @@
     @extends('layout')
 
        @section('content')
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minijobz - Get Things Done</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            500: '#6366f1',
-                        },
-                        secondary: {
-                            500: '#6366f1',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
+<style>
 
   @keyframes scrollUp {
     0% { transform: translateY(0); }
@@ -67,10 +42,6 @@
 }
 
 </style>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-</head>
-<body class="bg-gray-50 text-gray-800 min-h-screen">
     
  
  
@@ -215,93 +186,61 @@
   </div>
 </section>
  
-<!-- Why Choose Minijobz? - Modern/Dynamic -->
-<section class="relative py-24 px-6">
-  <!-- Decorative gradients -->
-  <div class="pointer-events-none absolute inset-0">
-    <div class="absolute -top-12 -left-12 w-72 h-72 bg-gradient-to-br from-indigo-400/30 to-cyan-400/30 rounded-full blur-3xl"></div>
-    <div class="absolute -bottom-16 -right-16 w-80 h-80 bg-gradient-to-tr from-pink-400/20 to-violet-400/20 rounded-full blur-3xl"></div>
+<!-- Why Choose Minijobz? - Clean, Icon Left -->
+<section class="relative py-56 px-6 md:px-12 bg-gradient-to-r from-blue-50 to-white">
+  <!-- Background image with subtle overlay -->
+  <div class="absolute inset-0">
+    <img src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?auto=format&fit=crop&w=2000&am… alt="Teamwork Background" class="w-full h-full object-cover opacity-20">
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-100/70 to-white/80"></div>
   </div>
- 
   <div class="relative max-w-7xl mx-auto">
     <div class="text-center">
-      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-600 border border-indigo-100">
-        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
-        Why Minijobz
-      </span>
-      <h2 class="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
-        <span class="bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent">Reasons you'll love using Minijobz</span>
+      <h2 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">
+        Reasons you'll love using Minijobz
       </h2>
-      <p class="text-gray-600 text-lg mt-4 max-w-2xl mx-auto">
+      <p class="text-gray-700 text-lg mt-4 max-w-2xl mx-auto">
         Fast matches, verified people, and pricing you control — all in one place.
       </p>
     </div>
  
-    <!-- Cards -->
-    <div class="mt-14 grid md:grid-cols-3 gap-6 md:gap-8">
+    <!-- Cards - smaller but balanced -->
+    <div class="mt-16 grid md:grid-cols-3 gap-6 md:gap-8">
       <!-- Card 1 -->
-      <div class="group relative rounded-2xl">
-        <div class="absolute -inset-px rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 opacity-30 blur transition-opacity duration-300 group-hover:opacity-60"></div>
-        <div class="relative h-full rounded-2xl bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl overflow-hidden">
-          <div class="h-36 w-full overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1598970434795-0c54fe7c0642?auto=format&fit=crop&w=1200&am… alt="Local & Fast" class="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-500">
-          </div>
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-              <div class="inline-flex items-center gap-2">
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600">
-                  <i data-feather="map-pin" class="w-5 h-5"></i>
-                </span>
-                <h3 class="text-xl font-bold">Local & Fast</h3>
-              </div>
-              <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">Under 24h</span>
-            </div>
-            <p class="text-gray-600">Find trusted people nearby and get help within hours. No waiting, no hassle.</p>
-          </div>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition p-6 flex items-center gap-6">
+        <span class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex-shrink-0">
+          <i data-feather="map-pin" class="w-9 h-9"></i>
+        </span>
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-1">Local & Fast</h3>
+          <p class="text-gray-600 text-base leading-relaxed">
+            Find trusted people nearby and get help within hours — no waiting, no hassle.
+          </p>
         </div>
       </div>
  
       <!-- Card 2 -->
-      <div class="group relative rounded-2xl">
-        <div class="absolute -inset-px rounded-2xl bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 opacity-30 blur transition-opacity duration-300 group-hover:opacity-60"></div>
-        <div class="relative h-full rounded-2xl bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl overflow-hidden">
-          <div class="h-36 w-full overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1556740720-4b2b47e6e5e3?auto=format&fit=crop&w=1200&q… alt="Safe & Secure" class="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-500">
-          </div>
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-              <div class="inline-flex items-center gap-2">
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600">
-                  <i data-feather="shield" class="w-5 h-5"></i>
-                </span>
-                <h3 class="text-xl font-bold">Safe & Secure</h3>
-              </div>
-              <span class="text-xs px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100">Verified</span>
-            </div>
-            <p class="text-gray-600">Built-in reviews, ratings, and verified profiles ensure trustworthy help every time.</p>
-          </div>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition p-6 flex items-center gap-6">
+        <span class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex-shrink-0">
+          <i data-feather="shield" class="w-9 h-9"></i>
+        </span>
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-1">Safe & Secure</h3>
+          <p class="text-gray-600 text-base leading-relaxed">
+            Verified profiles, reviews, and ratings make every job safe and transparent.
+          </p>
         </div>
       </div>
  
       <!-- Card 3 -->
-      <div class="group relative rounded-2xl">
-        <div class="absolute -inset-px rounded-2xl bg-gradient-to-br from-amber-500 via-pink-500 to-violet-500 opacity-30 blur transition-opacity duration-300 group-hover:opacity-60"></div>
-        <div class="relative h-full rounded-2xl bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl overflow-hidden">
-          <div class="h-36 w-full overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1581090700227-2db269f9b0e0?auto=format&fit=crop&w=1200&am… alt="Fair Pricing" class="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-500">
-          </div>
-          <div class="p-6">
-            <div class="flex items-center justify-between mb-4">
-              <div class="inline-flex items-center gap-2">
-                <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-pink-100 text-pink-600">
-                  <i data-feather="dollar-sign" class="w-5 h-5"></i>
-                </span>
-                <h3 class="text-xl font-bold">Fair Pricing</h3>
-              </div>
-              <span class="text-xs px-2.5 py-1 rounded-full bg-amber-50 text-amber-600 border border-amber-100">You decide</span>
-            </div>
-            <p class="text-gray-600">Set your budget and choose the best offer for your needs. Transparent and fair for everyone.</p>
-          </div>
+      <div class="rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition p-6 flex items-center gap-6">
+        <span class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex-shrink-0">
+          <i data-feather="dollar-sign" class="w-9 h-9"></i>
+        </span>
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-1">Fair Pricing</h3>
+          <p class="text-gray-600 text-base leading-relaxed">
+            Set your budget and choose the best offer for your needs — transparent and fair.
+          </p>
         </div>
       </div>
     </div>
@@ -382,9 +321,9 @@
 
  
    <!-- Popular Tasks -->
-<section class="py-16 px-4 overflow-hidden">
+<section class="py-20 px-4 overflow-hidden">
   <div class="max-w-7xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-12">Popular Tasks</h2>
+    <h2 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-20">See what others are getting done</h2>
  
     <!-- Scrolling container -->
     <div class="space-y-10">
@@ -392,184 +331,216 @@
       <div class="flex space-x-6 animate-scroll-right">
         <!-- Duplicate cards twice for smooth loop -->
         <div class="flex space-x-6">
-          <!-- Task Cards 1–3 -->
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Moving Help</span>
-              <span class="font-bold">$120</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Help moving furniture</h3>
-            <p class="text-gray-600 mb-4">Need help moving a couch and dining table to a new apartment 2 blocks away.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>East Village (0.5mi)</span>
-            </div>
-          </div>
+           <!-- Card 1 -->
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Delivery</span>
+                   <h3 class="text-xl font-bold text-gray-900">King mattress pick and delivery</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$85</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Cleaning</span>
-              <span class="font-bold">$75</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Apartment deep cleaning</h3>
-            <p class="text-gray-600 mb-4">1 bedroom apartment needs deep cleaning before move-in.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Midtown (1.7mi)</span>
-            </div>
-          </div>
+           <!-- Card 2 -->
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Delivery</span>
+                   <h3 class="text-xl font-bold text-gray-900">Sofa delivery</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$95</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Delivery</span>
-              <span class="font-bold">$35</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Pick up groceries</h3>
-            <p class="text-gray-600 mb-4">Need someone to pick up my grocery order from Whole Foods.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Uptown (3.2mi)</span>
-            </div>
-          </div>
+           <!-- Card 3 -->
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Cleaning</span>
+                   <h3 class="text-xl font-bold text-gray-900">End of lease clean</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$450</span>
+             </div>
+           </div>
         </div>
  
         <!-- Duplicate for continuous loop -->
         <div class="flex space-x-6">
-          <!-- (same 3 cards repeated) -->
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Moving Help</span>
-              <span class="font-bold">$120</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Help moving furniture</h3>
-            <p class="text-gray-600 mb-4">Need help moving a couch and dining table to a new apartment 2 blocks away.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>East Village (0.5mi)</span>
-            </div>
-          </div>
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Delivery</span>
+                   <h3 class="text-xl font-bold text-gray-900">King mattress pick and delivery</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$85</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Cleaning</span>
-              <span class="font-bold">$75</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Apartment deep cleaning</h3>
-            <p class="text-gray-600 mb-4">1 bedroom apartment needs deep cleaning before move-in.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Midtown (1.7mi)</span>
-            </div>
-          </div>
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Delivery</span>
+                   <h3 class="text-xl font-bold text-gray-900">Sofa delivery</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$95</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Delivery</span>
-              <span class="font-bold">$35</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Pick up groceries</h3>
-            <p class="text-gray-600 mb-4">Need someone to pick up my grocery order from Whole Foods.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Uptown (3.2mi)</span>
-            </div>
-          </div>
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Cleaning</span>
+                   <h3 class="text-xl font-bold text-gray-900">End of lease clean</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$450</span>
+             </div>
+           </div>
         </div>
       </div>
  
       <!-- Bottom row (scrolls left) -->
       <div class="flex space-x-6 animate-scroll-left">
         <div class="flex space-x-6">
-          <!-- Task Cards 4–6 -->
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Tech Help</span>
-              <span class="font-bold">$50</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Set up home network</h3>
-            <p class="text-gray-600 mb-4">Need help setting up a mesh WiFi system in my house.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Riverside (2.1mi)</span>
-            </div>
-          </div>
+           <!-- Card 4 -->
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Removals</span>
+                   <h3 class="text-xl font-bold text-gray-900">Couch moved 1km down the road</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$60</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Handyman</span>
-              <span class="font-bold">$90</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Fix leaky faucet</h3>
-            <p class="text-gray-600 mb-4">Kitchen faucet is leaking, needs repair or replacement.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Downtown (0.8mi)</span>
-            </div>
-          </div>
+           <!-- Card 5 -->
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Removals</span>
+                   <h3 class="text-xl font-bold text-gray-900">Removalist TODAY</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$506</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Tutoring</span>
-              <span class="font-bold">$40/hr</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Math tutor for 8th grader</h3>
-            <p class="text-gray-600 mb-4">Need help with algebra twice a week after school.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Southside (4.3mi)</span>
-            </div>
-          </div>
+           <!-- Card 6 -->
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Removals</span>
+                   <h3 class="text-xl font-bold text-gray-900">Urgent removalist</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$450</span>
+             </div>
+           </div>
         </div>
  
         <!-- Duplicate for seamless loop -->
         <div class="flex space-x-6">
-          <!-- same 4–6 cards repeated -->
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Tech Help</span>
-              <span class="font-bold">$50</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Set up home network</h3>
-            <p class="text-gray-600 mb-4">Need help setting up a mesh WiFi system in my house.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Riverside (2.1mi)</span>
-            </div>
-          </div>
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Removals</span>
+                   <h3 class="text-xl font-bold text-gray-900">Couch moved 1km down the road</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$60</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Handyman</span>
-              <span class="font-bold">$90</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Fix leaky faucet</h3>
-            <p class="text-gray-600 mb-4">Kitchen faucet is leaking, needs repair or replacement.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Downtown (0.8mi)</span>
-            </div>
-          </div>
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Removals</span>
+                   <h3 class="text-xl font-bold text-gray-900">Removalist TODAY</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$506</span>
+             </div>
+           </div>
  
-          <div class="bg-white rounded-xl p-6 border border-gray-200 hover:border-secondary-500 transition shadow-sm min-w-[300px]">
-            <div class="flex justify-between items-start mb-4">
-              <span class="px-3 py-1 bg-gray-100 rounded-full text-sm">Tutoring</span>
-              <span class="font-bold">$40/hr</span>
-            </div>
-            <h3 class="font-bold text-xl mb-2">Math tutor for 8th grader</h3>
-            <p class="text-gray-600 mb-4">Need help with algebra twice a week after school.</p>
-            <div class="flex items-center space-x-2 text-sm text-gray-400">
-              <i data-feather="map-pin" class="w-4"></i>
-              <span>Southside (4.3mi)</span>
-            </div>
-          </div>
+           <div class="min-w-[360px] bg-blue-50 border border-blue-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+             <div class="flex items-start mb-4">
+               <div class="flex items-center gap-3">
+                 <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="avatar">
+                 <div>
+                   <span class="block text-xs font-semibold uppercase tracking-wide text-blue-700">Removals</span>
+                   <h3 class="text-xl font-bold text-gray-900">Urgent removalist</h3>
+                 </div>
+               </div>
+             </div>
+             <div class="flex items-center justify-between text-sm">
+               <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white text-blue-700 border border-blue-100"><i data-feather="star" class="w-4 h-4 text-amber-400"></i> 5 Stars</span>
+               <span class="text-lg font-bold text-gray-900">$450</span>
+             </div>
+           </div>
         </div>
       </div>
-    </div>
- 
-    <div class="text-center mt-10">
-      <button class="px-6 py-3 rounded-lg border border-primary-500 text-primary-500 hover:bg-primary-500/10 font-medium">
-        View All Tasks
-      </button>
     </div>
   </div>
 </section>
@@ -659,28 +630,7 @@
     </footer>
  
 <script>
-  const settingsButton = document.getElementById('settings-button');
-  const settingsMenu = document.getElementById('settings-menu');
- 
-  settingsButton.addEventListener('click', () => {
-    const isHidden = settingsMenu.classList.contains('hidden');
-    if (isHidden) {
-      settingsMenu.classList.remove('hidden');
-      setTimeout(() => settingsMenu.classList.add('show'), 10); // animate in
-    } else {
-      settingsMenu.classList.remove('show');
-      setTimeout(() => settingsMenu.classList.add('hidden'), 200); // delay hide for smooth close
-    }
-  });
- 
-  // Close dropdown when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!settingsButton.contains(e.target) && !settingsMenu.contains(e.target)) {
-      settingsMenu.classList.remove('show');
-      setTimeout(() => settingsMenu.classList.add('hidden'), 200);
-    }
-  });
-    function duplicateCards(templateId, containerId) {
+  function duplicateCards(templateId, containerId) {
     const template = document.getElementById(templateId);
     const container = document.getElementById(containerId);
     for (let i = 0; i < 3; i++) {
@@ -735,7 +685,5 @@ const testimonials = document.querySelectorAll('.testimonial');
 
   feather.replace();
 </script>
-</body>
-</html>
 
 @endsection

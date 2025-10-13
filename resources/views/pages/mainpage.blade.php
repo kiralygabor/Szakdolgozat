@@ -107,27 +107,46 @@
   </style>
 </head>
 <body>
-  <nav class="profile-navbar">
-    <img src="img/user.png" class="user-pic" onclick="toggleMenu()">
-
-    <div class="sub-menu-wrap" id="subMenu">
-      <div class="sub-menu">
-        <div class="user-info">
-         <h3><a href="{{ route('profile') }}">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</a></h3>
-          <p>Public Profile</p>
+  <!-- Custom Navbar for Main Page -->
+<nav class="bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-6xl mx-auto flex justify-between items-center px-6 py-3">
+        <!-- Left side -->
+        <div class="flex items-center space-x-5">
+            <div class="flex items-center space-x-2">
+                <i data-feather="zap" class="text-secondary-500"></i>
+                <span class="text-xl font-bold text-gray-900">Minijobz</span>
+            </div>
+            <a href="#" class="px-4 py-2 rounded-lg bg-secondary-500 text-white hover:bg-secondary-600 font-semibold">Post a Task</a>
+            <a href="{{ route('tasks') }}" class="text-gray-600 hover:text-secondary-500">Browse Tasks</a>
+            <a href="#" class="text-gray-600 hover:text-secondary-500">My Tasks</a>
+            <a href="#" class="text-gray-600 hover:text-secondary-500">Notifications</a>
+            <a href="#" class="text-gray-600 hover:text-secondary-500">Messages</a>
         </div>
-        <hr>
-        <a href="#" class="sub-menu-link">My Tasker Dashboard</a>
-        <a href="#" class="sub-menu-link">Payment history</a>
-        <a href="#" class="sub-menu-link">Payment methods</a>
-        <a href="#" class="sub-menu-link">Settings</a>
-        <a href="#" class="sub-menu-link">Discover</a>
-        <a href="#" class="sub-menu-link">Help topics</a>
-        <hr>
-        <a href="{{ route('logout') }}" class="sub-menu-link">Logout</a>
-      </div>
+ 
+        <!-- Right side: profile dropdown -->
+        <div class="relative">
+            <img src="img/user.png" class="user-pic" onclick="toggleMenu()">
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        <h3><a href="{{ route('profile') }}">John Doe</a></h3>
+                        <p>Public Profile</p>
+                    </div>
+                    <hr>
+                    <a href="#" class="sub-menu-link">My Tasker Dashboard</a>
+                    <a href="#" class="sub-menu-link">Payment history</a>
+                    <a href="#" class="sub-menu-link">Payment methods</a>
+                    <a href="#" class="sub-menu-link">Settings</a>
+                    <a href="#" class="sub-menu-link">Discover</a>
+                    <a href="#" class="sub-menu-link">Help topics</a>
+                    <hr>
+                    <a href="{{ route('logout') }}" class="sub-menu-link">Logout</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
+</nav>
+ 
 
   <script>
     let subMenu = document.getElementById("subMenu");

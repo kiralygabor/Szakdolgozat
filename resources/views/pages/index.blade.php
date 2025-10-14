@@ -567,14 +567,17 @@
       </div>
     </div>
  
-    <!-- Right Side: Phone Mockup -->
-    <div class="flex justify-center md:justify-end">
-      <div class="relative w-64 md:w-72 lg:w-96">
-        <img src="https://via.placeholder.com/300x600" alt="Mobile App Mockup" class="rounded-3xl shadow-2xl border-4 border-white">
-        <!-- Optional: Floating app screen highlights -->
-        <div class="absolute top-8 left-6 w-52 h-96 bg-white rounded-2xl opacity-30"></div>
-      </div>
-    </div>
+  <!-- Right Side: Phone Mockup -->
+<div class="flex justify-center md:justify-end">
+  <div class="relative w-64 md:w-72 lg:w-96">
+    <img  
+      src="assets/img/phone_14_01.webp" 
+      alt="Mobile App Mockup" 
+    >
+
+  </div>
+</div>
+
  
   </div>
 </section>

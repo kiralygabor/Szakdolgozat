@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ProfileController;
@@ -16,6 +17,7 @@ Route::get('profile', [PagesController::class, 'profile'])->name('profile');
 Route::get('category', [PagesController::class, 'category'])->name('category');
 Route::get('howitworks', [PagesController::class, 'howitworks'])->name('howitworks');
 Route::get('tasks', [PagesController::class, 'tasks'])->name('tasks');
+Route::get('api/cities', [PagesController::class, 'searchCities'])->name('api.cities.search');
 
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post'); 

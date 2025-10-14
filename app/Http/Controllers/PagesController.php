@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\City;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
  
 class PagesController extends Controller
 {
@@ -26,20 +27,38 @@ class PagesController extends Controller
  
     public function category(): View
     {
-        return view('pages.category');
+        $categories = Category::orderBy('name')->get();
+        return view('pages.category', [
+            'categories' => $categories,
+        ]);
     }
     public function tasks(Request $request): View
     {
         $query = Advertisment::query()->with(['category', 'employer.city']);
- 
-        // Search by city name
+
+        // Multi-search by q (title, description, category name, city name)
         if ($request->filled('q')) {
-            $search = trim($request->string('q'));
+            $q = trim((string) $request->query('q'));
+            $query->where(function ($sub) use ($q) {
+                $sub->where('title', 'like', "%{$q}%")
+                    ->orWhere('description', 'like', "%{$q}%")
+                    ->orWhereHas('category', function ($c) use ($q) {
+                        $c->where('name', 'like', "%{$q}%");
+                    })
+                    ->orWhereHas('employer.city', function ($city) use ($q) {
+                        $city->where('name', 'like', "%{$q}%");
+                    });
+            });
+        }
+
+        // Explicit city filter (set from Work Type dropdown live search)
+        if ($request->filled('city_search')) {
+            $search = trim((string) $request->query('city_search'));
             $query->whereHas('employer.city', function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%");
             });
         }
- 
+
         // Filter by category
         if ($request->filled('category')) {
             $categoryId = (int) $request->input('category');
@@ -47,7 +66,7 @@ class PagesController extends Controller
                 $query->where('categories_id', $categoryId);
             }
         }
- 
+
         // Filter by price range (clamped to 1000–20000)
         $minPrice = (int) $request->input('min_price', 1000);
         $maxPrice = (int) $request->input('max_price', 20000);
@@ -61,10 +80,21 @@ class PagesController extends Controller
             $query->whereBetween('price', [$minPrice, $maxPrice]);
         }
 
-        // Type filter (optional placeholder: in-person/remote) - skipping until schema supports
- 
+        // Type filter (in_person | remote | all)
+        $type = $request->string('type', 'all');
+        if ($type === 'remote') {
+            // Heuristic: location contains 'remote'
+            $query->where('location', 'like', '%remote%');
+        } elseif ($type === 'in_person') {
+            $query->where(function ($q) {
+                $q->whereNull('location')
+                  ->orWhere('location', '=','')
+                  ->orWhere('location', 'not like', '%remote%');
+            });
+        }
+
         // Sorting
-        $sort = $request->string('sort', 'recent');
+        $sort = (string) $request->query('sort', 'recent');
         switch ($sort) {
             case 'closest':
                 // Requires geo data; fallback to alphabetical city for now
@@ -76,29 +106,58 @@ class PagesController extends Controller
             case 'due':
                 $query->orderBy('expiration_date');
                 break;
+            case 'lowest_price':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'highest_price':
+                $query->orderBy('price', 'desc');
+                break;
             case 'recent':
             default:
                 $query->orderByDesc('created_at');
         }
- 
+
         $tasks = $query->paginate(20)->withQueryString();
         $categories = Category::orderBy('name')->get();
         $cities = City::orderBy('name')->get();
- 
+
         return view('pages.tasks', [
             'tasks' => $tasks,
             'categories' => $categories,
             'cities' => $cities,
             'filters' => [
-                'q' => $request->string('q')->toString(),
+                'q' => (string) $request->query('q', ''),
+                'city_search' => (string) $request->query('city_search', ''),
                 'category' => $request->input('category'),
                 'sort' => $sort,
                 'min_price' => $minPrice,
                 'max_price' => $maxPrice,
-                'distance' => (int) $request->input('distance', 20),
+                'type' => $type,
             ],
         ]);
     }
+
+    public function searchCities(Request $request): JsonResponse
+    {
+        $search = $request->string('q', '');
+        
+        if (strlen($search) < 2) {
+            return response()->json([]);
+        }
+
+        $q = (string) $search;
+
+        // Return DISTINCT names that contain the query, exact match (case-insensitive) first
+        $cities = City::selectRaw('MIN(id) as id, name')
+            ->where('name', 'like', "%{$q}%")
+            ->groupBy('name')
+            ->orderByRaw('LOWER(name) = LOWER(?) DESC, name ASC', [$q])
+            ->limit(20)
+            ->get();
+
+        return response()->json($cities);
+    }
+
     public function howitworks(): View
     {
         return view('pages.howitworks');

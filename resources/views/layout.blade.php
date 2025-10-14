@@ -48,7 +48,7 @@
 @hasSection('navbar')
 @yield('navbar')
 @else
-<nav class="bg-white border-b border-gray-200 shadow-sm fixed top-0 left-0 w-full z-50 backdrop-blur-sm bg-white/90">
+<nav class="bg-white border-b border-gray-200 shadow-sm w-full z-50">
 <div class="w-full flex justify-between items-center px-6 py-3">
 <div class="flex items-center space-x-2 pl-4">
   <a href="{{ url('/index') }}" class="flex items-center">
@@ -179,64 +179,6 @@
 </div>
 </nav>
 @endif
-
-          <a href="{{ url('tasks') }}" class="text-gray-600 hover:text-secondary-500">Browse Tasks</a>
-          <a href="{{ url('howitworks') }}" class="text-gray-600 hover:text-secondary-500">How It Works</a>
-        </div>
-        <!-- Right side -->
-        <div class="flex items-center space-x-3 relative">
-          <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white">
-            Login
-          </a>
-          <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg border border-primary-500 text-primary-500 hover:bg-primary-500/10">
-            Sign Up
-          </a>
-          <!-- Settings dropdown -->
-          <div class="relative">
-            <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
-              <i data-feather="settings"></i>
-            </button>
-            <!-- Dropdown -->
-            <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10 opacity-0 translate-y-2 transition-all duration-200 ease-out">
-              <div class="flex flex-col">
-                <div class="group relative">
-                  <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex justify-between items-center">
-                    Theme
-                    <i data-feather="chevron-right" class="w-4 h-4"></i>
-                  </div>
-                  <div class="submenu absolute top-0 left-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Light</div>
-                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Dark</div>
-                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">System Default</div>
-                  </div>
-                </div>
-                <div class="group relative">
-                  <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex justify-between items-center">
-                    Language
-                    <i data-feather="chevron-right" class="w-4 h-4"></i>
-                  </div>
-                  <div class="submenu absolute top-0 left-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">English</div>
-                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Hungarian</div>
-                  </div>
-                </div>
-                <div class="group relative">
-                  <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex justify-between items-center">
-                    Extras
-                    <i data-feather="chevron-right" class="w-4 h-4"></i>
-                  </div>
-                  <div class="submenu absolute top-0 left-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help / FAQ</div>
-                    <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Contact / Support</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-
 
     <!-- 🔹 MAIN CONTENT -->
     <main>

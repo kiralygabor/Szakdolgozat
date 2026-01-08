@@ -23,6 +23,12 @@ class OfferController extends Controller
                 ->with('error', 'You cannot make an offer on your own task.');
         }
 
+        // Prevent offers if task is not open
+        if ($task->status !== 'open') {
+            return redirect()->route('tasks.show', $task->id)
+                ->with('error', 'This task is no longer accepting offers.');
+        }
+
         $data = $request->validate([
             'offer_price' => ['required', 'integer', 'min:1'],
             'message'     => ['required', 'string', 'max:5000'],
@@ -56,8 +62,11 @@ class OfferController extends Controller
         // Update offer status
         $offer->update(['status' => 'accepted']);
 
-        // Ideally, we should also update the task status to 'assigned' or similar
-        // $task->update(['status' => 'assigned']);
+        // Update the task status to 'pending' and assign employee
+        $task->update([
+            'status' => 'pending',
+            'employee_id' => $offer->user_id,
+        ]);
 
         // Notify the Tasker
         $offer->user->notify(new \App\Notifications\OfferAcceptedNotification($task));

@@ -388,7 +388,8 @@
                   <div class="text">Add photos</div>
                   <div class="subtext">Click to upload images of your task</div>
               </div>
-              <input type="file" id="photoInput" name="photos[]" multiple accept="image/*" class="hidden">
+              <input type="file" id="photoSelectorInput" multiple accept="image/*" class="hidden">
+              <input type="file" id="photoSubmissionInput" name="photos[]" multiple class="hidden">
               <div class="photo-preview-container" id="photoPreviewContainer"></div>
           </div>
       </div>
@@ -454,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Photo upload elements
   const photoUploadPlus = document.getElementById('photoUploadPlus');
-  let photoInput = document.getElementById('photoInput');
+
   const photoPreviewContainer = document.getElementById('photoPreviewContainer');
 
   function setActive(el, active) {
@@ -740,55 +741,72 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleWorkType();
   });
 
-  // Photo upload functionality
-  function attachPhotoInputListener(inputEl) {
-    inputEl.addEventListener('change', function(e) {
-      const files = e.target.files;
-      if (!files || files.length === 0) return;
+  // Photo upload functionality - FIXED
+  const photoSelectorInput = document.getElementById('photoSelectorInput');
+  const photoSubmissionInput = document.getElementById('photoSubmissionInput');
+  let allPhotos = [];
 
-      // Show preview container when at least one file is selected
-      photoPreviewContainer.style.display = 'block';
-
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (file.type && file.type.startsWith('image/')) {
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            const photoPreview = document.createElement('div');
-            photoPreview.className = 'photo-preview';
-            photoPreview.innerHTML = `
-              <img src="${ev.target.result}" alt="Preview">
-              <div class="remove-photo" onclick="this.parentElement.remove()">×</div>
-            `;
-            photoPreviewContainer.appendChild(photoPreview);
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-
-      // After one selection, keep this input (with its FileList) for form submission
-      // and create a fresh empty input for any further selections.
-      const newInput = document.createElement('input');
-      newInput.type = 'file';
-      newInput.name = 'photos[]';
-      newInput.multiple = true;
-      newInput.accept = 'image/*';
-      newInput.className = 'hidden';
-
-      // Replace the reference so the plus button opens the newest empty input
-      inputEl.parentNode.insertBefore(newInput, inputEl.nextSibling);
-      attachPhotoInputListener(newInput);
-      photoInput = newInput;
-    });
+  function updateSubmissionFiles() {
+      const dt = new DataTransfer();
+      allPhotos.forEach(item => dt.items.add(item.file));
+      photoSubmissionInput.files = dt.files;
   }
 
-  // Initial wiring
-  attachPhotoInputListener(photoInput);
+  function renderPreviews() {
+      photoPreviewContainer.innerHTML = '';
+      if (allPhotos.length === 0) {
+          photoPreviewContainer.style.display = 'none';
+      } else {
+          photoPreviewContainer.style.display = 'block';
+      }
+
+      allPhotos.forEach((item, index) => {
+          const div = document.createElement('div');
+          div.className = 'photo-preview';
+          div.innerHTML = `
+              <img src="${item.url}" alt="Preview">
+              <div class="remove-photo">×</div>
+          `;
+          
+          div.querySelector('.remove-photo').addEventListener('click', (e) => {
+              e.stopPropagation();
+              // Remove item
+              allPhotos.splice(index, 1);
+              // Update state
+              updateSubmissionFiles();
+              renderPreviews();
+          });
+          
+          photoPreviewContainer.appendChild(div);
+      });
+  }
+
+  if (photoSelectorInput) {
+      photoSelectorInput.addEventListener('change', function(e) {
+          const files = Array.from(e.target.files || []);
+          if (files.length === 0) return;
+
+          files.forEach(file => {
+              if (file.type && file.type.startsWith('image/')) {
+                  allPhotos.push({
+                      file: file,
+                      url: URL.createObjectURL(file)
+                  });
+              }
+          });
+
+          updateSubmissionFiles();
+          renderPreviews();
+          
+          // Clear selector so same file can be selected again if needed
+          this.value = '';
+      });
+  }
 
   photoUploadPlus.addEventListener('click', function() {
-    if (photoInput) {
-      photoInput.click();
-    }
+      if (photoSelectorInput) {
+        photoSelectorInput.click();
+      }
   });
 
   // Initialize initial state from old() values

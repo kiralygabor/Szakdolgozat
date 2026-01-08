@@ -121,7 +121,7 @@
     </a>
 
   <!-- Mega Dropdown -->
-  <div class="absolute left-0 mt-3 hidden group-hover:flex bg-white border border-gray-200 rounded-xl shadow-2xl w-[650px] z-50 overflow-hidden">
+  <div id="categories-menu" class="absolute left-0 mt-3 hidden flex bg-white border border-gray-200 rounded-xl shadow-2xl w-[650px] z-50 overflow-hidden before:absolute before:-top-3 before:left-0 before:w-full before:h-3 before:content-[''] before:block">
 
     <!-- Left Section -->
     <div class="w-1/3 bg-gray-50 border-r border-gray-200 p-5 flex flex-col justify-start">
@@ -517,21 +517,40 @@
         };
         
         if (catGroup && catMenu) {
+          var catTimeout;
+          
           var showCat = function(){
-            catMenu.classList.remove('opacity-0','pointer-events-none','translate-y-2');
-            catMenu.classList.add('opacity-100');
+            clearTimeout(catTimeout);
+            catMenu.classList.remove('hidden');
+            // small delay to allow display change to register before opacity transition
+            requestAnimationFrame(() => {
+                catMenu.classList.remove('opacity-0','pointer-events-none','translate-y-2');
+                catMenu.classList.add('opacity-100');
+            });
           };
+          
           var hideCat = function(){
-            catMenu.classList.remove('opacity-100');
-            catMenu.classList.add('opacity-0');
-            // delay pointer-events toggle to allow transition
-            setTimeout(function(){ catMenu.classList.add('pointer-events-none','translate-y-2'); }, 150);
+            clearTimeout(catTimeout);
+            catTimeout = setTimeout(function(){
+                catMenu.classList.remove('opacity-100');
+                catMenu.classList.add('opacity-0');
+                // delay pointer-events toggle to allow transition
+                setTimeout(function(){ 
+                    if(catMenu.classList.contains('opacity-0')) {
+                        catMenu.classList.add('pointer-events-none','translate-y-2');
+                        catMenu.classList.add('hidden');
+                    }
+                }, 150);
+            }, 300); // 300ms delay to bridge the gap
           };
+
           catGroup.addEventListener('mouseenter', showCat);
           catGroup.addEventListener('mouseleave', hideCat);
+          
           // Also handle focus for accessibility
           catGroup.addEventListener('focusin', showCat);
           catGroup.addEventListener('focusout', function(e){
+            // Delay strict focus check slightly or rely on the same timeout
             if (!catGroup.contains(e.relatedTarget)) hideCat();
           });
         }

@@ -98,10 +98,13 @@
           name="q"
           value="{{ $filters['q'] ?? '' }}"
           type="text"
-          placeholder="Search tasks, city or category..."
-          class="w-full pl-10 pr-4 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
+          placeholder="Search for a task name..."
+          class="w-full pl-10 pr-12 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
           autocomplete="off"
         >
+        <button type="submit" class="absolute right-1 top-1 bottom-1 px-3 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-sm">
+           <i data-feather="search" class="w-3.5 h-3.5"></i>
+        </button>
         <input type="hidden" name="city_search" id="city-search-hidden" value="{{ $filters['city_search'] ?? '' }}">
       </div>
 
@@ -121,6 +124,28 @@
                   {{ $category->name }}
                 </option>
               @endforeach
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+               <i data-feather="chevron-down" class="h-4 w-4"></i>
+            </div>
+        </div>
+
+        <!-- Job/Service -->
+        <div class="relative {{ ($filters['category'] ?? '') ? '' : 'hidden' }}" id="job-filter-container">
+            <select name="job" id="job-filter" 
+                    class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
+              <option value="">All Services</option>
+              @if($filters['category'] ?? '')
+                @php
+                    $selectedCategory = $categories->firstWhere('id', $filters['category']);
+                    $jobs = $selectedCategory ? $selectedCategory->jobs : [];
+                @endphp
+                @foreach($jobs as $job)
+                    <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
+                        {{ $job->name }}
+                    </option>
+                @endforeach
+              @endif
             </select>
             <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                <i data-feather="chevron-down" class="h-4 w-4"></i>
@@ -244,21 +269,46 @@
                  <span class="text-[10px] text-gray-400">
                     {{ $task->created_at?->diffForHumans(null, true, true) }} ago
                  </span>
-                 @guest
-                     <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:underline">
-                        Sign in to make an offer
-                     </a>
-                 @else
-                     <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
-                     <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                        Make an offer
-                     </button>
-                 @endguest
+                 <div class="flex items-center gap-2">
+                     @auth
+                         <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="text-xs font-semibold text-gray-500 hover:text-red-600 transition-colors" title="Report this task">
+                             <i data-feather="flag" class="w-3.5 h-3.5"></i>
+                         </button>
+                     @endauth
+                     @guest
+                         <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:underline">
+                            Sign in to make an offer
+                         </a>
+                     @else
+                         <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
+                         @if(count($missingSteps) > 0)
+                            <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
+                                Make an offer
+                            </button>
+                         @else
+                            <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
+                                Make an offer
+                            </a>
+                         @endif
+                     @endguest
+                 </div>
               </div>
             </div>
           @empty
-            <div class="text-center py-10 text-gray-400 text-sm">
-               No tasks found.
+            <div class="h-full bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center flex flex-col items-center justify-center space-y-4 shadow-sm">
+              <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-2">
+                 <i data-feather="search" class="w-10 h-10 text-blue-300"></i>
+              </div>
+              <div class="space-y-2">
+                <h3 class="text-xl font-bold text-slate-800">No tasks found</h3>
+                <p class="text-base text-slate-500 leading-relaxed max-w-[280px] mx-auto">
+                  We couldn't find any tasks matching your criteria. Try adjusting your filters or search terms.
+                </p>
+              </div>
+              <a href="{{ route('tasks') }}" class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-100 bg-blue-50/50 px-8 py-3 rounded-full transition-all mt-4 shadow-sm hover:shadow-md">
+                <i data-feather="refresh-cw" class="w-4 h-4"></i>
+                Clear all filters
+              </a>
             </div>
           @endforelse
          
@@ -279,17 +329,7 @@
     </div>
   </section>
 
-  @php
-    // --- FORCE SPECIFIC MODAL ITEMS ---
-    // This array contains the exact items requested.
-    $missingSteps = [
-        'Upload a profile picture',
-        'Add your date of birth',
-        'Verify your mobile',
-        'Link your bank account',
-        'Add your billing address'
-    ];
-  @endphp
+
 
   <!-- MODAL: BEFORE YOU MAKE AN OFFER -->
   <!-- We use 'hidden' class by default. JS removes it to show. -->
@@ -503,8 +543,31 @@
     setupDropdown('price-btn', 'price-menu');
     setupDropdown('type-btn', 'type-menu');
 
-    ['category-filter', 'sort-filter'].forEach(id => {
-        document.getElementById(id)?.addEventListener('change', () => document.getElementById('filters-form').submit());
+    const categoriesData = @json($categories);
+
+    ['category-filter', 'sort-filter', 'job-filter'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', (e) => {
+            if (id === 'category-filter') {
+                const categoryId = e.target.value;
+                const jobFilter = document.getElementById('job-filter');
+                const jobContainer = document.getElementById('job-filter-container');
+                
+                if (categoryId) {
+                    const category = categoriesData.find(c => c.id == categoryId);
+                    if (category && category.jobs) {
+                        jobFilter.innerHTML = '<option value="">All Services</option>';
+                        category.jobs.forEach(j => {
+                            jobFilter.innerHTML += `<option value="${j.id}">${j.name}</option>`;
+                        });
+                        jobContainer.classList.remove('hidden');
+                    }
+                } else {
+                    jobContainer.classList.add('hidden');
+                    jobFilter.value = '';
+                }
+            }
+            document.getElementById('filters-form').submit();
+        });
     });
 
     // 5. Price Slider
@@ -603,5 +666,19 @@
             if (e.target === modal) hideModal(); 
         });
     });
+    // 8. Search Input Enter Key
+    const searchInput = document.getElementById('search-q');
+    if (searchInput) {
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchInput.form.submit();
+            }
+        });
+    }
   </script>
+
+  <!-- Include Report Modal -->
+  @include('components.report-modal')
+
   @endsection

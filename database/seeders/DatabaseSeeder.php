@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             AdvertisementsSeeder::class,
             JobsSeeder::class,
             TestUserSeeder::class,
+            PenaltySeeder::class,
             ]);
     }
 }

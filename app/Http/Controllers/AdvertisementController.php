@@ -94,4 +94,36 @@ class AdvertisementController extends Controller
 
         return redirect()->route('my-tasks')->with('success', 'Task removed.');
     }
+
+    /**
+     * Mark an advertisement as completed.
+     */
+    public function complete(Request $request, Advertisment $advertisement)
+    {
+        if (Auth::id() !== $advertisement->employer_id) {
+            abort(403);
+        }
+
+        $advertisement->update(['status' => 'completed']);
+
+        // Check for review data
+        if ($request->has('stars') && $request->filled('stars')) {
+            $request->validate([
+                'stars' => 'required|integer|min:1|max:5',
+                'comment' => 'nullable|string|max:500',
+            ]);
+
+            if ($advertisement->employee_id) {
+                \App\Models\Review::create([
+                    'reviewer_id' => Auth::id(),
+                    'target_user_id' => $advertisement->employee_id,
+                    'stars' => $request->input('stars'),
+                    'comment' => $request->input('comment'),
+                ]);
+                return redirect()->back()->with('success', 'Task completed and review submitted!');
+            }
+        }
+
+        return redirect()->back()->with('success', 'Task marked as completed!');
+    }
 }

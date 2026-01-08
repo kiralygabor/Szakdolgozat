@@ -140,7 +140,7 @@
             </div>
 
             <nav class="nav flex-column nav-pills settings-nav" id="settingsTab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link" href="{{ url('/') }}"><i class="fas fa-arrow-left fa-fw"></i> Back to Home</a>
+                <a class="nav-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw"></i> Back to Home</a>
                 <div class="my-2 border-bottom"></div>
                 
                 <a class="nav-link" href="#">My Tasker Dashboard</a>
@@ -245,8 +245,8 @@
                                 type="email"
                                 class="form-control form-control-custom"
                                 id="email"
-                                value="{{ $user->email ?? '' }}"
-                                readonly>
+                                name="email"
+                                value="{{ old('email', $user->email ?? '') }}">
                         </div>
 
                         <div class="mb-4 custom-input-group">
@@ -255,8 +255,8 @@
                                 type="text"
                                 class="form-control form-control-custom"
                                 id="phone"
-                                value="{{ old('phone_number', $user->phone_number ?? '') }}"
-                                readonly>
+                                name="phone_number"
+                                value="{{ old('phone_number', $user->phone_number ?? '') }}">
                         </div>
 
                         <div class="mt-4">

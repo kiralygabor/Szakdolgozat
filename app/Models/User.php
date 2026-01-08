@@ -75,9 +75,14 @@ class User extends Authenticatable
         return $this->hasMany(Advertisment::class, 'employer', 'id');
     }
 
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'target_user_id');
+    }
+
     public function getRatingAttribute()
     {
-        // TODO: Implement real rating logic when reviews are linked
-        return 4.9; 
+        $avg = $this->reviewsReceived()->avg('stars');
+        return $avg ? round($avg, 1) : 0;
     }
 }

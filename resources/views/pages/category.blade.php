@@ -111,7 +111,7 @@
 <script>
     const jobsData = @json($jobsPayload ?? []);
     const urls = {
-        search: "{{ url('search') }}",
+        search: "{{ route('tasks') }}",
         postTask: "{{ url('post-task') }}"
     };
 
@@ -174,7 +174,7 @@
             const a = document.createElement('a');
 
             if (state.role === 'finder') {
-                a.href = `${urls.search}?category=${categoryId}&service=${job.id}`;
+                a.href = `${urls.search}?category=${categoryId}&job=${job.id}`;
             } else {
                 a.href = `${urls.postTask}?category=${categoryId}&job=${job.id}`;
             }

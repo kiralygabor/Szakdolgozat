@@ -236,6 +236,184 @@
         .task-hero { flex-direction: column; min-height: auto; }
         .hero-left, .hero-right { padding: 30px; }
     }
+
+    /* --- Modern Aesthetic Updates --- */
+    .modern-card {
+        background: #FFFFFF;
+        border-radius: 20px;
+        border: 1px solid #F3F4F6;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    /* Sleek Tabs */
+    .modern-tabs-wrapper {
+        display: inline-flex;
+        background: #F1F5F9;
+        padding: 4px;
+        border-radius: 16px;
+        position: relative;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+    
+    .modern-tab {
+        position: relative;
+        padding: 10px 28px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #64748B;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        z-index: 1;
+    }
+    
+    .modern-tab:hover {
+        color: #334155;
+    }
+    
+    .modern-tab.active {
+        background: #FFFFFF;
+        color: #2563EB;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+        font-weight: 700;
+    }
+
+    /* Control Bar (Search & Filter) */
+    .controls-bar {
+        background: #FFFFFF;
+        border-radius: 20px;
+        padding: 16px;
+        border: 1px solid #E5E7EB;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        margin-bottom: 32px;
+    }
+
+    .modern-search-wrapper {
+        position: relative;
+        flex: 1;
+        max-width: 380px;
+    }
+
+    .modern-search-input {
+        width: 100%;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        padding: 12px 16px 12px 44px;
+        border-radius: 12px;
+        font-size: 14px;
+        color: #334155;
+        transition: all 0.2s;
+    }
+    
+    .modern-search-input:focus {
+        background: #FFFFFF;
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .modern-filter-group {
+        display: flex;
+        gap: 4px;
+        background: #F8FAFC;
+        padding: 4px;
+        border-radius: 12px;
+        border: 1px solid #F1F5F9;
+    }
+
+    .filter-btn {
+        padding: 8px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748B;
+        border-radius: 8px;
+        transition: all 0.2s;
+        text-decoration: none;
+    }
+    
+    .filter-btn:hover {
+        background: rgba(255,255,255,0.8);
+        color: #334155;
+    }
+    
+    .filter-btn.active {
+        background: #FFFFFF;
+        color: #2563EB;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* Modern Empty State */
+    .modern-empty-state {
+        text-align: center;
+        padding: 80px 24px;
+        background: #FFFFFF;
+        border-radius: 32px;
+        border: 2px dashed #E5E7EB;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-illustration {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #F0F9FF 0%, #DBEAFE 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+        position: relative;
+    }
+    
+    .empty-illustration i {
+        color: #3B82F6;
+        filter: drop-shadow(0 4px 6px rgba(59, 130, 246, 0.2));
+    }
+
+    .empty-illustration::before {
+        content: '';
+        position: absolute;
+        inset: -12px;
+        border-radius: 50%;
+        border: 2px dashed #E0F2FE;
+        animation: spin 30s linear infinite;
+    }
+    
+    @keyframes spin { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+
+    .empty-title { font-size: 24px; font-weight: 800; color: #1E293B; margin-bottom: 12px; }
+    .empty-desc { color: #64748B; font-size: 16px; max-width: 400px; line-height: 1.6; margin-bottom: 32px; }
+
+    .cta-button {
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+        color: white;
+        padding: 14px 32px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        text-decoration: none;
+    }
+    
+    .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(37, 99, 235, 0.3);
+        color: white;
+    }
 </style>
 
 @section('content')
@@ -262,17 +440,149 @@
                 $offerCount = $activeTask->offers_count ?? 0; 
                 $hasOffers = $offerCount > 0;
                 $viewCount = $activeTask->views ?? 0;
+                
+                // Offers only visible if task is Open AND we are the employer (default view)
+                // If applying, we might want different logic?
+                // Actually, if I am the employee, I shouldn't see OTHER people's offers details, 
+                // but maybe just my own? For now, 'mytasks' relies on showing offers list.
+                // We'll hide the generic offers list if we are in 'applied' mode, and show OUR offer details.
+                
+                $showOffers = $activeTask->status === 'open' && ($viewMode ?? 'posted') === 'posted';
             }
         @endphp
 
+        {{-- MAIN TABS (Context Switcher) --}}
+        <div class="flex justify-center mb-8">
+            <div class="modern-tabs-wrapper">
+                <a href="{{ route('my-tasks', ['view' => 'posted']) }}" 
+                   class="modern-tab {{ ($viewMode ?? 'posted') === 'posted' ? 'active' : '' }}">
+                   Posted Tasks
+                </a>
+                <a href="{{ route('my-tasks', ['view' => 'applied']) }}" 
+                   class="modern-tab {{ ($viewMode ?? 'posted') === 'applied' ? 'active' : '' }}">
+                   My Applications
+                </a>
+            </div>
+        </div>
+
         {{-- SCENARIO 1: TASKS EXIST --}}
+            <!-- Dashboard Header: Search & Filters -->
+            <div class="controls-bar">
+                <form method="GET" action="{{ route('my-tasks') }}" class="modern-search-wrapper">
+                    <i data-feather="search" class="search-icon" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; height: 18px;"></i>
+                    <input name="q" value="{{ $filters['q'] ?? '' }}" type="text" placeholder="Search your tasks..." class="modern-search-input" autocomplete="off">
+                    <input type="hidden" name="status" value="{{ $filters['status'] ?? 'posted' }}">
+                    <input type="hidden" name="view" value="{{ $viewMode ?? 'posted' }}">
+                </form>
+
+                <div class="modern-filter-group">
+                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'posted'])) }}" class="filter-btn {{ ($filters['status'] ?? 'posted') === 'posted' ? 'active' : '' }}">Posted</a>
+                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'pending'])) }}" class="filter-btn {{ ($filters['status'] ?? '') === 'pending' ? 'active' : '' }}">Pending</a>
+                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'completed'])) }}" class="filter-btn {{ ($filters['status'] ?? '') === 'completed' ? 'active' : '' }}">Completed</a>
+                </div>
+            </div>
         @if($hasTasks)
             
             <div class="task-hero">
                 
                 {{-- LEFT SIDE (Dynamic Content) --}}
                 <div class="hero-left">
-                    @if($hasOffers)
+                    {{-- APPLIED VIEW LOGIC --}}
+                    @if(($viewMode ?? 'posted') === 'applied')
+                        @php
+                            // Find my offer for this task
+                            $myOffer = $activeTask->offers->where('user_id', auth()->id())->first();
+                        @endphp
+
+                        @if($activeTask->status === 'pending')
+                            @if($activeTask->employee_id == auth()->id())
+                                <div class="status-badge active" style="color:#059669;">
+                                    <span class="status-dot" style="background-color:#10B981;"></span> Offer Accepted
+                                </div>
+                                <h1 class="hero-headline">You're Hired!</h1>
+                                <p class="hero-subtext">
+                                    The employer accepted your offer. Please start working on the task and coordinate details.
+                                </p>
+                                <div class="mt-6 flex gap-3">
+                                    <a href="{{ route('messages', ['user_id' => $activeTask->employer_id]) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition flex items-center gap-2 no-underline">
+                                        <i data-feather="message-circle" class="w-5 h-5"></i> Contact Employer
+                                    </a>
+                                </div>
+                            @else
+                                <div class="status-badge" style="color:#DC2626;">
+                                    <span class="status-dot" style="background-color:#EF4444;"></span> Offer Not Selected
+                                </div>
+                                <h1 class="hero-headline">Task Assigned</h1>
+                                <p class="hero-subtext">
+                                    This task was assigned to another Tasker. Don't worry, there are plenty more tasks!
+                                </p>
+                                <div class="mt-6">
+                                    <a href="{{ route('tasks') }}" class="text-blue-600 font-bold hover:underline">Browse more tasks</a>
+                                </div>
+                            @endif
+
+                        @elseif($activeTask->status === 'completed')
+                            @if($activeTask->employee_id == auth()->id())
+                                <div class="status-badge active">
+                                    <span class="status-dot"></span> Job Done
+                                </div>
+                                <h1 class="hero-headline">Task Completed</h1>
+                                <p class="hero-subtext">
+                                    Great work! This task is marked as completed.
+                                </p>
+                            @else
+                                <div class="status-badge">
+                                    <span class="status-dot"></span> Closed
+                                </div>
+                                <h1 class="hero-headline">Task Completed</h1>
+                                <p class="hero-subtext">
+                                    This task has been completed by another Tasker.
+                                </p>
+                            @endif
+
+                        @else
+                            {{-- OPEN STATUS --}}
+                            <div class="status-badge" style="color:#2563EB;">
+                                <span class="status-dot" style="background-color:#3B82F6;"></span> Application Sent
+                            </div>
+                            <h1 class="hero-headline">Waiting for response</h1>
+                            <p class="hero-subtext">
+                                You offered <strong>£{{ number_format($myOffer->price ?? 0, 0) }}</strong>.
+                                We'll let you know if the employer accepts it.
+                            </p>
+                            <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl mt-6">
+                                <h4 class="font-bold text-blue-900 text-sm mb-1">Your Message</h4>
+                                <p class="text-blue-700 text-sm italic">"{{ $myOffer->message ?? '' }}"</p>
+                            </div>
+                        @endif
+
+                    {{-- POSTED VIEW LOGIC (Existing) --}}
+                    @elseif($activeTask->status === 'pending')
+                         <div class="status-badge" style="color: #F59E0B;">
+                            <span class="status-dot" style="background-color: #FBBF24;"></span> In Progress
+                        </div>
+                        <h1 class="hero-headline">Task is underway</h1>
+                        <p class="hero-subtext">
+                            You have accepted an offer. Once the work is done to your satisfaction, please mark the task as completed.
+                        </p>
+                        
+                        {{-- Trigger Completion Modal --}}
+                        <div class="mt-6">
+                            <button type="button" onclick="openCompleteTaskModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:-translate-y-1 flex items-center gap-2">
+                                <i data-feather="check-circle" class="w-5 h-5"></i> Mark as Completed
+                            </button>
+                        </div>
+                    
+                    @elseif($activeTask->status === 'completed')
+                        <div class="status-badge active">
+                            <span class="status-dot"></span> Completed
+                        </div>
+                        <h1 class="hero-headline">Task Completed</h1>
+                        <p class="hero-subtext">
+                            This task has been successfully completed. 
+                        </p>
+                    
+                    @elseif($hasOffers)
                         <div class="status-badge active">
                             <span class="status-dot"></span> New Activity
                         </div>
@@ -291,34 +601,38 @@
                         </p>
                     @endif
 
-                    <div class="offers-container mt-6">
-                        <div class="offers-header mb-4">
-                            <div class="illustration-box">
-                                <div class="bg-blue-100 p-3 rounded-full inline-block">
-                                    <i data-feather="users" class="text-blue-600 w-8 h-8"></i>
+
+                        <div class="offers-container mt-6">
+                        @if(($viewMode ?? 'posted') === 'posted' && $activeTask->status === 'open')
+                            <div class="offers-header mb-4">
+                                <div class="illustration-box">
+                                    <div class="bg-blue-100 p-3 rounded-full inline-block">
+                                        <i data-feather="users" class="text-blue-600 w-8 h-8"></i>
+                                    </div>
                                 </div>
+                                @if($hasOffers)
+                                    <h3 class="text-lg font-bold text-gray-800">You have {{ $offerCount }} offer(s).</h3>
+                                    <p class="questions-copy mt-2">
+                                        Review your offers and choose the Tasker that best matches your needs.
+                                    </p>
+                                @else
+                                    <h3 class="text-lg font-bold text-gray-800">Waiting for offers</h3>
+                                    <p class="questions-copy mt-2">
+                                        Sit tight while we find Taskers. If you don’t receive offers, consider adjusting your budget or adding more details.
+                                    </p>
+                                @endif
                             </div>
-                            @if($hasOffers)
-                                <h3 class="text-lg font-bold text-gray-800">You have {{ $offerCount }} offer(s).</h3>
-                                <p class="questions-copy mt-2">
-                                    Review your offers and choose the Tasker that best matches your needs.
-                                </p>
-                            @else
-                                <h3 class="text-lg font-bold text-gray-800">Waiting for offers</h3>
-                                <p class="questions-copy mt-2">
-                                    Sit tight while we find Taskers. If you don’t receive offers, consider adjusting your budget or adding more details.
-                                </p>
-                            @endif
-                        </div>
+                        @endif
 
                         <div class="offers-list overflow-y-auto custom-scrollbar" style="max-height: 120px; padding-right: 8px;">
-                            @if($hasOffers)
+                            @if($hasOffers && $showOffers)
                                 <div class="space-y-3">
                                     @foreach($activeTask->offers as $offer)
                                         <div onclick="openOfferModal({
                                             id: '{{ $offer->id }}',
                                             userId: '{{ $offer->user_id }}',
                                             initials: '{{ substr($offer->user->first_name ?? 'T', 0, 1) }}',
+                                            avatarUrl: '{{ !empty($offer->user->avatar) ? asset('storage/' . $offer->user->avatar) : '' }}',
                                             name: '{{ $offer->user->first_name ?? 'Tasker' }} {{ $offer->user->last_name ?? '' }}',
                                             rating: '{{ $offer->user->rating }}',
                                             time: '{{ $offer->created_at?->diffForHumans(null, true, true) }}',
@@ -329,10 +643,14 @@
                                             <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
                                             <div class="flex items-start gap-3">
-                                                {{-- Avatar Placeholder --}}
-                                                <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-sm shrink-0 border border-gray-200">
-                                                    {{ substr($offer->user->first_name ?? 'T', 0, 1) }}
-                                                </div>
+                                                {{-- Avatar --}}
+                                                @if(!empty($offer->user->avatar))
+                                                    <img src="{{ asset('storage/' . $offer->user->avatar) }}" alt="Avatar" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0">
+                                                @else
+                                                    <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-sm shrink-0 border border-gray-200">
+                                                        {{ substr($offer->user->first_name ?? 'T', 0, 1) }}
+                                                    </div>
+                                                @endif
 
                                                 <div class="flex-1 min-w-0">
                                                     <div class="flex justify-between items-start">
@@ -364,6 +682,13 @@
                                         </div>
                                     @endforeach
                                 </div>
+                            @elseif(!$showOffers && $hasTasks)
+                                 <div class="text-center py-6">
+                                    <div class="bg-gray-100 p-2 rounded-full inline-block mb-2">
+                                        <i data-feather="check" class="text-gray-400 w-5 h-5"></i>
+                                    </div>
+                                    <p class="text-sm text-gray-500">Offers are hidden because this task is {{ $activeTask->status }}.</p>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -377,26 +702,28 @@
                 <div class="hero-right">
                     
                     {{-- Floating More Options --}}
-                    <div class="more-options-container">
-                        <button class="more-btn" id="more-btn">
-                            <i data-feather="more-horizontal"></i>
-                        </button>
-                        <div class="custom-dropdown" id="more-menu">
-                            <a href="#" class="dropdown-item">
-                                <i data-feather="edit-2" style="width:16px;"></i> Edit task
-                            </a>
-                            <a href="{{ url('howitworks') }}" class="dropdown-item">
-                                <i data-feather="info" style="width:16px;"></i> How it works
-                            </a>
-                            <div style="height:1px; background:#F3F4F6; margin:6px 0;"></div>
-                            <button class="dropdown-item danger w-full text-left">
-                                <i data-feather="x-circle" style="width:16px;"></i> Cancel task
+                    @if(($viewMode ?? 'posted') === 'posted')
+                        <div class="more-options-container">
+                            <button class="more-btn" id="more-btn">
+                                <i data-feather="more-horizontal"></i>
                             </button>
+                            <div class="custom-dropdown" id="more-menu">
+                                <a href="#" class="dropdown-item">
+                                    <i data-feather="edit-2" style="width:16px;"></i> Edit task
+                                </a>
+                                <a href="{{ url('howitworks') }}" class="dropdown-item">
+                                    <i data-feather="info" style="width:16px;"></i> How it works
+                                </a>
+                                <div style="height:1px; background:#F3F4F6; margin:6px 0;"></div>
+                                <button class="dropdown-item danger w-full text-left">
+                                    <i data-feather="x-circle" style="width:16px;"></i> Cancel task
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                     <div>
-                        <span class="task-label">Active Task</span>
+                        <span class="task-label">{{ ucfirst($activeTask->status) }} Task</span>
                         <h2 class="task-main-title">{{ $activeTask->title }}</h2>
                         
                         {{-- 
@@ -467,6 +794,59 @@
                         </div>
                     </div>
 
+                    {{-- MODAL FOR COMPLETE & REVIEW --}}
+                    <div id="complete-task-modal" class="task-details-modal">
+                        <div class="task-details-backdrop" onclick="closeCompleteTaskModal()"></div>
+                        <div class="task-details-panel" style="max-width: 450px;">
+                            <button type="button" class="task-details-close" onclick="closeCompleteTaskModal()">
+                                <i data-feather="x" style="width:16px; height:16px;"></i>
+                            </button>
+                            
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Task Completed</h3>
+                            <p class="text-gray-500 mb-6">Would you like to leave a review for the Tasker?</p>
+                            
+                            {{-- Initial Choice Buttons --}}
+                            <div id="complete-choice-buttons" class="grid grid-cols-1 gap-3">
+                                <button onclick="showReviewForm()" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
+                                    <i data-feather="star" class="w-4 h-4"></i> Yes, leave a review
+                                </button>
+                                <form action="{{ route('advertisements.complete', $activeTask->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 transition">
+                                        No, just complete task
+                                    </button>
+                                </form>
+                            </div>
+
+                            {{-- Review Form (Hidden initially) --}}
+                            <div id="complete-review-form" class="hidden">
+                                <form action="{{ route('advertisements.complete', $activeTask->id) }}" method="POST">
+                                    @csrf
+                                    
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">Rating</label>
+                                        <div class="flex gap-2 text-2xl" id="star-rating-input">
+                                            @for($i=1; $i<=5; $i++)
+                                                <i data-feather="star" class="cursor-pointer text-gray-300 hover:text-yellow-400 peer-checked:text-yellow-400" onclick="setRating({{ $i }})" id="star-{{ $i }}"></i>
+                                            @endfor
+                                        </div>
+                                        <input type="hidden" name="stars" id="rating-value" required>
+                                    </div>
+                                    
+                                    <div class="mb-6">
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">Comment</label>
+                                        <textarea name="comment" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Write a short review..."></textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                                        Complete & Review
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+
                     {{-- MODAL FOR OFFER DETAILS --}}
                     <div id="offer-details-modal" class="task-details-modal" style="z-index: 60;">
                         <div class="task-details-backdrop" onclick="closeOfferModal()"></div>
@@ -476,20 +856,22 @@
                             </button>
                             
                             {{-- Offer Header --}}
-                            <div class="flex items-center gap-4 mb-6 pt-8">
-                                <div id="modal-offer-avatar" class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-2xl border border-gray-200">
-                                    <!-- Initials via JS -->
-                                </div>
-                                <div>
-                                    <h3 id="modal-offer-name" class="text-xl font-bold text-gray-900 leading-tight"></h3>
-                                    <div class="flex items-center gap-1 mt-1">
-                                        <i data-feather="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
-                                        <span id="modal-offer-rating" class="text-sm font-bold text-gray-800"></span>
-                                        <span class="text-gray-300 mx-1">•</span>
-                                        <span id="modal-offer-time" class="text-xs text-gray-400 font-medium uppercase tracking-wide"></span>
+                            <div class="flex items-center justify-between mb-6 pt-8">
+                                <a id="modal-profile-link" href="#" class="flex items-center gap-4 group text-decoration-none">
+                                    <div id="modal-offer-avatar" class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-2xl border border-gray-200 group-hover:border-blue-400 transition-colors">
+                                        <!-- Initials via JS -->
                                     </div>
-                                </div>
-                                <div class="ml-auto text-right">
+                                    <div>
+                                        <h3 id="modal-offer-name" class="text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors"></h3>
+                                        <div class="flex items-center gap-1 mt-1">
+                                            <i data-feather="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                            <span id="modal-offer-rating" class="text-sm font-bold text-gray-800"></span>
+                                            <span class="text-gray-300 mx-1">•</span>
+                                            <span id="modal-offer-time" class="text-xs text-gray-400 font-medium uppercase tracking-wide"></span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="text-right">
                                     <div id="modal-offer-price" class="text-2xl font-bold text-blue-600"></div>
                                     <div class="text-xs text-gray-400 uppercase font-bold mt-1">Offer Price</div>
                                 </div>
@@ -509,9 +891,15 @@
                                 
                                 <form id="accept-offer-form" method="POST" action="" class="h-14">
                                     @csrf
-                                    <button type="submit" class="h-full w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-                                        <i data-feather="check" class="w-4 h-4"></i> Accept Offer
-                                    </button>
+                                    @if($activeTask->status === 'open')
+                                        <button type="submit" class="h-full w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
+                                            <i data-feather="check" class="w-4 h-4"></i> Accept Offer
+                                        </button>
+                                    @else
+                                        <button type="button" disabled class="h-full w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-gray-200 border border-gray-200 text-gray-400 font-bold cursor-not-allowed">
+                                            <i data-feather="check" class="w-4 h-4"></i> Offer Accepted
+                                        </button>
+                                    @endif
                                 </form>
                             </div>
                         </div>
@@ -543,37 +931,50 @@
 
         {{-- SCENARIO 2: NO TASKS (PRESERVED) --}}
         @else
-            <!-- Dashboard Header: Search & Filters -->
-            <div class="dashboard-header" style="background: white; padding: 16px 24px; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <form method="GET" action="{{ route('my-tasks') }}" class="search-input-wrapper" style="position: relative;">
-                    <i data-feather="search" class="search-icon" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input name="q" value="{{ $filters['q'] ?? '' }}" type="text" placeholder="Search your tasks..." class="px-4 py-2 focus:ring-0 focus:outline-none" autocomplete="off" style="padding-left: 40px; border-radius: 50px; border: 1px solid #e2e8f0; width: 300px;">
-                    <input type="hidden" name="status" value="{{ $filters['status'] ?? 'posted' }}">
-                </form>
-                <div class="filter-tabs" style="display: flex; background: #f1f5f9; padding: 4px; border-radius: 12px;">
-                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'posted'])) }}" class="tab-btn {{ ($filters['status'] ?? 'posted') === 'posted' ? 'active' : '' }}" style="padding: 8px 20px; font-size: 14px; font-weight: 600; color: #64748b; border-radius: 8px; text-decoration: none;">Posted</a>
-                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'pending'])) }}" class="tab-btn {{ ($filters['status'] ?? '') === 'pending' ? 'active' : '' }}" style="padding: 8px 20px; font-size: 14px; font-weight: 600; color: #64748b; border-radius: 8px; text-decoration: none;">Pending</a>
-                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'completed'])) }}" class="tab-btn {{ ($filters['status'] ?? '') === 'completed' ? 'active' : '' }}" style="padding: 8px 20px; font-size: 14px; font-weight: 600; color: #64748b; border-radius: 8px; text-decoration: none;">Completed</a>
-                </div>
-            </div>
+            <!-- Dashboard Header: Search & Filters (Always show to allow filtering even if empty, or just for consistency/reset) -->
 
-            <!-- Empty State -->
-            <div class="original-empty-state">
-                <div class="mx-auto w-16 h-16 bg-gray-50 text-gray-400 rounded-full flex items-center justify-center mb-4">
-                    <i data-feather="clipboard" style="width:32px; height:32px;"></i>
+
+            <!-- Modern Empty State -->
+            <div class="modern-empty-state">
+                <div class="empty-illustration">
+                    <i data-feather="clipboard" style="width:48px; height:48px;"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">No tasks found</h3>
-                <p class="text-gray-500 max-w-md mx-auto mb-6">
-                    @if(($filters['status'] ?? 'posted') === 'posted')
-                        You haven't posted any tasks yet.
+                
+                <h3 class="empty-title">
+                     @if(($filters['status'] ?? 'posted') === 'posted' && empty($filters['q']))
+                        No tasks yet
+                    @elseif(($viewMode ?? 'posted') === 'applied')
+                        No applications found
                     @else
-                        No tasks found in this category.
+                        No tasks found
+                    @endif
+                </h3>
+                
+                <p class="empty-desc">
+                    @if(($viewMode ?? 'posted') === 'applied')
+                        You haven't applied to any tasks in this category yet. Browse available tasks to get started.
+                    @else
+                        @if(($filters['status'] ?? 'posted') === 'posted')
+                             @if(!empty($filters['q']))
+                                We couldn't find any tasks matching your search.
+                             @else
+                                Put your task in front of thousands of people and get it done quickly.
+                             @endif
+                        @else
+                            No tasks found with this status.
+                        @endif
                     @endif
                 </p>
-                <a href="#" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium">
-                    <i data-feather="plus-circle" style="width:18px; height:18px; margin-right:8px;"></i>
-                    Post a Task
-                </a>
+                
+                @if(($viewMode ?? 'posted') === 'applied')
+                    <a href="{{ route('tasks') }}" class="cta-button">
+                        <i data-feather="search" style="width:18px;"></i> Browse Tasks
+                    </a>
+                @else
+                    <a href="{{ route('post-task') }}" class="cta-button">
+                        <i data-feather="plus" style="width:18px;"></i> Post a New Task
+                    </a>
+                @endif
             </div>
         @endif
 
@@ -626,12 +1027,24 @@
             if(!modal) return;
 
             // Populate Data
-            document.getElementById('modal-offer-avatar').innerText = data.initials;
+            const avatarEl = document.getElementById('modal-offer-avatar');
+            if (data.avatarUrl) {
+                avatarEl.innerHTML = `<img src="${data.avatarUrl}" class="w-full h-full rounded-full object-cover">`;
+            } else {
+                avatarEl.innerHTML = data.initials;
+            }
+            
             document.getElementById('modal-offer-name').innerText = data.name;
             document.getElementById('modal-offer-rating').innerText = data.rating;
             document.getElementById('modal-offer-time').innerText = data.time + ' ago';
             document.getElementById('modal-offer-price').innerText = '£' + data.price;
             document.getElementById('modal-offer-message').innerText = data.message;
+            
+            // Set Profile Link
+            const profileLink = document.getElementById('modal-profile-link');
+            if (profileLink) {
+                profileLink.href = '/profile/' + data.userId;
+            }
 
             // Set Form Action
             const form = document.getElementById('accept-offer-form');
@@ -657,8 +1070,51 @@
                 document.body.style.overflow = '';
             }
         }
+
+        // --- COMPLETE MODAL LOGIC ---
+        window.openCompleteTaskModal = function() {
+            const modal = document.getElementById('complete-task-modal');
+            if(modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                // Reset view
+                document.getElementById('complete-choice-buttons').classList.remove('hidden');
+                document.getElementById('complete-review-form').classList.add('hidden');
+                // Reset rating stars
+                setRating(0);
+            }
+        }
+
+        window.closeCompleteTaskModal = function() {
+            const modal = document.getElementById('complete-task-modal');
+            if(modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        window.showReviewForm = function() {
+            document.getElementById('complete-choice-buttons').classList.add('hidden');
+            document.getElementById('complete-review-form').classList.remove('hidden');
+        }
+
+        window.setRating = function(value) {
+            document.getElementById('rating-value').value = value;
+            for(let i=1; i<=5; i++) {
+                const icon = document.getElementById('star-'+i);
+                if(i <= value) {
+                    icon.classList.add('text-yellow-400');
+                    icon.classList.remove('text-gray-300');
+                    icon.style.fill = 'currentColor'; // solid star
+                } else {
+                    icon.classList.remove('text-yellow-400');
+                    icon.classList.add('text-gray-300');
+                    icon.style.fill = 'none';
+                }
+            }
+            if(window.feather) window.feather.replace();
+        }
+
     });
-
-
 </script>
 @endsection

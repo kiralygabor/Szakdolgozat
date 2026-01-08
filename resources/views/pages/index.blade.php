@@ -800,22 +800,22 @@
         <!-- Buttons & QR Row -->
         <div class="flex flex-col sm:flex-row items-center gap-8 justify-center lg:justify-start">
           
-          <!-- Store Buttons -->
+          <!-- Store Buttons (Updated to White) -->
           <div class="flex flex-col gap-3 w-full sm:w-auto">
             <!-- Apple Button -->
-            <a href="#" class="flex items-center gap-3 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-xl transition-all duration-300 shadow-lg hover:-translate-y-1 border border-slate-700/50">
-              <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.3-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.21-1.96 1.07-3.11-1.05.05-2.31.74-3.03 1.59-.67.79-1.25 1.95-1.12 3.07 1.17.09 2.36-.73 3.08-1.55"/></svg>
+            <a href="#" class="flex items-center gap-3 bg-white hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-xl transition-all duration-300 shadow-lg hover:-translate-y-1">
+              <img src="assets/img/apple.svg" alt="Apple Logo" class="w-8 h-8">
               <div class="text-left leading-none">
-                <div class="text-[10px] uppercase tracking-wide opacity-80 mb-1">Download on the</div>
+                <div class="text-[10px] uppercase tracking-wide opacity-60 mb-1">Download on the</div>
                 <div class="text-base font-bold font-sans">App Store</div>
               </div>
             </a>
             
             <!-- Google Play Button -->
-            <a href="#" class="flex items-center gap-3 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-xl transition-all duration-300 shadow-lg hover:-translate-y-1 border border-slate-700/50">
-              <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.6 3,21.09 3,20.5M16.81,15.12L6.05,21.34L14.54,12.85L16.81,15.12M20.3,13.1L18.3,16.62L15.4,13.72L20.3,13.1M16.81,8.88L14.54,11.15L6.05,2.66L16.81,8.88M20.3,10.9L15.4,10.28L18.3,7.38L20.3,10.9Z"/></svg>
+            <a href="#" class="flex items-center gap-3 bg-white hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-xl transition-all duration-300 shadow-lg hover:-translate-y-1">
+              <img src="assets/img/google-play.svg" alt="Google Play Logo" class="w-7 h-7">
               <div class="text-left leading-none">
-                <div class="text-[10px] uppercase tracking-wide opacity-80 mb-1">Get it on</div>
+                <div class="text-[10px] uppercase tracking-wide opacity-60 mb-1">Get it on</div>
                 <div class="text-base font-bold font-sans">Google Play</div>
               </div>
             </a>
@@ -844,7 +844,6 @@
           <div class="absolute inset-4 bg-indigo-900 rounded-[3rem] blur-2xl opacity-60"></div>
           
           <!-- Actual Image -->
-          <!-- Using a clean, cutout phone mockup -->
           <img 
             src="https://assets.codepen.io/7729268/iphone-mockup-minijobz.png" 
             onerror="this.src='assets/img/phone_14_01.webp'"
@@ -865,7 +864,8 @@
             </div>
           </div>
 
-          <div class="absolute -right-4 bottom-1/3 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
+          <!-- Notification Card (Lowered to bottom-8) -->
+          <div class="absolute -right-4 bottom-8 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
              <div class="flex items-center gap-3">
               <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
               <div>
@@ -881,7 +881,6 @@
     </div>
   </div>
 </section>
- 
  
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-12 px-4 shadow-sm transition-colors duration-300">

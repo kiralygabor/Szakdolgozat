@@ -83,7 +83,7 @@
                 <div>
                     <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">{{ __('task_details.location') }}</p>
                     <p class="text-base font-medium text-slate-900">
-                        {{ optional(optional($task->employer)->city)->name ?? 'Remote' }}
+                        {{ $task->location ?? 'Remote' }}
                     </p>
                 </div>
             </div>

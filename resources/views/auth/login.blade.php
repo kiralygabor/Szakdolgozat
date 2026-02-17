@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login - Airtasker Style</title>
+  <title>Login - Minijobz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <style>
     body {
@@ -35,9 +35,12 @@
     .btn-primary {
       border-radius: 24px;
       padding: 0.75rem;
-      background: #007AFF;
+      background: #6366f1;
       border: none;
       font-weight: bold;
+    }
+    .btn-primary:hover {
+      background: #4f46e5;
     }
     .btn-outline {
       border-radius: 24px;
@@ -47,9 +50,12 @@
       background: #fff;
     }
     .auth-links a {
-      color: #007AFF;
+      color: #6366f1;
       text-decoration: none;
       font-weight: 500;
+    }
+    .auth-links a:hover {
+      color: #4f46e5;
     }
     .divider {
       margin: 1.5rem 0;
@@ -69,6 +75,11 @@
 
 <div class="auth-wrapper">
   <div class="auth-box">
+    <div style="margin-bottom: 24px;">
+      <a href="{{ url('/') }}">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" style="height: 48px; width: auto;">
+      </a>
+    </div>
     <h2 class="auth-title">Login to your account</h2>
 
     <!-- Success / Warning / Errors -->

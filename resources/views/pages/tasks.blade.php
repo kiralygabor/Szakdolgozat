@@ -30,24 +30,90 @@
       border-radius: 0.75rem;
     }
 
-    /* Range Slider Styling */
-    #price-menu input[type=range]::-webkit-slider-thumb {
+    /* Dual Range Slider — Airtasker Style */
+    .range-slider {
+      position: relative;
+      width: 100%;
+      height: 30px;
+    }
+    .range-slider .track-bg {
+      position: absolute;
+      width: 100%;
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 3px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .range-slider .track-fill {
+      position: absolute;
+      height: 6px;
+      background: #2563eb;
+      border-radius: 3px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .range-slider input[type=range] {
       -webkit-appearance: none;
       appearance: none;
-      width: 16px;
-      height: 16px;
-      background: #2563eb;
-      border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 10;
-      cursor: pointer;
-      margin-top: -6px;
-    }
-    #price-menu input[type=range]::-webkit-slider-runnable-track {
-      height: 4px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: transparent;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
+      outline: none;
+    }
+    .range-slider input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 21px;
+      height: 21px;
+      background: #ffffff;
+      border-radius: 50%;
+      border: 2px solid #2563eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      cursor: pointer;
+      pointer-events: all;
+      position: relative;
+      z-index: 3;
+      transition: box-shadow 0.15s;
+      margin-top: -8px;
+    }
+    .range-slider input[type=range]::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 0 4px rgba(37,99,235,0.15), 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .range-slider input[type=range]::-webkit-slider-thumb:active {
+      box-shadow: 0 0 0 6px rgba(37,99,235,0.2), 0 1px 3px rgba(0,0,0,0.15);
+    }
+    .range-slider input[type=range]::-moz-range-thumb {
+      width: 21px;
+      height: 21px;
+      background: #ffffff;
+      border-radius: 50%;
+      border: 2px solid #2563eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      cursor: pointer;
+      pointer-events: all;
+      margin-top: -8px;
+    }
+    .range-slider input[type=range]::-webkit-slider-runnable-track {
+      height: 6px;
+      background: transparent;
+    }
+    .range-slider input[type=range]::-moz-range-track {
+      height: 6px;
+      background: transparent;
+    }
+    .range-slider input#price-min {
+      z-index: 2;
+    }
+    .range-slider input#price-max {
+      z-index: 3;
     }
 
     /* --- Modal Specific Styles (Airtasker Look) --- */
@@ -98,7 +164,7 @@
           name="q"
           value="{{ $filters['q'] ?? '' }}"
           type="text"
-          placeholder="{{ __('tasks_page.search_placeholder') }}"
+          placeholder="Search for a task name..."
           class="w-full pl-10 pr-12 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
           autocomplete="off"
         >
@@ -118,7 +184,7 @@
         <div class="relative">
             <select name="category" id="category-filter" 
                     class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
-              <option value="">{{ __('tasks_page.all_categories') }}</option>
+              <option value="">All Categories</option>
               @foreach(($categories ?? []) as $category)
                 <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
                   {{ $category->name }}
@@ -134,7 +200,7 @@
         <div class="relative {{ ($filters['category'] ?? '') ? '' : 'hidden' }}" id="job-filter-container">
             <select name="job" id="job-filter" 
                     class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
-              <option value="">{{ __('tasks_page.all_services') }}</option>
+              <option value="">All Services</option>
               @if($filters['category'] ?? '')
                 @php
                     $selectedCategory = $categories->firstWhere('id', $filters['category']);
@@ -157,36 +223,36 @@
           <button type="button" id="type-btn"
                   class="min-w-[120px] justify-between px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
             <i data-feather="briefcase" class="w-3.5 h-3.5 text-gray-500"></i>
-            <span id="type-text">{{ __('tasks_page.type_btn') }}</span>
+            <span id="type-text">Type</span>
             <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
           </button>
           
           <div id="type-menu" class="absolute mt-3 right-0 bg-white border border-gray-100 rounded-xl shadow-xl p-4 w-64 hidden z-50">
              <div class="mb-3">
-               <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">{{ __('tasks_page.location_label') }}</label>
-               <input id="type-city-search" type="text" placeholder="{{ __('tasks_page.search_city_placeholder') }}"
+               <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Location</label>
+               <input id="type-city-search" type="text" placeholder="Search city..."
                    class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm focus:border-blue-500 outline-none">
                <div id="type-city-dropdown" class="mt-1 max-h-40 overflow-y-auto hidden border rounded-lg shadow-inner bg-white"></div>
              </div>
              <div class="mb-3">
-                <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">{{ __('tasks_page.mode_label') }}</label>
+                <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mode</label>
                 <div class="space-y-1">
                   <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
                     <input type="radio" name="type" value="all" class="text-blue-600" @checked(($filters['type'] ?? 'all') === 'all')>
-                    <span class="text-sm ml-2 text-gray-700">{{ __('tasks_page.mode_any') }}</span>
+                    <span class="text-sm ml-2 text-gray-700">Any</span>
                   </label>
                   <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
                     <input type="radio" name="type" value="in_person" class="text-blue-600" @checked(($filters['type'] ?? '') === 'in_person')>
-                    <span class="text-sm ml-2 text-gray-700">{{ __('tasks_page.mode_in_person') }}</span>
+                    <span class="text-sm ml-2 text-gray-700">In-Person</span>
                   </label>
                   <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
                     <input type="radio" name="type" value="remote" class="text-blue-600" @checked(($filters['type'] ?? '') === 'remote')>
-                    <span class="text-sm ml-2 text-gray-700">{{ __('tasks_page.mode_remote') }}</span>
+                    <span class="text-sm ml-2 text-gray-700">Remote</span>
                   </label>
                 </div>
              </div>
              <div class="flex justify-end gap-2 pt-2 border-t">
-               <button type="button" id="type-apply" class="w-full py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">{{ __('tasks_page.apply_filter') }}</button>
+               <button type="button" id="type-apply" class="w-full py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Apply Filter</button>
              </div>
           </div>
         </div>
@@ -194,40 +260,55 @@
         <!-- Price -->
         <div class="relative">
           <button type="button" id="price-btn"
-                  class="min-w-[120px] justify-between px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
+                  class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price'])) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
             <i data-feather="dollar-sign" class="w-3.5 h-3.5 text-gray-500"></i>
-            <span id="price-text">{{ __('tasks_page.price_btn') }}</span>
+            <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price'])) ? 'text-blue-600' : '' }}">
+              @if(isset($filters['min_price']) || isset($filters['max_price']))
+                €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
+              @else
+                Price
+              @endif
+            </span>
             <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
           </button>
           
-          <div id="price-menu" class="absolute mt-3 right-0 bg-white border border-gray-100 rounded-xl shadow-xl p-5 w-72 hidden z-50">
-            <span class="text-xs font-bold text-gray-500 uppercase mb-4 block">{{ __('tasks_page.budget_range') }}</span>
-            <div class="relative h-8 mb-4">
-               <div class="absolute top-1/2 w-full h-1 bg-gray-200 rounded-full -translate-y-1/2"></div>
-               <div id="price-track" class="absolute top-1/2 h-1 bg-blue-500 rounded-full -translate-y-1/2 z-0"></div>
+          <div id="price-menu" class="absolute mt-2 right-0 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50" style="width: 340px; padding: 16px 20px 12px;">
+            {{-- Header --}}
+            <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2" style="letter-spacing:.05em;">Task Price</label>
+
+            {{-- Price display box --}}
+            <div class="border border-gray-300 rounded-md px-3 py-2 mb-5 text-center">
+              <span id="price-display" class="text-[15px] font-semibold text-gray-800">
+                €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
+              </span>
+            </div>
+
+            {{-- Slider --}}
+            <div class="range-slider" style="margin-bottom: 20px;">
+               <div class="track-bg"></div>
+               <div id="price-track" class="track-fill"></div>
                <input id="price-min" name="min_price" type="range" min="1000" max="20000" step="50"
-                      value="{{ max(1000, (int)($filters['min_price'] ?? 1000)) }}"
-                      class="absolute w-full h-full opacity-0 cursor-pointer z-10">
+                      value="{{ max(1000, (int)($filters['min_price'] ?? 1000)) }}">
                <input id="price-max" name="max_price" type="range" min="1000" max="20000" step="50"
-                      value="{{ min(20000, (int)($filters['max_price'] ?? 20000)) }}"
-                      class="absolute w-full h-full opacity-0 cursor-pointer z-20">
+                      value="{{ min(20000, (int)($filters['max_price'] ?? 20000)) }}">
             </div>
-            <div class="flex justify-between items-center mb-4 text-sm text-gray-700 font-medium">
-                <span id="price-min-label">€1000</span>
-                <span id="price-max-label">€20000</span>
+
+            {{-- Buttons --}}
+            <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
+              <button type="button" id="price-cancel" class="flex-1 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors">Cancel</button>
+              <button type="button" id="price-apply" class="flex-1 py-2 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">Apply</button>
             </div>
-            <button type="button" id="price-apply" class="w-full py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">{{ __('tasks_page.apply_price') }}</button>
           </div>
         </div>
 
         <!-- Sort -->
         <div class="hidden lg:block h-8 w-px bg-gray-300 mx-4"></div>
         <select name="sort" id="sort-filter" class="bg-transparent text-sm font-medium text-gray-600 hover:text-gray-900 cursor-pointer outline-none">
-            <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>{{ __('tasks_page.sort_recent') }}</option>
-            <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>{{ __('tasks_page.sort_closest') }}</option>
-            <option value="due" @selected(($filters['sort'] ?? '')==='due')>{{ __('tasks_page.sort_due') }}</option>
-            <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>{{ __('tasks_page.sort_price_asc') }}</option>
-            <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>{{ __('tasks_page.sort_price_desc') }}</option>
+            <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>Sort: Recent</option>
+            <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>Sort: Closest</option>
+            <option value="due" @selected(($filters['sort'] ?? '')==='due')>Sort: Due Soon</option>
+            <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>Price: Low to High</option>
+            <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>Price: High to Low</option>
         </select>
       </div>
     </form>
@@ -261,13 +342,13 @@
                     {{ optional($task->category)->name ?? 'General' }}
                  </span>
                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-medium">
-                    📍 {{ optional(optional($task->employer)->city)->name ?? 'Remote' }}
+                    📍 {{ $task->location ?? 'Remote' }}
                  </span>
               </div>
  
               <div class="pt-2 border-t border-gray-50 flex justify-between items-center">
                  <span class="text-[10px] text-gray-400">
-                    {{ $task->created_at?->diffForHumans(null, true, true) }} {{ __('tasks_page.ago') }}
+                    {{ $task->created_at?->diffForHumans(null, true, true) }} ago
                  </span>
                  <div class="flex items-center gap-2">
                      @auth
@@ -277,17 +358,17 @@
                      @endauth
                      @guest
                          <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:underline">
-                            {{ __('tasks_page.signin_to_offer') }}
+                            Sign in to make an offer
                          </a>
                      @else
                          <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
                          @if(count($missingSteps) > 0)
                             <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                {{ __('tasks_page.make_offer') }}
+                                Make an offer
                             </button>
                          @else
                             <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                {{ __('tasks_page.make_offer') }}
+                                Make an offer
                             </a>
                          @endif
                      @endguest
@@ -300,14 +381,14 @@
                  <i data-feather="search" class="w-10 h-10 text-blue-300"></i>
               </div>
               <div class="space-y-2">
-                <h3 class="text-xl font-bold text-slate-800">{{ __('tasks_page.no_tasks_found') }}</h3>
+                <h3 class="text-xl font-bold text-slate-800">No tasks found</h3>
                 <p class="text-base text-slate-500 leading-relaxed max-w-[280px] mx-auto">
-                  {{ __('tasks_page.no_tasks_desc') }}
+                  We couldn't find any tasks matching your criteria. Try adjusting your filters or search terms.
                 </p>
               </div>
               <a href="{{ route('tasks') }}" class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-100 bg-blue-50/50 px-8 py-3 rounded-full transition-all mt-4 shadow-sm hover:shadow-md">
                 <i data-feather="refresh-cw" class="w-4 h-4"></i>
-                {{ __('tasks_page.clear_filters') }}
+                Clear all filters
               </a>
             </div>
           @endforelse
@@ -365,9 +446,9 @@
               </div>
               <!-- Header Text -->
               <div class="text-center mb-6">
-                  <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('tasks_page.before_offer_title') }}</h2>
+                  <h2 class="text-2xl font-bold text-gray-900 mb-2">Before you make an offer</h2>
                   <p class="text-gray-500 text-[15px] leading-relaxed">
-                      {{ __('tasks_page.before_offer_desc') }}
+                      Help us keep Minijobz safe and fun, and fill in a few details.
                   </p>
               </div>
 
@@ -418,7 +499,7 @@
               <!-- Footer Button -->
               <div class="mt-2">
                 <a href="{{ route('profile') }}" class="block w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-center rounded-full transition-colors text-sm">
-                    {{ __('tasks_page.continue') }}
+                    Continue
                 </a>
               </div>
           </div>
@@ -570,36 +651,72 @@
         });
     });
 
-    // 5. Price Slider
+    // 5. Dual-Thumb Price Range Slider (Airtasker style)
     (function initPriceSlider() {
         const minEl = document.getElementById('price-min');
         const maxEl = document.getElementById('price-max');
         const track = document.getElementById('price-track');
-        const labelMin = document.getElementById('price-min-label');
-        const labelMax = document.getElementById('price-max-label');
+        const priceDisplay = document.getElementById('price-display');
         const priceText = document.getElementById('price-text');
+        const priceBtn = document.getElementById('price-btn');
+        const priceMenu = document.getElementById('price-menu');
         if (!minEl || !maxEl) return;
-        function update() {
-            let min = parseInt(minEl.value), max = parseInt(maxEl.value);
-            if (min > max - 50) {
-                if (this === minEl) minEl.value = max - 50;
-                else maxEl.value = min + 50;
+
+        const RANGE_MIN = 1000;
+        const RANGE_MAX = 20000;
+        const GAP = 100;
+
+        function update(source) {
+            let minVal = parseInt(minEl.value);
+            let maxVal = parseInt(maxEl.value);
+
+            // Enforce minimum gap
+            if (minVal > maxVal - GAP) {
+                if (source === 'min') {
+                    minVal = maxVal - GAP;
+                    minEl.value = minVal;
+                } else {
+                    maxVal = minVal + GAP;
+                    maxEl.value = maxVal;
+                }
             }
-            const pMin = ((minEl.value - 1000) / 19000) * 100;
-            const pMax = ((maxEl.value - 1000) / 19000) * 100;
-            track.style.left = pMin + "%";
-            track.style.width = (pMax - pMin) + "%";
-            labelMin.textContent = '€' + minEl.value;
-            labelMax.textContent = '€' + maxEl.value;
-            if(min !== 1000 || max !== 20000) {
-                priceText.textContent = `€${minEl.value} - €${maxEl.value}`;
-                priceText.classList.add('text-blue-600', 'font-bold');
+
+            // Colored track between thumbs
+            const pMin = ((minVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
+            const pMax = ((maxVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
+            track.style.left = pMin + '%';
+            track.style.width = (pMax - pMin) + '%';
+
+            // Update price display box inside dropdown
+            if (priceDisplay) {
+                priceDisplay.textContent = `€${minVal.toLocaleString()} - €${maxVal.toLocaleString()}`;
             }
         }
-        minEl.addEventListener('input', update);
-        maxEl.addEventListener('input', update);
-        update();
-        document.getElementById('price-apply').addEventListener('click', () => document.getElementById('filters-form').submit());
+
+        minEl.addEventListener('input', () => update('min'));
+        maxEl.addEventListener('input', () => update('max'));
+
+        // Initial update
+        update('min');
+
+        // Apply button — submit form & update button text
+        document.getElementById('price-apply').addEventListener('click', () => {
+            const minVal = parseInt(minEl.value);
+            const maxVal = parseInt(maxEl.value);
+            priceText.textContent = `€${minVal.toLocaleString()} - €${maxVal.toLocaleString()}`;
+            priceText.classList.add('text-blue-600');
+            priceBtn.classList.add('border-blue-400');
+            document.getElementById('filters-form').submit();
+        });
+
+        // Cancel button — reset slider to original values & close
+        document.getElementById('price-cancel').addEventListener('click', () => {
+            // Reset to whatever the page loaded with
+            minEl.value = {{ max(1000, (int)($filters['min_price'] ?? 1000)) }};
+            maxEl.value = {{ min(20000, (int)($filters['max_price'] ?? 20000)) }};
+            update('min');
+            priceMenu.classList.add('hidden');
+        });
     })();
 
     // 6. City Search

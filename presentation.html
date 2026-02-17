@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Minijobz - Project Presentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css">
+    <style>
+        .container { display: flex; justify-content: space-around; }
+        .col { flex: 1; }
+        .text-left { text-align: left; }
+        .text-smaller { font-size: 0.7em; }
+        .highlight { color: #50fa7b; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Title -->
+            <section>
+                <h1>Minijobz</h1>
+                <h3>(Kicsimelo)</h3>
+                <p>A Modern Platform for Connecting Taskers and Employers</p>
+                <small>End-of-Year Software Project</small>
+            </section>
+
+            <!-- Slide 2: Overview -->
+            <section>
+                <h2>Project Overview</h2>
+                <div class="text-left">
+                    <p><span class="highlight">Goal:</span> Create a localized gig-economy marketplace.</p>
+                    <p><span class="highlight">Problem:</span> Finding reliable help for small tasks is often difficult and unorganized.</p>
+                    <p><span class="highlight">Solution:</span> A secure web platform connecting Employers with Taskers alongside real-time communication.</p>
+                </div>
+            </section>
+
+            <!-- Slide 3: Tech Stack -->
+            <section>
+                <h2>Technologies & Tools</h2>
+                <div class="container">
+                    <div class="col">
+                        <h4>Backend</h4>
+                        <ul>
+                            <li>Laravel 12</li>
+                            <li>PHP 8.2+</li>
+                            <li>Node.js (Socket.io)</li>
+                            <li>MySQL</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h4>Frontend</h4>
+                        <ul>
+                            <li>Blade Templates</li>
+                            <li>Tailwind CSS v4</li>
+                            <li>Axios</li>
+                            <li>Vite</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 4: Supported Platforms -->
+            <section>
+                <h2>Supported Platforms</h2>
+                <ul>
+                    <li><strong>Web (Desktop):</strong> Full dashboard and management features.</li>
+                    <li><strong>Mobile Web:</strong> Fully responsive design using Tailwind CSS.</li>
+                    <li><strong>Cross-Browser:</strong> Compatible with Chrome, Firefox, Edge, Safari.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 5: Visuals Placeholder -->
+            <section>
+                <h2>User Interface</h2>
+                <p>Designed for Clarity and Ease of Use</p>
+                <div style="background: #333; height: 300px; display: flex; align-items: center; justify-content: center; border-radius: 10px; border: 2px dashed #666;">
+                    [Insert Homepage / Dashboard Screenshot Here]
+                </div>
+                <p class="text-smaller">Features vibrant colors, clear CTAs, and a modern "Glassmorphism" aesthetic.</p>
+            </section>
+
+            <!-- Slide 6: Database/Architecture -->
+            <section>
+                <h2>Core Architecture</h2>
+                <ul>
+                    <li><strong>MVC Pattern:</strong> Clear separation of concern used in Laravel.</li>
+                    <li><strong>Real-Time:</strong> WebSocket layer for instant messaging between users.</li>
+                    <li><strong>Security:</strong> CSRF protection, Authentication (Socialite), Validation.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 7: Sample Code -->
+            <section>
+                <h3>Code Spotlight: Task Creation</h3>
+                <pre><code class="php" data-trim data-noescape>
+public function store(StoreTaskRequest $request) {
+    // 1. Validation check
+    $validated = $request->validated();
+
+    // 2. Handle File Uploads (Secure Storage)
+    $photos = [];
+    if ($request->hasFile('photos')) {
+        foreach ($request->file('photos') as $photo) {
+            $photos[] = $photo->store('task-photos', 'public');
+        }
+    }
+
+    // 3. Save Logic
+    $advert = new Advertisment();
+    $advert->fill($validated);
+    $advert->photos = $photos;
+    $advert->employer_id = Auth::id();
+    $advert->save();
+
+    return redirect()->route('my-tasks');
+}
+                </code></pre>
+                <p class="text-smaller">Demonstrates dependency injection, validation, and secure file handling.</p>
+            </section>
+
+            <!-- Slide 8: Challenges -->
+            <section>
+                <h2>Challenges & Solutions</h2>
+                <div class="text-left text-smaller">
+                    <p><strong>Challenge:</strong> Real-time messaging without page reloads.</p>
+                    <p><em>Solution:</em> Implemented a Node.js sidecar server with Socket.io.</p>
+                    <br>
+                    <p><strong>Challenge:</strong> Handling complex task states (Open -> Offers -> Accepted -> Completed).</p>
+                    <p><em>Solution:</em> State machine logic in Controllers + Database constraints.</p>
+                </div>
+            </section>
+
+            <!-- Slide 9: Team Roles -->
+            <section>
+                <h2>Team Collaboration</h2>
+                <ul>
+                    <li><strong>Backend & API:</strong> Database design, API endpoints, Auth logic.</li>
+                    <li><strong>Frontend & UI:</strong> Blade templates, Tailwind styling, Responsive layout.</li>
+                </ul>
+                <p style="margin-top: 20px; font-size: 0.8em; color: #aaa;">Collaboration via GitHub & modular feature development.</p>
+            </section>
+
+            <!-- Slide 10: Future Improvements -->
+            <section>
+                <h2>Future Roadmap</h2>
+                <ul>
+                    <li>🔔 Native Mobile App Wrapper</li>
+                    <li>💳 Stripe/PayPal Integration</li>
+                    <li>📍 Geolocation / Map View for Tasks</li>
+                    <li>✅ ID Verification System</li>
+                </ul>
+            </section>
+
+            <!-- Slide 11: Demo -->
+            <section>
+                <h1>Live Demo</h1>
+                <p>Let's see Minijobz in action!</p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            plugins: [ RevealHighlight ]
+        });
+    </script>
+</body>
+</html>

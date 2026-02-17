@@ -35,6 +35,7 @@
     </script>
     <style>
       /* Navbar dropdown animation helper */
+      a { text-decoration: none; }
       #settings-menu.show { opacity: 1 !important; transform: translateY(0) !important; }
 
       .user-pic { width: 40px; border-radius: 50%; cursor: pointer; }
@@ -568,10 +569,7 @@
 <div class="w-full flex justify-between items-center px-6 py-3">
 <div class="flex items-center space-x-2 pl-4">
   <a href="{{ url('/index') }}" class="flex items-center">
-    <img src="{{ asset('assets/img/logo.png') }}" 
-         alt="Minijobz Logo" 
-         class="h-8 w-auto object-contain"
-         style="max-height: 32px;">
+    <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="h-8 w-auto mix-blend-multiply">
   </a>
 </div>
 
@@ -870,8 +868,70 @@
     </main>
 
     <!-- 🔹 FOOTER -->
-    <footer class="text-center py-3">
-        <p>&copy; Király Gábor - Praszna Koppány - Nagy Gergely - 2025</p>
+    <footer class="bg-gray-50 border-t border-gray-200 pt-16 pb-8 mt-auto shadow-[0_-1px_2px_rgba(0,0,0,0.03)]">
+        <div class="container mx-auto px-6 max-w-7xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <!-- Column 1: Brand -->
+                <div class="space-y-4">
+                    <a href="{{ url('/index') }}" class="flex items-center">
+                        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="h-8 w-auto mix-blend-multiply">
+                    </a>
+                    <p class="text-sm text-gray-500 leading-relaxed">
+                        {{ __('footer.brand_description') }}
+                    </p>
+                </div>
+
+                <!-- Column 2: Popular Categories -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-4">{{ __('footer.popular_categories') }}</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li><a href="{{ url('/categories/handyman') }}" class="hover:text-indigo-600 transition-colors">Handyman</a></li>
+                        <li><a href="{{ url('/categories/cleaning') }}" class="hover:text-indigo-600 transition-colors">Cleaning</a></li>
+                        <li><a href="{{ url('/categories/delivery') }}" class="hover:text-indigo-600 transition-colors">Delivery</a></li>
+                        <li><a href="{{ url('/categories/gardening') }}" class="hover:text-indigo-600 transition-colors">Gardening</a></li>
+                        <li><a href="{{ url('/categories/removals') }}" class="hover:text-indigo-600 transition-colors">Removals</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: Company -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-4">{{ __('footer.company') }}</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.about_us') }}</a></li>
+                        <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.community_guidelines') }}</a></li>
+                        <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.contact_us') }}</a></li>
+                        <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.privacy_policy') }}</a></li>
+                        <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.terms_and_conditions') }}</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 4: Pages -->
+                <div>
+                    <h3 class="font-bold text-gray-900 mb-4">{{ __('footer.pages') }}</h3>
+                    <ul class="space-y-3 text-sm text-gray-600">
+                        <li><a href="{{ route('tasks') }}" class="hover:text-indigo-600 transition-colors">{{ __('navbar.browse_tasks') }}</a></li>
+                        <li><a href="{{ route('howitworks') }}" class="hover:text-indigo-600 transition-colors">{{ __('navbar.how_it_works') }}</a></li>
+                        @guest
+                            <li><a href="{{ route('login') }}" class="hover:text-indigo-600 transition-colors">{{ __('navbar.login') }}</a></li>
+                            <li><a href="{{ route('register') }}" class="hover:text-indigo-600 transition-colors">{{ __('navbar.sign_up') }}</a></li>
+                        @endguest
+                        @auth
+                            <li><a href="{{ route('my-tasks') }}" class="hover:text-indigo-600 transition-colors">{{ __('navbar.dashboard') }}</a></li>
+                            <li><a href="{{ route('profile') }}" class="hover:text-indigo-600 transition-colors">{{ __('navbar.profile') }}</a></li>
+                        @endauth
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">
+                    &copy; {{ date('Y') }} Minijobz. {{ __('footer.all_rights_reserved') }}
+                </p>
+                <div class="text-sm text-gray-400">
+                    {{ __('footer.copyright_authors') }}
+                </div>
+            </div>
+        </div>
     </footer>
 
     <!-- Bootstrap JS Bundle -->

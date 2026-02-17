@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign up - Airtasker Style</title>
+  <title>Sign Up - Minijobz</title>
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   
   <style>
     :root {
-      --primary-blue: #007AFF;
+      --primary-blue: #6366f1;
       --error-red: #dc3545;
       --dark-navy: #001844;
       --text-gray: #777;
@@ -166,6 +166,11 @@
 
 <div class="auth-wrapper">
   <div class="auth-box">
+    <div style="margin-bottom: 24px;">
+      <a href="{{ url('/') }}">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" style="height: 48px; width: auto;">
+      </a>
+    </div>
     <h2 class="auth-title">Sign up to your account</h2>
 
     <!-- Generic Status Messages (Success/Warnings) -->

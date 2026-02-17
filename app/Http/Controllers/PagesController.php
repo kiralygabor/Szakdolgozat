@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace App\Http\Controllers;
 
 use App\Models\Pages;
@@ -14,7 +14,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
- 
+
 class PagesController extends Controller
 {
     public function index() : View
@@ -32,7 +32,7 @@ class PagesController extends Controller
                     ->orderByDesc('created_at')
                     ->limit(6)
                     ->get();
-                
+
                 return [
                     'category' => $category,
                     'jobs' => $jobs,
@@ -47,7 +47,7 @@ class PagesController extends Controller
             'categoriesWithJobs' => $categories,
         ]);
     }
- 
+
     public function mainpage(Request $request): View
     {
         $query = Advertisement::where('status', 'open')->with(['category', 'employer.city']);
@@ -62,9 +62,7 @@ class PagesController extends Controller
 
         if ($request->filled('city_search')) {
             $search = trim((string) $request->query('city_search'));
-            $query->whereHas('employer.city', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
+            $query->where('location', 'like', "%{$search}%");
         }
 
         if ($request->filled('category')) {
@@ -99,10 +97,7 @@ class PagesController extends Controller
         $sort = (string) $request->query('sort', 'recent');
         switch ($sort) {
             case 'closest':
-                $query->join('users as u', 'u.id', '=', 'advertisements.employer_id')
-                      ->join('cities as c', 'c.id', '=', 'u.city_id')
-                      ->orderBy('c.name')
-                      ->select('advertisements.*');
+                $query->orderBy('location', 'asc');
                 break;
             case 'due':
                 $query->orderBy('expiration_date');
@@ -184,7 +179,7 @@ class PagesController extends Controller
 
         return redirect()->route('profile')->with('success', 'Profil sikeresen frissítve.');
     }
- 
+
     public function category(): View
     {
         $categories = Category::orderBy('name')->get();
@@ -214,9 +209,7 @@ class PagesController extends Controller
         // Explicit city filter (set from Work Type dropdown live search)
         if ($request->filled('city_search')) {
             $search = trim((string) $request->query('city_search'));
-            $query->whereHas('employer.city', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
-            });
+            $query->where('location', 'like', "%{$search}%");
         }
 
         // Filter by category
@@ -265,11 +258,8 @@ class PagesController extends Controller
         $sort = (string) $request->query('sort', 'recent');
         switch ($sort) {
             case 'closest':
-                // Requires geo data; fallback to alphabetical city for now
-                $query->join('users as u', 'u.id', '=', 'advertisements.employer_id')
-                      ->join('cities as c', 'c.id', '=', 'u.city_id')
-                      ->orderBy('c.name')
-                      ->select('advertisements.*');
+                // Sort by location name A-Z
+                $query->orderBy('location', 'asc');
                 break;
             case 'due':
                 $query->orderBy('expiration_date');
@@ -377,7 +367,7 @@ class PagesController extends Controller
 
         // Filter by task status (posted, pending, completed)
         $status = $request->string('status', '');
-        
+
         // If no status is explicitly set, set default defaults per view mode
         if (empty($status)) {
             $status = 'posted'; // Default tab
@@ -427,23 +417,23 @@ class PagesController extends Controller
             ],
         ]);
     }
-    
+
     public function notifications(): View
     {
         return view('pages.notifications');
     }
-    
+
     public function messages(): View
     {
         return view('pages.messages');
     }
-    
+
     public function postTask(): View
     {
         $categories = Category::with(['jobs' => function($query) {
             $query->orderBy('name');
         }])->orderBy('name')->get();
-        
+
         $otherJobId = Job::where('name', 'Other')->value('id');
 
         return view('pages.post-task', compact('categories', 'otherJobId'));
@@ -455,7 +445,7 @@ class PagesController extends Controller
     public function storeTask(StoreTaskRequest $request)
     {
         $validated = $request->validated();
-        
+
         // Handle photo uploads
         $photos = [];
         if ($request->hasFile('photos')) {
@@ -464,7 +454,7 @@ class PagesController extends Controller
                 $photos[] = $path;
             }
         }
-        
+
         // Create the advertisement
         $advertisement = new Advertisement();
         $advertisement->fill($validated);
@@ -473,12 +463,12 @@ class PagesController extends Controller
         $advertisement->created_at = now();
         $advertisement->expiration_date = now()->addDays(30); // Tasks expire in 30 days
         $advertisement->status = 'open';
-        
+
         $advertisement->save();
-        
+
         return redirect()->route('my-tasks')->with('success', 'Your task has been posted successfully!');
     }
- 
+
     public function showTask($id): View
     {
         $task = Advertisement::with(['category', 'employer.city', 'offers.user'])->findOrFail($id);
@@ -520,7 +510,7 @@ class PagesController extends Controller
     public function publicProfile($id): View
     {
         $user = \App\Models\User::with(['city', 'reviewsReceived.reviewer'])->findOrFail($id);
-        
+
         $canReview = false;
         if (Auth::check() && Auth::id() != $id) {
             $myId = Auth::id();

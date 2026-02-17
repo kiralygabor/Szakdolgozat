@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Messages')
+@section('title', __('messages_page.title'))
 
 @section('content')
 <style>
@@ -27,10 +27,10 @@
       <!-- Sidebar -->
       <aside class="border-r border-gray-200 flex flex-col h-full">
         <div class="p-4 border-b border-gray-100">
-          <h2 class="text-xl font-bold text-gray-800 mb-4">Messages</h2>
+          <h2 class="text-xl font-bold text-gray-800 mb-4">{{ __('messages_page.title') }}</h2>
           <div class="relative">
             <i data-feather="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
-            <input type="text" placeholder="Search messages..." class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+            <input type="text" placeholder="{{ __('messages_page.search_placeholder') }}" class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
           </div>
         </div>
 
@@ -60,7 +60,7 @@
                                 @endif
                             </div>
                             <p class="text-sm text-gray-500 truncate {{ $lastMessage && !$lastMessage->is_read && $lastMessage->sender_id !== Auth::id() ? 'font-bold text-gray-800' : '' }}">
-                                {{ $lastMessage ? $lastMessage->body : 'Start a conversation' }}
+                                {{ $lastMessage ? $lastMessage->body : __('messages_page.start_conversation') }}
                             </p>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
             @empty
                 <div class="p-8 text-center text-gray-500">
                     <i data-feather="message-square" class="mx-auto mb-3 opacity-50 w-10 h-10"></i>
-                    <p>No conversations yet.</p>
+                    <p>{{ __('messages_page.no_conversations') }}</p>
                 </div>
             @endforelse
         </div>
@@ -93,7 +93,7 @@
                     <div>
                         <h2 class="font-bold text-gray-900">{{ $chatUser->first_name }} {{ $chatUser->last_name }}</h2>
                         <span class="text-xs text-green-500 font-medium flex items-center gap-1">
-                            <span class="w-2 h-2 bg-green-500 rounded-full"></span> Online
+                            <span class="w-2 h-2 bg-green-500 rounded-full"></span> {{ __('messages_page.online') }}
                         </span>
                     </div>
                 </div>
@@ -105,10 +105,10 @@
                     <!-- Dropdown Menu -->
                     <div id="chat-options-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 hidden z-50 overflow-hidden">
                         <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-b border-gray-50">
-                            <i data-feather="user" class="w-4 h-4 inline-block mr-2"></i> View Profile
+                            <i data-feather="user" class="w-4 h-4 inline-block mr-2"></i> {{ __('messages_page.view_profile') }}
                         </a>
                         <button class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-b border-gray-50">
-                            <i data-feather="flag" class="w-4 h-4 inline-block mr-2"></i> Report User
+                            <i data-feather="flag" class="w-4 h-4 inline-block mr-2"></i> {{ __('messages_page.report_user') }}
                         </button>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                 <form id="message-form" class="flex items-center gap-2">
                     <input type="file" id="attachment-input" class="hidden" accept="image/*,.pdf,.doc,.docx">
                     <div class="flex-1 relative">
-                        <textarea id="message-input" rows="1" placeholder="Type a message..." class="w-full pl-4 pr-12 py-3 bg-gray-100 border-0 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition resize-none custom-scrollbar" style="min-height: 48px; max-height: 120px;"></textarea>
+                        <textarea id="message-input" rows="1" placeholder="{{ __('messages_page.type_placeholder') }}" class="w-full pl-4 pr-12 py-3 bg-gray-100 border-0 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition resize-none custom-scrollbar" style="min-height: 48px; max-height: 120px;"></textarea>
                         <button type="button" id="attachment-btn" class="absolute right-3 top-1/2 transform -translate-y-1/2 -mt-0.5 text-gray-400 hover:text-blue-600 transition">
                             <i data-feather="paperclip" class="w-5 h-5"></i>
                         </button>
@@ -145,8 +145,8 @@
                 <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
                     <i data-feather="message-circle" class="w-12 h-12 text-blue-500"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Your Messages</h2>
-                <p class="text-center max-w-md">Select a conversation from the left to start chatting.</p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ __('messages_page.empty_state_title') }}</h2>
+                <p class="text-center max-w-md">{{ __('messages_page.empty_state_desc') }}</p>
             </div>
         @endif
       </main>

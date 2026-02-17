@@ -49,7 +49,7 @@ class AdvertisementsSeeder extends Seeder
             ];
         }
 
-        // Extra advertisment specifically owned by the test user
+        // Extra advertisement specifically owned by the test user
         $testUserId = DB::table('users')->where('email', 'test2@example.hu')->value('id');
         $fallbackEmployerId = $userIds[0] ?? null;
         $employeeId = $userIds[1] ?? $fallbackEmployerId;
@@ -73,7 +73,7 @@ class AdvertisementsSeeder extends Seeder
         }
 
         foreach ($ads as $ad) {
-            DB::table('advertisments')->insert($ad);
+            DB::table('advertisements')->insert($ad);
         }
     }
 }

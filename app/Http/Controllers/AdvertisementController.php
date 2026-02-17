@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
-use App\Models\Advertisment;
+use App\Models\Advertisement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +30,7 @@ class AdvertisementController extends Controller
         }
     }
 
-    $advert = new Advertisment();
+    $advert = new Advertisement();
     $advert->fill($validated);
     $advert->photos = $photos ?: null;
     $advert->employer_id = Auth::id();
@@ -44,7 +44,7 @@ class AdvertisementController extends Controller
     /**
      * Update an existing advertisement.
      */
-    public function update(StoreTaskRequest $request, Advertisment $advertisement)
+    public function update(StoreTaskRequest $request, Advertisement $advertisement)
     {
         // Only the owner can update
         if (Auth::id() !== $advertisement->employer_id) {
@@ -77,7 +77,7 @@ class AdvertisementController extends Controller
     /**
      * Remove an advertisement.
      */
-    public function destroy(Advertisment $advertisement)
+    public function destroy(Advertisement $advertisement)
     {
         if (Auth::id() !== $advertisement->employer_id) {
             abort(403);
@@ -98,7 +98,7 @@ class AdvertisementController extends Controller
     /**
      * Mark an advertisement as completed.
      */
-    public function complete(Request $request, Advertisment $advertisement)
+    public function complete(Request $request, Advertisement $advertisement)
     {
         if (Auth::id() !== $advertisement->employer_id) {
             abort(403);

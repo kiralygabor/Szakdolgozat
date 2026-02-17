@@ -45,10 +45,10 @@ INSERT INTO `admins` (`id`, `name`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `advertisments`
+-- Tábla szerkezet ehhez a táblához `advertisements`
 --
 
-CREATE TABLE `advertisments` (
+CREATE TABLE `advertisements` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `categories_id` bigint(20) UNSIGNED NOT NULL,
   `reviews_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -63,10 +63,10 @@ CREATE TABLE `advertisments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- A tábla adatainak kiíratása `advertisments`
+-- A tábla adatainak kiíratása `advertisements`
 --
 
-INSERT INTO `advertisments` (`id`, `categories_id`, `reviews_id`, `employer_id`, `employee_id`, `title`, `description`, `price`, `created_at`, `expiration_date`, `status`) VALUES
+INSERT INTO `advertisements` (`id`, `categories_id`, `reviews_id`, `employer_id`, `employee_id`, `title`, `description`, `price`, `created_at`, `expiration_date`, `status`) VALUES
 (1, 1, 1, 1, 2, 'Lakás nagytakarítás', 'Két szobás lakás teljes takarítása szombaton délelőtt.', 18000, '2025-01-20 09:00:00', '2025-01-27 09:00:00', 'closed'),
 (2, 2, 2, 2, 3, 'Tavaszi kertgondozás', 'Sövényvágás, gyomlálás és fűnyírás egy családi házban.', 25000, '2025-02-01 10:00:00', '2025-02-10 10:00:00', 'closed'),
 (3, 3, 3, 3, 4, 'Gyermekfelügyelet délutánra', 'Két kisgyerekre vigyázás hétvégén.', 12000, '2025-02-10 15:00:00', '2025-02-17 15:00:00', 'closed'),
@@ -3733,15 +3733,15 @@ CREATE TABLE `subscription` (
   `name` char(20) NOT NULL,
   `availability` datetime NOT NULL,
   `price` int(11) NOT NULL,
-  `advertisment_number` int(11) NOT NULL,
-  `advertisment_expiration` int(11) NOT NULL
+  `advertisement_number` int(11) NOT NULL,
+  `advertisement_expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- A tábla adatainak kiíratása `subscription`
 --
 
-INSERT INTO `subscription` (`id`, `name`, `availability`, `price`, `advertisment_number`, `advertisment_expiration`) VALUES
+INSERT INTO `subscription` (`id`, `name`, `availability`, `price`, `advertisement_number`, `advertisement_expiration`) VALUES
 (1, 'Alap', '2025-01-01 00:00:00', 0, 2, 7),
 (2, 'Bronz', '2025-01-01 00:00:00', 1500, 5, 14),
 (3, 'Ezüst', '2025-01-01 00:00:00', 3500, 10, 30),
@@ -3835,14 +3835,14 @@ ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
--- A tábla indexei `advertisments`
+-- A tábla indexei `advertisements`
 --
-ALTER TABLE `advertisments`
+ALTER TABLE `advertisements`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `advertisments_categories_id_foreign` (`categories_id`),
-  ADD KEY `advertisments_reviews_id_foreign` (`reviews_id`),
-  ADD KEY `advertisments_employer_id_foreign` (`employer_id`),
-  ADD KEY `advertisments_employee_id_foreign` (`employee_id`);
+  ADD KEY `advertisements_categories_id_foreign` (`categories_id`),
+  ADD KEY `advertisements_reviews_id_foreign` (`reviews_id`),
+  ADD KEY `advertisements_employer_id_foreign` (`employer_id`),
+  ADD KEY `advertisements_employee_id_foreign` (`employee_id`);
 
 --
 -- A tábla indexei `categories`
@@ -3910,9 +3910,9 @@ ALTER TABLE `verify_users`
 --
 
 --
--- AUTO_INCREMENT a táblához `advertisments`
+-- AUTO_INCREMENT a táblához `advertisements`
 --
-ALTER TABLE `advertisments`
+ALTER TABLE `advertisements`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
@@ -3974,13 +3974,13 @@ ALTER TABLE `verify_users`
 --
 
 --
--- Megkötések a táblához `advertisments`
+-- Megkötések a táblához `advertisements`
 --
-ALTER TABLE `advertisments`
-  ADD CONSTRAINT `advertisments_categories_id_foreign` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `advertisments_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `advertisments_employer_id_foreign` FOREIGN KEY (`employer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `advertisments_reviews_id_foreign` FOREIGN KEY (`reviews_id`) REFERENCES `reviews` (`id`) ON DELETE SET NULL;
+ALTER TABLE `advertisements`
+  ADD CONSTRAINT `advertisements_categories_id_foreign` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `advertisements_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `advertisements_employer_id_foreign` FOREIGN KEY (`employer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `advertisements_reviews_id_foreign` FOREIGN KEY (`reviews_id`) REFERENCES `reviews` (`id`) ON DELETE SET NULL;
 
 --
 -- Megkötések a táblához `cities`

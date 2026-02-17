@@ -80,13 +80,7 @@
 
             <!-- Checkboxes -->
             <div class="space-y-4 mb-8">
-                <label class="flex items-start gap-3 cursor-pointer">
-                    <input type="checkbox" name="marketing_consent" class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                    <span class="text-sm text-gray-600 leading-snug">
-                        I agree to receive product updates, marketing materials and special offers via email, SMS, and push notifications
-                    </span>
-                </label>
-
+               
                 <label class="flex items-start gap-3 cursor-pointer">
                     <input type="checkbox" name="terms_consent" class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" required>
                     <span class="text-sm text-gray-600 leading-snug">

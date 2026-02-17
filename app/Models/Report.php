@@ -25,7 +25,7 @@ class Report extends Model
 
     public function advertisement()
     {
-        return $this->belongsTo(Advertisment::class, 'advertisement_id');
+        return $this->belongsTo(Advertisement::class, 'advertisement_id');
     }
 
     public function reporter()

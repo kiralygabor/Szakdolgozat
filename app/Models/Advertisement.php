@@ -4,9 +4,9 @@ namespace App\Models;
  
 use Illuminate\Database\Eloquent\Model;
  
-class Advertisment extends Model
+class Advertisement extends Model
 {
-    protected $table = 'advertisments';
+    protected $table = 'advertisements';
     // Use Eloquent timestamps (created_at/updated_at)
 
     protected $fillable = [
@@ -62,6 +62,6 @@ class Advertisment extends Model
 
     public function offers()
     {
-        return $this->hasMany(Offer::class, 'advertisment_id');
+        return $this->hasMany(Offer::class, 'advertisement_id');
     }
 }

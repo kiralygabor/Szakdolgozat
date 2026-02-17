@@ -22,9 +22,9 @@
         </div>
         {{-- Labels --}}
         <div class="flex justify-between text-[11px] font-semibold text-gray-500 mt-2 relative">
-            <span class="text-left w-1/3 {{ $isOpen || $isAssigned || $isCompleted ? 'text-green-600' : '' }}">Open</span>
-            <span class="text-center w-1/3 {{ $isAssigned || $isCompleted ? 'text-green-600' : '' }}">Assigned</span>
-            <span class="text-right w-1/3 {{ $isCompleted ? 'text-green-600' : '' }}">Completed</span>
+            <span class="text-left w-1/3 {{ $isOpen || $isAssigned || $isCompleted ? 'text-green-600' : '' }}">{{ __('task_details.progress.open') }}</span>
+            <span class="text-center w-1/3 {{ $isAssigned || $isCompleted ? 'text-green-600' : '' }}">{{ __('task_details.progress.assigned') }}</span>
+            <span class="text-right w-1/3 {{ $isCompleted ? 'text-green-600' : '' }}">{{ __('task_details.progress.completed') }}</span>
         </div>
     </div>
  
@@ -32,7 +32,7 @@
     <div class="mb-4 text-sm text-blue-600">
         <a href="{{ route('tasks') }}" class="inline-flex items-center hover:underline font-medium">
             <i data-feather="chevron-left" class="w-4 h-4 mr-1"></i>
-            Return to map
+            {{ __('task_details.return') }}
         </a>
     </div>
  
@@ -69,7 +69,7 @@
                     </div>
                 @endif
                 <div>
-                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">Posted by</p>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">{{ __('task_details.posted_by') }}</p>
                     <p class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">{{ $task->employer->first_name ?? 'Unknown' }} {{ $task->employer->last_name ?? '' }}</p>
                     <p class="text-xs text-gray-400 mt-1">{{ $task->created_at->diffForHumans() }}</p>
                 </div>
@@ -81,7 +81,7 @@
                     <i data-feather="map-pin" class="w-5 h-5 text-slate-900"></i>
                 </div>
                 <div>
-                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">Location</p>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">{{ __('task_details.location') }}</p>
                     <p class="text-base font-medium text-slate-900">
                         {{ optional(optional($task->employer)->city)->name ?? 'Remote' }}
                     </p>
@@ -94,9 +94,9 @@
                     <i data-feather="calendar" class="w-5 h-5 text-slate-900"></i>
                 </div>
                 <div>
-                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">To be done on</p>
-                    <p class="text-base font-medium text-slate-900">On {{ \Carbon\Carbon::parse($task->created_at)->addDays(7)->format('D, d M') }}</p>
-                    <p class="text-xs text-gray-500">Anytime</p>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">{{ __('task_details.to_be_done') }}</p>
+                    <p class="text-base font-medium text-slate-900">{{ __('On') }} {{ \Carbon\Carbon::parse($task->created_at)->addDays(7)->format('D, d M') }}</p>
+                    <p class="text-xs text-gray-500">{{ __('task_details.anytime') }}</p>
                 </div>
             </div>
  
@@ -106,12 +106,12 @@
                     <i data-feather="users" class="w-5 h-5 text-slate-900"></i>
                 </div>
                 <div>
-                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">Applications</p>
+                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">{{ __('task_details.applications.label') }}</p>
                     <p class="text-base font-medium text-slate-900">
-                        {{ $task->offers ? $task->offers->count() : 0 }} Offers
+                        {{ __('task_details.applications.offers_count', ['count' => $task->offers ? $task->offers->count() : 0]) }}
                     </p>
                     <p class="text-xs text-gray-500">
-                        {{ ($task->offers && $task->offers->count() > 0) ? 'View candidates' : 'Be the first' }}
+                        {{ ($task->offers && $task->offers->count() > 0) ? __('task_details.applications.view_candidates') : __('task_details.applications.be_first') }}
                     </p>
                 </div>
             </div>
@@ -130,25 +130,25 @@
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Task Budget</p>
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('task_details.budget.label') }}</p>
                             <div class="flex items-baseline gap-1">
                                 <span class="text-4xl font-black text-slate-800 tracking-tight">£{{ number_format($task->price, 0) }}</span>
-                                <span class="text-sm font-medium text-gray-400">GBP</span>
+                                <span class="text-sm font-medium text-gray-400">{{ __('task_details.budget.currency') }}</span>
                             </div>
                         </div>
                         {{-- Status Badge --}}
                         {{-- Status Badge --}}
                         @if($task->status === 'open')
                             <div class="px-2 py-1 bg-green-50 text-green-700 rounded-md text-[10px] font-bold uppercase tracking-wide border border-green-100">
-                                Open for offers
+                                {{ __('task_details.status.open') }}
                             </div>
                         @elseif($task->status === 'pending')
                             <div class="px-2 py-1 bg-yellow-50 text-yellow-700 rounded-md text-[10px] font-bold uppercase tracking-wide border border-yellow-100">
-                                Assigned / In Progress
+                                {{ __('task_details.status.assigned') }}
                             </div>
                         @elseif($task->status === 'completed')
                             <div class="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-[10px] font-bold uppercase tracking-wide border border-blue-100">
-                                Completed
+                                {{ __('task_details.status.completed') }}
                             </div>
                         @endif
                     </div>
@@ -167,7 +167,7 @@
                             
                             {{-- Price Input with Currency Prefix --}}
                             <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">Your Offer</label>
+                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">{{ __('task_details.form.your_offer') }}</label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <span class="text-gray-500 font-bold sm:text-sm">£</span>
@@ -180,30 +180,30 @@
 
                             {{-- Message Input --}}
                             <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">Message</label>
+                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">{{ __('task_details.form.message') }}</label>
                                 <textarea name="message" rows="3"
                                     class="w-full px-3 py-2.5 bg-gray-50 border border-transparent text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent transition-all resize-none"
-                                    placeholder="Hi, I can help you with this task because..." required></textarea>
+                                    placeholder="{{ __('task_details.form.message_placeholder') }}" required></textarea>
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="space-y-2">
                             <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transform transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm">
-                                <span>Make an Offer</span>
+                                <span>{{ __('task_details.form.submit') }}</span>
                                 <i data-feather="arrow-right" class="w-4 h-4"></i>
                             </button>
                             
                             @auth
                                 <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="w-full py-2.5 bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
                                     <i data-feather="flag" class="w-4 h-4"></i>
-                                    <span>Report Task</span>
+                                    <span>{{ __('task_details.form.report') }}</span>
                                 </button>
                             @endauth
                             
                             <!-- Micro Trust Text -->
                             <p class="text-center text-[10px] text-gray-400 mt-3 flex items-center justify-center gap-1">
-                                <i data-feather="shield" class="w-3 h-3"></i> Secure payment hold
+                                <i data-feather="shield" class="w-3 h-3"></i> {{ __('task_details.form.secure') }}
                             </p>
                         </div>
                     </form>
@@ -220,23 +220,23 @@
                         <div>
                             <h3 class="text-lg font-bold text-gray-900">
                                 @if($task->status === 'pending')
-                                    Task Assigned
+                                    {{ __('task_details.states.assigned_title') }}
                                 @else
-                                    Task Completed
+                                    {{ __('task_details.states.completed_title') }}
                                 @endif
                             </h3>
                             <p class="text-sm text-gray-500 mt-1">
                                 @if($task->status === 'pending')
-                                    This task has been assigned to a Tasker and is currently in progress. No further offers can be made.
+                                    {{ __('task_details.states.assigned_desc') }}
                                 @else
-                                    This task has been successfully completed.
+                                    {{ __('task_details.states.completed_desc') }}
                                 @endif
                             </p>
                         </div>
                         
                         @auth
                             <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="mt-4 px-4 py-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-500 hover:text-red-600 text-xs font-semibold rounded-lg transition-colors flex items-center gap-2">
-                                <i data-feather="flag" class="w-3 h-3"></i> Report Task
+                                <i data-feather="flag" class="w-3 h-3"></i> {{ __('task_details.form.report') }}
                             </button>
                         @endauth
                     </div>
@@ -250,12 +250,12 @@
     {{-- DETAILS SECTION --}}
     <div class="w-full">
         <button id="details-toggle" type="button" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 focus:outline-none">
-            <span id="details-toggle-text">More details</span>
+            <span id="details-toggle-text">{{ __('task_details.details.more') }}</span>
             <i id="details-toggle-icon" data-feather="chevron-down" class="w-4 h-4 ml-1 transition-transform"></i>
         </button>
  
         <div id="details-content" class="w-full mt-4 relative overflow-hidden max-h-20 transition-all duration-300">
-            <h3 class="text-lg font-bold text-slate-900 mb-3">Description</h3>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">{{ __('task_details.details.description') }}</h3>
             <div class="prose prose-slate text-slate-600 leading-relaxed max-w-none">
                 <p>{{ $task->description }}</p>
             </div>
@@ -307,9 +307,9 @@
 
                 <!-- Header Text -->
                 <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Before you make an offer</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('task_details.modal.title') }}</h2>
                     <p class="text-gray-500 text-[15px] leading-relaxed">
-                        Help us keep Minijobz safe and fun, and fill in a few details.
+                        {{ __('task_details.modal.desc') }}
                     </p>
                 </div>
 
@@ -343,7 +343,7 @@
                 <!-- Footer Button -->
                 <div class="mt-2">
                     <a href="{{ route('profile') }}" class="block w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-center rounded-full transition-colors text-sm">
-                        Continue
+                        {{ __('task_details.modal.continue') }}
                     </a>
                 </div>
             </div>
@@ -370,12 +370,12 @@
                 if (isCollapsed) {
                     detailsContent.classList.remove('max-h-20', 'overflow-hidden');
                     if (detailsFade) detailsFade.classList.add('hidden');
-                    toggleText.textContent = 'Less details';
+                    toggleText.textContent = '{{ __('task_details.details.less') }}';
                     toggleIcon.classList.add('rotate-180');
                 } else {
                     detailsContent.classList.add('max-h-20', 'overflow-hidden');
                     if (detailsFade) detailsFade.classList.remove('hidden');
-                    toggleText.textContent = 'More details';
+                    toggleText.textContent = '{{ __('task_details.details.more') }}';
                     toggleIcon.classList.remove('rotate-180');
                 }
             });

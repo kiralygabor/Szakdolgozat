@@ -28,8 +28,8 @@ try {
         echo "Other job NOT found\n";
     }
     
-    // Check advertisments table structure
-    $columns = DB::select("SHOW COLUMNS FROM advertisments");
+    // Check advertisements table structure
+    $columns = DB::select("SHOW COLUMNS FROM advertisements");
     echo "\nAdvertisments table columns:\n";
     foreach ($columns as $column) {
         echo "- {$column->Field} ({$column->Type})\n";

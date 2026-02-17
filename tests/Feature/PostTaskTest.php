@@ -65,7 +65,7 @@ class PostTaskTest extends TestCase
 
         $response->assertRedirect(route('my-tasks'));
 
-        $this->assertDatabaseHas('advertisments', [
+        $this->assertDatabaseHas('advertisements', [
             'title' => 'Test Task',
             'employer_id' => $user->id,
             'categories_id' => $category->id,

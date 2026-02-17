@@ -20,6 +20,13 @@
   .animate-scroll-left { animation: scroll-left 40s linear infinite; }
   .animate-scroll-right { animation: scroll-right 40s linear infinite; }
   
+  /* Pause animation on hover (optional) */
+  .group:hover .animate-scroll-left,
+  .group:hover .animate-scroll-right {
+    animation-play-state: paused;
+  }
+  
+  /* Edge fade mask */
   .scroll-mask {
     mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
@@ -81,18 +88,17 @@
   <!-- Content -->
   <div class="relative z-10 text-center max-w-3xl px-6">
     <h1 class="text-6xl md:text-7xl font-extrabold mb-6 leading-tight">
-      Get Things Done with <span class="text-indigo-400">Minijobz</span>
+      @lang('index.hero_title')
     </h1>
     <p class="text-lg md:text-xl text-gray-200 mb-8">
-      Find local helpers or offer your skills — simple, fast, and secure.  
-      Post your first task in seconds and connect with reliable workers near you.
+      {{ __('index.hero_subtitle') }}
     </p>
     <div class="flex flex-col sm:flex-row gap-4 justify-center">
       <a href="{{ route('post-task') }}" class="px-8 py-4 bg-indigo-500 hover:bg-indigo-600 rounded-full text-lg font-semibold shadow-lg transition text-white">
-        Post a Task
+        {{ __('index.post_task') }}
       </a>
       <a href="#browse-tasks" class="px-8 py-4 bg-white text-gray-900 hover:bg-gray-100 rounded-full text-lg font-semibold shadow-lg transition">
-        Browse Tasks
+        {{ __('index.browse_tasks') }}
       </a>
     </div>
   </div>
@@ -109,8 +115,7 @@
     <!-- Left Side: The Process (Timeline) - UNCHANGED -->
     <div class="pr-0 lg:pr-10">
       <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-12 leading-tight">
-        From "To-Do" to <br>
-        <span class="text-indigo-600 dark:text-indigo-400">"Done"</span> in 3 steps.
+        @lang('index.how_it_works_title')
       </h2>
       
       <div class="space-y-12 relative">
@@ -121,9 +126,9 @@
             <span class="font-bold text-lg">1</span>
           </div>
           <div class="pt-1">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Post a task for free</h3>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">{{ __('index.step_1_title') }}</h3>
             <p class="text-gray-600 dark:text-slate-400 leading-relaxed text-lg">
-              Tell us what you need done. Whether it's cleaning, moving, or handyman work, it takes just seconds to post.
+              {{ __('index.step_1_desc') }}
             </p>
           </div>
         </div>
@@ -133,9 +138,9 @@
             <span class="font-bold text-lg">2</span>
           </div>
           <div class="pt-1">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Review offers & profiles</h3>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">{{ __('index.step_2_title') }}</h3>
             <p class="text-gray-600 dark:text-slate-400 leading-relaxed text-lg">
-              Get offers from locals quickly. View their profiles, ratings, and reviews to pick the best person for the job.
+              {{ __('index.step_2_desc') }}
             </p>
           </div>
         </div>
@@ -145,9 +150,9 @@
             <span class="font-bold text-lg">3</span>
           </div>
           <div class="pt-1">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Hire & Pay Securely</h3>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">{{ __('index.step_3_title') }}</h3>
             <p class="text-gray-600 dark:text-slate-400 leading-relaxed text-lg">
-              Your payment is held securely in escrow and only released when the task is completed to your satisfaction.
+              {{ __('index.step_3_desc') }}
             </p>
           </div>
         </div>
@@ -155,7 +160,7 @@
 
       <div class="mt-16">
         <a href="{{ route('post-task') }}" class="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white transition-all duration-200 bg-indigo-600 rounded-full hover:bg-indigo-700 shadow-lg hover:-translate-y-1">
-          Start for free
+          {{ __('index.start_for_free') }}
         </a>
       </div>
     </div>
@@ -174,8 +179,8 @@
             
             <!-- Title -->
             <div>
-              <h3 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-none">Explore</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">Browse local services</p>
+              <h3 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-none">{{ __('index.explore') }}</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 font-medium">{{ __('index.browse_local_services') }}</p>
             </div>
 
             <!-- Trending Indicator (Visual Only - Not a Button) -->
@@ -185,7 +190,7 @@
                 </div>
                 <div class="flex flex-col">
    
-                  <span class="text-xs font-bold text-indigo-900 dark:text-indigo-100 leading-none">Trending Now</span>
+                  <span class="text-xs font-bold text-indigo-900 dark:text-indigo-100 leading-none">{{ __('index.trending_now') }}</span>
                 </div>
             </div>
         </div>
@@ -309,10 +314,10 @@
     <!-- Header -->
     <div class="text-center max-w-3xl mx-auto mb-16">
       <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-6">
-        Why smarter people choose <span class="text-indigo-600 dark:text-indigo-400">Minijobz</span>
+        @lang('index.why_choose_title')
       </h2>
       <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-        We’ve stripped away the complexity of hiring. No agencies, no hidden fees—just a simple way to connect with locals who get the job done.
+        {{ __('index.why_choose_desc') }}
       </p>
     </div>
 
@@ -325,12 +330,12 @@
         <div class="w-14 h-14 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
           <i data-feather="zap" class="w-7 h-7"></i>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Lightning Fast</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ __('index.fast_title') }}</h3>
         <p class="text-gray-600 mb-6 leading-relaxed">
-          Skip the agency queues. Post a task and receive offers from available locals within minutes.
+          {{ __('index.fast_desc') }}
         </p>
         <div class="flex items-center text-blue-600 font-semibold text-sm">
-          <span>Post a task now</span>
+          <span>{{ __('index.fast_link') }}</span>
           <i data-feather="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
         </div>
       </div>
@@ -341,12 +346,12 @@
         <div class="w-14 h-14 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
           <i data-feather="shield" class="w-7 h-7"></i>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">Verified & Insured</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ __('index.secure_title') }}</h3>
         <p class="text-gray-600 mb-6 leading-relaxed">
-          Rest easy knowing Taskers are ID-verified. Payments are held securely in escrow until you're happy.
+          {{ __('index.secure_desc') }}
         </p>
         <div class="flex items-center text-emerald-600 font-semibold text-sm">
-          <span>Read our guarantee</span>
+          <span>{{ __('index.secure_link') }}</span>
           <i data-feather="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
         </div>
       </div>
@@ -357,12 +362,12 @@
         <div class="w-14 h-14 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
           <i data-feather="sliders" class="w-7 h-7"></i>
         </div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-3">You Set The Price</h3>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ __('index.price_title') }}</h3>
         <p class="text-gray-600 mb-6 leading-relaxed">
-          Stay in control of your budget. Set your price upfront or ask for quotes to find the best deal.
+          {{ __('index.price_desc') }}
         </p>
         <div class="flex items-center text-indigo-600 font-semibold text-sm">
-          <span>See average prices</span>
+          <span>{{ __('index.price_link') }}</span>
           <i data-feather="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
         </div>
       </div>
@@ -386,13 +391,12 @@
     
     <!-- Left Column: Controls -->
     <div>
-      <span class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-wider uppercase text-sm mb-2 block">Community Stories</span>
+      <span class="text-indigo-600 dark:text-indigo-400 font-semibold tracking-wider uppercase text-sm mb-2 block">{{ __('index.community_stories') }}</span>
       <h2 class="text-5xl md:text-6xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight transition-colors duration-300">
-        Trusted by <br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500 dark:from-indigo-400 dark:to-cyan-400">real neighbors.</span>
+        @lang('index.trusted_by_neighbors')
       </h2>
       <p class="text-lg text-gray-600 dark:text-slate-400 mb-12 max-w-md leading-relaxed transition-colors duration-300">
-        Don't just take our word for it. See how Minijobz is helping people reclaim their time and earn extra income every day.
+        {{ __('index.testimonial_intro') }}
       </p>
       
       <!-- Control Arrows -->
@@ -441,127 +445,21 @@
 </section>
  
  
-  <!-- Popular Tasks Section -->
+<!-- Popular Tasks Section -->
 <section class="py-24 bg-gray-50 transition-colors duration-300 overflow-hidden relative">
-  <div class="max-w-7xl mx-auto px-4 mb-12 text-center">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
+<div class="max-w-7xl mx-auto px-4 mb-12 text-center">
+<h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
       See what others are getting done
-    </h2>
-    <p class="mt-4 text-lg text-gray-600">Real tasks, real prices, completed recently.</p>
-  </div>
+</h2>
+<p class="mt-4 text-lg text-gray-600">Real tasks, real prices, completed recently.</p>
+</div>
  
   <!-- Container with Edge Fade Mask -->
   <div class="relative scroll-mask group">
    
     <!-- Row 1: Scrolls Left -->
     <div class="flex gap-5 mb-6 w-max animate-scroll-left">
-      <!-- CARD SET 1 (Original) -->
-      <div class="flex gap-5">
-        <!-- Card 1 -->
-        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span>
-              <span class="font-bold text-gray-900 text-lg">$85</span>
-            </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3>
-          </div>
-         
-          <!-- Bottom Section: Avatar + Reviews -->
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
-            <img src="https://i.pravatar.cc/150?img=11" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
-            <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
-              <span class="text-[11px] text-gray-500 font-medium">12 reviews</span>
-            </div>
-          </div>
-        </div>
- 
-        <!-- Card 2 -->
-        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span>
-              <span class="font-bold text-gray-900 text-lg">$450</span>
-            </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3>
-          </div>
-         
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
-            <img src="https://i.pravatar.cc/150?img=5" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
-            <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
-              <span class="text-[11px] text-gray-500 font-medium">48 reviews</span>
-            </div>
-          </div>
-        </div>
- 
-        <!-- Card 3 -->
-        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span>
-              <span class="font-bold text-gray-900 text-lg">$120</span>
-            </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3>
-          </div>
-         
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
-            <img src="https://i.pravatar.cc/150?img=3" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
-            <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
-              <span class="text-[11px] text-gray-500 font-medium">32 reviews</span>
-            </div>
-          </div>
-        </div>
- 
-         <!-- Card 4 -->
-         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div>
-            <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span>
-              <span class="font-bold text-gray-900 text-lg">$95</span>
-            </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3>
-          </div>
-         
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
-            <img src="https://i.pravatar.cc/150?img=59" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
-            <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 text-gray-300"></i>
-              </div>
-              <span class="text-[11px] text-gray-500 font-medium">8 reviews</span>
-            </div>
-          </div>
-        </div>
-      </div>
- 
-      <!-- CARD SET 2 (Duplicate for Loop) -->
-      <div class="flex gap-5">
-        <!-- Card 1 Duplicate -->
+      <!-- CARD SET 1 -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
@@ -573,19 +471,11 @@
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=11" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">12 reviews</span>
             </div>
           </div>
         </div>
- 
-        <!-- Card 2 Duplicate -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
@@ -597,19 +487,11 @@
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=5" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">48 reviews</span>
             </div>
           </div>
         </div>
- 
-        <!-- Card 3 Duplicate -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
@@ -621,20 +503,12 @@
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=3" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">32 reviews</span>
             </div>
           </div>
         </div>
- 
-         <!-- Card 4 Duplicate -->
-         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span>
@@ -645,25 +519,50 @@
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=59" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 text-gray-300"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">8 reviews</span>
             </div>
           </div>
         </div>
-      </div>
+      <!-- CARD SET 2 (Duplicate) -->
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">$85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">$450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">$120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">$95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 reviews</span></div></div>
+        </div>
+      <!-- CARD SET 3 (Third Duplicate for seamless loop) -->
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">$85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">$450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">$120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">$95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 reviews</span></div></div>
+        </div>
     </div>
  
-    <!-- Row 2: Scrolls Right -->
+    <!-- Row 2: Scrolls Right (FIXED: Added Duplicate Set) -->
     <div class="flex gap-5 w-max animate-scroll-right">
-      <!-- CARD SET 1 (Original) -->
-      <div class="flex gap-5">
-         <!-- Card 5 -->
+      <!-- CARD SET 1 -->
          <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
@@ -672,23 +571,14 @@
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3>
           </div>
-         
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=12" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">22 reviews</span>
             </div>
           </div>
         </div>
- 
-        <!-- Card 6 -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
@@ -697,23 +587,14 @@
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3>
           </div>
-         
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=60" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">145 reviews</span>
             </div>
           </div>
         </div>
- 
-        <!-- Card 7 -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
@@ -722,23 +603,14 @@
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3>
           </div>
-         
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=68" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 text-gray-300"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">9 reviews</span>
             </div>
           </div>
         </div>
- 
-        <!-- Card 8 -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
@@ -747,22 +619,48 @@
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3>
           </div>
-         
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=33" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
-              <div class="flex text-amber-400 mb-0.5">
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-                <i data-feather="star" class="w-3 h-3 fill-current"></i>
-              </div>
+              <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
               <span class="text-[11px] text-gray-500 font-medium">41 reviews</span>
             </div>
           </div>
         </div>
-      </div>
+      <!-- CARD SET 2 (THIS WAS MISSING: Duplicate for Loop) -->
+         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">$75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">$150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 reviews</span></div></div>
+        </div>
+      <!-- CARD SET 3 (Third Duplicate for seamless loop) -->
+         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">$75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 reviews</span></div></div>
+        </div>
+        <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">$150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 reviews</span></div></div>
+        </div>
     </div>
  
   </div>
@@ -784,17 +682,16 @@
       <div class="lg:col-span-7 flex flex-col justify-center text-center lg:text-left">
         <div class="inline-flex items-center justify-center lg:justify-start gap-2 mb-6">
           <span class="px-3 py-1 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-100 text-xs font-bold uppercase tracking-widest backdrop-blur-sm">
-            Mobile App
+            {{ __('index.mobile_app_badge') }}
           </span>
         </div>
         
         <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
-          Your pocket-sized <br>
-          <span class="text-indigo-200">personal assistant.</span>
+          @lang('index.mobile_app_title')
         </h2>
         
         <p class="text-lg text-indigo-100 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-          Post tasks, chat with Taskers, and make secure payments on the go. Track your job status in real-time, wherever you are.
+          {{ __('index.mobile_app_desc') }}
         </p>
 
         <!-- Buttons & QR Row -->
@@ -830,7 +727,7 @@
               <!-- Placeholder QR Code -->
               <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=MinijobzAppDownload" alt="Scan to download" class="w-24 h-24 mix-blend-multiply opacity-90">
             </div>
-            <span class="text-xs font-medium text-indigo-200 tracking-wide uppercase">Scan to install</span>
+            <span class="text-xs font-medium text-indigo-200 tracking-wide uppercase">{{ __('index.scan_to_install') }}</span>
           </div>
         
         </div>
@@ -882,51 +779,88 @@
   </div>
 </section>
  
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 py-12 px-4 shadow-sm transition-colors duration-300">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-8">
-            <div>
-                <div class="flex items-center space-x-2 mb-4">
-                    <i data-feather="zap" class="text-indigo-500"></i>
-                    <span class="text-xl font-bold text-gray-900">Minijobz</span>
+    <!-- Improved Footer -->
+    <footer class="bg-white dark:bg-slate-950 border-t border-gray-100 dark:border-slate-800 pt-20 pb-10 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- Top Section: 5 Columns -->
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16 text-left">
+                
+                <!-- Brand & Description -->
+                <div class="col-span-2 lg:col-span-2 pr-0 lg:pr-12">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 dark:shadow-none">
+                            <i data-feather="zap" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Minijobz</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed max-w-sm">
+                        {{ __('index.footer_tagline') }}
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-900 flex items-center justify-center text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-gray-200 dark:hover:border-slate-700 transition-all duration-300">
+                            <i data-feather="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-900 flex items-center justify-center text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-gray-200 dark:hover:border-slate-700 transition-all duration-300">
+                            <i data-feather="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-900 flex items-center justify-center text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-gray-200 dark:hover:border-slate-700 transition-all duration-300">
+                            <i data-feather="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg bg-gray-50 dark:bg-slate-900 flex items-center justify-center text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-gray-200 dark:hover:border-slate-700 transition-all duration-300">
+                            <i data-feather="linkedin" class="w-5 h-5"></i>
+                        </a>
+                    </div>
                 </div>
-                <p class="text-gray-600">Connecting people to get things done since 2025.</p>
-                <div class="flex space-x-4 mt-4">
-                    <a href="#" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i data-feather="facebook"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i data-feather="twitter"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i data-feather="instagram"></i></a>
+
+                <!-- Top Categories -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-[10px]">{{ __('index.top_categories') }}</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">Post Delivery</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">Cleaning Services</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">Handyman Tasks</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">Gardening Help</a></li>
+                    </ul>
+                </div>
+
+                <!-- Partners -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-[10px]">{{ __('index.for_taskers') }}</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">{{ __('index.browse_tasks') }}</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">{{ __('index.tasker_resources') }}</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">{{ __('index.safety_tips') }}</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">Help Center</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h3 class="text-gray-900 dark:text-white font-bold mb-6 uppercase tracking-wider text-[10px]">{{ __('index.company') }}</h3>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">{{ __('index.about_us') }}</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">{{ __('index.careers') }}</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">{{ __('index.press') }}</a></li>
+                        <li><a href="#" class="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors text-sm font-medium">{{ __('index.contact') }}</a></li>
+                    </ul>
                 </div>
             </div>
-            <div>
-                <h3 class="font-bold text-gray-900 mb-4">For Taskers</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Browse Tasks</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">How It Works</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Safety Tips</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Tasker Resources</a></li>
-                </ul>
+
+            <!-- Bottom Section -->
+            <div class="pt-8 border-t border-gray-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6">
+                <!-- Copyright -->
+                <div class="text-gray-400 dark:text-gray-500 text-xs">
+                    &copy; 2025 Minijobz. {{ __('index.all_rights_reserved') }}
+                </div>
+                
+                <!-- Legal Links -->
+                <div class="flex gap-6">
+                    <a href="#" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-white text-[10px] font-bold tracking-widest uppercase transition-colors">{{ __('index.terms') }}</a>
+                    <a href="#" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-white text-[10px] font-bold tracking-widest uppercase transition-colors">{{ __('index.privacy') }}</a>
+                    <a href="#" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-white text-[10px] font-bold tracking-widest uppercase transition-colors">{{ __('index.cookies') }}</a>
+                </div>
             </div>
-            <div>
-                <h3 class="font-bold text-gray-900 mb-4">For Posters</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Post a Task</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Pricing</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Safety Tips</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Help Center</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-bold text-gray-900 mb-4">Company</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">About Us</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Careers</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Press</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-indigo-500">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto border-t border-gray-200 mt-12 pt-8 text-center text-gray-500">
-            <p>© 2025 Minijobz. All rights reserved.</p>
         </div>
     </footer>
  
@@ -945,32 +879,7 @@
   duplicateCards('task-cards-right', 'col-right');
 
   // 2. Testimonials Logic (3D Page Turn / Card Flip)
-  const testimonials = [
-    {
-      quote: "Minijobz helped me find reliable helpers in minutes. It’s fast, simple, and finally gave me my weekends back.",
-      name: "Lisa Thompson",
-      role: "Homeowner",
-      img: "https://i.pravatar.cc/150?img=32" 
-    },
-    {
-      quote: "I was able to pick up weekend gigs easily between my studies. It's the best way to earn extra income on my own schedule.",
-      name: "Mark Rodriguez",
-      role: "Student & Freelancer",
-      img: "https://i.pravatar.cc/150?img=11" 
-    },
-    {
-      quote: "Found a cleaner the same day I posted! The pricing was transparent and the person was super professional.",
-      name: "Sophie Lee",
-      role: "Small Business Owner",
-      img: "https://i.pravatar.cc/150?img=5" 
-    },
-    {
-      quote: "I use Minijobz for everything from moving furniture to gardening. It's like having a team of experts in my pocket.",
-      name: "James Wilson",
-      role: "Property Manager",
-      img: "https://i.pravatar.cc/150?img=68"
-    }
-  ];
+  const testimonials = @json(__('index.testimonials'));
 
   let currentIndex = 0;
   const contentWrapper = document.getElementById('testimonial-content');

@@ -22,17 +22,30 @@ class GoogleController extends Controller
 
             if ($finduser) {
                 Auth::login($finduser);
-                return redirect()->intended('counties');
+                return redirect()->intended(route('index'));
             } else {
+                // Generate a unique account ID (AC prefix + random digits)
+                do {
+                    $accountId = 'AC' . str_pad((string)mt_rand(1, 999999), 4, '0', STR_PAD_LEFT);
+                } while (User::where('account_id', $accountId)->exists());
+
+                // Split name or use raw data if available
+                $firstName = $user->offsetGet('given_name') ?? $user->getName();
+                $lastName = $user->offsetGet('family_name') ?? '';
+
                 $newUser = User::create([
-                    'name' => $user->name,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
                     'email' => $user->email,
                     'google_id'=> $user->id,
-                    'password' => encrypt('123456dummy')
+                    'account_id' => $accountId,
+                    'verified' => true,
+                    'subscription_id' => 1,
+                    'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(16))
                 ]);
 
                 Auth::login($newUser);
-                return redirect()->intended('counties');
+                return redirect()->intended(route('index'));
             }
         } catch (\Exception $e) {
             dd($e->getMessage());

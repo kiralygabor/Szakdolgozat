@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Offer extends Model
 {
     protected $fillable = [
-        'advertisment_id',
+        'advertisement_id',
         'user_id',
         'price',
         'message',
@@ -17,7 +17,7 @@ class Offer extends Model
 
     public function task(): BelongsTo
     {
-        return $this->belongsTo(Advertisment::class, 'advertisment_id');
+        return $this->belongsTo(Advertisement::class, 'advertisement_id');
     }
 
     public function user(): BelongsTo

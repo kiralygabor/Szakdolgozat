@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('advertisments', function (Blueprint $table) {
+        Schema::table('advertisements', function (Blueprint $table) {
             $table->string('status')->default('open')->change();
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('advertisments', function (Blueprint $table) {
+        Schema::table('advertisements', function (Blueprint $table) {
             //
         });
     }

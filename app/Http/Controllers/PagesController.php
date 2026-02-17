@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pages;
-use App\Models\Advertisment;
+use App\Models\Advertisement;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Job;
@@ -26,7 +26,7 @@ class PagesController extends Controller
             ->get()
             ->map(function ($category) {
                 // Get 6 jobs for this category
-                $jobs = Advertisment::where('categories_id', $category->id)
+                $jobs = Advertisement::where('categories_id', $category->id)
                     ->where('status', 'open')
                     ->with(['category', 'employer.city'])
                     ->orderByDesc('created_at')
@@ -50,7 +50,7 @@ class PagesController extends Controller
  
     public function mainpage(Request $request): View
     {
-        $query = Advertisment::where('status', 'open')->with(['category', 'employer.city']);
+        $query = Advertisement::where('status', 'open')->with(['category', 'employer.city']);
 
         if ($request->filled('q')) {
             $q = trim((string) $request->query('q'));
@@ -99,10 +99,10 @@ class PagesController extends Controller
         $sort = (string) $request->query('sort', 'recent');
         switch ($sort) {
             case 'closest':
-                $query->join('users as u', 'u.id', '=', 'advertisments.employer_id')
+                $query->join('users as u', 'u.id', '=', 'advertisements.employer_id')
                       ->join('cities as c', 'c.id', '=', 'u.city_id')
                       ->orderBy('c.name')
-                      ->select('advertisments.*');
+                      ->select('advertisements.*');
                 break;
             case 'due':
                 $query->orderBy('expiration_date');
@@ -200,7 +200,7 @@ class PagesController extends Controller
     }
     public function tasks(Request $request): View
     {
-        $query = Advertisment::where('status', 'open')->with(['category', 'employer.city']);
+        $query = Advertisement::where('status', 'open')->with(['category', 'employer.city']);
 
         // Multi-search by q (title, description, category name, city name)
         if ($request->filled('q')) {
@@ -266,10 +266,10 @@ class PagesController extends Controller
         switch ($sort) {
             case 'closest':
                 // Requires geo data; fallback to alphabetical city for now
-                $query->join('users as u', 'u.id', '=', 'advertisments.employer_id')
+                $query->join('users as u', 'u.id', '=', 'advertisements.employer_id')
                       ->join('cities as c', 'c.id', '=', 'u.city_id')
                       ->orderBy('c.name')
-                      ->select('advertisments.*');
+                      ->select('advertisements.*');
                 break;
             case 'due':
                 $query->orderBy('expiration_date');
@@ -355,17 +355,12 @@ class PagesController extends Controller
         return response()->json($cities);
     }
 
-    public function howitworks(): View
-    {
-        return view('pages.howitworks');
-    }
-
     public function myTasks(Request $request): View
     {
         $userId = Auth::id();
         $viewMode = $request->query('view', 'posted'); // 'posted' or 'applied'
 
-        $query = Advertisment::query()
+        $query = Advertisement::query()
             ->with(['category', 'employer.city', 'offers.user'])
             ->withCount('offers');
 
@@ -471,7 +466,7 @@ class PagesController extends Controller
         }
         
         // Create the advertisement
-        $advertisement = new Advertisment();
+        $advertisement = new Advertisement();
         $advertisement->fill($validated);
         $advertisement->photos = $photos;
         $advertisement->employer_id = Auth::id();
@@ -486,7 +481,7 @@ class PagesController extends Controller
  
     public function showTask($id): View
     {
-        $task = Advertisment::with(['category', 'employer.city', 'offers.user'])->findOrFail($id);
+        $task = Advertisement::with(['category', 'employer.city', 'offers.user'])->findOrFail($id);
 
         // Increment view count
         $task->increment('views');
@@ -532,7 +527,7 @@ class PagesController extends Controller
             $profileId = (int) $id;
 
             // Enforce: Reviews given <= Completed tasks together
-            $completedTasksCount = \App\Models\Advertisment::whereIn('status', ['completed', 'Completed'])
+            $completedTasksCount = \App\Models\Advertisement::whereIn('status', ['completed', 'Completed'])
                 ->where(function($q) use ($myId, $profileId) {
                     $q->where(function($sq) use ($myId, $profileId) {
                         $sq->where('employer_id', $myId)->where('employee_id', $profileId);
@@ -569,7 +564,7 @@ class PagesController extends Controller
         $targetId = (int) $id;
 
         // Double check limit in store method
-        $completedTasksCount = \App\Models\Advertisment::whereIn('status', ['completed', 'Completed'])
+        $completedTasksCount = \App\Models\Advertisement::whereIn('status', ['completed', 'Completed'])
             ->where(function($q) use ($myId, $targetId) {
                 $q->where(function($sq) use ($myId, $targetId) {
                     $sq->where('employer_id', $myId)->where('employee_id', $targetId);

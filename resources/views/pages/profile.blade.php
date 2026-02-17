@@ -140,17 +140,17 @@
             </div>
 
             <nav class="nav flex-column nav-pills settings-nav" id="settingsTab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw"></i> Back to Home</a>
+                <a class="nav-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw"></i> {{ __('profile_page.sidebar.back_home') }}</a>
                 <div class="my-2 border-bottom"></div>
                 
-                <a class="nav-link" href="#">My Tasker Dashboard</a>
-                <a class="nav-link" id="notification-tab" data-bs-toggle="pill" href="#notification" role="tab">Notifications</a>
+                <a class="nav-link" href="#">{{ __('profile_page.sidebar.dashboard') }}</a>
+                <a class="nav-link" id="notification-tab" data-bs-toggle="pill" href="#notification" role="tab">{{ __('profile_page.sidebar.notifications') }}</a>
                 
                 <!-- Active Tab styling matches the screenshot logic -->
-                <a class="nav-link active" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab">Profile</a>
-                <a class="nav-link" id="account-tab" data-bs-toggle="pill" href="#account" role="tab">Settings</a>
-                <a class="nav-link" id="security-tab" data-bs-toggle="pill" href="#security" role="tab">Security</a>
-                <a class="nav-link" id="billing-tab" data-bs-toggle="pill" href="#billing" role="tab">Billing</a>
+                <a class="nav-link active" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab">{{ __('profile_page.sidebar.profile') }}</a>
+                <a class="nav-link" id="account-tab" data-bs-toggle="pill" href="#account" role="tab">{{ __('profile_page.sidebar.settings') }}</a>
+                <a class="nav-link" id="security-tab" data-bs-toggle="pill" href="#security" role="tab">{{ __('profile_page.sidebar.security') }}</a>
+                <a class="nav-link" id="billing-tab" data-bs-toggle="pill" href="#billing" role="tab">{{ __('profile_page.sidebar.billing') }}</a>
             </nav>
         </div>
 
@@ -163,7 +163,7 @@
                 <div class="tab-pane fade show active" id="profile" role="tabpanel">
                     
                     <div class="d-flex justify-content-between align-items-start mb-4">
-                        <h1 class="page-title">Profile</h1>
+                        <h1 class="page-title">{{ __('profile_page.profile.title') }}</h1>
                         
                     </div>
 
@@ -172,12 +172,12 @@
                     @endif
 
                     <!-- Profile Form -->
-                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" onsubmit="return confirm('Biztosan módosítod az adataidat?');">
+                    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" onsubmit="return confirm('{{ __('profile_page.profile.confirm_update') }}');">
                         @csrf
                         @method('PUT')
                         <!-- Avatar Section -->
                         <div class="mb-5">
-                            <h6 class="section-label">Upload Avatar</h6>
+                            <h6 class="section-label">{{ __('profile_page.profile.upload_avatar') }}</h6>
                             <div class="d-flex flex-column flex-md-row align-items-center gap-3">
                                 <!-- Avatar Placeholder / Current Avatar -->
                                 <div class="avatar-circle overflow-hidden">
@@ -190,15 +190,15 @@
 
                                 <!-- Action Buttons -->
                                 <div class="d-flex flex-column gap-2">
-                                    <label class="btn btn-primary btn-primary-custom px-4 mb-0" for="avatarInput">Upload photo</label>
-                                    <small class="text-muted">PNG vagy JPG, max. 5 MB.</small>
+                                    <label class="btn btn-primary btn-primary-custom px-4 mb-0" for="avatarInput">{{ __('profile_page.profile.upload_photo') }}</label>
+                                    <small class="text-muted">{{ __('profile_page.profile.upload_help') }}</small>
                                 </div>
                             </div>
                             <!-- Hidden file input for avatar upload -->
                             <input type="file" id="avatarInput" name="avatar" accept="image/*" class="d-none">
                         </div>
                         <div class="mb-4 custom-input-group">
-                            <label for="firstName" class="form-label">First name*</label>
+                            <label for="firstName" class="form-label">{{ __('profile_page.profile.first_name') }}</label>
                             <input
                                 type="text"
                                 class="form-control form-control-custom"
@@ -208,7 +208,7 @@
                         </div>
 
                         <div class="mb-4 custom-input-group">
-                            <label for="lastName" class="form-label">Last name*</label>
+                            <label for="lastName" class="form-label">{{ __('profile_page.profile.last_name') }}</label>
                             <input
                                 type="text"
                                 class="form-control form-control-custom"
@@ -218,7 +218,7 @@
                         </div>
 
                         <div class="mb-4 custom-input-group">
-                            <label for="birthdate" class="form-label">Birthday</label>
+                            <label for="birthdate" class="form-label">{{ __('profile_page.profile.birthday') }}</label>
                             <input
                                 type="date"
                                 class="form-control form-control-custom"
@@ -228,7 +228,7 @@
                         </div>
 
                         <div class="mb-4 custom-input-group position-relative">
-                            <label for="location" class="form-label">Location</label>
+                            <label for="location" class="form-label">{{ __('profile_page.profile.location') }}</label>
                             <input
                                 type="text"
                                 class="form-control form-control-custom"
@@ -240,7 +240,7 @@
                         </div>
 
                         <div class="mb-4 custom-input-group">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label">{{ __('profile_page.profile.email') }}</label>
                             <input
                                 type="email"
                                 class="form-control form-control-custom"
@@ -250,7 +250,7 @@
                         </div>
 
                         <div class="mb-4 custom-input-group">
-                            <label for="phone" class="form-label">Phone Number</label>
+                            <label for="phone" class="form-label">{{ __('profile_page.profile.phone') }}</label>
                             <input
                                 type="text"
                                 class="form-control form-control-custom"
@@ -260,67 +260,67 @@
                         </div>
 
                         <div class="mt-4">
-                            <button type="submit" class="btn btn-primary btn-primary-custom px-5">Save Profile</button>
+                            <button type="submit" class="btn btn-primary btn-primary-custom px-5">{{ __('profile_page.profile.save') }}</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Account Tab (Hidden content from original code, styled similarly) -->
                 <div class="tab-pane fade" id="account" role="tabpanel">
-                    <h1 class="page-title">Account Settings</h1>
+                    <h1 class="page-title">{{ __('profile_page.account.title') }}</h1>
                     <form>
                         <hr class="my-4">
                         <div class="mb-3">
-                            <label class="text-danger fw-bold">Delete Account</label>
-                            <p class="text-muted small">Once you delete your account, there is no going back.</p>
-                            <button class="btn btn-danger rounded-pill px-4" type="button">Delete Account</button>
+                            <label class="text-danger fw-bold">{{ __('profile_page.account.delete_title') }}</label>
+                            <p class="text-muted small">{{ __('profile_page.account.delete_desc') }}</p>
+                            <button class="btn btn-danger rounded-pill px-4" type="button">{{ __('profile_page.account.delete_btn') }}</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Security Tab -->
                 <div class="tab-pane fade" id="security" role="tabpanel">
-                    <h1 class="page-title">Security</h1>
+                    <h1 class="page-title">{{ __('profile_page.security.title') }}</h1>
                     <form>
                         <div class="mb-4 custom-input-group">
-                            <label class="form-label">Old Password</label>
+                            <label class="form-label">{{ __('profile_page.security.old_password') }}</label>
                             <input type="password" class="form-control form-control-custom mb-3">
                             
-                            <label class="form-label">New Password</label>
+                            <label class="form-label">{{ __('profile_page.security.new_password') }}</label>
                             <input type="password" class="form-control form-control-custom mb-3">
                             
-                            <label class="form-label">Confirm New Password</label>
+                            <label class="form-label">{{ __('profile_page.security.confirm_password') }}</label>
                             <input type="password" class="form-control form-control-custom">
                         </div>
-                        <button class="btn btn-primary btn-primary-custom px-4">Update Password</button>
+                        <button class="btn btn-primary btn-primary-custom px-4">{{ __('profile_page.security.update_password') }}</button>
                     </form>
                 </div>
 
                 <!-- Notification Tab -->
                 <div class="tab-pane fade" id="notification" role="tabpanel">
-                    <h1 class="page-title">Notifications</h1>
+                    <h1 class="page-title">{{ __('profile_page.notifications.title') }}</h1>
                     <form>
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" value="" id="emailAlerts" checked>
                             <label class="form-check-label" for="emailAlerts">
-                                Email each time a vulnerability is found
+                                {{ __('profile_page.notifications.email_alerts') }}
                             </label>
                         </div>
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" value="" id="emailSummary" checked>
                             <label class="form-check-label" for="emailSummary">
-                                Email a digest summary of vulnerabilities
+                                {{ __('profile_page.notifications.email_summary') }}
                             </label>
                         </div>
-                        <button class="btn btn-primary btn-primary-custom px-4 mt-2">Save Preferences</button>
+                        <button class="btn btn-primary btn-primary-custom px-4 mt-2">{{ __('profile_page.notifications.save') }}</button>
                     </form>
                 </div>
 
                 <!-- Billing Tab -->
                 <div class="tab-pane fade" id="billing" role="tabpanel">
-                    <h1 class="page-title">Billing</h1>
-                    <button class="btn btn-primary btn-primary-custom mb-4" type="button">Add Payment Method</button>
-                    <div class="p-4 bg-light text-center rounded text-muted">No payments yet.</div>
+                    <h1 class="page-title">{{ __('profile_page.billing.title') }}</h1>
+                    <button class="btn btn-primary btn-primary-custom mb-4" type="button">{{ __('profile_page.billing.add_method') }}</button>
+                    <div class="p-4 bg-light text-center rounded text-muted">{{ __('profile_page.billing.no_payments') }}</div>
                 </div>
 
             </div>

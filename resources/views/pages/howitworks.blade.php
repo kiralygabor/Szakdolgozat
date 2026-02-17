@@ -1,201 +1,171 @@
 @extends('layout')
 
 @section('content')
-<div class="bg-gray-50 text-gray-800 min-h-screen">
-  <!-- Header / Hero (bigger) -->
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900"></div>
-    <img src="https://via.placeholder.com/2000x900" alt="Collaboration" class="absolute inset-0 w-full h-full object-cover opacity-20">
-    <div class="relative z-10 max-w-7xl mx-auto px-6 py-28 md:py-40">
-      <div class="max-w-3xl">
-        <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight">How Minijobz Works</h1>
-        <p class="mt-6 text-xl md:text-2xl text-gray-200">Post a task in minutes, get offers fast, and hire trusted people with confidence.</p>
-        <div class="mt-10 flex gap-4">
-          <a href="#" class="px-7 py-3.5 rounded-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold">Post a Task</a>
-          <a href="#download" class="px-7 py-3.5 rounded-full bg-white/10 border border-white/20 text-white hover:bg-white/20">Get the app</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Steps: Describe, Budget, Pick a Tasker (bigger) -->
-  <section id="steps" class="py-28 px-6 bg-white">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-10">
-      <!-- Step 1 -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden relative hover:shadow-xl transition">
-        <div class="absolute top-4 right-4 bg-indigo-500/10 text-indigo-600 text-xs px-2 py-1 rounded-full border border-indigo-200">Step 1</div>
-        <img src="https://via.placeholder.com/1200x400" alt="Describe task" class="w-full h-48 object-cover">
-        <div class="p-7">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600"><i data-feather="edit-3" class="w-5 h-5"></i></span>
-            <h3 class="text-2xl font-bold">Describe what you need</h3>
-          </div>
-          <p class="text-gray-600">Tell us what needs doing, where, and when. Clear details help you get better offers.</p>
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden relative hover:shadow-xl transition">
-        <div class="absolute top-4 right-4 bg-indigo-500/10 text-indigo-600 text-xs px-2 py-1 rounded-full border border-indigo-200">Step 2</div>
-        <img src="https://via.placeholder.com/1200x400" alt="Set budget" class="w-full h-48 object-cover">
-        <div class="p-7">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600"><i data-feather="dollar-sign" class="w-5 h-5"></i></span>
-            <h3 class="text-2xl font-bold">Set your budget</h3>
-          </div>
-          <p class="text-gray-600">Choose a fixed price or hourly rate. You stay in control with transparent pricing.</p>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="bg-white rounded-2xl shadow-lg overflow-hidden relative hover:shadow-xl transition">
-        <div class="absolute top-4 right-4 bg-indigo-500/10 text-indigo-600 text-xs px-2 py-1 rounded-full border border-indigo-200">Step 3</div>
-        <img src="https://via.placeholder.com/1200x400" alt="Pick tasker" class="w-full h-48 object-cover">
-        <div class="p-7">
-          <div class="flex items-center gap-3 mb-3">
-            <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-sky-100 text-sky-600"><i data-feather="check-circle" class="w-5 h-5"></i></span>
-            <h3 class="text-2xl font-bold">Pick a Tasker</h3>
-          </div>
-          <p class="text-gray-600">Compare offers, profiles, and completion rates to choose the best person for the job.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Insurance Cover -->
-  <section class="py-20 px-6 bg-gray-50">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Insurance that has your back</h2>
-        <p class="text-gray-600 text-lg mb-6">Eligible tasks are backed by our partner insurance for extra peace of mind. We take safety seriously so you can hire with confidence.</p>
-        <ul class="space-y-3 text-gray-700">
-          <li class="flex items-start gap-3"><i data-feather="shield" class="text-indigo-500 w-5 h-5 mt-0.5"></i> Coverage for accidental damage during eligible tasks</li>
-          <li class="flex items-start gap-3"><i data-feather="file-text" class="text-indigo-500 w-5 h-5 mt-0.5"></i> Clear policy terms and easy claims process</li>
-          <li class="flex items-start gap-3"><i data-feather="lock" class="text-indigo-500 w-5 h-5 mt-0.5"></i> Secure payments held until the job is marked complete</li>
-        </ul>
-      </div>
-      <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-        <div class="flex items-center gap-3">
-          <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-100 text-indigo-600"><i data-feather="award" class="w-6 h-6"></i></span>
-          <div>
-            <p class="text-sm text-gray-500">Backed protection</p>
-            <p class="text-lg font-semibold">Eligible Task Insurance</p>
-          </div>
-        </div>
-        <div class="mt-6 grid grid-cols-2 gap-4">
-          <div class="rounded-xl border border-gray-200 p-4">
-            <p class="text-xs text-gray-500">Claim support</p>
-            <p class="text-sm font-semibold">48h response</p>
-          </div>
-          <div class="rounded-xl border border-gray-200 p-4">
-            <p class="text-xs text-gray-500">Coverage type</p>
-            <p class="text-sm font-semibold">Accidental damage</p>
-          </div>
-          <div class="rounded-xl border border-gray-200 p-4">
-            <p class="text-xs text-gray-500">Availability</p>
-            <p class="text-sm font-semibold">Select regions</p>
-          </div>
-          <div class="rounded-xl border border-gray-200 p-4">
-            <p class="text-xs text-gray-500">Cost</p>
-            <p class="text-sm font-semibold">Included</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Ratings and Reviews -->
-  <section class="py-16 px-6 bg-white">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-extrabold">Ratings & Reviews</h2>
-        <p class="text-gray-600 max-w-2xl mx-auto mt-3">Every Tasker builds a track record. See ratings, read reviews, and hire with confidence.</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
-          <div class="flex items-center mb-3">
-            <div class="w-12 h-12 rounded-full bg-secondary-500 flex items-center justify-center mr-4"><i data-feather="user" class="text-white"></i></div>
-            <div>
-              <h3 class="font-bold">Alex P.</h3>
-              <div class="flex text-yellow-400"><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i></div>
+<div class="bg-white text-slate-900 font-sans antialiased">
+    
+    <!-- Hero Section: Clean & Focused -->
+    <section class="relative bg-[#f6f8fa] py-16 md:py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="z-10">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
+                    {!! __('howitworks.hero_title') !!}
+                </h1>
+                <p class="mt-6 text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
+                    {{ __('howitworks.hero_desc') }}
+                </p>
+                <div class="mt-10">
+                    <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg hover:shadow-indigo-200">
+                        {{ __('howitworks.hero_btn') }}
+                    </a>
+                </div>
             </div>
-          </div>
-          <p class="text-gray-600 italic">“Great communication and got the job done quickly. Would hire again.”</p>
-        </div>
-        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
-          <div class="flex items-center mb-3">
-            <div class="w-12 h-12 rounded-full bg-secondary-500 flex items-center justify-center mr-4"><i data-feather="user" class="text-white"></i></div>
-            <div>
-              <h3 class="font-bold">Jamie L.</h3>
-              <div class="flex text-yellow-400"><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i></div>
+            <div class="relative">
+                <!-- Using a more lifestyle-oriented image placeholder -->
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6954?auto=format&fit=crop&w=800&q=80" alt="Person working" class="rounded-2xl shadow-2xl z-10 relative">
+                <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-indigo-100 rounded-full -z-0"></div>
             </div>
-          </div>
-          <p class="text-gray-600 italic">“Professional and friendly. The reviews helped me choose the right person.”</p>
         </div>
-        <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 shadow-sm">
-          <div class="flex items-center mb-3">
-            <div class="w-12 h-12 rounded-full bg-secondary-500 flex items-center justify-center mr-4"><i data-feather="user" class="text-white"></i></div>
-            <div>
-              <h3 class="font-bold">Rita S.</h3>
-              <div class="flex text-yellow-400"><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i><i data-feather="star" class="w-4"></i></div>
-            </div>
-          </div>
-          <p class="text-gray-600 italic">“Five stars! Clear ratings and real feedback made it easy to decide.”</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Stay in contact -->
-  <section class="py-20 px-6 bg-gray-50">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-      <div class="order-2 md:order-1">
-        <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Stay in contact</h2>
-        <p class="text-gray-600 text-lg mb-6">Chat safely in-app, share photos, and get real-time updates. Keep everything in one place until the job’s done.</p>
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div class="rounded-2xl bg-white border border-gray-200 p-4 flex items-start gap-3">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-blue-100 text-blue-600"><i data-feather="message-circle" class="w-5 h-5"></i></span>
-            <div>
-              <p class="font-semibold">In-app messaging</p>
-              <p class="text-sm text-gray-600">Keep your details private while coordinating tasks.</p>
+    <!-- How it Works: The Z-Pattern Layout -->
+    <section class="py-24 px-6">
+        <div class="max-w-6xl mx-auto space-y-32">
+            
+            <!-- Step 1 -->
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="Post a task" class="rounded-2xl shadow-xl">
+                </div>
+                <div class="order-1 md:order-2">
+                    <span class="text-indigo-600 font-bold uppercase tracking-widest text-sm">{{ __('howitworks.step1.badge') }}</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6">{{ __('howitworks.step1.title') }}</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        {{ __('howitworks.step1.desc') }}
+                    </p>
+                    <ul class="mt-6 space-y-3">
+                        <li class="flex items-center gap-3 text-slate-700"><i data-feather="check" class="text-emerald-500 w-5"></i> {{ __('howitworks.step1.item1') }}</li>
+                        <li class="flex items-center gap-3 text-slate-700"><i data-feather="check" class="text-emerald-500 w-5"></i> {{ __('howitworks.step1.item2') }}</li>
+                    </ul>
+                </div>
             </div>
-          </div>
-          <div class="rounded-2xl bg-white border border-gray-200 p-4 flex items-start gap-3">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-amber-100 text-amber-600"><i data-feather="bell" class="w-5 h-5"></i></span>
-            <div>
-              <p class="font-semibold">Notifications</p>
-              <p class="text-sm text-gray-600">Get offer alerts and progress updates instantly.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="order-1 md:order-2">
-        <div class="relative w-full max-w-md mx-auto">
-          <img src="https://via.placeholder.com/300x600" alt="Messages" class="rounded-3xl shadow-2xl border-4 border-white">
-          <div class="absolute top-6 left-6 w-40 h-72 bg-white rounded-2xl opacity-20"></div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Download the App -->
-  <section id="download" class="py-24 px-6 bg-blue-600 text-white">
-    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="text-5xl font-extrabold mb-6 leading-tight">Take Minijobz Anywhere</h2>
-        <p class="text-xl mb-8 text-gray-100 max-w-lg">Post tasks, get offers, and hire trusted people directly from your phone. Everything you need, right at your fingertips.</p>
-        <div class="flex flex-wrap gap-4">
-          <a href="#" class="bg-white text-blue-600 font-semibold py-3 px-6 rounded-full shadow hover:bg-gray-100 transition">Download App</a>
-          <a href="#" class="border border-white text-white font-semibold py-3 px-6 rounded-full hover:bg-white hover:text-blue-600 transition">Sign Up Now</a>
+            <!-- Step 2 -->
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-indigo-600 font-bold uppercase tracking-widest text-sm">{{ __('howitworks.step2.badge') }}</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6">{{ __('howitworks.step2.title') }}</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        {{ __('howitworks.step2.desc') }}
+                    </p>
+                    <div class="mt-8 p-6 bg-slate-50 rounded-xl border-l-4 border-indigo-500 italic text-slate-600">
+                        {!! __('howitworks.step2.quote') !!}
+                    </div>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&w=800&q=80" alt="Pick a tasker" class="rounded-2xl shadow-xl">
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1">
+                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80" alt="Job done" class="rounded-2xl shadow-xl">
+                </div>
+                <div class="order-1 md:order-2">
+                    <span class="text-indigo-600 font-bold uppercase tracking-widest text-sm">{{ __('howitworks.step3.badge') }}</span>
+                    <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6">{{ __('howitworks.step3.title') }}</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        {{ __('howitworks.step3.desc') }}
+                    </p>
+                    <div class="mt-8 flex gap-4">
+                        <div class="flex -space-x-3">
+                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/100?u=1" alt="">
+                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/100?u=2" alt="">
+                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/100?u=3" alt="">
+                        </div>
+                        <p class="text-sm text-slate-500 self-center">{{ __('howitworks.step3.users_count') }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="flex justify-center md:justify-end">
-        <div class="relative w-64 md:w-72 lg:w-96">
-          <img src="https://via.placeholder.com/300x600" alt="Mobile App Mockup" class="rounded-3xl shadow-2xl border-4 border-white">
-          <div class="absolute top-8 left-6 w-52 h-96 bg-white rounded-2xl opacity-30"></div>
+    </section>
+
+    <!-- Trust & Safety Section: Icon Grid -->
+    <section class="bg-slate-900 py-24 text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold">{{ __('howitworks.safety.title') }}</h2>
+                <p class="mt-4 text-slate-400 text-lg">{{ __('howitworks.safety.desc') }}</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-12 text-center">
+                <div>
+                    <div class="mx-auto w-16 h-16 bg-indigo-500/20 flex items-center justify-center rounded-full mb-6 text-indigo-400">
+                        <i data-feather="shield" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">{{ __('howitworks.safety.insurance_title') }}</h3>
+                    <p class="text-slate-400">{{ __('howitworks.safety.insurance_desc') }}</p>
+                </div>
+                <div>
+                    <div class="mx-auto w-16 h-16 bg-indigo-500/20 flex items-center justify-center rounded-full mb-6 text-indigo-400">
+                        <i data-feather="lock" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">{{ __('howitworks.safety.payments_title') }}</h3>
+                    <p class="text-slate-400">{{ __('howitworks.safety.payments_desc') }}</p>
+                </div>
+                <div>
+                    <div class="mx-auto w-16 h-16 bg-indigo-500/20 flex items-center justify-center rounded-full mb-6 text-indigo-400">
+                        <i data-feather="star" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">{{ __('howitworks.safety.reviews_title') }}</h3>
+                    <p class="text-slate-400">{{ __('howitworks.safety.reviews_desc') }}</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- Earn Money Section: Two-Tone CTA -->
+    <section class="py-24 px-6 bg-white text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold mb-6">{{ __('howitworks.earn.title') }}</h2>
+            <p class="text-xl text-slate-600 mb-10 leading-relaxed">
+                {{ __('howitworks.earn.desc') }}
+            </p>
+            <a href="#" class="inline-block border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white font-bold py-4 px-10 rounded-full transition-all">
+                {{ __('howitworks.earn.btn') }}
+            </a>
+        </div>
+    </section>
+
+    <!-- App Download Section: Modern Mockup Style -->
+    <section class="bg-indigo-600 py-20 px-6 overflow-hidden">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <div class="text-white">
+                <h2 class="text-4xl font-bold mb-6">{{ __('howitworks.app.title') }}</h2>
+                <p class="text-indigo-100 text-lg mb-8">{{ __('howitworks.app.desc') }}</p>
+                <div class="flex gap-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-12 cursor-pointer">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-12 cursor-pointer">
+                </div>
+            </div>
+            <div class="relative flex justify-center">
+                <!-- Simple Mobile Placeholder -->
+                <div class="w-64 h-[500px] bg-slate-800 rounded-[3rem] border-[8px] border-slate-900 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 w-full h-6 bg-slate-900"></div>
+                    <div class="p-4 space-y-4">
+                        <div class="h-4 w-3/4 bg-slate-700 rounded mt-8"></div>
+                        <div class="h-32 w-full bg-slate-700 rounded"></div>
+                        <div class="h-4 w-full bg-slate-700 rounded"></div>
+                        <div class="h-4 w-2/3 bg-slate-700 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </div>
+
+<script>
+    // Initialize Feather icons
+    feather.replace();
+</script>
 @endsection

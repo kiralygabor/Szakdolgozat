@@ -16,8 +16,8 @@ return new class extends Migration
             $table->char('name', 20);
             $table->integer('availability');
             $table->integer('price');
-            $table->integer('advertisment_number');
-            $table->datetime('advertisment_expiration');
+            $table->integer('advertisement_number');
+            $table->datetime('advertisement_expiration');
         });
     }
 

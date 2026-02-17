@@ -52,22 +52,21 @@
 
       /* Notification Bell Button */
       .notification-btn {
-        width: 40px; /* Adjusted to match other nav items */
+        width: 40px;
         height: 40px;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgb(255, 255, 255); /* Changed to white to match nav */
+        background-color: rgb(255, 255, 255);
         border-radius: 50%;
         cursor: pointer;
         transition-duration: .3s;
         border: none;
       }
-      .notification-btn:hover { background-color: #f3f4f6; } /* Light gray hover */
+      .notification-btn:hover { background-color: #f3f4f6; }
       .notification-btn .bell { width: 18px; }
-      .notification-btn .bell path { fill: #4b5563; } /* Gray-600 to match other icons */
-      
+      .notification-btn .bell path { fill: #4b5563; }
       .notification-btn:hover .bell { animation: bellRing 0.9s both; }
 
       @keyframes bellRing {
@@ -79,6 +78,321 @@
         75% { transform: rotateZ(2deg); }
       }
       .notification-btn:active { transform: scale(0.8); }
+
+      /* ===== MOBILE NAVBAR ===== */
+      .mobile-navbar {
+        display: none;
+        background: #fff;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        padding: 10px 16px;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 100;
+      }
+
+      @media (max-width: 767px) {
+        .mobile-navbar { display: flex; }
+        .desktop-navbar { display: none !important; }
+      }
+
+      /* Hamburger button */
+      .mobile-hamburger {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        z-index: 201;
+      }
+      .mobile-hamburger span {
+        display: block;
+        width: 22px;
+        height: 2.5px;
+        background: #1a1a2e;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+      .mobile-hamburger.active span:nth-child(1) {
+        transform: translateY(7.5px) rotate(45deg);
+      }
+      .mobile-hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .mobile-hamburger.active span:nth-child(3) {
+        transform: translateY(-7.5px) rotate(-45deg);
+      }
+
+      /* Mobile sidebar overlay */
+      .mobile-sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 190;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .mobile-sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+      }
+
+      /* Mobile sidebar */
+      .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 85%;
+        max-width: 340px;
+        height: 100vh;
+        background: #fff;
+        z-index: 200;
+        transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+      }
+      .mobile-sidebar.active {
+        left: 0;
+      }
+
+      /* Sidebar header */
+      .mobile-sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 20px;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .mobile-sidebar-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        color: #333;
+        cursor: pointer;
+        padding: 4px 8px;
+        line-height: 1;
+        transition: color 0.2s;
+      }
+      .mobile-sidebar-close:hover {
+        color: #6366f1;
+      }
+
+      /* Sidebar user info */
+      .mobile-sidebar-user {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .mobile-sidebar-user img {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e5e7eb;
+      }
+      .mobile-sidebar-user-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+      .mobile-sidebar-user-sub {
+        font-size: 12px;
+        color: #888;
+      }
+
+      /* Sidebar navigation links */
+      .mobile-sidebar-nav {
+        padding: 8px 0;
+      }
+      .mobile-sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 20px;
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        border-left: 3px solid transparent;
+      }
+      .mobile-sidebar-link:hover,
+      .mobile-sidebar-link.active {
+        background: #f5f3ff;
+        color: #6366f1;
+        border-left-color: #6366f1;
+      }
+      .mobile-sidebar-link i,
+      .mobile-sidebar-link svg {
+        width: 18px;
+        height: 18px;
+        color: #6b7280;
+        flex-shrink: 0;
+      }
+      .mobile-sidebar-link:hover i,
+      .mobile-sidebar-link:hover svg {
+        color: #6366f1;
+      }
+      .mobile-sidebar-divider {
+        height: 1px;
+        background: #f0f0f0;
+        margin: 6px 0;
+      }
+      .mobile-sidebar-section-label {
+        padding: 12px 20px 6px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #9ca3af;
+      }
+
+      /* Mobile post-task button in sidebar */
+      .mobile-sidebar-cta {
+        display: block;
+        margin: 12px 20px;
+        padding: 12px;
+        text-align: center;
+        background: #6366f1;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.15s;
+      }
+      .mobile-sidebar-cta:hover {
+        background: #4f46e5;
+        transform: translateY(-1px);
+        color: #fff;
+      }
+
+      /* Mobile right-side profile dropdown */
+      .mobile-profile-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        position: relative;
+      }
+      .mobile-profile-btn img {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e5e7eb;
+        transition: border-color 0.2s;
+      }
+      .mobile-profile-btn:hover img {
+        border-color: #6366f1;
+      }
+      .mobile-profile-dropdown {
+        position: absolute;
+        top: 52px;
+        right: 0;
+        width: 260px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        z-index: 210;
+        opacity: 0;
+        transform: translateY(-8px) scale(0.95);
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+      .mobile-profile-dropdown.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+      .mobile-profile-dropdown-user {
+        padding: 14px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .mobile-profile-dropdown-user:hover {
+        background: #f5f3ff;
+      }
+      .mobile-profile-dropdown-user h4 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a1a2e;
+        margin: 0;
+      }
+      .mobile-profile-dropdown-user p {
+        font-size: 12px;
+        color: #888;
+        margin: 2px 0 0;
+      }
+      .mobile-profile-dropdown-links {
+        padding: 6px 0;
+      }
+      .mobile-profile-dropdown-links a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        font-size: 14px;
+        color: #333;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+      }
+      .mobile-profile-dropdown-links a:hover {
+        background: #f5f3ff;
+        color: #6366f1;
+      }
+      .mobile-profile-dropdown-links a i {
+        width: 16px;
+        height: 16px;
+        color: #6b7280;
+      }
+      .mobile-profile-dropdown-links a:hover i {
+        color: #6366f1;
+      }
+      .mobile-profile-dropdown-divider {
+        height: 1px;
+        background: #f0f0f0;
+        margin: 0;
+      }
+
+      /* Mobile guest buttons */
+      .mobile-guest-btns {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .mobile-guest-btns a {
+        padding: 7px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .mobile-login-btn {
+        background: #6366f1;
+        color: #fff !important;
+      }
+      .mobile-login-btn:hover {
+        background: #4f46e5;
+      }
+      .mobile-signup-btn {
+        border: 1.5px solid #6366f1;
+        color: #6366f1 !important;
+        background: transparent;
+      }
+      .mobile-signup-btn:hover {
+        background: rgba(99,102,241,0.08);
+      }
     </style>
     <!-- Feather icons (used in navbar) -->
     <script src="https://unpkg.com/feather-icons"></script>
@@ -92,7 +406,165 @@
 @hasSection('navbar')
 @yield('navbar')
 @else
-<nav class="bg-white border-b border-gray-200 shadow-sm w-full z-50">
+
+{{-- ===== MOBILE NAVBAR (visible < 768px) ===== --}}
+<nav class="mobile-navbar">
+  {{-- Left: Hamburger --}}
+  <button class="mobile-hamburger" id="mobileHamburger" aria-label="Open menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  {{-- Center: Logo --}}
+  <a href="{{ url('/index') }}" class="flex items-center">
+    <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" style="height: 28px; width: auto; object-fit: contain;">
+  </a>
+
+  {{-- Right: Profile picture / Login --}}
+  <div style="position: relative;">
+    @auth
+      @php
+        $mobileUser = auth()->user();
+        $mobileFullName = trim(($mobileUser->first_name ?? '') . ' ' . ($mobileUser->last_name ?? ''))
+            ?: ($mobileUser->name ?? $mobileUser->email);
+        $mobileAvatarSrc = $mobileUser->avatar
+            ? asset('storage/' . $mobileUser->avatar)
+            : asset('img/user.png');
+      @endphp
+      <button class="mobile-profile-btn" id="mobileProfileBtn" type="button">
+        <img src="{{ $mobileAvatarSrc }}" alt="Profile">
+        @php
+          $mobileUnread = auth()->user()->unreadNotifications()->count();
+        @endphp
+        @if($mobileUnread > 0)
+          <span style="position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#ef4444;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;">{{ $mobileUnread }}</span>
+        @endif
+      </button>
+
+      {{-- Mobile profile dropdown --}}
+      <div class="mobile-profile-dropdown" id="mobileProfileDropdown">
+        <div class="mobile-profile-dropdown-user" onclick="window.location.href='{{ route('profile') }}'">
+          <h4>{{ $mobileFullName }}</h4>
+          <p>{{ __('navbar.public_profile') }}</p>
+        </div>
+        <div class="mobile-profile-dropdown-links">
+          <a href="{{ route('my-tasks') }}">
+            <i data-feather="grid"></i> {{ __('navbar.dashboard') }}
+          </a>
+          <a href="{{ route('notifications') }}">
+            <i data-feather="bell"></i> {{ __('navbar.notifications') }}
+            @if($mobileUnread > 0)
+              <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;">{{ $mobileUnread }}</span>
+            @endif
+          </a>
+          <a href="{{ route('profile') }}">
+            <i data-feather="user"></i> {{ __('navbar.profile') }}
+          </a>
+          <a href="{{ route('profile') }}">
+            <i data-feather="settings"></i> {{ __('navbar.settings') }}
+          </a>
+          <a href="{{ route('profile') }}">
+            <i data-feather="credit-card"></i> {{ __('navbar.billing') }}
+          </a>
+        </div>
+        <div class="mobile-profile-dropdown-divider"></div>
+        <div class="mobile-profile-dropdown-links">
+          <a href="#" onclick="event.preventDefault(); document.getElementById('mobile-logout-form').submit();" style="color:#dc2626;">
+            <i data-feather="log-out" style="color:#dc2626;"></i> {{ __('navbar.logout') }}
+          </a>
+          <form id="mobile-logout-form" method="POST" action="{{ route('logout') }}" style="display:none;">
+            @csrf
+          </form>
+        </div>
+      </div>
+    @endauth
+
+    @guest
+      <div class="mobile-guest-btns">
+        <a href="{{ route('login') }}" class="mobile-login-btn">{{ __('navbar.login') }}</a>
+        <a href="{{ route('register') }}" class="mobile-signup-btn">{{ __('navbar.sign_up') }}</a>
+      </div>
+    @endguest
+  </div>
+</nav>
+
+{{-- Mobile Sidebar Overlay --}}
+<div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
+
+{{-- Mobile Sidebar --}}
+<div class="mobile-sidebar" id="mobileSidebar">
+  <div class="mobile-sidebar-header">
+    <a href="{{ url('/index') }}">
+      <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="height: 26px; width: auto;">
+    </a>
+    <button class="mobile-sidebar-close" id="mobileSidebarClose" aria-label="Close menu">&times;</button>
+  </div>
+
+  @auth
+    <div class="mobile-sidebar-user" onclick="window.location.href='{{ route('profile') }}'" style="cursor:pointer;">
+      <img src="{{ $mobileAvatarSrc }}" alt="Profile">
+      <div>
+        <div class="mobile-sidebar-user-name">{{ $mobileFullName }}</div>
+        <div class="mobile-sidebar-user-sub">{{ __('navbar.public_profile') }}</div>
+      </div>
+    </div>
+  @endauth
+
+  <div class="mobile-sidebar-nav">
+    <div class="mobile-sidebar-section-label">{{ __('navbar.categories') }}</div>
+    <a href="{{ url('category') }}" class="mobile-sidebar-link">
+      <i data-feather="grid"></i> {{ __('navbar.categories') }}
+    </a>
+
+    <a href="{{ route('post-task') }}" onclick="return checkLogin(event)" class="mobile-sidebar-cta">
+      {{ __('navbar.post_task') }}
+    </a>
+
+    <div class="mobile-sidebar-divider"></div>
+    <div class="mobile-sidebar-section-label">Navigation</div>
+
+    <a href="{{ url('/index') }}" class="mobile-sidebar-link">
+      <i data-feather="home"></i> Home
+    </a>
+    <a href="{{ url('tasks') }}" class="mobile-sidebar-link">
+      <i data-feather="search"></i> {{ __('navbar.browse_tasks') }}
+    </a>
+    <a href="{{ url('howitworks') }}" class="mobile-sidebar-link">
+      <i data-feather="help-circle"></i> {{ __('navbar.how_it_works') }}
+    </a>
+
+    @auth
+      <div class="mobile-sidebar-divider"></div>
+      <div class="mobile-sidebar-section-label">{{ __('navbar.dashboard') }}</div>
+      <a href="{{ route('my-tasks') }}" class="mobile-sidebar-link">
+        <i data-feather="clipboard"></i> {{ __('navbar.dashboard') }}
+      </a>
+      <a href="{{ route('notifications') }}" class="mobile-sidebar-link">
+        <i data-feather="bell"></i> {{ __('navbar.notifications') }}
+        @if($mobileUnread > 0)
+          <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;">{{ $mobileUnread }}</span>
+        @endif
+      </a>
+    @endauth
+
+    <div class="mobile-sidebar-divider"></div>
+    <div class="mobile-sidebar-section-label">{{ __('navbar.settings') }}</div>
+    <a href="#" class="mobile-sidebar-link" id="mobileLangToggle">
+      <i data-feather="globe"></i> {{ __('navbar.language') }}
+    </a>
+  </div>
+
+  @guest
+    <div style="padding: 16px 20px; border-top: 1px solid #f0f0f0; margin-top: auto;">
+      <a href="{{ route('login') }}" class="mobile-sidebar-cta" style="margin: 0 0 8px;">{{ __('navbar.login') }}</a>
+      <a href="{{ route('register') }}" class="mobile-sidebar-cta" style="margin: 0; background: transparent; color: #6366f1; border: 1.5px solid #6366f1;">{{ __('navbar.sign_up') }}</a>
+    </div>
+  @endguest
+</div>
+
+{{-- ===== DESKTOP NAVBAR (visible >= 768px) ===== --}}
+<nav class="desktop-navbar bg-white border-b border-gray-200 shadow-sm w-full z-50">
 <div class="w-full flex justify-between items-center px-6 py-3">
 <div class="flex items-center space-x-2 pl-4">
   <a href="{{ url('/index') }}" class="flex items-center">
@@ -108,13 +580,13 @@
 <!-- CENTER: Nav Links -->
 <div class="flex items-center space-x-5">
   <a href="{{ route('post-task') }}" onclick="return checkLogin(event)" class="px-4 py-2 rounded-lg bg-secondary-500 text-white hover:bg-secondary-600 font-semibold">
-    Post a Task
+    {{ __('navbar.post_task') }}
   </a>
  
   <!-- Mega Menu -->
   <div id="categories-group" class="relative group">
     <a href="{{ url('category') }}" class="text-gray-600 hover:text-secondary-500 font-medium inline-flex items-center px-2 py-2">
-      Categories
+      {{ __('navbar.categories') }}
       <svg class="ml-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
@@ -125,8 +597,8 @@
 
     <!-- Left Section -->
     <div class="w-1/3 bg-gray-50 border-r border-gray-200 p-5 flex flex-col justify-start">
-      <h3 class="text-gray-800 font-semibold text-lg mb-2">Pick a type of task</h3>
-      <p class="text-sm text-gray-500 leading-snug">Choose a service category to find professionals and tasks that match your needs.</p>
+      <h3 class="text-gray-800 font-semibold text-lg mb-2">{{ __('navbar.pick_task_type') }}</h3>
+      <p class="text-sm text-gray-500 leading-snug">{{ __('navbar.choose_category_desc') }}</p>
     </div>
 
     <!-- Right Section -->
@@ -212,15 +684,15 @@
 
       <!-- View All -->
       <div class="col-span-2 text-center border-t pt-3 mt-2">
-        <a href="/category" class="inline-block text-indigo-600 font-medium hover:underline">View All Categories →</a>
+        <a href="/category" class="inline-block text-indigo-600 font-medium hover:underline">{{ __('navbar.view_all_categories') }} →</a>
       </div>
 
     </div>
   </div>
 </div>
  
-  <a href="{{ url('tasks') }}" class="text-gray-600 hover:text-secondary-500">Browse Tasks</a>
-  <a href="{{ url('howitworks') }}" class="text-gray-600 hover:text-secondary-500">How It Works</a>
+  <a href="{{ url('tasks') }}" class="text-gray-600 hover:text-secondary-500">{{ __('navbar.browse_tasks') }}</a>
+  <a href="{{ url('howitworks') }}" class="text-gray-600 hover:text-secondary-500">{{ __('navbar.how_it_works') }}</a>
 </div>
  
 <!-- RIGHT: Login / Signup / Settings -->
@@ -229,10 +701,10 @@
   @guest
     <!-- Show Login and Sign Up for guests -->
     <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white">
-      Login
+      {{ __('navbar.login') }}
     </a>
     <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg border border-primary-500 text-primary-500 hover:bg-primary-500/10">
-      Sign Up
+      {{ __('navbar.sign_up') }}
     </a>
   @endguest
 
@@ -254,29 +726,29 @@
         <div class="sub-menu">
           <div class="user-info cursor-pointer" onclick="window.location.href='{{ route('profile') }}'">
             <h3>{{ $fullName }}</h3>
-            <p class="text-gray-500 hover:text-indigo-600">Public Profile</p>
+            <p class="text-gray-500 hover:text-indigo-600">{{ __('navbar.public_profile') }}</p>
           </div>
           <hr>
           <a href="{{ route('my-tasks') }}" class="sub-menu-link flex items-center gap-2">
-            <i data-feather="grid" class="w-4 h-4"></i> My Tasker Dashboard
+            <i data-feather="grid" class="w-4 h-4"></i> {{ __('navbar.dashboard') }}
           </a>
           <a href="{{ route('notifications') }}" class="sub-menu-link flex items-center gap-2">
-            <i data-feather="bell" class="w-4 h-4"></i> Notifications
+            <i data-feather="bell" class="w-4 h-4"></i> {{ __('navbar.notifications') }}
           </a>
           <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
-            <i data-feather="user" class="w-4 h-4"></i> Profile
+            <i data-feather="user" class="w-4 h-4"></i> {{ __('navbar.profile') }}
           </a>
           <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
-            <i data-feather="settings" class="w-4 h-4"></i> Settings
+            <i data-feather="settings" class="w-4 h-4"></i> {{ __('navbar.settings') }}
           </a>
           <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
-            <i data-feather="shield" class="w-4 h-4"></i> Security
+            <i data-feather="shield" class="w-4 h-4"></i> {{ __('navbar.security') }}
           </a>
           <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
-            <i data-feather="credit-card" class="w-4 h-4"></i> Billing
+            <i data-feather="credit-card" class="w-4 h-4"></i> {{ __('navbar.billing') }}
           </a>
           <hr>
-          <a href="#" class="sub-menu-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+          <a href="#" class="sub-menu-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('navbar.logout') }}</a>
           <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
             @csrf
           </form>
@@ -349,37 +821,37 @@
     <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
       <i data-feather="settings"></i>
     </button>
-    <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-10 opacity-0 translate-y-2 transition-all duration-200 ease-out">
+    <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
       <div class="flex flex-col">
         <div class="group relative">
           <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
             <i data-feather="chevron-left" class="w-4 h-4"></i>
-            Theme
+            {{ __('navbar.theme') }}
           </div>
           <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="light">Light</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="dark">Dark</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="system">System Default</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="light">{{ __('navbar.light') }}</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="dark">{{ __('navbar.dark') }}</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="system">{{ __('navbar.system_default') }}</div>
           </div>
         </div>
         <div class="group relative">
           <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
             <i data-feather="chevron-left" class="w-4 h-4"></i>
-            Language
+            {{ __('navbar.language') }}
           </div>
           <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">English</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Hungarian</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">English</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">Hungarian</div>
           </div>
         </div>
         <div class="group relative">
           <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
             <i data-feather="chevron-left" class="w-4 h-4"></i>
-            Extras
+            {{ __('navbar.extras') }}
           </div>
           <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help / FAQ</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Contact / Support</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.help_faq') }}</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.contact_support') }}</div>
           </div>
         </div>
       </div>
@@ -390,6 +862,7 @@
 </div>
 </nav>
 @endif
+
 
     <!-- 🔹 MAIN CONTENT -->
     <main>
@@ -507,6 +980,27 @@
                 applyTheme(opt.getAttribute('data-theme'));
               });
             });
+            // Language option clicks
+            var langOptions = submenu.querySelectorAll('[data-lang]');
+            langOptions.forEach(function(opt){
+              opt.addEventListener('click', function(){
+                var locale = opt.getAttribute('data-lang');
+                // Create a form and submit it to switch language
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/language/' + locale;
+                
+                // Add CSRF token
+                var csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = '{{ csrf_token() }}';
+                form.appendChild(csrfInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+              });
+            });
           });
         }
         
@@ -557,7 +1051,83 @@
         if (window.feather && typeof window.feather.replace === 'function') {
           window.feather.replace();
         }
-      })(); 
+      })();
+
+      // ===== MOBILE NAVIGATION LOGIC =====
+      (function() {
+        var hamburger = document.getElementById('mobileHamburger');
+        var sidebar = document.getElementById('mobileSidebar');
+        var overlay = document.getElementById('mobileSidebarOverlay');
+        var closeBtn = document.getElementById('mobileSidebarClose');
+        var profileBtn = document.getElementById('mobileProfileBtn');
+        var profileDropdown = document.getElementById('mobileProfileDropdown');
+
+        function openSidebar() {
+          if (!sidebar || !overlay) return;
+          sidebar.classList.add('active');
+          overlay.classList.add('active');
+          if (hamburger) hamburger.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+        function closeSidebar() {
+          if (!sidebar || !overlay) return;
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+          if (hamburger) hamburger.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+
+        if (hamburger) hamburger.addEventListener('click', function() {
+          if (sidebar && sidebar.classList.contains('active')) {
+            closeSidebar();
+          } else {
+            openSidebar();
+          }
+        });
+        if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
+
+        // Profile dropdown toggle
+        if (profileBtn && profileDropdown) {
+          profileBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('active');
+          });
+          document.addEventListener('click', function(e) {
+            if (profileDropdown && !profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+              profileDropdown.classList.remove('active');
+            }
+          });
+        }
+
+        // Language toggle in sidebar
+        var langToggle = document.getElementById('mobileLangToggle');
+        if (langToggle) {
+          langToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Simple toggle: detect current locale and switch
+            var currentLocale = document.documentElement.lang || 'hu';
+            var newLocale = currentLocale === 'hu' ? 'en' : 'hu';
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/language/' + newLocale;
+            var csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = '{{ csrf_token() }}';
+            form.appendChild(csrfInput);
+            document.body.appendChild(form);
+            form.submit();
+          });
+        }
+
+        // Re-apply feather icons for mobile sidebar
+        setTimeout(function() {
+          if (window.feather && typeof window.feather.replace === 'function') {
+            window.feather.replace();
+          }
+        }, 100);
+      })();
 
       // Notification Dropdown Logic
       function toggleNotifications() {

@@ -88,9 +88,28 @@ class AuthController extends Controller
     public function postRegistration(Request $request): RedirectResponse
     {
         $request->validate([
-            'email'    => 'required|email|unique:users',
+            'email'    => 'required|email',
             'password' => 'required|min:6|confirmed',
         ]);
+
+        // If email already exists, attempt to log in instead
+        if (User::where('email', $request->email)->exists()) {
+            if (Auth::attempt($request->only('email', 'password'))) {
+                $user = Auth::user();
+
+                if (!$user->verified) {
+                    Auth::logout();
+                    session(['pending_user_id' => $user->id]);
+                    return redirect()->route('verify.code.form')
+                        ->with('status', 'This email is already registered. Enter the verification code we sent to your email.');
+                }
+
+                return redirect()->intended(route('tasks'))
+                    ->withSuccess('This email is already in use. You have been successfully logged in.');
+            }
+
+            return back()->withInput()->withErrors(['email' => 'This email is already in use. Please check your password or use another email.']);
+        }
 
         session(['registration_form' => [
             'email' => $request->email,

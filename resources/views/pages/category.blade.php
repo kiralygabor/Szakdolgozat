@@ -7,7 +7,7 @@
 
             <!-- Left: Categories list -->
             <aside class="relative md:pr-6 md:-translate-x-12 md:transform">
-                <h3 class="text-2xl font-bold text-blue-900 text-left mt-2">Categories</h3>
+                <h3 class="text-2xl font-bold text-blue-900 text-left mt-2">{{ __('category_page.sidebar_title') }}</h3>
 
                 <div class="mt-10 pr-4 relative z-10">
                     <!-- Vertical Line -->
@@ -43,7 +43,7 @@
                 <!-- Title & Image Section -->
                 <div class="text-center mb-8">
                     <h1 id="cat-title" class="text-3xl sm:text-4xl font-bold text-gray-900 mb-10">
-                        {{ $firstCategory->name ?? 'Select a Category' }}
+                        {{ $firstCategory->name ?? __('category_page.fallback_title') }}
                     </h1>
 
                     <!-- Increased height by 30px -->
@@ -52,7 +52,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
                             <p id="cat-desc" class="text-base sm:text-lg font-medium leading-relaxed max-w-3xl mx-auto drop-shadow-md">
-                                {{ $firstCategory->description ?? 'Find the best services or offer your skills here.' }}
+                                {{ $firstCategory->description ?? __('category_page.fallback_desc') }}
                             </p>
                         </div>
                     </div>
@@ -69,17 +69,17 @@
                             <button id="btn-finder" onclick="switchRole('finder')" 
                                 class="relative z-10 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 
                                        bg-blue-50 text-blue-700 shadow-sm">
-                                I'm a Finder
+                                {{ __('category_page.finder_tab') }}
                             </button>
 
                             <!-- Tasker – will turn blue when selected -->
                             <button id="btn-tasker" onclick="switchRole('tasker')" 
                                 class="relative z-10 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 text-gray-500 hover:text-gray-700">
-                                I'm a Tasker
+                                {{ __('category_page.tasker_tab') }}
                             </button>
                         </div>
                         <p id="role-helper-text" class="text-gray-500 text-sm mt-3 animate-fade-in">
-                            Select a service below to find professionals.
+                            {{ __('category_page.finder_helper') }}
                         </p>
                     </div>
 
@@ -146,14 +146,14 @@
             elements.btnTasker.className =
                 "relative z-10 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 text-gray-500 hover:text-gray-700";
 
-            elements.helperText.textContent = "Select a service below to find professionals.";
+            elements.helperText.textContent = "{{ __('category_page.finder_helper') }}";
         } else {
             elements.btnFinder.className =
                 "relative z-10 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 text-gray-500 hover:text-gray-700";
             elements.btnTasker.className =
                 "relative z-10 px-8 py-2.5 rounded-full text-sm font-bold transition-all duration-300 bg-blue-50 text-blue-700 shadow-sm";
 
-            elements.helperText.textContent = "Select your skill below to post a task.";
+            elements.helperText.textContent = "{{ __('category_page.tasker_helper') }}";
         }
 
         renderJobs(state.categoryId);
@@ -165,7 +165,7 @@
         if (!categoryId || !jobsData[categoryId] || !jobsData[categoryId].length) {
             elements.jobsList.innerHTML = `
                 <div class="col-span-full py-8 text-center text-gray-400">
-                    <p>No specific services listed yet.</p>
+                    <p>{{ __('category_page.no_services') }}</p>
                 </div>`;
             return;
         }

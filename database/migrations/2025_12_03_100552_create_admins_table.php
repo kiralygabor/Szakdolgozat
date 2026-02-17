@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username');
             $table->string('password', 255);
+            $table->string('profile_picture_path');
         });
     }
 

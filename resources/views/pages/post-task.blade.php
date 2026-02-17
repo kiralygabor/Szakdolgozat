@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Post a Task')
+@section('title', __('post-task.title'))
 
 @section('content')
 <style>
@@ -195,12 +195,12 @@
 
     <!-- Sidebar -->
     <aside class="md:w-1/4 mb-8 md:mb-0">
-      <h2 class="text-lg font-semibold mb-6 text-gray-800">Post a task</h2>
+      <h2 class="text-lg font-semibold mb-6 text-gray-800">{{ __('post-task.sidebar.post_task') }}</h2>
       <ul class="space-y-4 text-gray-500" id="sidebarSteps">
-        <li class="font-semibold text-blue-800">Category & Date</li>
-        <li>Location</li>
-        <li>Details</li>
-        <li>Budget</li>
+        <li class="font-semibold text-blue-800">{{ __('post-task.sidebar.category_date') }}</li>
+        <li>{{ __('post-task.sidebar.location') }}</li>
+        <li>{{ __('post-task.sidebar.details') }}</li>
+        <li>{{ __('post-task.sidebar.budget') }}</li>
       </ul>
     </aside>
 
@@ -213,7 +213,7 @@
         
         @if ($errors->any())
         <div class="rounded-md border border-red-200 bg-red-50 p-4 text-red-700">
-          <div class="font-semibold mb-2">Please fix the following and try again:</div>
+          <div class="font-semibold mb-2">{{ __('post-task.error_header') }}</div>
           <ul class="list-disc pl-5 space-y-1">
             @foreach ($errors->all() as $error)
               <li>{{ $error }}</li>
@@ -224,14 +224,14 @@
 
         <!-- STEP 1 -->
         <div id="step-1" class="step-pane">
-          <h1 class="text-3xl font-bold text-blue-900 mb-8">Let's start with the basics</h1>
+          <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step1.title') }}</h1>
           
           <!-- Category and Job Selection -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                  <label for="categorySelect" class="block text-lg font-medium text-gray-800 mb-2">Category</label>
+                  <label for="categorySelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.category_label') }}</label>
                   <select id="categorySelect" name="categories_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition">
-                      <option value="">Select a Category</option>
+                      <option value="">{{ __('post-task.step1.category_placeholder') }}</option>
                       @foreach($categories as $category)
                           <option value="{{ $category->id }}">{{ $category->name }}</option>
                       @endforeach
@@ -241,9 +241,9 @@
                   @enderror
               </div>
               <div>
-                  <label for="jobSelect" class="block text-lg font-medium text-gray-800 mb-2">Service (Job)</label>
+                  <label for="jobSelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.service_label') }}</label>
                   <select id="jobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" disabled>
-                      <option value="">Select a Category first</option>
+                      <option value="">{{ __('post-task.step1.service_placeholder_initial') }}</option>
                   </select>
                   @error('jobs_id')
                     <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -252,19 +252,19 @@
           </div>
 
           <div>
-            <label for="taskDescription" class="block text-lg font-medium text-gray-800 mb-2">Task Title</label>
-            <input id="taskDescription" name="title" type="text" placeholder="e.g. Help move my sofa" value="{{ old('title') }}" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" />
+            <label for="taskDescription" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.task_title_label') }}</label>
+            <input id="taskDescription" name="title" type="text" placeholder="{{ __('post-task.step1.task_title_placeholder') }}" value="{{ old('title') }}" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" />
             @error('title')
               <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
           </div>
 
           <div class="mt-6">
-            <label class="block text-lg font-medium text-gray-800 mb-4">When do you need this done?</label>
+            <label class="block text-lg font-medium text-gray-800 mb-4">{{ __('post-task.step1.date_label') }}</label>
             <div class="flex flex-wrap gap-4">
               <div class="date-dropdown flex-1 min-w-[200px]">
                 <button type="button" class="date-dropdown-btn" id="beforeDateBtn">
-                  <span id="beforeDateLabel">Before date</span>
+                  <span id="beforeDateLabel">{{ __('post-task.step1.before_date') }}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 </button>
                 <div class="date-dropdown-calendar" id="beforeDateCalendar">
@@ -273,14 +273,14 @@
               </div>
               <div class="date-dropdown flex-1 min-w-[200px]">
                 <button type="button" class="date-dropdown-btn" id="onDateBtn">
-                  <span id="onDateLabel">On date</span>
+                  <span id="onDateLabel">{{ __('post-task.step1.on_date') }}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 </button>
                 <div class="date-dropdown-calendar" id="onDateCalendar">
                   <input type="date" name="required_date" class="w-full border-0 rounded-lg p-2" id="onDateValue" value="{{ old('required_date') }}" />
                 </div>
               </div>
-              <button type="button" class="pill-btn" data-option="flexible">I'm flexible</button>
+              <button type="button" class="pill-btn" data-option="flexible">{{ __('post-task.step1.flexible') }}</button>
             </div>
             @error('required_date')
               <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
@@ -293,33 +293,33 @@
           <div class="mt-8">
             <label class="flex items-center gap-2 text-lg font-medium text-gray-800 mb-4">
               <input type="checkbox" id="needTimeCheckbox" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <span>I need a certain time of day</span>
+              <span>{{ __('post-task.step1.certain_time') }}</span>
             </label>
             <!-- Note: name="preferred_time[]" allows multiple values to be sent as an array -->
             <div id="timeOfDayOptions" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
               <label class="time-option" data-time="morning">
                 <input type="checkbox" name="preferred_time[]" value="morning" class="hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="2" x2="12" y2="9"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="8 6 12 2 16 6"></polyline></svg>
-                <span class="font-semibold text-gray-800">Morning</span>
-                <span class="text-sm text-gray-600">6am - 12pm</span>
+                <span class="font-semibold text-gray-800">{{ __('post-task.step1.morning') }}</span>
+                <span class="text-sm text-gray-600">{{ __('post-task.step1.morning_range') }}</span>
               </label>
               <label class="time-option" data-time="midday">
                 <input type="checkbox" name="preferred_time[]" value="midday" class="hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                <span class="font-semibold text-gray-800">Midday</span>
-                <span class="text-sm text-gray-600">12pm - 3pm</span>
+                <span class="font-semibold text-gray-800">{{ __('post-task.step1.midday') }}</span>
+                <span class="text-sm text-gray-600">{{ __('post-task.step1.midday_range') }}</span>
               </label>
               <label class="time-option" data-time="afternoon">
                 <input type="checkbox" name="preferred_time[]" value="afternoon" class="hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="16 5 12 9 8 5"></polyline></svg>
-                <span class="font-semibold text-gray-800">Afternoon</span>
-                <span class="text-sm text-gray-600">3pm - 6pm</span>
+                <span class="font-semibold text-gray-800">{{ __('post-task.step1.afternoon') }}</span>
+                <span class="text-sm text-gray-600">{{ __('post-task.step1.afternoon_range') }}</span>
               </label>
               <label class="time-option" data-time="evening">
                 <input type="checkbox" name="preferred_time[]" value="evening" class="hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                <span class="font-semibold text-gray-800">Evening</span>
-                <span class="text-sm text-gray-600">6pm - 9pm</span>
+                <span class="font-semibold text-gray-800">{{ __('post-task.step1.evening') }}</span>
+                <span class="text-sm text-gray-600">{{ __('post-task.step1.evening_range') }}</span>
               </label>
             </div>
           </div>
@@ -327,18 +327,18 @@
 
       <!-- STEP 2 -->
       <div id="step-2" class="step-pane hidden">
-        <h1 class="text-3xl font-bold text-blue-900 mb-8">Tell us where</h1>
+        <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step2.title') }}</h1>
         <div class="space-y-8">
           <div>
-            <p class="text-lg font-medium text-gray-800 mb-6">How would you like this task to be done?</p>
+            <p class="text-lg font-medium text-gray-800 mb-6">{{ __('post-task.step2.question') }}</p>
             <div class="flex flex-col sm:flex-row gap-4">
               <div class="location-option selected" id="inPersonOption">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <div class="title">In-person</div>
-                <div class="description">Tasker comes to your location</div>
+                <div class="title">{{ __('post-task.step2.in_person') }}</div>
+                <div class="description">{{ __('post-task.step2.in_person_desc') }}</div>
               </div>
               <div class="location-option" id="onlineOption">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -346,17 +346,17 @@
                   <line x1="8" y1="21" x2="16" y2="21"></line>
                   <line x1="12" y1="17" x2="12" y2="21"></line>
                 </svg>
-                <div class="title">Online</div>
-                <div class="description">Task can be done remotely</div>
+                <div class="title">{{ __('post-task.step2.online') }}</div>
+                <div class="description">{{ __('post-task.step2.online_desc') }}</div>
               </div>
             </div>
           </div>
         
           <div id="locationInputs" class="space-y-6">
             <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">Where do you need this done?</label>
+              <label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step2.location_label') }}</label>
               <div class="relative">
-                <input type="text" id="pickupSuburb" name="location" class="w-full border border-gray-300 rounded-lg p-3" placeholder="Enter a suburb" value="{{ old('location') }}" autocomplete="off" />
+                <input type="text" id="pickupSuburb" name="location" class="w-full border border-gray-300 rounded-lg p-3" placeholder="{{ __('post-task.step2.location_placeholder') }}" value="{{ old('location') }}" autocomplete="off" />
                 <div id="pickupSuburbDropdown" class="absolute left-0 right-0 mt-1 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg hidden z-10"></div>
               </div>
               @error('location')
@@ -369,24 +369,24 @@
 
       <!-- STEP 3 -->
       <div id="step-3" class="step-pane hidden">
-      <h1 class="text-3xl font-bold text-blue-900 mb-8">Add more details</h1>
+      <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step3.title') }}</h1>
       <div class="space-y-6">
           <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">Task details</label>
-              <textarea id="taskDetails" name="description" rows="6" class="w-full border border-gray-300 rounded-lg p-3" placeholder="Provide more information so Taskers can give accurate quotes">{{ old('description') }}</textarea>
+              <label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step3.details_label') }}</label>
+              <textarea id="taskDetails" name="description" rows="6" class="w-full border border-gray-300 rounded-lg p-3" placeholder="{{ __('post-task.step3.details_placeholder') }}">{{ old('description') }}</textarea>
               @error('description')
                 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
               @enderror
           </div>
           <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">Photos <span class="text-gray-500">(optional)</span></label>
+              <label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step3.photos_label') }} <span class="text-gray-500">{{ __('post-task.step3.photos_optional') }}</span></label>
               <div class="photo-upload-plus" id="photoUploadPlus">
                   <svg xmlns="http://www.w3.org/2000/svg" class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <line x1="12" y1="5" x2="12" y2="19"></line>
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                   </svg>
-                  <div class="text">Add photos</div>
-                  <div class="subtext">Click to upload images of your task</div>
+                  <div class="text">{{ __('post-task.step3.add_photos') }}</div>
+                  <div class="subtext">{{ __('post-task.step3.add_photos_desc') }}</div>
               </div>
               <input type="file" id="photoSelectorInput" multiple accept="image/*" class="hidden">
               <input type="file" id="photoSubmissionInput" name="photos[]" multiple class="hidden">
@@ -397,14 +397,14 @@
 
       <!-- STEP 4 -->
       <div id="step-4" class="step-pane hidden">
-      <h1 class="text-3xl font-bold text-blue-900 mb-8">Suggest your budget</h1>
-      <p class="text-lg font-medium text-gray-800">What is your budget?</p>
-      <p class="text-gray-600 mb-4">You can always negotiate the final price.</p>
+      <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step4.title') }}</h1>
+      <p class="text-lg font-medium text-gray-800">{{ __('post-task.step4.budget_question') }}</p>
+      <p class="text-gray-600 mb-4">{{ __('post-task.step4.negotiable') }}</p>
       <div class="flex items-stretch rounded-lg overflow-hidden border" id="budgetWrapper">
           <span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">$</span>
-          <input id="budgetInput" name="price" type="number" min="10" max="9999" class="flex-1 p-3 outline-none" placeholder="Enter budget" value="{{ old('price') }}">
+          <input id="budgetInput" name="price" type="number" min="10" max="9999" class="flex-1 p-3 outline-none" placeholder="{{ __('post-task.step4.budget_placeholder') }}" value="{{ old('price') }}">
       </div>
-      <p id="budgetError" class="text-sm text-orange-600 mt-2 hidden">The price must be between $10 and $9999</p>
+      <p id="budgetError" class="text-sm text-orange-600 mt-2 hidden">{{ __('post-task.step4.budget_error') }}</p>
       @error('price')
         <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
       @enderror
@@ -412,10 +412,10 @@
 
       <!-- Nav Buttons -->
       <div class="flex items-center justify-between mt-10">
-      <button type="button" id="backBtn" class="w-40 bg-blue-50 text-blue-700 font-semibold py-3 rounded-full disabled:opacity-50" disabled>Back</button>
+      <button type="button" id="backBtn" class="w-40 bg-blue-50 text-blue-700 font-semibold py-3 rounded-full disabled:opacity-50" disabled>{{ __('post-task.nav.back') }}</button>
       <div class="flex gap-3">
-          <button type="button" id="nextBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full">Next</button>
-          <button type="submit" id="submitBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full opacity-60 cursor-not-allowed hidden" disabled>Get quotes</button>
+          <button type="button" id="nextBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full">{{ __('post-task.nav.next') }}</button>
+          <button type="submit" id="submitBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full opacity-60 cursor-not-allowed hidden" disabled>{{ __('post-task.nav.get_quotes') }}</button>
       </div>
   </div>
       </form>
@@ -520,7 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // --- JOB POPULATION LOGIC ---
   function populateJobs(catId, selectedJobId = null) {
-      jobSelect.innerHTML = '<option value="">Select a Service</option>';
+      jobSelect.innerHTML = '<option value="">{{ __('post-task.step1.service_placeholder_select') }}</option>';
       jobSelect.disabled = true;
       
       if (!catId) return;
@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if (submitBtn.disabled) {
           e.preventDefault();
-          alert('Please complete all required fields correctly.');
+          alert("{{ __('post-task.error_header') }}");
       }
   });
 
@@ -604,8 +604,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     onDateValue.value = '';
     beforeDateValue.value = '';
-    onDateLabel.textContent = 'On date';
-    beforeDateLabel.textContent = 'Before date';
+    onDateLabel.textContent = "{{ __('post-task.step1.on_date') }}";
+    beforeDateLabel.textContent = "{{ __('post-task.step1.before_date') }}";
   }
 
   onDateBtn.addEventListener('click', function(e) {
@@ -625,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function() {
   onDateValue.addEventListener('change', function() {
     if (this.value) {
       const date = new Date(this.value + 'T00:00:00');
-      onDateLabel.textContent = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      onDateLabel.textContent = date.toLocaleDateString('{{ app()->getLocale() == 'hu' ? 'hu-HU' : 'en-US' }}', { month: 'short', day: 'numeric', year: 'numeric' });
       onDateBtn.classList.add('active');
     }
   });
@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', function() {
   beforeDateValue.addEventListener('change', function() {
     if (this.value) {
       const date = new Date(this.value + 'T00:00:00');
-      beforeDateLabel.textContent = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      beforeDateLabel.textContent = date.toLocaleDateString('{{ app()->getLocale() == 'hu' ? 'hu-HU' : 'en-US' }}', { month: 'short', day: 'numeric', year: 'numeric' });
       beforeDateBtn.classList.add('active');
     }
   });

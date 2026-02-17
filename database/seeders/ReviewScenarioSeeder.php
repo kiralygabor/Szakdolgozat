@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Advertisment;
+use App\Models\Advertisement;
 use App\Models\Offer;
 use App\Models\Category;
 use Illuminate\Support\Facades\Hash;
@@ -50,7 +50,7 @@ class ReviewScenarioSeeder extends Seeder
         // 2. Create a Completed Task where Target is Employer
         $category = Category::first() ?? Category::create(['name' => 'General']);
 
-        $task = Advertisment::create([
+        $task = Advertisement::create([
             'employer_id' => $target->id,
             'categories_id' => $category->id,
             'title' => 'Completed Task for Review Test',
@@ -65,7 +65,7 @@ class ReviewScenarioSeeder extends Seeder
 
         // 3. Create an Accepted Offer from Reviewer
         Offer::create([
-            'advertisment_id' => $task->id,
+            'advertisement_id' => $task->id,
             'user_id' => $reviewer->id,
             'price' => 5000,
             'message' => 'I did this cleanly.',

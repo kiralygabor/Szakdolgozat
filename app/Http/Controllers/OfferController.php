@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Advertisment;
+use App\Models\Advertisement;
 use App\Models\Offer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class OfferController extends Controller
 {
-    public function store(Request $request, Advertisment $task): RedirectResponse
+    public function store(Request $request, Advertisement $task): RedirectResponse
     {
         $user = Auth::user();
         if (!$user) {
@@ -35,7 +35,7 @@ class OfferController extends Controller
         ]);
 
         $offer = Offer::create([
-            'advertisment_id' => $task->id,
+            'advertisement_id' => $task->id,
             'user_id'         => $user->id,
             'price'           => $data['offer_price'],
             'message'         => $data['message'],

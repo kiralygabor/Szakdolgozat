@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('advertisment_id')->constrained('advertisments')->cascadeOnDelete();
+            $table->foreignId('advertisement_id')->constrained('advertisements')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->integer('price');
             $table->text('message');

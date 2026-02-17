@@ -23,8 +23,8 @@ Route::put('profile', [PagesController::class, 'updateProfile'])->name('profile.
 Route::get('profile/{id}', [PagesController::class, 'publicProfile'])->name('public-profile');
 Route::post('profile/{id}/review', [PagesController::class, 'storeReview'])->name('public-profile.review')->middleware('auth');
 Route::get('category', [PagesController::class, 'category'])->name('category');
-Route::get('howitworks', [PagesController::class, 'howitworks'])->name('howitworks');
 Route::get('tasks', [PagesController::class, 'tasks'])->name('tasks');
+Route::get('/howitworks', function () {return view('pages.howitworks');})->name('howitworks');
 Route::get('my-tasks', [PagesController::class, 'myTasks'])->name('my-tasks');
 Route::get('notifications', [PagesController::class, 'notifications'])->name('notifications');
 Route::post('notifications/mark-read', [PagesController::class, 'markAllRead'])->name('notifications.mark-read')->middleware('auth');
@@ -41,6 +41,15 @@ Route::post('offers/{offer}/accept', [OfferController::class, 'accept'])->name('
 Route::post('reports', [ReportController::class, 'store'])->name('reports.store')->middleware('auth');
 Route::post('user-reports', [UserReportController::class, 'store'])->name('user-reports.store')->middleware('auth');
 Route::get('api/cities', [PagesController::class, 'searchCities'])->name('api.cities.search');
+
+// Language switching
+Route::post('language/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'hu'])) {
+        session(['locale' => $locale]);
+        app()->setLocale($locale);
+    }
+    return back();
+})->name('language.switch');
 
 // Advertisement REST endpoints (optional API for CRUD)
 // Allow visiting /advertisements (or common misspelling) via GET by redirecting to tasks list
@@ -75,7 +84,7 @@ Route::post('post-registration_settings', [AuthController::class, 'postRegistrat
 Route::get('forgot-password', [AuthController::class, 'showForgotPasswordForm'])
     ->name('password.request');
 
-// Send Reset Link Email
+// Send Reset Link 
 Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])
     ->name('password.email');
 

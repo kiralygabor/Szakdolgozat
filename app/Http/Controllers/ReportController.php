@@ -11,7 +11,7 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'advertisement_id' => 'required|exists:advertisments,id',
+            'advertisement_id' => 'required|exists:advertisements,id',
             'description' => 'required|string|min:10|max:1000',
             'reported_account_id' => 'required|exists:users,id'
         ]);

@@ -29,6 +29,8 @@ class User extends Authenticatable
          'city_id',
          'subscription_id',
          'avatar',
+         'google_id',
+         'verified',
     ];
 
     /**
@@ -70,9 +72,9 @@ class User extends Authenticatable
     public function category() {
         return $this->hasOne(Category::class);
     }
-        public function advertisments()
+    public function advertisements()
     {
-        return $this->hasMany(Advertisment::class, 'employer', 'id');
+        return $this->hasMany(Advertisement::class, 'employer_id', 'id');
     }
 
     public function reviewsReceived()

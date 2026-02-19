@@ -44,13 +44,7 @@
                 <a href="?user_id={{ $otherUser->id }}" class="block p-4 hover:bg-gray-50 transition border-b border-gray-50 {{ $isActive ? 'bg-blue-50 border-l-4 border-l-blue-600' : '' }}">
                     <div class="flex items-center gap-3">
                         <div class="relative">
-                            @if($otherUser->avatar)
-                                <img src="{{ asset('storage/' . $otherUser->avatar) }}" class="w-12 h-12 rounded-full object-cover border border-gray-200">
-                            @else
-                                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg">
-                                    {{ substr($otherUser->first_name, 0, 1) }}
-                                </div>
-                            @endif
+                            <img src="{{ $otherUser->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-gray-200">
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex justify-between items-baseline mb-1">
@@ -82,14 +76,9 @@
             
             <!-- Chat Header -->
             <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-white z-10 flex-shrink-0">
-                <div class="flex items-center gap-3">
-                    @if($chatUser->avatar)
-                        <img src="{{ asset('storage/' . $chatUser->avatar) }}" class="w-10 h-10 rounded-full object-cover">
-                    @else
-                        <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold">
-                            {{ substr($chatUser->first_name, 0, 1) }}
-                        </div>
-                    @endif
+                    <div class="relative">
+                        <img src="{{ $chatUser->avatar_url }}" class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                    </div>
                     <div>
                         <h2 class="font-bold text-gray-900">{{ $chatUser->first_name }} {{ $chatUser->last_name }}</h2>
                         <span class="text-xs text-green-500 font-medium flex items-center gap-1">

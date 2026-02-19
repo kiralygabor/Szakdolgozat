@@ -122,6 +122,7 @@
         text-transform: uppercase;
         margin-bottom: 5px;
     }
+    /* Progress Bar */
     .progress-custom {
         height: 6px;
         background-color: #e9ecef;
@@ -129,11 +130,11 @@
     }
 </style>
 
-<div class="container my-5">
-    <div class="row">
-        
-        <!-- Sidebar Navigation -->
-        <div class="col-md-3 mb-4">
+<div class="max-w-7xl mx-auto px-6 py-10">
+    <div class="flex flex-col md:flex-row gap-10">
+       
+        <!-- Sidebar Navigation (aligned with Logo) -->
+        <div class="md:w-1/5 mb-8 md:mb-0">
             <!-- Optional: User Brief Info -->
             <div class="text-center mb-4 pb-3 border-bottom d-md-none">
                 <h5>My Settings</h5>
@@ -155,7 +156,7 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="col-md-9">
+        <div class="flex-1 md:pl-10">
             
             <div class="tab-content" id="settingsTabContent">
                 
@@ -181,11 +182,7 @@
                             <div class="d-flex flex-column flex-md-row align-items-center gap-3">
                                 <!-- Avatar Placeholder / Current Avatar -->
                                 <div class="avatar-circle overflow-hidden">
-                                    @if(!empty($user->avatar))
-                                        <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
-                                    @else
-                                        <i class="fas fa-user"></i>
-                                    @endif
+                                    <img src="{{ $user->avatar_url }}" id="avatarPreview" alt="Avatar" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
 
                                 <!-- Action Buttons -->
@@ -265,9 +262,33 @@
                     </form>
                 </div>
 
-                <!-- Account Tab (Hidden content from original code, styled similarly) -->
+                <!-- Account Tab (Settings) -->
                 <div class="tab-pane fade" id="account" role="tabpanel">
                     <h1 class="page-title">{{ __('profile_page.account.title') }}</h1>
+                    
+                    <div class="mb-5 custom-input-group">
+                        <h6 class="section-label">{{ __('navbar.language') }}</h6>
+                        <select id="lang-select" class="form-control form-control-custom w-full md:w-1/2">
+                            <option value="en" @selected(app()->getLocale() == 'en')>English</option>
+                            <option value="hu" @selected(app()->getLocale() == 'hu')>Hungarian</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-5 custom-input-group">
+                        <h6 class="section-label">{{ __('navbar.theme') }}</h6>
+                        <select id="theme-select" class="form-control form-control-custom w-full md:w-1/2">
+                            <option value="light">{{ __('navbar.light') }}</option>
+                            <option value="dark">{{ __('navbar.dark') }}</option>
+                            <option value="system">{{ __('navbar.system_default') }}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <button type="button" id="apply-settings-btn" class="btn btn-primary btn-primary-custom px-5">
+                            {{ __('Apply') }}
+                        </button>
+                    </div>
+
                     <form>
                         <hr class="my-4">
                         <div class="mb-3">
@@ -329,66 +350,161 @@
 </div>
 
 <script>
-    (function () {
-        const input = document.getElementById('location');
-        const hiddenCityId = document.getElementById('city_id');
-        const suggestions = document.getElementById('location-suggestions');
-        if (!input || !suggestions) return;
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Location Autocomplete ---
+        (function () {
+            const input = document.getElementById('location');
+            const hiddenCityId = document.getElementById('city_id');
+            const suggestions = document.getElementById('location-suggestions');
+            if (!input || !suggestions) return;
 
-        let timer = null;
+            let timer = null;
 
-        function clearSuggestions() {
-            suggestions.innerHTML = '';
-            suggestions.style.display = 'none';
+            function clearSuggestions() {
+                suggestions.innerHTML = '';
+                suggestions.style.display = 'none';
+            }
+
+            input.addEventListener('input', function () {
+                const query = this.value.trim();
+                hiddenCityId.value = '';
+
+                if (timer) clearTimeout(timer);
+                if (query.length < 2) {
+                    clearSuggestions();
+                    return;
+                }
+
+                timer = setTimeout(() => {
+                    fetch(`/api/cities?q=${encodeURIComponent(query)}`)
+                        .then(res => res.json())
+                        .then(cities => {
+                            suggestions.innerHTML = '';
+                            if (!Array.isArray(cities) || cities.length === 0) {
+                                clearSuggestions();
+                                return;
+                            }
+
+                            cities.slice(0, 10).forEach(city => {
+                                const item = document.createElement('button');
+                                item.type = 'button';
+                                item.className = 'list-group-item list-group-item-action';
+                                item.textContent = city.name;
+                                item.addEventListener('click', function () {
+                                    input.value = city.name;
+                                    hiddenCityId.value = city.id || '';
+                                    clearSuggestions();
+                                });
+                                suggestions.appendChild(item);
+                            });
+
+                            suggestions.style.display = 'block';
+                        })
+                        .catch(() => {
+                            clearSuggestions();
+                        });
+                }, 300);
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!suggestions.contains(e.target) && e.target !== input) {
+                    clearSuggestions();
+                }
+            });
+        })();
+
+        // --- Tab switching via URL query param ---
+        (function handleUrlTabs() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) {
+                const tabEl = document.getElementById(tabParam + '-tab');
+                if (tabEl && typeof bootstrap !== 'undefined') {
+                    const bstab = new bootstrap.Tab(tabEl);
+                    bstab.show();
+                }
+            }
+        })();
+
+        // --- Language and Theme switching logic ---
+        (function handleSettings() {
+            const themeSelect = document.getElementById('theme-select');
+            const langSelect = document.getElementById('lang-select');
+            const applyBtn = document.getElementById('apply-settings-btn');
+            const root = document.documentElement;
+
+            function applyTheme(mode) {
+                if (mode === 'system') {
+                    localStorage.setItem('theme', 'system');
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    root.classList.toggle('dark', prefersDark);
+                } else if (mode === 'dark') {
+                    root.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    root.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            }
+
+
+        // Avatar Preview Logic
+        const avatarInput = document.getElementById('avatarInput');
+        const avatarPreview = document.getElementById('avatarPreview');
+
+        if (avatarInput && avatarPreview) {
+            avatarInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        avatarPreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         }
 
-        input.addEventListener('input', function () {
-            const query = this.value.trim();
-            hiddenCityId.value = '';
+            // Init select state
+            const savedTheme = localStorage.getItem('theme') || 'system';
+            if (themeSelect) themeSelect.value = savedTheme;
 
-            if (timer) clearTimeout(timer);
-            if (query.length < 2) {
-                clearSuggestions();
-                return;
-            }
+            if (applyBtn) {
+                applyBtn.addEventListener('click', function() {
+                    console.log('Apply button clicked');
+                    
+                    // 1. Apply Theme
+                    if (themeSelect) {
+                        applyTheme(themeSelect.value);
+                        console.log('Theme applied:', themeSelect.value);
+                    }
 
-            timer = setTimeout(() => {
-                fetch(`/api/cities?q=${encodeURIComponent(query)}`)
-                    .then(res => res.json())
-                    .then(cities => {
-                        suggestions.innerHTML = '';
-                        if (!Array.isArray(cities) || cities.length === 0) {
-                            clearSuggestions();
-                            return;
+                    // 2. Apply Language (Redirect if changed)
+                    if (langSelect) {
+                        const currentLocale = '{{ app()->getLocale() }}';
+                        const newLocale = langSelect.value;
+                        console.log('Current locale:', currentLocale, 'New locale:', newLocale);
+                        
+                        if (newLocale !== currentLocale) {
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = '/language/' + newLocale;
+                            const csrfInput = document.createElement('input');
+                            csrfInput.type = 'hidden';
+                            csrfInput.name = '_token';
+                            csrfInput.value = '{{ csrf_token() }}';
+                            form.appendChild(csrfInput);
+                            document.body.appendChild(form);
+                            form.submit();
+                            return; 
                         }
-
-                        cities.slice(0, 10).forEach(city => {
-                            const item = document.createElement('button');
-                            item.type = 'button';
-                            item.className = 'list-group-item list-group-item-action';
-                            item.textContent = city.name;
-                            item.addEventListener('click', function () {
-                                input.value = city.name;
-                                hiddenCityId.value = city.id || '';
-                                clearSuggestions();
-                            });
-                            suggestions.appendChild(item);
-                        });
-
-                        suggestions.style.display = 'block';
-                    })
-                    .catch(() => {
-                        clearSuggestions();
-                    });
-            }, 300);
-        });
-
-        document.addEventListener('click', function (e) {
-            if (!suggestions.contains(e.target) && e.target !== input) {
-                clearSuggestions();
+                    }
+                    
+                    alert('Settings applied successfully!');
+                });
             }
-        });
-    })();
+        })();
+    });
 </script>
 
 @endsection

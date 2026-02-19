@@ -167,6 +167,7 @@ class AuthController extends Controller
             'birthdate'       => $validated['birthdate'],
             'phone_number'    => $validated['phone_number'],
             'city_id'         => (int) $validated['city_id'],
+            'avatar'          => 'assets/img/default.jpg',
         ]);
 
         // Create verification token

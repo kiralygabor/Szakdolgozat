@@ -44,6 +44,7 @@
       border-radius: 3px;
       top: 50%;
       transform: translateY(-50%);
+      left: 0;
     }
     .range-slider .track-fill {
       position: absolute;
@@ -67,6 +68,7 @@
       margin: 0;
       padding: 0;
       outline: none;
+      left: 0;
     }
     .range-slider input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -109,10 +111,10 @@
       height: 6px;
       background: transparent;
     }
-    .range-slider input#price-min {
+    .range-slider input[id*="price-min"] {
       z-index: 2;
     }
-    .range-slider input#price-max {
+    .range-slider input[id*="price-max"] {
       z-index: 3;
     }
 
@@ -151,13 +153,14 @@
  
   <!-- FILTERS NAVBAR -->
   <section class="bg-white border-b border-gray-200 shadow-sm z-20 relative">
+    <!-- Desktop Form (Hidden on mobile) -->
     <form method="GET" action="{{ route('tasks') }}" id="filters-form"
-          class="max-w-7xl mx-auto flex items-center gap-4 px-6 py-3 h-16">
+          class="max-w-7xl mx-auto flex items-center gap-4 px-6 py-3 h-16 hidden md:flex">
  
       <!-- Search Bar -->
-      <div class="relative flex-grow max-w-md group">
+      <div class="relative flex-grow max-w-md group border-r pr-6 mr-2">
         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <i data-feather="search" class="h-4 w-4 text-gray-400 group-focus-within:text-blue-500"></i>
+          <i data-feather="search" class="h-4 w-4 text-gray-400 group-  focus-within:text-blue-500"></i>
         </div>
         <input
           id="search-q"
@@ -168,14 +171,11 @@
           class="w-full pl-10 pr-12 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
           autocomplete="off"
         >
-        <button type="submit" class="absolute right-1 top-1 bottom-1 px-3 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-sm">
+        <button type="submit" class="absolute right-7 top-1 bottom-1 px-3 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-sm">
            <i data-feather="search" class="w-3.5 h-3.5"></i>
         </button>
         <input type="hidden" name="city_search" id="city-search-hidden" value="{{ $filters['city_search'] ?? '' }}">
       </div>
-
-      <!-- Separator -->
-      <div class="h-8 w-px bg-gray-300 hidden md:block mx-4"></div>
  
       <!-- Filters -->
       <div class="flex items-center gap-3 h-full">
@@ -260,10 +260,10 @@
         <!-- Price -->
         <div class="relative">
           <button type="button" id="price-btn"
-                  class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price'])) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
+                  class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
             <i data-feather="dollar-sign" class="w-3.5 h-3.5 text-gray-500"></i>
-            <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price'])) ? 'text-blue-600' : '' }}">
-              @if(isset($filters['min_price']) || isset($filters['max_price']))
+            <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'text-blue-600' : '' }}">
+              @if(isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000))
                 €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
               @else
                 Price
@@ -312,10 +312,155 @@
         </select>
       </div>
     </form>
+
+    <!-- Mobile Filter Trigger (Visible only on mobile) -->
+    <div class="md:hidden px-4 pb-3 bg-white">
+        <button type="button" id="mobile-filter-trigger" 
+                class="w-full h-11 flex items-center justify-between border border-gray-200 rounded-full px-5 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer text-sm shadow-sm">
+            <div class="flex items-center gap-3 overflow-hidden">
+                <i data-feather="search" class="w-4 h-4 text-blue-600"></i>
+                <div class="flex flex-col items-start overflow-hidden">
+                    <span class="font-bold text-gray-900 text-[13px] leading-tight truncate">
+                         @if($filters['q'] ?? '') 
+                            "{{ $filters['q'] }}" 
+                        @else 
+                            Browse everything
+                        @endif
+                    </span>
+                    <span class="text-[11px] text-gray-500 leading-tight">
+                        @if($filters['type'] ?? '')
+                            {{ $filters['type'] === 'remote' ? 'Remote' : 'In-person' }}
+                        @else
+                            Any mode
+                        @endif
+                        ·
+                        @if($filters['category'] ?? '')
+                            {{ $categories->firstWhere('id', $filters['category'])->name ?? 'All' }}
+                        @else
+                            All categories
+                        @endif
+                    </span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 border-l pl-3 ml-2 shrink-0">
+                <i data-feather="sliders" class="w-4 h-4 text-gray-600"></i>
+            </div>
+        </button>
+    </div>
   </section>
+
+  <!-- MOBILE FILTERS MODAL -->
+  <div id="mobile-filters-modal" class="fixed inset-0 z-[100] bg-white hidden flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 class="text-base font-bold text-gray-800">Filters</h2>
+          <button type="button" id="close-mobile-filters" class="p-2 -mr-2 bg-gray-50 rounded-full text-gray-400">
+              <i data-feather="x" class="w-5 h-5"></i>
+          </button>
+      </div>
+
+      <!-- Modal Content -->
+      <form id="mobile-filters-form" method="GET" action="{{ route('tasks') }}" class="flex-1 overflow-y-auto px-6 pt-2 pb-6 space-y-7 custom-scroll">
+          
+          <!-- Task Name Search -->
+          <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Task Name</label>
+              <div class="relative">
+                  <input type="text" name="q" placeholder="Search for task name..." value="{{ $filters['q'] ?? '' }}" 
+                         class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
+                  <div class="absolute right-5 top-1/2 -translate-y-1/2">
+                      <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Category -->
+          <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Category</label>
+              <div class="relative">
+                  <select name="category" id="mobile-category" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
+                      <option value="">All Categories</option>
+                      @foreach(($categories ?? []) as $category)
+                          <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
+                              {{ $category->name }}
+                          </option>
+                      @endforeach
+                  </select>
+                  <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none">
+                      <i data-feather="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                  </div>
+              </div>
+          </div>
+
+          <!-- To be done -->
+          <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">To be done</label>
+              <div class="flex p-1.5 bg-gray-100 rounded-2xl border border-gray-200">
+                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'in_person' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="in_person">In-person</button>
+                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'remote' ? 'bg-blue-900 text-white shadow-md' : 'text-gray-500' }}" data-value="remote">Remotely</button>
+                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'all' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="all">All</button>
+              </div>
+              <input type="hidden" name="type" id="mobile-type-hidden" value="{{ $filters['type'] ?? 'all' }}">
+          </div>
+
+          <!-- Suburb -->
+          <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Suburb</label>
+              <div class="relative">
+                  <input type="text" id="mobile-city-search-input" placeholder="Search city or suburb..." value="{{ $filters['city_search'] ?? '' }}" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
+                  <div class="absolute right-5 top-1/2 -translate-y-1/2">
+                      <i data-feather="map-pin" class="w-4 h-4 text-gray-400"></i>
+                  </div>
+                  <div id="mobile-city-results" class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl z-[110] hidden max-h-56 overflow-y-auto"></div>
+              </div>
+              <input type="hidden" name="city_search" id="mobile-city-hidden" value="{{ $filters['city_search'] ?? '' }}">
+          </div>
+
+          <!-- Task Price -->
+          <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">Task Price</label>
+              <div class="text-center mb-8">
+                  <span id="mobile-price-text" class="text-[15px] font-extrabold text-blue-600 bg-blue-50 px-5 py-2.5 rounded-full border border-blue-200">
+                      €{{ number_format($filters['min_price'] ?? 1000) }} - €{{ number_format($filters['max_price'] ?? 20000) }}
+                  </span>
+              </div>
+              <div class="px-2">
+                  <div class="range-slider">
+                      <div class="track-bg h-2"></div>
+                      <div id="mobile-price-track" class="track-fill h-2"></div>
+                      <input id="mobile-price-min" name="min_price" type="range" min="1000" max="20000" step="100" value="{{ $filters['min_price'] ?? 1000 }}">
+                      <input id="mobile-price-max" name="max_price" type="range" min="1000" max="20000" step="100" value="{{ $filters['max_price'] ?? 20000 }}">
+                  </div>
+              </div>
+          </div>
+
+          <!-- Sort -->
+          <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Sort by</label>
+              <div class="relative">
+                  <select name="sort" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 outline-none">
+                      <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>Most Recent</option>
+                      <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>Closest to me</option>
+                      <option value="due" @selected(($filters['sort'] ?? '')==='due')>Due Soon</option>
+                      <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>Price: Low to High</option>
+                      <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>Price: High to Low</option>
+                  </select>
+                  <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none">
+                      <i data-feather="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                  </div>
+              </div>
+          </div>
+      </form>
+
+      <!-- Modal Footer -->
+      <div class="p-6 border-t border-gray-100 flex gap-4 bg-white">
+          <button type="button" id="clear-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all">Cancel</button>
+          <button type="button" id="apply-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg shadow-blue-100 transition-all">Apply</button>
+      </div>
+  </div>
  
   <!-- Main Content -->
-  <section class="bg-gray-50 pt-8 h-[700px]">
+  <section class="bg-gray-50 pt-0 h-[700px]">
    <div class="flex max-w-7xl mx-auto px-6 gap-6 h-full pb-6">
      
       <!-- Left: Tasks Pane -->
@@ -685,7 +830,8 @@
             const pMin = ((minVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
             const pMax = ((maxVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
             track.style.left = pMin + '%';
-            track.style.width = (pMax - pMin) + '%';
+            track.style.right = (100 - pMax) + '%';
+            track.style.width = 'auto';
 
             // Update price display box inside dropdown
             if (priceDisplay) {
@@ -793,6 +939,140 @@
             }
         });
     }
+
+    // 9. Mobile Filters Logic
+    (function initMobileFilters() {
+        const trigger = document.getElementById('mobile-filter-trigger');
+        const modal = document.getElementById('mobile-filters-modal');
+        const closeBtn = document.getElementById('close-mobile-filters');
+        const cancelBtn = document.getElementById('clear-mobile-filters');
+        const applyBtn = document.getElementById('apply-mobile-filters');
+        const form = document.getElementById('mobile-filters-form');
+
+        if (!trigger || !modal) return;
+
+        trigger.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Prevent scroll
+            refreshIcons();
+        });
+
+        const hideModal = () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        };
+
+        [closeBtn, cancelBtn].forEach(btn => btn?.addEventListener('click', hideModal));
+
+        // Type Tabs
+        const typeTabs = document.querySelectorAll('.mobile-type-tab');
+        const typeHidden = document.getElementById('mobile-type-hidden');
+        typeTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                typeTabs.forEach(t => {
+                    t.classList.remove('bg-white', 'shadow-md', 'text-blue-600', 'bg-blue-900', 'text-white');
+                    t.classList.add('text-gray-500');
+                });
+                
+                const val = tab.dataset.value;
+                typeHidden.value = val;
+                
+                if (val === 'remote') {
+                    tab.classList.add('bg-blue-900', 'text-white', 'shadow-md');
+                    tab.classList.remove('text-gray-500');
+                } else {
+                    tab.classList.add('bg-white', 'shadow-md', 'text-blue-600');
+                    tab.classList.remove('text-gray-500');
+                }
+            });
+        });
+
+        // Price Slider (Mobile)
+        const minEl = document.getElementById('mobile-price-min');
+        const maxEl = document.getElementById('mobile-price-max');
+        const track = document.getElementById('mobile-price-track');
+        const priceText = document.getElementById('mobile-price-text');
+        
+        if (minEl && maxEl && track) {
+            const RANGE_MIN = 1000;
+            const RANGE_MAX = 20000;
+            const GAP = 100;
+
+            function updatePrice(source) {
+                let minVal = parseInt(minEl.value);
+                let maxVal = parseInt(maxEl.value);
+
+                if (minVal > maxVal - GAP) {
+                    if (source === 'min') {
+                        minVal = maxVal - GAP;
+                        minEl.value = minVal;
+                    } else {
+                        maxVal = minVal + GAP;
+                        maxEl.value = maxVal;
+                    }
+                }
+
+                const pMin = ((minVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
+                const pMax = ((maxVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
+                
+                track.style.left = pMin + '%';
+                track.style.right = (100 - pMax) + '%';
+                track.style.width = 'auto';
+                
+                if (priceText) priceText.textContent = `€${minVal.toLocaleString()} - €${maxVal.toLocaleString()}`;
+            }
+
+            minEl.addEventListener('input', () => updatePrice('min'));
+            maxEl.addEventListener('input', () => updatePrice('max'));
+            updatePrice('min');
+        }
+
+        // City Search (Mobile)
+        const cityInput = document.getElementById('mobile-city-search-input');
+        const cityResults = document.getElementById('mobile-city-results');
+        const cityHidden = document.getElementById('mobile-city-hidden');
+        let mobileSearchTimeout;
+
+        if (cityInput) {
+            cityInput.addEventListener('input', (e) => {
+                clearTimeout(mobileSearchTimeout);
+                const q = e.target.value;
+                if (q.length < 2) { cityResults.classList.add('hidden'); return; }
+
+                mobileSearchTimeout = setTimeout(async () => {
+                    try {
+                        const res = await fetch(`/api/cities?q=${q}`);
+                        const cities = await res.json();
+                        cityResults.innerHTML = '';
+                        if (cities.length) {
+                            cityResults.classList.remove('hidden');
+                            cities.slice(0, 8).forEach(c => {
+                                const div = document.createElement('div');
+                                div.className = 'px-5 py-4 text-[14px] font-medium hover:bg-blue-50 cursor-pointer text-gray-700 border-b border-gray-50 last:border-0';
+                                div.innerHTML = `<i data-feather="map-pin" class="w-3.5 h-3.5 inline mr-2 text-gray-400"></i> ${c.name}`;
+                                div.onclick = () => {
+                                    cityInput.value = c.name;
+                                    cityHidden.value = c.name;
+                                    cityResults.classList.add('hidden');
+                                    refreshIcons();
+                                };
+                                cityResults.appendChild(div);
+                            });
+                            refreshIcons();
+                        } else {
+                            cityResults.classList.add('hidden');
+                        }
+                    } catch (err) {}
+                }, 300);
+            });
+        }
+
+        applyBtn.addEventListener('click', () => {
+            form.submit();
+        });
+    })();
   </script>
 
   <!-- Include Report Modal -->

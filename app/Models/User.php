@@ -87,4 +87,24 @@ class User extends Authenticatable
         $avg = $this->reviewsReceived()->avg('stars');
         return $avg ? round($avg, 1) : 0;
     }
+
+    /**
+     * Get the full URL for the user's avatar.
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        if (!$this->avatar) {
+            return asset('assets/img/default.jpg');
+        }
+
+        if (str_starts_with($this->avatar, 'http')) {
+            return $this->avatar;
+        }
+
+        if (str_starts_with($this->avatar, 'assets/')) {
+            return asset($this->avatar);
+        }
+
+        return asset('storage/' . $this->avatar);
+    }
 }

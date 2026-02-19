@@ -61,13 +61,7 @@
  
             {{-- Posted By --}}
             <a href="{{ $task->employer ? route('public-profile', $task->employer->id) : '#' }}" class="flex items-center space-x-4 group hover:bg-gray-50 p-2 -ml-2 rounded-lg transition-colors text-decoration-none">
-                @if(!empty($task->employer->avatar))
-                    <img src="{{ asset('storage/' . $task->employer->avatar) }}" alt="Avatar" class="w-12 h-12 rounded-full object-cover border border-gray-200 group-hover:border-blue-400 transition-colors">
-                @else
-                    <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-lg flex-shrink-0 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
-                        {{ substr($task->employer->first_name ?? 'U', 0, 1) }}
-                    </div>
-                @endif
+                <img src="{{ $task->employer->avatar_url }}" alt="Avatar" class="w-12 h-12 rounded-full object-cover border border-gray-200 group-hover:border-blue-400 transition-colors">
                 <div>
                     <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wide mb-1">{{ __('task_details.posted_by') }}</p>
                     <p class="text-base font-medium text-slate-900 group-hover:text-blue-600 transition-colors">{{ $task->employer->first_name ?? 'Unknown' }} {{ $task->employer->last_name ?? '' }}</p>

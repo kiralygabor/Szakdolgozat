@@ -2,11 +2,11 @@
 
 @section('content')
 <section class="bg-white pt-8 pb-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-[260px_minmax(0,1fr)] gap-10 md:gap-14 items-start">
-
-            <!-- Left: Categories list -->
-            <aside class="relative md:pr-6 md:-translate-x-12 md:transform">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex flex-col md:flex-row gap-10 items-start">
+ 
+            <!-- Left: Categories list (aligned with Logo) -->
+            <aside class="md:w-1/5 mb-8 md:mb-0">
                 <h3 class="text-2xl font-bold text-blue-900 text-left mt-2">{{ __('category_page.sidebar_title') }}</h3>
 
                 <div class="mt-10 pr-4 relative z-10">

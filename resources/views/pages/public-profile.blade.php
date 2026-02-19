@@ -3,8 +3,8 @@
 @section('title', __('public_profile.title', ['name' => $user->first_name]))
 
 @section('content')
-<div class="bg-gray-50 min-h-screen py-12">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="bg-gray-50 min-h-screen py-12 px-6">
+    <div class="max-w-7xl mx-auto">
         
         {{-- Flash Messages --}}
         @if(session('success'))
@@ -27,13 +27,7 @@
                 <div class="relative -top-16 flex items-end">
                     <!-- Avatar -->
                     <div class="relative">
-                        @if($user->avatar)
-                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->first_name }}" class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg bg-white">
-                        @else
-                            <div class="w-32 h-32 rounded-full border-4 border-white bg-gray-200 flex items-center justify-center text-gray-500 font-bold text-4xl shadow-lg">
-                                {{ substr($user->first_name, 0, 1) }}
-                            </div>
-                        @endif
+                        <img src="{{ $user->avatar_url }}" alt="{{ $user->first_name }}" class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg bg-white">
                     </div>
                 </div>
 
@@ -151,11 +145,11 @@
                         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex gap-4">
                             <!-- Reviewer Avatar -->
                             <div class="shrink-0">
-                                @if($review->reviewer && $review->reviewer->avatar)
-                                    <img src="{{ asset('storage/' . $review->reviewer->avatar) }}" class="w-12 h-12 rounded-full object-cover">
+                                @if($review->reviewer)
+                                    <img src="{{ $review->reviewer->avatar_url }}" class="w-12 h-12 rounded-full object-cover">
                                 @else
                                     <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold">
-                                        {{ substr($review->reviewer->first_name ?? 'A', 0, 1) }}
+                                        {{ substr('A', 0, 1) }}
                                     </div>
                                 @endif
                             </div>

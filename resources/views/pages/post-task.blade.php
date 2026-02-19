@@ -1,7 +1,5 @@
 @extends('layout')
-
 @section('title', __('post-task.title'))
-
 @section('content')
 <style>
   .pill-btn {
@@ -187,248 +185,254 @@
     font-size: 0.875rem;
     border: 2px solid white;
   }
+  .is-invalid {
+    border-color: #dc3545 !important;
+    animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+  }
+  .invalid-feedback-custom {
+  text-align: left;
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  margin-left: 4px;
+  font-weight: 500;
+}
 </style>
 
-
 <div class="min-h-screen flex flex-col items-center bg-white">
-  <div class="w-full max-w-5xl flex flex-col md:flex-row px-6 py-10">
-
-    <!-- Sidebar -->
-    <aside class="md:w-1/4 mb-8 md:mb-0">
-      <h2 class="text-lg font-semibold mb-6 text-gray-800">{{ __('post-task.sidebar.post_task') }}</h2>
-      <ul class="space-y-4 text-gray-500" id="sidebarSteps">
-        <li class="font-semibold text-blue-800">{{ __('post-task.sidebar.category_date') }}</li>
-        <li>{{ __('post-task.sidebar.location') }}</li>
-        <li>{{ __('post-task.sidebar.details') }}</li>
-        <li>{{ __('post-task.sidebar.budget') }}</li>
-      </ul>
-    </aside>
-
-    <!-- Main -->
-    <section class="md:w-3/4 md:pl-10">
-      <form id="postTaskForm" class="space-y-10" action="{{ route('advertisements.store') }}" method="POST" enctype="multipart/form-data">
+<div class="w-full max-w-7xl flex flex-col md:flex-row px-6 py-10">
+<!-- Sidebar -->
+<aside class="md:w-1/5 mb-8 md:mb-0 md:border-r border-gray-200 md:pr-6">
+<h2 class="text-lg font-semibold mb-6 text-gray-800 mt-2">{{ __('post-task.sidebar.post_task') }}</h2>
+<ul class="space-y-4 text-gray-500" id="sidebarSteps">
+<li class="font-semibold text-blue-800">{{ __('post-task.sidebar.category_date') }}</li>
+<li>{{ __('post-task.sidebar.location') }}</li>
+<li>{{ __('post-task.sidebar.details') }}</li>
+<li>{{ __('post-task.sidebar.budget') }}</li>
+</ul>
+</aside>
+<!-- Main -->
+<section class="md:w-4/5 md:pl-10">
+<form id="postTaskForm" action="{{ route('advertisements.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" name="task_type" id="input_task_type" value="{{ old('task_type', 'in-person') }}" />
-        <input type="hidden" name="is_date_flexible" id="input_is_date_flexible" value="{{ old('is_date_flexible', '0') }}" />
-        
+<input type="hidden" name="task_type" id="input_task_type" value="{{ old('task_type', 'in-person') }}" />
+<input type="hidden" name="is_date_flexible" id="input_is_date_flexible" value="{{ old('is_date_flexible', '0') }}" />
         @if ($errors->any())
-        <div class="rounded-md border border-red-200 bg-red-50 p-4 text-red-700">
-          <div class="font-semibold mb-2">{{ __('post-task.error_header') }}</div>
-          <ul class="list-disc pl-5 space-y-1">
+<div class="rounded-md border border-red-200 bg-red-50 p-4 text-red-700 mb-10">
+<div class="font-semibold mb-2">{{ __('post-task.error_header') }}</div>
+<ul class="list-disc pl-5 space-y-1">
             @foreach ($errors->all() as $error)
-              <li>{{ $error }}</li>
+<li>{{ $error }}</li>
             @endforeach
-          </ul>
-        </div>
+</ul>
+</div>
         @endif
-
-        <!-- STEP 1 -->
-        <div id="step-1" class="step-pane">
-          <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step1.title') }}</h1>
-          
-          <!-- Category and Job Selection -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div>
-                  <label for="categorySelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.category_label') }}</label>
-                  <select id="categorySelect" name="categories_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition">
-                      <option value="">{{ __('post-task.step1.category_placeholder') }}</option>
+<!-- STEP 1 -->
+<div id="step-1" class="step-pane">
+<h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step1.title') }}</h1>
+<!-- Category and Job Selection -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+<div>
+<label for="categorySelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.category_label') }}</label>
+<select id="categorySelect" name="categories_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition">
+<option value="">{{ __('post-task.step1.category_placeholder') }}</option>
                       @foreach($categories as $category)
-                          <option value="{{ $category->id }}">{{ $category->name }}</option>
+<option value="{{ $category->id }}">{{ $category->name }}</option>
                       @endforeach
-                  </select>
+</select>
                   @error('categories_id')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+<p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                   @enderror
-              </div>
-              <div>
-                  <label for="jobSelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.service_label') }}</label>
-                  <select id="jobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" disabled>
-                      <option value="">{{ __('post-task.step1.service_placeholder_initial') }}</option>
-                  </select>
+</div>
+<div>
+<label for="jobSelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.service_label') }}</label>
+<select id="jobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" disabled>
+<option value="">{{ __('post-task.step1.service_placeholder_initial') }}</option>
+</select>
                   @error('jobs_id')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+<p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                   @enderror
-              </div>
-          </div>
-
-          <div>
-            <label for="taskDescription" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.task_title_label') }}</label>
-            <input id="taskDescription" name="title" type="text" placeholder="{{ __('post-task.step1.task_title_placeholder') }}" value="{{ old('title') }}" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" />
+</div>
+</div>
+<div>
+<label for="taskDescription" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.task_title_label') }}</label>
+<input id="taskDescription" name="title" type="text" placeholder="{{ __('post-task.step1.task_title_placeholder') }}" value="{{ old('title') }}" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" />
             @error('title')
-              <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+<p class="text-sm text-red-600 mt-1">{{ $message }}</p>
             @enderror
-          </div>
-
-          <div class="mt-6">
-            <label class="block text-lg font-medium text-gray-800 mb-4">{{ __('post-task.step1.date_label') }}</label>
-            <div class="flex flex-wrap gap-4">
-              <div class="date-dropdown flex-1 min-w-[200px]">
-                <button type="button" class="date-dropdown-btn" id="beforeDateBtn">
-                  <span id="beforeDateLabel">{{ __('post-task.step1.before_date') }}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                </button>
-                <div class="date-dropdown-calendar" id="beforeDateCalendar">
-                  <input type="date" name="required_before_date" class="w-full border-0 rounded-lg p-2" id="beforeDateValue" value="{{ old('required_before_date') }}" />
-                </div>
-              </div>
-              <div class="date-dropdown flex-1 min-w-[200px]">
-                <button type="button" class="date-dropdown-btn" id="onDateBtn">
-                  <span id="onDateLabel">{{ __('post-task.step1.on_date') }}</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                </button>
-                <div class="date-dropdown-calendar" id="onDateCalendar">
-                  <input type="date" name="required_date" class="w-full border-0 rounded-lg p-2" id="onDateValue" value="{{ old('required_date') }}" />
-                </div>
-              </div>
-              <button type="button" class="pill-btn" data-option="flexible">{{ __('post-task.step1.flexible') }}</button>
-            </div>
+</div>
+<div class="mt-6">
+<label class="block text-lg font-medium text-gray-800 mb-4">{{ __('post-task.step1.date_label') }}</label>
+<div class="flex flex-wrap gap-4">
+<div class="date-dropdown flex-1 min-w-[200px]">
+<button type="button" class="date-dropdown-btn" id="beforeDateBtn">
+<span id="beforeDateLabel">{{ __('post-task.step1.before_date') }}</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+</button>
+<div class="date-dropdown-calendar" id="beforeDateCalendar">
+<input type="date" name="required_before_date" class="w-full border-0 rounded-lg p-2" id="beforeDateValue" value="{{ old('required_before_date') }}" />
+</div>
+</div>
+<div class="date-dropdown flex-1 min-w-[200px]">
+<button type="button" class="date-dropdown-btn" id="onDateBtn">
+<span id="onDateLabel">{{ __('post-task.step1.on_date') }}</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+</button>
+<div class="date-dropdown-calendar" id="onDateCalendar">
+<input type="date" name="required_date" class="w-full border-0 rounded-lg p-2" id="onDateValue" value="{{ old('required_date') }}" />
+</div>
+</div>
+<button type="button" class="pill-btn" data-option="flexible">{{ __('post-task.step1.flexible') }}</button>
+</div>
             @error('required_date')
-              <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+<p class="text-sm text-red-600 mt-2">{{ $message }}</p>
             @enderror
             @error('required_before_date')
-              <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+<p class="text-sm text-red-600 mt-2">{{ $message }}</p>
             @enderror
-          </div>
-
-          <div class="mt-8">
-            <label class="flex items-center gap-2 text-lg font-medium text-gray-800 mb-4">
-              <input type="checkbox" id="needTimeCheckbox" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-              <span>{{ __('post-task.step1.certain_time') }}</span>
-            </label>
-            <!-- Note: name="preferred_time[]" allows multiple values to be sent as an array -->
-            <div id="timeOfDayOptions" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
-              <label class="time-option" data-time="morning">
-                <input type="checkbox" name="preferred_time[]" value="morning" class="hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="2" x2="12" y2="9"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="8 6 12 2 16 6"></polyline></svg>
-                <span class="font-semibold text-gray-800">{{ __('post-task.step1.morning') }}</span>
-                <span class="text-sm text-gray-600">{{ __('post-task.step1.morning_range') }}</span>
-              </label>
-              <label class="time-option" data-time="midday">
-                <input type="checkbox" name="preferred_time[]" value="midday" class="hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                <span class="font-semibold text-gray-800">{{ __('post-task.step1.midday') }}</span>
-                <span class="text-sm text-gray-600">{{ __('post-task.step1.midday_range') }}</span>
-              </label>
-              <label class="time-option" data-time="afternoon">
-                <input type="checkbox" name="preferred_time[]" value="afternoon" class="hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="16 5 12 9 8 5"></polyline></svg>
-                <span class="font-semibold text-gray-800">{{ __('post-task.step1.afternoon') }}</span>
-                <span class="text-sm text-gray-600">{{ __('post-task.step1.afternoon_range') }}</span>
-              </label>
-              <label class="time-option" data-time="evening">
-                <input type="checkbox" name="preferred_time[]" value="evening" class="hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                <span class="font-semibold text-gray-800">{{ __('post-task.step1.evening') }}</span>
-                <span class="text-sm text-gray-600">{{ __('post-task.step1.evening_range') }}</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-      <!-- STEP 2 -->
-      <div id="step-2" class="step-pane hidden">
-        <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step2.title') }}</h1>
-        <div class="space-y-8">
-          <div>
-            <p class="text-lg font-medium text-gray-800 mb-6">{{ __('post-task.step2.question') }}</p>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <div class="location-option selected" id="inPersonOption">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-                <div class="title">{{ __('post-task.step2.in_person') }}</div>
-                <div class="description">{{ __('post-task.step2.in_person_desc') }}</div>
-              </div>
-              <div class="location-option" id="onlineOption">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                  <line x1="8" y1="21" x2="16" y2="21"></line>
-                  <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-                <div class="title">{{ __('post-task.step2.online') }}</div>
-                <div class="description">{{ __('post-task.step2.online_desc') }}</div>
-              </div>
-            </div>
-          </div>
-        
-          <div id="locationInputs" class="space-y-6">
-            <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step2.location_label') }}</label>
-              <div class="relative">
-                <input type="text" id="pickupSuburb" name="location" class="w-full border border-gray-300 rounded-lg p-3" placeholder="{{ __('post-task.step2.location_placeholder') }}" value="{{ old('location') }}" autocomplete="off" />
-                <div id="pickupSuburbDropdown" class="absolute left-0 right-0 mt-1 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg hidden z-10"></div>
-              </div>
-              @error('location')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-              @enderror
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 3 -->
-      <div id="step-3" class="step-pane hidden">
-      <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step3.title') }}</h1>
-      <div class="space-y-6">
-          <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step3.details_label') }}</label>
-              <textarea id="taskDetails" name="description" rows="6" class="w-full border border-gray-300 rounded-lg p-3" placeholder="{{ __('post-task.step3.details_placeholder') }}">{{ old('description') }}</textarea>
-              @error('description')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-              @enderror
-          </div>
-          <div>
-              <label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step3.photos_label') }} <span class="text-gray-500">{{ __('post-task.step3.photos_optional') }}</span></label>
-              <div class="photo-upload-plus" id="photoUploadPlus">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>
-                  <div class="text">{{ __('post-task.step3.add_photos') }}</div>
-                  <div class="subtext">{{ __('post-task.step3.add_photos_desc') }}</div>
-              </div>
-              <input type="file" id="photoSelectorInput" multiple accept="image/*" class="hidden">
-              <input type="file" id="photoSubmissionInput" name="photos[]" multiple class="hidden">
-              <div class="photo-preview-container" id="photoPreviewContainer"></div>
-          </div>
-      </div>
-  </div>
-
-      <!-- STEP 4 -->
-      <div id="step-4" class="step-pane hidden">
-      <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step4.title') }}</h1>
-      <p class="text-lg font-medium text-gray-800">{{ __('post-task.step4.budget_question') }}</p>
-      <p class="text-gray-600 mb-4">{{ __('post-task.step4.negotiable') }}</p>
-      <div class="flex items-stretch rounded-lg overflow-hidden border" id="budgetWrapper">
-          <span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">$</span>
-          <input id="budgetInput" name="price" type="number" min="10" max="9999" class="flex-1 p-3 outline-none" placeholder="{{ __('post-task.step4.budget_placeholder') }}" value="{{ old('price') }}">
-      </div>
-      <p id="budgetError" class="text-sm text-orange-600 mt-2 hidden">{{ __('post-task.step4.budget_error') }}</p>
-      @error('price')
-        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-      @enderror
-      </div>
-
-      <!-- Nav Buttons -->
-      <div class="flex items-center justify-between mt-10">
-      <button type="button" id="backBtn" class="w-40 bg-blue-50 text-blue-700 font-semibold py-3 rounded-full disabled:opacity-50" disabled>{{ __('post-task.nav.back') }}</button>
-      <div class="flex gap-3">
-          <button type="button" id="nextBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full">{{ __('post-task.nav.next') }}</button>
-          <button type="submit" id="submitBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full opacity-60 cursor-not-allowed hidden" disabled>{{ __('post-task.nav.get_quotes') }}</button>
-      </div>
-  </div>
-      </form>
-    </section>
-  </div>
 </div>
-
+<div class="mt-8">
+<label class="flex items-center gap-2 text-lg font-medium text-gray-800 mb-4">
+<input type="checkbox" id="needTimeCheckbox" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+<span>{{ __('post-task.step1.certain_time') }}</span>
+</label>
+<!-- Note: name="preferred_time[]" allows multiple values to be sent as an array -->
+<div id="timeOfDayOptions" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
+<label class="time-option" data-time="morning">
+<input type="checkbox" name="preferred_time[]" value="morning" class="hidden">
+<svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="2" x2="12" y2="9"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="8 6 12 2 16 6"></polyline></svg>
+<span class="font-semibold text-gray-800">{{ __('post-task.step1.morning') }}</span>
+<span class="text-sm text-gray-600">{{ __('post-task.step1.morning_range') }}</span>
+</label>
+<label class="time-option" data-time="midday">
+<input type="checkbox" name="preferred_time[]" value="midday" class="hidden">
+<svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+<span class="font-semibold text-gray-800">{{ __('post-task.step1.midday') }}</span>
+<span class="text-sm text-gray-600">{{ __('post-task.step1.midday_range') }}</span>
+</label>
+<label class="time-option" data-time="afternoon">
+<input type="checkbox" name="preferred_time[]" value="afternoon" class="hidden">
+<svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="16 5 12 9 8 5"></polyline></svg>
+<span class="font-semibold text-gray-800">{{ __('post-task.step1.afternoon') }}</span>
+<span class="text-sm text-gray-600">{{ __('post-task.step1.afternoon_range') }}</span>
+</label>
+<label class="time-option" data-time="evening">
+<input type="checkbox" name="preferred_time[]" value="evening" class="hidden">
+<svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+<span class="font-semibold text-gray-800">{{ __('post-task.step1.evening') }}</span>
+<span class="text-sm text-gray-600">{{ __('post-task.step1.evening_range') }}</span>
+</label>
+</div>
+</div>
+</div>
+<!-- STEP 2 -->
+<div id="step-2" class="step-pane hidden">
+<h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step2.title') }}</h1>
+<div class="space-y-8">
+<div>
+<p class="text-lg font-medium text-gray-800 mb-6">{{ __('post-task.step2.question') }}</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<div class="location-option selected" id="inPersonOption">
+<svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+<circle cx="12" cy="10" r="3"></circle>
+</svg>
+<div class="title">{{ __('post-task.step2.in_person') }}</div>
+<div class="description">{{ __('post-task.step2.in_person_desc') }}</div>
+</div>
+<div class="location-option" id="onlineOption">
+<svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+<line x1="8" y1="21" x2="16" y2="21"></line>
+<line x1="12" y1="17" x2="12" y2="21"></line>
+</svg>
+<div class="title">{{ __('post-task.step2.online') }}</div>
+<div class="description">{{ __('post-task.step2.online_desc') }}</div>
+</div>
+</div>
+</div>
+<div id="locationInputs" class="space-y-6">
+<div>
+<label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step2.location_label') }}</label>
+<div class="relative">
+<input type="text" id="pickupSuburb" name="location" class="w-full border border-gray-300 rounded-lg p-3" placeholder="{{ __('post-task.step2.location_placeholder') }}" value="{{ old('location') }}" autocomplete="off" />
+<div id="pickupSuburbDropdown" class="absolute left-0 right-0 mt-1 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg hidden z-10"></div>
+</div>
+              @error('location')
+<p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+              @enderror
+</div>
+</div>
+</div>
+</div>
+<!-- STEP 3 -->
+<div id="step-3" class="step-pane hidden">
+<h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step3.title') }}</h1>
+<div class="space-y-6">
+<div>
+<label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step3.details_label') }}</label>
+<textarea id="taskDetails" name="description" rows="6" class="w-full border border-gray-300 rounded-lg p-3" placeholder="{{ __('post-task.step3.details_placeholder') }}">{{ old('description') }}</textarea>
+              @error('description')
+<p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+              @enderror
+</div>
+<div>
+<label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step3.photos_label') }} <span class="text-gray-500">{{ __('post-task.step3.photos_optional') }}</span></label>
+<div class="photo-upload-plus" id="photoUploadPlus">
+<svg xmlns="http://www.w3.org/2000/svg" class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<line x1="12" y1="5" x2="12" y2="19"></line>
+<line x1="5" y1="12" x2="19" y2="12"></line>
+</svg>
+<div class="text">{{ __('post-task.step3.add_photos') }}</div>
+<div class="subtext">{{ __('post-task.step3.add_photos_desc') }}</div>
+</div>
+<input type="file" id="photoSelectorInput" multiple accept="image/*" class="hidden">
+<input type="file" id="photoSubmissionInput" name="photos[]" multiple class="hidden">
+<div class="photo-preview-container" id="photoPreviewContainer"></div>
+</div>
+</div>
+</div>
+<!-- STEP 4 -->
+<div id="step-4" class="step-pane hidden">
+<h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step4.title') }}</h1>
+<p class="text-lg font-medium text-gray-800">{{ __('post-task.step4.budget_question') }}</p>
+<p class="text-gray-600 mb-4">{{ __('post-task.step4.negotiable') }}</p>
+<div class="flex items-stretch rounded-lg overflow-hidden border @error('price') is-invalid @enderror" id="budgetWrapper">
+<span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">$</span>
+<input id="budgetInput" name="price" type="number" min="10" max="9999" class="flex-1 p-3 outline-none" placeholder="{{ __('post-task.step4.budget_placeholder') }}" value="{{ old('price') }}">
+</div>
+<div id="budgetError" class="invalid-feedback-custom hidden">
+        {{ __('post-task.step4.budget_error') }}
+</div>
+      @error('price')
+<div class="invalid-feedback-custom server-error">
+          {{ $message }}
+</div>
+      @enderror
+</div>
+<!-- Nav Buttons -->
+<div class="flex items-center justify-between mt-10">
+<button type="button" id="backBtn" class="w-40 bg-blue-50 text-blue-700 font-semibold py-3 rounded-full disabled:opacity-50" disabled>{{ __('post-task.nav.back') }}</button>
+<div class="flex gap-3">
+<button type="button" id="nextBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full">{{ __('post-task.nav.next') }}</button>
+<button type="submit" id="submitBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full opacity-60 cursor-not-allowed hidden" disabled>{{ __('post-task.nav.get_quotes') }}</button>
+</div>
+</div>
+</form>
+</section>
+</div>
+</div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Categories Data
   const categoriesData = @json($categories);
 
-  
   // Step handling
   const panes = [
     document.getElementById('step-1'),
@@ -440,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextBtn = document.getElementById('nextBtn');
   const submitBtn = document.getElementById('submitBtn');
   let stepIndex = 0;
-
   // Inputs
   const categorySelect = document.getElementById('categorySelect');
   const jobSelect = document.getElementById('jobSelect');
@@ -452,17 +455,13 @@ document.addEventListener('DOMContentLoaded', function() {
   const pickupSuburbDropdown = document.getElementById('pickupSuburbDropdown');
   const budgetInput = document.getElementById('budgetInput');
   const budgetError = document.getElementById('budgetError');
-
   // Photo upload elements
   const photoUploadPlus = document.getElementById('photoUploadPlus');
-
   const photoPreviewContainer = document.getElementById('photoPreviewContainer');
-
   function setActive(el, active) {
     if (!el) return;
     el.classList.toggle('selected', active);
   }
-
   function showStep(i){
     panes.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
     backBtn.disabled = i === 0;
@@ -472,7 +471,6 @@ document.addEventListener('DOMContentLoaded', function() {
     validateCurrent();
     if (window.feather && typeof window.feather.replace === 'function') feather.replace();
   }
-
   function updateSidebar(i){
     const items = document.querySelectorAll('#sidebarSteps li');
     items.forEach((li, idx) => {
@@ -482,9 +480,9 @@ document.addEventListener('DOMContentLoaded', function() {
       li.classList.toggle('text-gray-500', !isActive);
     });
   }
-
   function validateCurrent(){
     let ok = true;
+    let budgetErrorTimeout;
     if (stepIndex === 0) {
       // Must have Task title AND Category AND Job
       ok = taskInput.value.trim().length > 0 && categorySelect.value !== "" && jobSelect.value !== "";
@@ -494,40 +492,66 @@ document.addEventListener('DOMContentLoaded', function() {
     } else if (stepIndex === 2) {
       ok = document.getElementById('taskDetails').value.trim().length > 0;
     } else if (stepIndex === 3) {
-      const v = Number(budgetInput.value);
-      ok = v >= 10 && v <= 9999;
-      budgetError.classList.toggle('hidden', ok);
+  const val = budgetInput.value.trim();
+  const budgetWrapper = document.getElementById('budgetWrapper');
+  const serverError = budgetWrapper.parentElement.querySelector('.server-error');
+  // 1. Always clear the timer immediately on every keystroke
+  clearTimeout(budgetErrorTimeout);
+  // 2. Hide server error if user starts typing
+  if (serverError) serverError.classList.add('hidden');
+  if (val === "") {
+    ok = false;
+    budgetError.classList.add('hidden');
+    budgetWrapper.classList.remove('is-invalid');
+  } else {
+    const n = Number(val);
+    const isValidRange = (n >= 10 && n <= 9999);
+    if (isValidRange) {
+      // INSTANT: If valid, hide error immediately and enable button
+      ok = true;
+      budgetError.classList.add('hidden');
+      budgetWrapper.classList.remove('is-invalid');
+    } else {
+      // INSTANT: Disable button so they can't submit a bad value
+      ok = false;
+      // DELAYED: Wait to show the red error message
+      budgetErrorTimeout = setTimeout(() => {
+        // RE-VERIFY: Check the value again AFTER the delay
+        const currentVal = budgetInput.value.trim();
+        const currentN = Number(currentVal);
+        const stillInvalid = currentVal !== "" && (currentN < 10 || currentN > 9999);
+        if (stillInvalid) {
+          budgetError.classList.remove('hidden');
+          budgetWrapper.classList.add('is-invalid');
+        }
+      }, 800);
     }
+  }
+}
     nextBtn.disabled = !ok;
     submitBtn.disabled = !ok;
     submitBtn.classList.toggle('opacity-60', !ok);
     submitBtn.classList.toggle('cursor-not-allowed', !ok);
   }
-
   taskInput.addEventListener('input', validateCurrent);
   categorySelect.addEventListener('change', validateCurrent);
   jobSelect.addEventListener('change', validateCurrent);
   pickupSuburb && pickupSuburb.addEventListener('input', validateCurrent);
   document.getElementById('taskDetails')?.addEventListener('input', validateCurrent);
   budgetInput && budgetInput.addEventListener('input', validateCurrent);
-
   backBtn.addEventListener('click', function(){
     if (stepIndex > 0) { stepIndex -= 1; showStep(stepIndex); }
   });
   nextBtn.addEventListener('click', function(){
     if (stepIndex < panes.length - 1) { stepIndex += 1; showStep(stepIndex); }
   });
-  
   // --- JOB POPULATION LOGIC ---
   function populateJobs(catId, selectedJobId = null) {
       jobSelect.innerHTML = '<option value="">{{ __('post-task.step1.service_placeholder_select') }}</option>';
       jobSelect.disabled = true;
-      
       if (!catId) return;
-      
       const category = categoriesData.find(c => c.id == catId);
       const uniqueJobs = new Map(); // Using Map to track unique jobs by ID
-      
       if (category && category.jobs && category.jobs.length > 0) {
           // Collect unique jobs
           category.jobs.forEach(job => {
@@ -535,7 +559,6 @@ document.addEventListener('DOMContentLoaded', function() {
                   uniqueJobs.set(job.id, job);
               }
           });
-
           // Add unique jobs to dropdown
           uniqueJobs.forEach(job => {
               const option = document.createElement('option');
@@ -546,56 +569,45 @@ document.addEventListener('DOMContentLoaded', function() {
               }
               jobSelect.appendChild(option);
           });
-
           jobSelect.disabled = false;
       }
       validateCurrent();
   }
-
   categorySelect.addEventListener('change', function() {
       populateJobs(this.value);
   });
-
   // --- PRE-SELECTION FROM URL ---
   const urlParams = new URLSearchParams(window.location.search);
   const preCat = urlParams.get('category'); // e.g. ?category=2
   const preService = urlParams.get('job') || urlParams.get('service'); // e.g. &job=5 or &service=5
-  
   if (preCat) {
       categorySelect.value = preCat;
       // We pass the job ID to select it automatically
       populateJobs(preCat, preService);
   }
-
   // Form Submission
   const form = document.getElementById('postTaskForm');
   form.addEventListener('submit', function(e){
       // Update hidden fields
       const isOnline = onlineOption.classList.contains('selected');
       document.getElementById('input_task_type').value = isOnline ? 'online' : 'in-person';
-      
       const flexibleActive = flexibleBtn && flexibleBtn.getAttribute('data-active') === 'true';
       document.getElementById('input_is_date_flexible').value = flexibleActive ? '1' : '0';
-      
       if (submitBtn.disabled) {
           e.preventDefault();
           alert("{{ __('post-task.error_header') }}");
       }
   });
-
   // Date dropdown functionality
   const onDateBtn = document.getElementById('onDateBtn');
   const onDateCalendar = document.getElementById('onDateCalendar');
   const onDateValue = document.getElementById('onDateValue');
   const onDateLabel = document.getElementById('onDateLabel');
-
   const beforeDateBtn = document.getElementById('beforeDateBtn');
   const beforeDateCalendar = document.getElementById('beforeDateCalendar');
   const beforeDateValue = document.getElementById('beforeDateValue');
   const beforeDateLabel = document.getElementById('beforeDateLabel');
-
   const flexibleBtn = document.querySelector('[data-option="flexible"]');
-
   function resetDateOptions() {
     onDateBtn.classList.remove('active');
     beforeDateBtn.classList.remove('active');
@@ -607,21 +619,18 @@ document.addEventListener('DOMContentLoaded', function() {
     onDateLabel.textContent = "{{ __('post-task.step1.on_date') }}";
     beforeDateLabel.textContent = "{{ __('post-task.step1.before_date') }}";
   }
-
   onDateBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     resetDateOptions();
     onDateBtn.classList.add('active');
     setTimeout(() => { onDateValue.showPicker(); }, 50);
   });
-
   beforeDateBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     resetDateOptions();
     beforeDateBtn.classList.add('active');
     setTimeout(() => { beforeDateValue.showPicker(); }, 50);
   });
-
   onDateValue.addEventListener('change', function() {
     if (this.value) {
       const date = new Date(this.value + 'T00:00:00');
@@ -629,9 +638,7 @@ document.addEventListener('DOMContentLoaded', function() {
       onDateBtn.classList.add('active');
     }
   });
-  
   onDateValue.addEventListener('click', function(e) { e.stopPropagation(); });
-
   beforeDateValue.addEventListener('change', function() {
     if (this.value) {
       const date = new Date(this.value + 'T00:00:00');
@@ -639,21 +646,17 @@ document.addEventListener('DOMContentLoaded', function() {
       beforeDateBtn.classList.add('active');
     }
   });
-  
   beforeDateValue.addEventListener('click', function(e) { e.stopPropagation(); });
-
   if (flexibleBtn) {
     flexibleBtn.addEventListener('click', function() {
       resetDateOptions();
       this.setAttribute('data-active','true');
     });
   }
-
   // Time of day checkbox and options
   const needTimeCheckbox = document.getElementById('needTimeCheckbox');
   const timeOfDayOptions = document.getElementById('timeOfDayOptions');
   const timeOptions = document.querySelectorAll('.time-option');
-
   needTimeCheckbox.addEventListener('change', function() {
     timeOfDayOptions.classList.toggle('hidden', !this.checked);
     if (!this.checked) {
@@ -662,7 +665,6 @@ document.addEventListener('DOMContentLoaded', function() {
         timeOptions.forEach(opt => opt.classList.remove('selected'));
     }
   });
-
   // Multiple time selections
   timeOptions.forEach(option => {
     option.addEventListener('click', function(e) {
@@ -671,7 +673,6 @@ document.addEventListener('DOMContentLoaded', function() {
       this.classList.toggle('selected', checkbox.checked);
     });
   });
-
   // Suburb / city autocomplete (uses /api/cities like tasks search)
   let suburbSearchTimeout;
   if (pickupSuburb && pickupSuburbDropdown) {
@@ -683,7 +684,6 @@ document.addEventListener('DOMContentLoaded', function() {
         pickupSuburbDropdown.innerHTML = '';
         return;
       }
-
       suburbSearchTimeout = setTimeout(async () => {
         try {
           const res = await fetch(`/api/cities?q=${encodeURIComponent(q)}`);
@@ -693,7 +693,6 @@ document.addEventListener('DOMContentLoaded', function() {
             pickupSuburbDropdown.classList.add('hidden');
             return;
           }
-
           cities.slice(0, 8).forEach((c) => {
             const div = document.createElement('div');
             div.className = 'px-3 py-2 text-sm hover:bg-blue-50 cursor-pointer text-gray-700';
@@ -706,14 +705,12 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             pickupSuburbDropdown.appendChild(div);
           });
-
           pickupSuburbDropdown.classList.remove('hidden');
         } catch (err) {
           pickupSuburbDropdown.classList.add('hidden');
         }
       }, 300);
     });
-
     // Hide dropdown when clicking outside
     document.addEventListener('click', (event) => {
       if (!pickupSuburbDropdown.contains(event.target) && event.target !== pickupSuburb) {
@@ -721,37 +718,31 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-
   // Location type selection
   function toggleWorkType(){
     const isOnline = onlineOption.classList.contains('selected');
     document.getElementById('locationInputs').classList.toggle('hidden', isOnline);
     validateCurrent();
   }
-
   inPersonOption.addEventListener('click', function(){
     setActive(inPersonOption, true);
     setActive(onlineOption, false);
     toggleWorkType();
   });
-
   onlineOption.addEventListener('click', function(){
     setActive(inPersonOption, false);
     setActive(onlineOption, true);
     toggleWorkType();
   });
-
   // Photo upload functionality - FIXED
   const photoSelectorInput = document.getElementById('photoSelectorInput');
   const photoSubmissionInput = document.getElementById('photoSubmissionInput');
   let allPhotos = [];
-
   function updateSubmissionFiles() {
       const dt = new DataTransfer();
       allPhotos.forEach(item => dt.items.add(item.file));
       photoSubmissionInput.files = dt.files;
   }
-
   function renderPreviews() {
       photoPreviewContainer.innerHTML = '';
       if (allPhotos.length === 0) {
@@ -759,15 +750,13 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
           photoPreviewContainer.style.display = 'block';
       }
-
       allPhotos.forEach((item, index) => {
           const div = document.createElement('div');
           div.className = 'photo-preview';
           div.innerHTML = `
-              <img src="${item.url}" alt="Preview">
-              <div class="remove-photo">×</div>
+<img src="${item.url}" alt="Preview">
+<div class="remove-photo">×</div>
           `;
-          
           div.querySelector('.remove-photo').addEventListener('click', (e) => {
               e.stopPropagation();
               // Remove item
@@ -776,16 +765,13 @@ document.addEventListener('DOMContentLoaded', function() {
               updateSubmissionFiles();
               renderPreviews();
           });
-          
           photoPreviewContainer.appendChild(div);
       });
   }
-
   if (photoSelectorInput) {
       photoSelectorInput.addEventListener('change', function(e) {
           const files = Array.from(e.target.files || []);
           if (files.length === 0) return;
-
           files.forEach(file => {
               if (file.type && file.type.startsWith('image/')) {
                   allPhotos.push({
@@ -794,21 +780,17 @@ document.addEventListener('DOMContentLoaded', function() {
                   });
               }
           });
-
           updateSubmissionFiles();
           renderPreviews();
-          
           // Clear selector so same file can be selected again if needed
           this.value = '';
       });
   }
-
   photoUploadPlus.addEventListener('click', function() {
       if (photoSelectorInput) {
         photoSelectorInput.click();
       }
   });
-
   // Initialize initial state from old() values
   (function initializeFromOldValues(){
     const initialTaskType = document.getElementById('input_task_type').value;
@@ -820,19 +802,16 @@ document.addEventListener('DOMContentLoaded', function() {
       setActive(onlineOption, false);
     }
     toggleWorkType();
-    
     const oldCat = "{{ old('categories_id') }}";
     const oldJob = "{{ old('jobs_id') }}";
     if (oldCat) {
         categorySelect.value = oldCat;
         populateJobs(oldCat, oldJob);
     }
-
     const isFlexible = document.getElementById('input_is_date_flexible').value === '1';
     if (isFlexible && flexibleBtn) {
       flexibleBtn.setAttribute('data-active','true');
     }
-    
     if (onDateValue.value) {
       const d = new Date(onDateValue.value + 'T00:00:00');
       onDateLabel.textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -843,7 +822,6 @@ document.addEventListener('DOMContentLoaded', function() {
       beforeDateLabel.textContent = d2.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       beforeDateBtn.classList.add('active');
     }
-    
     // Restore preferred times
     const oldPreferredTime = @json(old('preferred_time', []));
     if (oldPreferredTime && oldPreferredTime.length > 0) {
@@ -859,10 +837,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
   })();
-
   if (typeof feather !== 'undefined') feather.replace();
   showStep(stepIndex);
 });
 </script>
-
 @endsection

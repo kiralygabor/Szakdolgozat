@@ -11,6 +11,9 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
@@ -429,9 +432,7 @@
         $mobileUser = auth()->user();
         $mobileFullName = trim(($mobileUser->first_name ?? '') . ' ' . ($mobileUser->last_name ?? ''))
             ?: ($mobileUser->name ?? $mobileUser->email);
-        $mobileAvatarSrc = $mobileUser->avatar
-            ? asset('storage/' . $mobileUser->avatar)
-            : asset('img/user.png');
+        $mobileAvatarSrc = $mobileUser->avatar_url;
       @endphp
       <button class="mobile-profile-btn" id="mobileProfileBtn" type="button">
         <img src="{{ $mobileAvatarSrc }}" alt="Profile">
@@ -462,7 +463,7 @@
           <a href="{{ route('profile') }}">
             <i data-feather="user"></i> {{ __('navbar.profile') }}
           </a>
-          <a href="{{ route('profile') }}">
+          <a href="{{ route('profile', ['tab' => 'account']) }}">
             <i data-feather="settings"></i> {{ __('navbar.settings') }}
           </a>
           <a href="{{ route('profile') }}">
@@ -551,8 +552,8 @@
 
     <div class="mobile-sidebar-divider"></div>
     <div class="mobile-sidebar-section-label">{{ __('navbar.settings') }}</div>
-    <a href="#" class="mobile-sidebar-link" id="mobileLangToggle">
-      <i data-feather="globe"></i> {{ __('navbar.language') }}
+    <a href="{{ route('profile', ['tab' => 'account']) }}" class="mobile-sidebar-link">
+      <i data-feather="settings"></i> {{ __('navbar.settings') }}
     </a>
   </div>
 
@@ -566,20 +567,20 @@
 
 {{-- ===== DESKTOP NAVBAR (visible >= 768px) ===== --}}
 <nav class="desktop-navbar bg-white border-b border-gray-200 shadow-sm w-full z-50">
-<div class="w-full flex justify-between items-center px-6 py-3">
-<div class="flex items-center space-x-2 pl-4">
-  <a href="{{ url('/index') }}" class="flex items-center">
-    <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="h-8 w-auto mix-blend-multiply">
-  </a>
-</div>
-
-
+  <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
+    <!-- LEFT: Logo (aligned with Sidebar location) -->
+    <div class="flex items-center md:w-1/5">
+      <a href="{{ url('/index') }}" class="flex items-center">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="h-8 w-auto mix-blend-multiply">
+      </a>
+    </div>
  
-<!-- CENTER: Nav Links -->
-<div class="flex items-center space-x-5">
-  <a href="{{ route('post-task') }}" onclick="return checkLogin(event)" class="px-4 py-2 rounded-lg bg-secondary-500 text-white hover:bg-secondary-600 font-semibold">
-    {{ __('navbar.post_task') }}
-  </a>
+    <!-- CENTER & RIGHT: Center Links and Auth (aligned with Section location) -->
+    <div class="flex-1 flex justify-between items-center md:pl-10">
+      <div class="flex items-center space-x-5">
+        <a href="{{ route('post-task') }}" onclick="return checkLogin(event)" class="px-4 py-2 rounded-lg bg-secondary-500 text-white hover:bg-secondary-600 font-semibold">
+          {{ __('navbar.post_task') }}
+        </a>
  
   <!-- Mega Menu -->
   <div id="categories-group" class="relative group">
@@ -713,9 +714,7 @@
         $currentUser = auth()->user();
         $fullName = trim(($currentUser->first_name ?? '') . ' ' . ($currentUser->last_name ?? ''))
             ?: ($currentUser->name ?? $currentUser->email);
-        $avatarSrc = $currentUser->avatar
-            ? asset('storage/' . $currentUser->avatar)
-            : asset('img/user.png');
+        $avatarSrc = $currentUser->avatar_url;
       @endphp
       <button type="button" class="rounded-full overflow-hidden w-9 h-9 ring-1 ring-gray-300 hover:ring-gray-400" onclick="toggleMenu()">
         <img src="{{ $avatarSrc }}" alt="Profile" class="w-full h-full object-cover">
@@ -736,7 +735,7 @@
           <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="user" class="w-4 h-4"></i> {{ __('navbar.profile') }}
           </a>
-          <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
+          <a href="{{ route('profile', ['tab' => 'account']) }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="settings" class="w-4 h-4"></i> {{ __('navbar.settings') }}
           </a>
           <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
@@ -934,8 +933,6 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       // Navbar settings dropdown behavior
       (function(){
@@ -1160,26 +1157,6 @@
           });
         }
 
-        // Language toggle in sidebar
-        var langToggle = document.getElementById('mobileLangToggle');
-        if (langToggle) {
-          langToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Simple toggle: detect current locale and switch
-            var currentLocale = document.documentElement.lang || 'hu';
-            var newLocale = currentLocale === 'hu' ? 'en' : 'hu';
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/language/' + newLocale;
-            var csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = '_token';
-            csrfInput.value = '{{ csrf_token() }}';
-            form.appendChild(csrfInput);
-            document.body.appendChild(form);
-            form.submit();
-          });
-        }
 
         // Re-apply feather icons for mobile sidebar
         setTimeout(function() {

@@ -11,21 +11,27 @@
         transform: translateY(5px);
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
-    .message-wrapper:hover .delete-overlay {
+
+    /* Apply hover only directly on the bubble container, not the full width row */
+    .message-bubble-container:hover .delete-overlay {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
     }
+
+    /* Tighten footer for messages page */
+    footer {
+        padding-top: 2rem !important;
+    }
 </style>
 
-<section class="py-8 min-h-screen bg-gray-50">
+<section class="py-0 md:py-8 bg-gray-50">
   <!-- FIX 1: Increased the subtraction in calc() slightly to prevent page scroll -->
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row h-[750px]">
-      
+  <div class="max-w-7xl mx-auto px-0 md:px-6">
+    <div class="bg-white border-0 md:border border-gray-200 rounded-none md:rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row h-[calc(100dvh-56px)] md:h-[750px]">
+
       <!-- Sidebar (aligned with Logo) -->
-      <aside class="w-full md:w-1/5 border-r border-gray-200 flex flex-col h-full bg-white">
+      <aside class="{{ $activeConversation ? 'hidden md:flex' : 'flex' }} w-full md:w-1/5 border-r border-gray-200 flex flex-col h-full bg-white">
         <div class="p-4 border-b border-gray-100">
           <h2 class="text-xl font-bold text-gray-800 mb-4">{{ __('messages_page.title') }}</h2>
           <div class="relative">
@@ -69,13 +75,17 @@
       </aside>
 
       <!-- Main Chat Area (aligned with Nav Links) -->
-      <main class="flex-1 flex flex-col h-full bg-white relative overflow-hidden md:pl-10">
+      <main class="{{ $activeConversation ? 'flex' : 'hidden md:flex' }} flex-1 flex flex-col h-full bg-white relative overflow-hidden md:pl-10">
         @if($activeConversation)
             @php $chatUser = $activeConversation->getOtherUser(Auth::id()); @endphp
-            
+
             <!-- Chat Header -->
-            <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-white z-10 flex-shrink-0">
-                <div class="flex items-center gap-3">
+            <div class="p-3 md:p-4 border-b border-gray-200 flex items-center justify-between bg-white z-10 flex-shrink-0">
+                <div class="flex items-center gap-2 md:gap-3">
+                    <!-- Back button for mobile -->
+                    <a href="{{ url()->current() }}" class="md:hidden p-1 text-gray-500 hover:text-gray-700">
+                        <i data-feather="arrow-left" class="w-6 h-6"></i>
+                    </a>
                     <div class="relative shrink-0">
                         <img src="{{ $chatUser->avatar_url }}" class="w-10 h-10 rounded-full object-cover border border-gray-200 shadow-sm">
                     </div>
@@ -150,15 +160,20 @@
         if (window.feather) window.feather.replace();
 
         const authUserId = "{{ Auth::id() }}"; 
+        const authUserAvatar = "{{ Auth::user()->avatar_url }}";
         const conversationId = "{{ $activeConversation ? $activeConversation->id : '' }}";
+        let otherUserAvatar = ""; 
+        @if($activeConversation)
+            otherUserAvatar = "{{ $activeConversation->getOtherUser(Auth::id())->avatar_url }}";
+        @endif
         const messagesContainer = document.getElementById('messages-container');
         const messageForm = document.getElementById('message-form');
         const messageInput = document.getElementById('message-input');
-        
+
         // --- UI Handlers ---
         const chatOptionsBtn = document.getElementById('chat-options-btn');
         const chatOptionsDropdown = document.getElementById('chat-options-dropdown');
-        
+
         if (chatOptionsBtn && chatOptionsDropdown) {
             chatOptionsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -257,7 +272,7 @@
                 }
 
                 appendMessage(tempMsg);
-                
+
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
                 clearAttachment();
@@ -321,19 +336,18 @@
         // --- UPDATED APPEND FUNCTION ---
         function appendMessage(msg) {
             const isMe = String(msg.sender_id) === String(authUserId);
-            
+
             const div = document.createElement('div');
-            // 'message-wrapper' allows hover detection
-            div.className = `flex ${isMe ? 'justify-end' : 'justify-start'} mb-5 message-wrapper group`; 
+            div.className = `flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'} mb-8`; 
             div.id = `message-${msg.id}`;
-            
+
             const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             let contentHtml = '';
-            
+
             if (msg.is_deleted) {
                 contentHtml = `
-                    <p class="text-sm italic text-gray-500 flex items-center gap-1">
+                    <p class="text-sm italic text-gray-400 flex items-center gap-1">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg> 
                         Message deleted
                     </p>`;
@@ -354,14 +368,13 @@
                 }
             }
 
-            // RED DELETE BUBBLE OUTSIDE
-            // absolute -top-3 -right-2 puts it outside the top right corner
+            // RED DELETE BUBBLE OUTSIDE (Fixed hover area by making it absolute relative to bubble)
             let deleteOverlay = '';
             if (isMe && !msg.is_deleted) {
                 deleteOverlay = `
-                    <div class="delete-overlay absolute -top-3 -right-2 z-10">
+                    <div class="delete-overlay absolute top-[-10px] right-2 z-20 pointer-events-none group-hover:pointer-events-auto">
                         <button onclick="deleteMessage('${msg.id}', this)" 
-                                class="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white text-[10px] font-bold py-1 px-2 rounded-full shadow-md transition-colors"
+                                class="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white text-[10px] font-bold py-1 px-2 rounded-full shadow-md transition-all active:scale-95"
                                 title="Delete Message">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="3 6 5 6 21 6"></polyline>
@@ -373,12 +386,17 @@
                 `;
             }
 
+            const avatarUrl = isMe ? authUserAvatar : otherUserAvatar;
+
             div.innerHTML = `
-                <div class="max-w-[75%] relative">
+                <div class="shrink-0 mb-1">
+                    <img src="${avatarUrl}" class="w-8 h-8 rounded-full object-cover border border-gray-200 shadow-sm">
+                </div>
+                <div class="max-w-[70%] relative message-bubble-container group">
                     ${deleteOverlay}
-                    <div class="message-bubble ${isMe ? (msg.is_deleted ? 'bg-gray-100 border border-gray-200' : 'bg-blue-600 text-white') : (msg.is_deleted ? 'bg-gray-100 border border-gray-200' : 'bg-white border border-gray-200 text-gray-800')} px-5 py-3 rounded-2xl shadow-sm ${isMe ? 'rounded-br-none' : 'rounded-bl-none'}">
+                    <div class="message-bubble transition-shadow ${isMe ? (msg.is_deleted ? 'bg-gray-50 border border-gray-200' : 'bg-blue-600 text-white') : (msg.is_deleted ? 'bg-gray-50 border border-gray-200' : 'bg-white border border-gray-200 text-gray-800')} px-4 py-2.5 rounded-2xl shadow-sm ${isMe ? 'rounded-br-none' : 'rounded-bl-none'}">
                         ${contentHtml}
-                        <span class="text-[10px] ${isMe && !msg.is_deleted ? 'text-blue-100' : 'text-gray-400'} block text-right mt-1 opacity-70">${time}</span>
+                        <span class="text-[10px] ${isMe && !msg.is_deleted ? 'text-blue-100' : 'text-gray-400'} block ${isMe ? 'text-right' : 'text-left'} mt-1 opacity-70 font-medium">${time}</span>
                     </div>
                 </div>
             `;
@@ -426,7 +444,8 @@
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
-            return div.innerHTML.replace(/\n/g, '<br>');
+            return div.innerHTML.replace(/\n/g, '
+');
         }
     });
 </script>

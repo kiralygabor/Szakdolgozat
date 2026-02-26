@@ -14,15 +14,16 @@
       </div>
       <div class="divide-y divide-gray-200">
         @forelse(($notifications ?? []) as $n)
-          <div class="p-4 flex items-start gap-3 hover:bg-gray-50">
-            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">!
+          <a href="{{ $n->data['link'] ?? '#' }}" class="p-4 flex items-start gap-3 hover:bg-gray-50 no-underline transition-colors {{ $n->read_at ? 'opacity-60' : 'bg-blue-50/20' }}">
+            <div class="w-10 h-10 rounded-full {{ ($n->data['type'] ?? '') === 'success' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600' }} flex items-center justify-center flex-shrink-0">
+              <i data-feather="{{ ($n->data['type'] ?? '') === 'success' ? 'check-circle' : 'bell' }}" class="w-5 h-5"></i>
             </div>
-            <div class="flex-1">
-              <p class="text-gray-900 font-medium">{{ $n->title ?? __('notifications_page.default_title') }}</p>
-              <p class="text-sm text-gray-600">{{ $n->message ?? '' }}</p>
-              <div class="text-xs text-gray-500 mt-1">{{ $n->created_at?->diffForHumans() }}</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-gray-900 font-bold mb-0 truncate">{{ $n->data['title'] ?? __('notifications_page.default_title') }}</p>
+              <p class="text-sm text-gray-600 mb-0 line-clamp-2">{{ $n->data['message'] ?? '' }}</p>
+              <div class="text-[10px] text-gray-400 mt-1 uppercase font-semibold tracking-wider">{{ $n->created_at?->diffForHumans() }}</div>
             </div>
-          </div>
+          </a>
         @empty
           <div class="p-8 text-center">
             <p class="text-gray-600 mb-4">{{ __('notifications_page.empty_state') }}</p>

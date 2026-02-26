@@ -5,20 +5,22 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class OfferAcceptedNotification extends Notification
+class OfferCancelledNotification extends Notification
 {
     use Queueable;
 
     public $task;
-    public $employer;
+    public $user;
+    public $amount;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($task, $employer)
+    public function __construct($task, $user, $amount)
     {
         $this->task = $task;
-        $this->employer = $employer;
+        $this->user = $user;
+        $this->amount = $amount;
     }
 
     /**
@@ -35,11 +37,11 @@ class OfferAcceptedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => $this->employer->first_name . ' has accepted your offer',
-            'message' => $this->employer->first_name . ' accepted your offer for "' . $this->task->title . '"',
-            'link' => route('tasks.show', ['task' => $this->task->id]),
+            'title' => $this->user->first_name . ' has cancelled their offer',
+            'message' => $this->user->first_name . ' cancelled their £' . $this->amount . ' offer for "' . $this->task->title . '"',
+            'link' => route('my-tasks', ['task_id' => $this->task->id]),
             'task_id' => $this->task->id,
-            'type' => 'success'
+            'type' => 'warning'
         ];
     }
 }

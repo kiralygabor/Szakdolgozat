@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Conversation;
 use App\Models\Message;
 use App\Models\User;
+use App\Notifications\NewMessageNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
@@ -51,6 +52,11 @@ class MessageController extends Controller
             ->where('sender_id', '!=', Auth::id())
             ->where('is_read', false)
             ->update(['is_read' => true]);
+
+        // Mark related notifications as read
+        Auth::user()->unreadNotifications()
+            ->where('data->conversation_id', $conversation->id)
+            ->update(['read_at' => now()]);
 
         $messages = $conversation->messages()->with('sender')->get();
         
@@ -97,6 +103,10 @@ class MessageController extends Controller
             'attachment_type' => $attachmentType,
             'is_read' => false
         ]);
+
+        // Notify the recipient
+        $recipient = $conversation->getOtherUser(Auth::id());
+        $recipient->notify(new NewMessageNotification($message, Auth::user()));
 
         return response()->json($message->load('sender'));
     }

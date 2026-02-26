@@ -451,7 +451,8 @@ class PagesController extends Controller
 
     public function notifications(): View
     {
-        return view('pages.notifications');
+        $notifications = Auth::user()->notifications()->latest()->get();
+        return view('pages.notifications', compact('notifications'));
     }
 
     public function messages(): View

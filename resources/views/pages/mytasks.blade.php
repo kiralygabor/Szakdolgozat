@@ -1,4 +1,5 @@
-@extends('layout')
+
+​@extends('layout')
 
 @section('title', __('mytasks.title'))
 
@@ -203,6 +204,22 @@
     .task-details-panel {
         position: relative; background: #FFFFFF; border-radius: 24px; padding: 32px 36px;
         max-width: 640px; width: 90%; margin: auto; box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+    }
+
+    .task-details-close {
+        position: absolute; top: 16px; left: 16px;
+        width: 36px; height: 36px; border-radius: 50%;
+        background: #FFFFFF; border: 1px solid #E5E7EB; color: #6B7280;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; z-index: 50; transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .task-details-close:hover { background: #F9FAFB; color: #111827; transform: rotate(90deg); }
+
+    @media (max-width: 640px) {
+        .task-details-modal { padding: 20px 0; }
+        .task-details-panel { padding: 48px 20px 24px; width: 95%; border-radius: 20px; }
+        .task-details-close { top: 12px; left: 12px; }
     }
 
     /* Modern Empty State */
@@ -703,35 +720,35 @@
                             </button>
                             
                             {{-- Offer Header --}}
-                            <div class="flex items-center justify-between mb-6 pt-8">
-                                <a id="modal-profile-link" href="#" class="flex items-center gap-4 group text-decoration-none">
-                                    <div id="modal-offer-avatar" class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-2xl border border-gray-200 group-hover:border-blue-400 transition-colors">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                                <a id="modal-profile-link" href="#" class="flex items-center gap-3 group text-decoration-none">
+                                    <div id="modal-offer-avatar" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xl sm:text-2xl border border-gray-200 group-hover:border-blue-400 transition-colors shrink-0">
                                         <!-- Initials via JS -->
                                     </div>
-                                    <div>
-                                        <h3 id="modal-offer-name" class="text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors"></h3>
+                                    <div class="min-w-0">
+                                        <h3 id="modal-offer-name" class="text-lg sm:text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors truncate"></h3>
                                         <div class="flex items-center gap-1 mt-1">
-                                            <i data-feather="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
-                                            <span id="modal-offer-rating" class="text-sm font-bold text-gray-800"></span>
+                                            <i data-feather="star" class="w-3.5 h-3.5 text-yellow-400 fill-current"></i>
+                                            <span id="modal-offer-rating" class="text-xs sm:text-sm font-bold text-gray-800"></span>
                                             <span class="text-gray-300 mx-1">•</span>
-                                            <span id="modal-offer-time" class="text-xs text-gray-400 font-medium uppercase tracking-wide"></span>
+                                            <span id="modal-offer-time" class="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wide"></span>
                                         </div>
                                     </div>
                                 </a>
-                                <div class="text-right">
-                                    <div id="modal-offer-price" class="text-2xl font-bold text-blue-600"></div>
-                                    <div class="text-xs text-gray-400 uppercase font-bold mt-1">{{ __('Offer Price') }}</div>
+                                <div class="w-full sm:w-auto flex sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-4 sm:pt-0 border-gray-100">
+                                    <div id="modal-offer-price" class="text-2xl font-bold text-blue-600 order-2 sm:order-1"></div>
+                                    <div class="text-[10px] text-gray-400 uppercase font-bold sm:mt-1 order-1 sm:order-2">{{ __('Offer Price') }}</div>
                                 </div>
                             </div>
 
                             {{-- Offer Body --}}
-                            <div class="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
-                                <h4 class="text-xs font-bold text-gray-400 uppercase mb-2">{{ __('Message from Tasker') }}</h4>
+                            <div class="bg-gray-50 rounded-2xl p-4 sm:p-5 mb-6 border border-gray-100">
+                                <h4 class="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ __('Message from Tasker') }}</h4>
                                 <p id="modal-offer-message" class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap break-words" style="overflow-wrap: break-word; word-break: break-word;"></p>
                             </div>
 
                             {{-- Actions --}}
-                            <div class="grid grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <a id="message-tasker-btn" href="#" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-bold hover:bg-gray-50 transition text-center no-underline">
                                     <i data-feather="message-circle" class="w-4 h-4"></i> {{ __('Message') }}
                                 </a>

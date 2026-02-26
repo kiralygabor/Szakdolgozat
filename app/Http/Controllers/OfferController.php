@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Advertisement;
 use App\Models\Offer;
+use App\Notifications\OfferCancelledNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,7 +44,7 @@ class OfferController extends Controller
         ]);
 
         // Notify the employer
-        $task->employer->notify(new \App\Notifications\NewOfferNotification($offer, $task));
+        $task->employer->notify(new \App\Notifications\NewOfferNotification($offer, $task, $user));
 
         return redirect()->route('tasks')
             ->with('success', 'Your offer has been sent to the task owner.');
@@ -69,7 +70,7 @@ class OfferController extends Controller
         ]);
 
         // Notify the Tasker
-        $offer->user->notify(new \App\Notifications\OfferAcceptedNotification($task));
+        $offer->user->notify(new \App\Notifications\OfferAcceptedNotification($task, $user));
 
         return redirect()->back()->with('success', 'Offer accepted! You can now message the Tasker.');
     }
@@ -86,7 +87,13 @@ class OfferController extends Controller
             ->first();
 
         if ($offer) {
+            $amount = $offer->price;
+            $employer = $task->employer;
             $offer->delete();
+            
+            // Notify the employer
+            $employer->notify(new OfferCancelledNotification($task, $user, $amount));
+
             return redirect()->back()->with('success', 'Your offer has been cancelled.');
         }
 

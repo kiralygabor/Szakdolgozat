@@ -3,8 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewOfferNotification extends Notification
@@ -13,20 +11,20 @@ class NewOfferNotification extends Notification
 
     public $offer;
     public $task;
+    public $user;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($offer, $task)
+    public function __construct($offer, $task, $user)
     {
         $this->offer = $offer;
         $this->task = $task;
+        $this->user = $user;
     }
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
      */
     public function via(object $notifiable): array
     {
@@ -35,13 +33,12 @@ class NewOfferNotification extends Notification
 
     /**
      * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => 'New offer: £' . $this->offer->price . ' for "' . $this->task->title . '"',
+            'title' => $this->user->first_name . ' has sent an offer',
+            'message' => $this->user->first_name . ' made a £' . $this->offer->price . ' offer for "' . $this->task->title . '"',
             'link' => route('my-tasks', ['task_id' => $this->task->id]),
             'offer_id' => $this->offer->id,
             'task_id' => $this->task->id,

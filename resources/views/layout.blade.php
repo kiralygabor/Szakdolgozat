@@ -791,11 +791,14 @@
                                     <i data-feather="bell" style="width:14px; height:14px;"></i>
                                 </div>
                             </div>
-                            <div>
-                                <p class="text-sm text-gray-800 font-medium leading-snug">
-                                    {{ $notification->data['message'] ?? 'New notification' }}
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-gray-900 font-bold mb-0 truncate">
+                                    {{ $notification->data['title'] ?? 'Notification' }}
                                 </p>
-                                <p class="text-xs text-gray-500 mt-1">
+                                <p class="text-xs text-gray-600 mb-0 truncate">
+                                    {{ $notification->data['message'] ?? '' }}
+                                </p>
+                                <p class="text-[10px] text-gray-400 mt-1 uppercase font-semibold">
                                     {{ $notification->created_at->diffForHumans() }}
                                 </p>
                             </div>

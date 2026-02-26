@@ -23,6 +23,7 @@ return [
         'phone' => 'Phone Number',
         'save' => 'Save Profile',
         'confirm_update' => 'Are you sure you want to update your data?',
+        'confirm_delete' => 'Are you sure you want to delete your account? This action cannot be undone.',
     ],
     'account' => [
         'title' => 'Account Settings',

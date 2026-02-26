@@ -45,7 +45,7 @@ class OfferController extends Controller
         // Notify the employer
         $task->employer->notify(new \App\Notifications\NewOfferNotification($offer, $task));
 
-        return redirect()->route('tasks.show', $task->id)
+        return redirect()->route('tasks')
             ->with('success', 'Your offer has been sent to the task owner.');
     }
 
@@ -72,5 +72,24 @@ class OfferController extends Controller
         $offer->user->notify(new \App\Notifications\OfferAcceptedNotification($task));
 
         return redirect()->back()->with('success', 'Offer accepted! You can now message the Tasker.');
+    }
+
+    public function destroy(Advertisement $task): RedirectResponse
+    {
+        $user = Auth::user();
+        if (!$user) {
+            abort(403);
+        }
+
+        $offer = Offer::where('advertisement_id', $task->id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if ($offer) {
+            $offer->delete();
+            return redirect()->back()->with('success', 'Your offer has been cancelled.');
+        }
+
+        return redirect()->back()->with('error', 'Offer not found.');
     }
 }

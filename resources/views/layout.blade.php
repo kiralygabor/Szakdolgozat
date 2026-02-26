@@ -44,7 +44,7 @@
       .user-pic { width: 40px; border-radius: 50%; cursor: pointer; }
       .sub-menu-wrap { position: absolute; top: 60px; right: 0; width: 280px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; z-index: 50; }
       .sub-menu-wrap.open-menu { max-height: 500px; }
-      .sub-menu { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+      .sub-menu { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #d1d5db; }
       .user-info { margin-bottom: 15px; padding: 10px 12px; border-radius: 8px; transition: background 0.2s ease, color 0.2s ease; cursor: pointer; }
       .user-info:hover { background: #007bff; }
       .user-info:hover h3 a, .user-info:hover p { color: #fff; }
@@ -446,10 +446,10 @@
 
       {{-- Mobile profile dropdown --}}
       <div class="mobile-profile-dropdown" id="mobileProfileDropdown">
-        <div class="mobile-profile-dropdown-user" onclick="window.location.href='{{ route('profile') }}'">
-          <h4>{{ $mobileFullName }}</h4>
-          <p>{{ __('navbar.public_profile') }}</p>
-        </div>
+        <a href="{{ route('public-profile', auth()->id()) }}" class="mobile-profile-dropdown-user block no-underline transition-colors hover:bg-indigo-50">
+          <h4 class="text-sm font-bold text-gray-900 group-hover:text-indigo-600 mb-0">{{ $mobileFullName }}</h4>
+          <p class="text-xs text-gray-500 mt-1 mb-0">{{ __('navbar.public_profile') }}</p>
+        </a>
         <div class="mobile-profile-dropdown-links">
           <a href="{{ route('my-tasks') }}">
             <i data-feather="grid"></i> {{ __('navbar.dashboard') }}
@@ -466,7 +466,10 @@
           <a href="{{ route('profile', ['tab' => 'account']) }}">
             <i data-feather="settings"></i> {{ __('navbar.settings') }}
           </a>
-          <a href="{{ route('profile') }}">
+          <a href="{{ route('profile', ['tab' => 'security']) }}">
+            <i data-feather="shield"></i> {{ __('navbar.security') }}
+          </a>
+          <a href="{{ route('profile', ['tab' => 'billing']) }}">
             <i data-feather="credit-card"></i> {{ __('navbar.billing') }}
           </a>
         </div>
@@ -504,13 +507,13 @@
   </div>
 
   @auth
-    <div class="mobile-sidebar-user" onclick="window.location.href='{{ route('profile') }}'" style="cursor:pointer;">
-      <img src="{{ $mobileAvatarSrc }}" alt="Profile">
+    <a href="{{ route('public-profile', auth()->id()) }}" class="mobile-sidebar-user flex items-center gap-3 no-underline transition-colors hover:bg-indigo-50">
+      <img src="{{ $mobileAvatarSrc }}" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200">
       <div>
-        <div class="mobile-sidebar-user-name">{{ $mobileFullName }}</div>
-        <div class="mobile-sidebar-user-sub">{{ __('navbar.public_profile') }}</div>
+        <div class="mobile-sidebar-user-name text-sm font-bold text-gray-900">{{ $mobileFullName }}</div>
+        <div class="mobile-sidebar-user-sub text-xs text-gray-400">{{ __('navbar.public_profile') }}</div>
       </div>
-    </div>
+    </a>
   @endauth
 
   <div class="mobile-sidebar-nav">
@@ -721,10 +724,10 @@
       </button>
       <div class="sub-menu-wrap" id="subMenu">
         <div class="sub-menu">
-          <div class="user-info cursor-pointer" onclick="window.location.href='{{ route('profile') }}'">
-            <h3>{{ $fullName }}</h3>
-            <p class="text-gray-500 hover:text-indigo-600">{{ __('navbar.public_profile') }}</p>
-          </div>
+          <a href="{{ route('public-profile', Auth::id()) }}" class="user-info block px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors no-underline">
+            <h3 class="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{{ $fullName }}</h3>
+            <p class="text-xs text-gray-500 mb-0">{{ __('navbar.public_profile') }}</p>
+          </a>
           <hr>
           <a href="{{ route('my-tasks') }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="grid" class="w-4 h-4"></i> {{ __('navbar.dashboard') }}
@@ -738,10 +741,10 @@
           <a href="{{ route('profile', ['tab' => 'account']) }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="settings" class="w-4 h-4"></i> {{ __('navbar.settings') }}
           </a>
-          <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
+          <a href="{{ route('profile', ['tab' => 'security']) }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="shield" class="w-4 h-4"></i> {{ __('navbar.security') }}
           </a>
-          <a href="{{ route('profile') }}" class="sub-menu-link flex items-center gap-2">
+          <a href="{{ route('profile', ['tab' => 'billing']) }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="credit-card" class="w-4 h-4"></i> {{ __('navbar.billing') }}
           </a>
           <hr>
@@ -771,7 +774,7 @@
         </button>
 
         <!-- Dropdown Menu -->
-        <div id="notification-dropdown" class="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden hidden transform origin-top-right transition-all duration-200 z-50">
+        <div id="notification-dropdown" class="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden hidden transform origin-top-right transition-all duration-200 z-50">
             <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 class="font-bold text-gray-800">Notifications</h3>
                 @if($unreadCount > 0)
@@ -818,7 +821,7 @@
     <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
       <i data-feather="settings"></i>
     </button>
-    <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
+    <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
       <div class="flex flex-col">
         <div class="group relative">
           <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">

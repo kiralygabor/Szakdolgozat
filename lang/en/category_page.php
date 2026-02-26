@@ -9,4 +9,5 @@ return [
     'finder_helper' => 'Select a service below to find professionals.',
     'tasker_helper' => 'Select your skill below to post a task.',
     'no_services' => 'No specific services listed yet.',
+    'scroll_hint' => 'Scroll to see more',
 ];

@@ -447,7 +447,7 @@
  
 <!-- Popular Tasks Section -->
 <section class="py-24 bg-gray-50 transition-colors duration-300 overflow-hidden relative">
-<div class="max-w-7xl mx-auto px-4 mb-12 text-center">
+<div class="max-w-7xl mx-auto px-6 mb-12 text-center">
 <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
       See what others are getting done
 </h2>

@@ -149,7 +149,7 @@ class PagesController extends Controller
             abort(403);
         }
 
-        $data = $request->validate([
+        $request->validate([
             'first_name'   => ['required', 'string', 'max:255'],
             'last_name'    => ['required', 'string', 'max:255'],
             'email'        => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
@@ -159,25 +159,50 @@ class PagesController extends Controller
             'avatar'       => ['nullable', 'image', 'max:5120'], // max 5MB
         ]);
 
-        $user->first_name   = $data['first_name'];
-        $user->last_name    = $data['last_name'];
-        $user->email        = $data['email'];
-        $user->phone_number = $data['phone_number'] ?? null;
-        $user->birthdate    = $data['birthdate'] ?? null;
-        $user->city_id      = $data['city_id'] ?? null;
+        $user->first_name   = $request->first_name;
+        $user->last_name    = $request->last_name;
+        $user->email        = $request->email;
+        $user->phone_number = $request->phone_number;
+        $user->birthdate    = $request->birthdate;
+        $user->city_id      = $request->city_id;
 
         if ($request->hasFile('avatar')) {
-            // delete old avatar if exists
-            if (!empty($user->avatar)) {
+            // delete old avatar if exists and it's not the default asset or a Google URL
+            if (!empty($user->avatar) && !str_starts_with($user->avatar, 'assets/') && !str_starts_with($user->avatar, 'http')) {
                 Storage::disk('public')->delete($user->avatar);
             }
 
             $path = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $path;
         }
+
         $user->save();
 
-        return redirect()->route('profile')->with('success', 'Profil sikeresen frissítve.');
+        return redirect()->route('profile')->with('success', __('profile_page.profile.update_success') ?? 'Profile updated successfully.');
+    }
+
+    public function deleteProfile(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403);
+        }
+
+        // Delete avatar if exists and it's not a default asset or a Google URL
+        if (!empty($user->avatar) && !str_starts_with($user->avatar, 'assets/') && !str_starts_with($user->avatar, 'http')) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        // Perform deletion
+        $user->delete();
+
+        // Logout and clear session
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('index')->with('success', 'Account deleted successfully.');
     }
 
     public function category(): View
@@ -195,7 +220,7 @@ class PagesController extends Controller
     }
     public function tasks(Request $request): View
     {
-        $query = Advertisement::where('status', 'open')->with(['category', 'employer.city']);
+        $query = Advertisement::where('status', 'open')->with(['category', 'employer.city', 'offers']);
 
         // Multi-search by q (title, description, category name, city name)
         if ($request->filled('q')) {
@@ -275,6 +300,12 @@ class PagesController extends Controller
                 $query->orderByDesc('created_at');
         }
 
+        $userId = Auth::id();
+        if ($userId) {
+            // Put tasks with my offers at the top
+            $query->orderByRaw('(SELECT COUNT(*) FROM offers WHERE offers.advertisement_id = advertisements.id AND offers.user_id = ?) DESC', [$userId]);
+        }
+
         $tasks = $query->paginate(20)->withQueryString();
         $categories = Category::with('jobs')->orderBy('name')->get();
         $cities = City::orderBy('name')->get();
@@ -293,7 +324,7 @@ class PagesController extends Controller
                 $missingSteps[] = 'Verify your mobile';
             }
             if (empty($user->city_id)) {
-                $missingSteps[] = 'Add your billing address';
+                $missingSteps[] = 'Add your location';
             }
         }
 
@@ -490,7 +521,7 @@ class PagesController extends Controller
                 $missingSteps[] = 'Verify your mobile';
             }
             if (empty($user->city_id)) {
-                $missingSteps[] = 'Add your billing address';
+                $missingSteps[] = 'Add your location';
             }
         }
 

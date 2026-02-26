@@ -3,7 +3,7 @@
 @section('title', __('public_profile.title', ['name' => $user->first_name]))
 
 @section('content')
-<div class="bg-gray-50 min-h-screen py-12 px-6">
+<div class="bg-gray-50 min-h-screen py-12 px-6 pb-24">
     <div class="max-w-7xl mx-auto">
         
         {{-- Flash Messages --}}
@@ -13,173 +13,161 @@
                 {{ session('success') }}
             </div>
         @endif
-        @if(session('error'))
-            <div class="mb-4 p-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm font-medium flex items-center shadow-sm">
-                <i data-feather="alert-circle" class="w-4 h-4 mr-2"></i>
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- User Header Card -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
-            <div class="h-32 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+            <div class="h-32 bg-blue-50/50 border-b border-gray-100"></div>
+            
             <div class="px-8 pb-8 relative">
-                <div class="relative -top-16 flex items-end">
-                    <!-- Avatar -->
-                    <div class="relative">
-                        <img src="{{ $user->avatar_url }}" alt="{{ $user->first_name }}" class="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg bg-white">
-                    </div>
-                </div>
-
-                <div class="-mt-12 flex flex-col md:flex-row justify-between items-start md:items-end">
-                    <div>
-                        <h1 class="text-3xl font-extrabold text-gray-900">{{ $user->first_name }} {{ $user->last_name }}</h1>
-                        <div class="flex items-center gap-4 mt-2 text-gray-600">
-                            <!-- Location -->
-                            <div class="flex items-center gap-1">
-                                <i data-feather="map-pin" class="w-4 h-4 text-gray-400"></i>
-                                <span class="text-sm font-medium">{{ $user->city->name ?? __('Unknown Location') }}</span>
-                            </div>
-                            <!-- Joined Date -->
-                            <div class="flex items-center gap-1">
-                                <i data-feather="calendar" class="w-4 h-4 text-gray-400"></i>
-                                <span class="text-sm font-medium">{{ __('public_profile.joined', ['date' => $user->created_at->format('M Y')]) }}</span>
+                <div class="relative -top-12 flex flex-col md:flex-row md:items-start justify-between">
+                    
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+                        <!-- Avatar -->
+                        <div class="relative">
+                            <img src="{{ $user->avatar_url }}" alt="{{ $user->first_name }}" class="w-32 h-32 rounded-2xl border-4 border-white object-cover shadow-sm bg-white">
+                        </div>
+                        
+                        <!-- Name and Bio Info: Aligned to start at the same place -->
+                        <div class="flex flex-col items-center md:items-start mt-12 md:mt-14">
+                            @if(auth()->id() === $user->id)
+                                <div class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-full border border-blue-100 mb-2">
+                                    <i data-feather="user" class="w-3.5 h-3.5"></i>
+                                    <span class="text-xs font-bold uppercase tracking-wider">{{ __('public_profile.viewing_own_profile') }}</span>
+                                </div>
+                            @endif
+                            <h1 class="text-2xl font-bold text-gray-900 leading-tight">
+                                {{ $user->first_name }} {{ $user->last_name }}
+                            </h1>
+                            
+                            <div class="flex flex-wrap justify-center md:justify-start items-center gap-4 mt-2 text-gray-500 font-medium">
+                                <div class="flex items-center gap-1">
+                                    <i data-feather="map-pin" class="w-3.5 h-3.5 text-blue-600"></i>
+                                    <span class="text-sm">{{ $user->city->name ?? 'Remote' }}</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <i data-feather="calendar" class="w-3.5 h-3.5 text-blue-600"></i>
+                                    <span class="text-sm">{{ __('public_profile.joined', ['date' => $user->created_at->format('M Y')]) }}</span>
+                                </div>
+                                
+                                @if(auth()->id() !== $user->id)
+                                    {{-- Report Flag beside Join Date --}}
+                                    <button onclick="openReportModal()" class="flex items-center gap-1 text-gray-400 hover:text-red-500 transition-colors border-l pl-4 border-gray-200">
+                                        <i data-feather="flag" class="w-3.5 h-3.5"></i>
+                                        <span class="text-sm">{{ __('public_profile.report_user') }}</span>
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Rating Badge -->
-                    <div class="mt-4 md:mt-0 flex flex-col items-center md:items-end">
-                         <div class="flex items-center bg-amber-50 px-3 py-1 rounded-full border border-amber-100">
-                             <span class="text-2xl font-bold text-amber-500 mr-2">{{ $user->rating > 0 ? $user->rating : __('public_profile.new') }}</span>
-                             <div class="flex text-amber-400">
+                    <div class="mt-6 md:mt-14 flex flex-col items-center md:items-end">
+                        <div class="flex items-center bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
+                             <span class="text-xl font-bold text-blue-700 mr-2">{{ $user->rating > 0 ? number_format($user->rating, 1) : __('public_profile.new') }}</span>
+                             <div class="flex text-blue-600">
                                 @for($i=1; $i<=5; $i++)
-                                    <i data-feather="star" class="w-4 h-4 {{ $i <= round($user->rating) ? 'fill-current' : 'text-gray-300' }}"></i>
+                                    <i data-feather="star" class="w-3.5 h-3.5 {{ $i <= round($user->rating) ? 'fill-current' : 'text-blue-200' }}"></i>
                                 @endfor
                              </div>
-                         </div>
-                         <span class="text-xs text-gray-400 font-medium mt-1">{{ __('public_profile.reviews_count', ['count' => $reviews->count()]) }}</span>
-                         @auth
-                            @if(auth()->id() !== $user->id)
-                                <button onclick="openUserReportModal('{{ $user->account_id }}')" class="mt-3 text-red-500 hover:text-red-700 text-sm font-medium flex items-center transition-colors">
-                                    <i data-feather="flag" class="w-4 h-4 mr-1"></i>
-                                    {{ __('public_profile.report_user') }}
-                                </button>
-                            @endif
-                         @endauth
+                        </div>
+                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-2">{{ __('public_profile.reviews_count', ['count' => $reviews->count()]) }}</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <!-- Left Column: Stats / Bio (Placeholder) -->
-            <div class="space-y-6">
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">{{ __('public_profile.about') }}</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed">
-                        {{ $user->bio ?? __('public_profile.no_bio') }}
-                    </p>
-                </div>
-                
-                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                    <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">{{ __('public_profile.verification') }}</h3>
-                    <ul class="space-y-3">
-                        <li class="flex items-center gap-3 text-sm text-gray-700">
-                            <i data-feather="check-circle" class="w-5 h-5 text-green-500"></i>
-                            {{ __('public_profile.email_verified') }}
-                        </li>
-                        <li class="flex items-center gap-3 text-sm text-gray-700">
-                            <i data-feather="{{ $user->phone_number ? 'check-circle' : 'circle' }}" class="w-5 h-5 {{ $user->phone_number ? 'text-green-500' : 'text-gray-300' }}"></i>
-                            {{ __('public_profile.phone_verified') }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Right Column: Reviews -->
-            <div class="md:col-span-2 space-y-6">
-                
-                <!-- Review Form -->
+        <!-- Reviews Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
                 @auth
-                    @if($canReview)
-                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">{{ __('public_profile.leave_review') }}</h3>
+                    @if($canReview && auth()->id() !== $user->id)
+                    <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 sticky top-6">
+                        <h3 class="text-lg font-bold text-gray-900 mb-6">{{ __('public_profile.leave_review') }}</h3>
                         <form action="{{ route('public-profile.review', $user->id) }}" method="POST">
                             @csrf
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('public_profile.rating') }}</label>
-                                <div class="flex gap-2 text-gray-300 transition-colors" id="star-rating" onmouseleave="resetStars()">
+                            <div class="mb-6">
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('public_profile.rating') }}</label>
+                                <div class="flex gap-2 text-blue-100" id="star-rating" onmouseleave="resetStars()">
                                     @for($i=1; $i<=5; $i++)
                                         <label class="cursor-pointer" onmouseenter="highlightStars({{ $i }})">
                                             <input type="radio" name="stars" value="{{ $i }}" class="hidden" onclick="setRating({{ $i }})">
-                                            <i data-feather="star" class="w-8 h-8 text-gray-300"></i>
+                                            <i data-feather="star" class="w-6 h-6 transition-transform hover:scale-110"></i>
                                         </label>
                                     @endfor
                                 </div>
                                 <input type="hidden" name="stars" id="stars-input" value="5">
                             </div>
-                            <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('public_profile.comment') }}</label>
-                                <textarea name="comment" rows="3" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" placeholder="{{ __('public_profile.comment_placeholder', ['name' => $user->first_name]) }}" maxlength="150" required></textarea>
+                            <div class="mb-6">
+                                <textarea name="comment" rows="3" class="w-full rounded-xl border-gray-100 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-sm" placeholder="{{ __('public_profile.comment_placeholder_generic') }}" required></textarea>
                             </div>
-                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition">{{ __('public_profile.post_review') }}</button>
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-sm shadow-blue-100">
+                                {{ __('public_profile.post_review') }}
+                            </button>
                         </form>
                     </div>
-                    @else
-                        @if(auth()->id() !== $user->id)
-                        <div class="bg-blue-50 rounded-xl p-6 border border-blue-100 text-center">
-                            <i data-feather="lock" class="w-6 h-6 text-blue-400 mx-auto mb-2"></i>
-                            <p class="text-sm text-blue-800 font-medium">{{ __('public_profile.lock_review', ['name' => $user->first_name]) }}</p>
-                        </div>
-                        @endif
                     @endif
                 @endauth
+            </div>
 
-                <!-- Reviews List -->
-                <div class="space-y-4">
+            <div class="{{ ($canReview && auth()->id() !== $user->id) ? 'lg:col-span-2' : 'lg:col-span-3' }} space-y-4">
+                <div class="flex items-center gap-4 mb-2">
                     <h3 class="text-xl font-bold text-gray-900">{{ __('public_profile.reviews', ['count' => $reviews->count()]) }}</h3>
                     
-                    @forelse($reviews as $review)
-                        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex gap-4">
-                            <!-- Reviewer Avatar -->
-                            <div class="shrink-0">
-                                @if($review->reviewer)
-                                    <img src="{{ $review->reviewer->avatar_url }}" class="w-12 h-12 rounded-full object-cover">
-                                @else
-                                    <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold">
-                                        {{ substr('A', 0, 1) }}
-                                    </div>
-                                @endif
-                            </div>
-                            
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start mb-1">
-                                    <h4 class="font-bold text-gray-900">{{ $review->reviewer->first_name ?? __('public_profile.anonymous') }} {{ $review->reviewer->last_name ?? '' }}</h4>
-                                    <span class="text-xs text-gray-500">{{ $review->created_at->diffForHumans() }}</span>
-                                </div>
-                                <div class="flex text-amber-400 mb-2">
-                                    @for($i=1; $i<=5; $i++)
-                                        <i data-feather="star" class="w-3 h-3 {{ $i <= $review->stars ? 'fill-current' : 'text-gray-300' }}"></i>
-                                    @endfor
-                                </div>
-                                <p class="text-gray-600 text-sm leading-relaxed">
-                                    {{ $review->comment }}
-                                </p>
-                            </div>
+                    {{-- Inline Warning --}}
+                    @auth
+                        @if(!$canReview && auth()->id() !== $user->id)
+                        <div class="flex items-center gap-1.5 bg-amber-50 text-amber-700 px-3 py-1 rounded-full border border-amber-100">
+                            <i data-feather="info" class="w-3.5 h-3.5"></i>
+                            <span class="text-xs font-medium">{{ __('public_profile.review_after_test_warning') }}</span>
                         </div>
-                    @empty
-                        <div class="text-center py-10 bg-white rounded-xl border border-gray-100 border-dashed">
-                            <i data-feather="message-square" class="w-10 h-10 text-gray-300 mx-auto mb-3"></i>
-                            <p class="text-gray-500">{{ __('public_profile.no_reviews', ['name' => $user->first_name]) }}</p>
-                        </div>
-                    @endforelse
+                        @endif
+                    @endauth
                 </div>
+                
+                @forelse($reviews as $review)
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex gap-6">
+                        <img src="{{ $review->reviewer->avatar_url }}" class="w-12 h-12 rounded-xl object-cover ring-4 ring-gray-50">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start mb-1">
+                                <h4 class="font-bold text-gray-900 text-sm">{{ $review->reviewer->first_name }}</h4>
+                                <span class="text-[10px] font-bold text-gray-300 uppercase tracking-tight">{{ $review->created_at->diffForHumans() }}</span>
+                            </div>
+                            <div class="flex text-blue-500 mb-3">
+                                @for($i=1; $i<=5; $i++)
+                                    <i data-feather="star" class="w-3.5 h-3.5 {{ $i <= $review->stars ? 'fill-current' : 'text-blue-100' }}"></i>
+                                @endfor
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed italic">"{{ $review->comment }}"</p>
+                        </div>
+                    </div>
+                @empty
+                    <!-- Restored Empty State Icon -->
+                    <div class="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-100">
+                        <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-feather="message-circle" class="w-8 h-8 text-blue-200"></i>
+                        </div>
+                        <p class="text-gray-400 text-sm font-medium">{{ __('public_profile.no_reviews', ['name' => $user->first_name]) }}</p>
+                    </div>
+                @endforelse
             </div>
         </div>
     </div>
 </div>
+
+@if(auth()->id() !== $user->id)
+{{-- Sticky Bottom Bar --}}
+<div class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 p-4 z-50 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div>
+            <h4 class="font-bold text-gray-900 text-base">{{ __('public_profile.work_with', ['name' => $user->first_name]) }}</h4>
+            <p class="text-xs text-gray-500 hidden md:block">{{ __('public_profile.work_with_footer_desc') }}</p>
+        </div>
+        <a href="#" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-100 text-sm">
+            {{ __('public_profile.contact_me', ['name' => $user->first_name]) }}
+        </a>
+    </div>
+</div>
+@endif
 
 @include('components.user-report-modal')
 
@@ -188,21 +176,25 @@
         if(window.feather) feather.replace();
     });
 
+    function openReportModal() {
+        const modal = document.getElementById('user-report-modal');
+        if(modal) modal.classList.remove('hidden');
+    }
+
     function highlightStars(count) {
         const icons = document.querySelectorAll('#star-rating i, #star-rating svg');
         icons.forEach((icon, idx) => {
              if (idx < count) {
-                 icon.classList.add('text-amber-500', 'fill-current');
-                 icon.classList.remove('text-gray-300');
+                 icon.classList.add('text-blue-600', 'fill-current');
+                 icon.classList.remove('text-blue-100');
              } else {
-                 icon.classList.remove('text-amber-500', 'fill-current');
-                 icon.classList.add('text-gray-300');
+                 icon.classList.remove('text-blue-600', 'fill-current');
+                 icon.classList.add('text-blue-100');
              }
         });
     }
 
     function resetStars() {
-        // Get currently selected input value, or default to 5
         const val = document.getElementById('stars-input').value || 5;
         highlightStars(val);
     }
@@ -211,8 +203,6 @@
         document.getElementById('stars-input').value = val;
         highlightStars(val);
     }
-    
-    // Initialize default state (5 stars)
     resetStars();
 </script>
 @endsection

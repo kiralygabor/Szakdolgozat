@@ -105,6 +105,7 @@ class User extends Authenticatable
             return asset($this->avatar);
         }
 
-        return asset('storage/' . $this->avatar);
+        // If it's a storage path (like 'avatars/xxx.png'), use Storage::url
+        return asset('storage/' . ltrim($this->avatar, '/'));
     }
 }

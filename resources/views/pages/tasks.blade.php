@@ -152,200 +152,204 @@
   <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
  
   <!-- FILTERS NAVBAR -->
-  <section class="bg-white border-b border-gray-200 shadow-sm z-20 relative">
-    <!-- Desktop Form (Hidden on mobile) -->
-    <form method="GET" action="{{ route('tasks') }}" id="filters-form"
-          class="max-w-7xl mx-auto flex items-center gap-4 px-6 py-3 h-16 hidden md:flex">
- 
-      <!-- Search Bar -->
-      <div class="relative flex-grow max-w-md group border-r pr-6 mr-2">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <i data-feather="search" class="h-4 w-4 text-gray-400 group-  focus-within:text-blue-500"></i>
-        </div>
-        <input
-          id="search-q"
-          name="q"
-          value="{{ $filters['q'] ?? '' }}"
-          type="text"
-          placeholder="Search for a task name..."
-          class="w-full pl-10 pr-12 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
-          autocomplete="off"
-        >
-        <button type="submit" class="absolute right-7 top-1 bottom-1 px-3 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-sm">
-           <i data-feather="search" class="w-3.5 h-3.5"></i>
-        </button>
-        <input type="hidden" name="city_search" id="city-search-hidden" value="{{ $filters['city_search'] ?? '' }}">
-      </div>
- 
-      <!-- Filters -->
-      <div class="flex items-center gap-3 h-full">
-        
-        <!-- Category -->
-        <div class="relative">
-            <select name="category" id="category-filter" 
-                    class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
-              <option value="">All Categories</option>
-              @foreach(($categories ?? []) as $category)
-                <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
-                  {{ $category->name }}
-                </option>
-              @endforeach
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-               <i data-feather="chevron-down" class="h-4 w-4"></i>
-            </div>
-        </div>
+  <section class="bg-gray-50 z-20 relative pt-4">
+    <div class="max-w-7xl mx-auto px-4 md:px-6">
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+        <!-- Desktop Form (Hidden on mobile) -->
+        <form method="GET" action="{{ route('tasks') }}" id="filters-form"
+              class="flex items-center gap-4 px-6 py-3 h-16 hidden md:flex">
 
-        <!-- Job/Service -->
-        <div class="relative {{ ($filters['category'] ?? '') ? '' : 'hidden' }}" id="job-filter-container">
-            <select name="job" id="job-filter" 
-                    class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
-              <option value="">All Services</option>
-              @if($filters['category'] ?? '')
-                @php
-                    $selectedCategory = $categories->firstWhere('id', $filters['category']);
-                    $jobs = $selectedCategory ? $selectedCategory->jobs : [];
-                @endphp
-                @foreach($jobs as $job)
-                    <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
-                        {{ $job->name }}
+          <!-- Search Bar -->
+          <div class="relative flex-grow max-w-md group border-r pr-6 mr-2">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i data-feather="search" class="h-4 w-4 text-gray-400 group-  focus-within:text-blue-500"></i>
+            </div>
+            <input
+              id="search-q"
+              name="q"
+              value="{{ $filters['q'] ?? '' }}"
+              type="text"
+              placeholder="Search for a task name..."
+              class="w-full pl-10 pr-12 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
+              autocomplete="off"
+            >
+            <button type="submit" class="absolute right-7 top-1 bottom-1 px-3 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-sm">
+               <i data-feather="search" class="w-3.5 h-3.5"></i>
+            </button>
+            <input type="hidden" name="city_search" id="city-search-hidden" value="{{ $filters['city_search'] ?? '' }}">
+          </div>
+
+          <!-- Filters -->
+          <div class="flex items-center gap-3 h-full">
+
+            <!-- Category -->
+            <div class="relative">
+                <select name="category" id="category-filter" 
+                        class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
+                  <option value="">All Categories</option>
+                  @foreach(($categories ?? []) as $category)
+                    <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
+                      {{ $category->name }}
                     </option>
-                @endforeach
-              @endif
+                  @endforeach
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                   <i data-feather="chevron-down" class="h-4 w-4"></i>
+                </div>
+            </div>
+
+            <!-- Job/Service -->
+            <div class="relative {{ ($filters['category'] ?? '') ? '' : 'hidden' }}" id="job-filter-container">
+                <select name="job" id="job-filter" 
+                        class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
+                  <option value="">All Services</option>
+                  @if($filters['category'] ?? '')
+                    @php
+                        $selectedCategory = $categories->firstWhere('id', $filters['category']);
+                        $jobs = $selectedCategory ? $selectedCategory->jobs : [];
+                    @endphp
+                    @foreach($jobs as $job)
+                        <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
+                            {{ $job->name }}
+                        </option>
+                    @endforeach
+                  @endif
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                   <i data-feather="chevron-down" class="h-4 w-4"></i>
+                </div>
+            </div>
+
+            <!-- Work Type -->
+            <div class="relative">
+              <button type="button" id="type-btn"
+                      class="min-w-[120px] justify-between px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
+                <i data-feather="briefcase" class="w-3.5 h-3.5 text-gray-500"></i>
+                <span id="type-text">Type</span>
+                <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
+              </button>
+
+              <div id="type-menu" class="absolute mt-3 right-0 bg-white border border-gray-100 rounded-xl shadow-xl p-4 w-64 hidden z-50">
+                 <div class="mb-3">
+                   <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Location</label>
+                   <input id="type-city-search" type="text" placeholder="Search city..."
+                       class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm focus:border-blue-500 outline-none">
+                   <div id="type-city-dropdown" class="mt-1 max-h-40 overflow-y-auto hidden border rounded-lg shadow-inner bg-white"></div>
+                 </div>
+                 <div class="mb-3">
+                    <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mode</label>
+                    <div class="space-y-1">
+                      <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="type" value="all" class="text-blue-600" @checked(($filters['type'] ?? 'all') === 'all')>
+                        <span class="text-sm ml-2 text-gray-700">Any</span>
+                      </label>
+                      <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="type" value="in_person" class="text-blue-600" @checked(($filters['type'] ?? '') === 'in_person')>
+                        <span class="text-sm ml-2 text-gray-700">In-Person</span>
+                      </label>
+                      <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="type" value="remote" class="text-blue-600" @checked(($filters['type'] ?? '') === 'remote')>
+                        <span class="text-sm ml-2 text-gray-700">Remote</span>
+                      </label>
+                    </div>
+                 </div>
+                 <div class="flex justify-end gap-2 pt-2 border-t">
+                   <button type="button" id="type-apply" class="w-full py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Apply Filter</button>
+                 </div>
+              </div>
+            </div>
+
+            <!-- Price -->
+            <div class="relative">
+              <button type="button" id="price-btn"
+                      class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
+                <i data-feather="dollar-sign" class="w-3.5 h-3.5 text-gray-500"></i>
+                <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'text-blue-600' : '' }}">
+                  @if(isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000))
+                    €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
+                  @else
+                    Price
+                  @endif
+                </span>
+                <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
+              </button>
+
+              <div id="price-menu" class="absolute mt-2 right-0 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50" style="width: 340px; padding: 16px 20px 12px;">
+                {{-- Header --}}
+                <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2" style="letter-spacing:.05em;">Task Price</label>
+
+                {{-- Price display box --}}
+                <div class="border border-gray-300 rounded-md px-3 py-2 mb-5 text-center">
+                  <span id="price-display" class="text-[15px] font-semibold text-gray-800">
+                    €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
+                  </span>
+                </div>
+
+                {{-- Slider --}}
+                <div class="range-slider" style="margin-bottom: 20px;">
+                   <div class="track-bg"></div>
+                   <div id="price-track" class="track-fill"></div>
+                   <input id="price-min" name="min_price" type="range" min="1000" max="20000" step="50"
+                          value="{{ max(1000, (int)($filters['min_price'] ?? 1000)) }}">
+                   <input id="price-max" name="max_price" type="range" min="1000" max="20000" step="50"
+                          value="{{ min(20000, (int)($filters['max_price'] ?? 20000)) }}">
+                </div>
+
+                {{-- Buttons --}}
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
+                  <button type="button" id="price-cancel" class="flex-1 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors">Cancel</button>
+                  <button type="button" id="price-apply" class="flex-1 py-2 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">Apply</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sort -->
+            <div class="hidden lg:block h-8 w-px bg-gray-300 mx-4"></div>
+            <select name="sort" id="sort-filter" class="bg-transparent text-sm font-medium text-gray-600 hover:text-gray-900 cursor-pointer outline-none">
+                <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>Sort: Recent</option>
+                <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>Sort: Closest</option>
+                <option value="due" @selected(($filters['sort'] ?? '')==='due')>Sort: Due Soon</option>
+                <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>Price: Low to High</option>
+                <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>Price: High to Low</option>
             </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-               <i data-feather="chevron-down" class="h-4 w-4"></i>
-            </div>
-        </div>
-   
-        <!-- Work Type -->
-        <div class="relative">
-          <button type="button" id="type-btn"
-                  class="min-w-[120px] justify-between px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
-            <i data-feather="briefcase" class="w-3.5 h-3.5 text-gray-500"></i>
-            <span id="type-text">Type</span>
-            <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
-          </button>
-          
-          <div id="type-menu" class="absolute mt-3 right-0 bg-white border border-gray-100 rounded-xl shadow-xl p-4 w-64 hidden z-50">
-             <div class="mb-3">
-               <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Location</label>
-               <input id="type-city-search" type="text" placeholder="Search city..."
-                   class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm focus:border-blue-500 outline-none">
-               <div id="type-city-dropdown" class="mt-1 max-h-40 overflow-y-auto hidden border rounded-lg shadow-inner bg-white"></div>
-             </div>
-             <div class="mb-3">
-                <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mode</label>
-                <div class="space-y-1">
-                  <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
-                    <input type="radio" name="type" value="all" class="text-blue-600" @checked(($filters['type'] ?? 'all') === 'all')>
-                    <span class="text-sm ml-2 text-gray-700">Any</span>
-                  </label>
-                  <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
-                    <input type="radio" name="type" value="in_person" class="text-blue-600" @checked(($filters['type'] ?? '') === 'in_person')>
-                    <span class="text-sm ml-2 text-gray-700">In-Person</span>
-                  </label>
-                  <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
-                    <input type="radio" name="type" value="remote" class="text-blue-600" @checked(($filters['type'] ?? '') === 'remote')>
-                    <span class="text-sm ml-2 text-gray-700">Remote</span>
-                  </label>
+          </div>
+        </form>
+
+        <!-- Mobile Filter Trigger (Visible only on mobile) -->
+        <div class="md:hidden px-4 py-3 bg-white">
+            <button type="button" id="mobile-filter-trigger" 
+                    class="w-full h-11 flex items-center justify-between border border-gray-200 rounded-full px-5 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer text-sm shadow-sm">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <i data-feather="search" class="w-4 h-4 text-blue-600"></i>
+                    <div class="flex flex-col items-start overflow-hidden">
+                        <span class="font-bold text-gray-900 text-[13px] leading-tight truncate">
+                             @if($filters['q'] ?? '') 
+                                "{{ $filters['q'] }}" 
+                            @else 
+                                Browse everything
+                            @endif
+                        </span>
+                        <span class="text-[11px] text-gray-500 leading-tight">
+                            @if($filters['type'] ?? '')
+                                {{ $filters['type'] === 'remote' ? 'Remote' : 'In-person' }}
+                            @else
+                                Any mode
+                            @endif
+                            ·
+                            @if($filters['category'] ?? '')
+                                {{ $categories->firstWhere('id', $filters['category'])->name ?? 'All' }}
+                            @else
+                                All categories
+                            @endif
+                        </span>
+                    </div>
                 </div>
-             </div>
-             <div class="flex justify-end gap-2 pt-2 border-t">
-               <button type="button" id="type-apply" class="w-full py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Apply Filter</button>
-             </div>
-          </div>
+                <div class="flex items-center gap-2 border-l pl-3 ml-2 shrink-0">
+                    <i data-feather="sliders" class="w-4 h-4 text-gray-600"></i>
+                </div>
+            </button>
         </div>
-   
-        <!-- Price -->
-        <div class="relative">
-          <button type="button" id="price-btn"
-                  class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
-            <i data-feather="dollar-sign" class="w-3.5 h-3.5 text-gray-500"></i>
-            <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'text-blue-600' : '' }}">
-              @if(isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000))
-                €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
-              @else
-                Price
-              @endif
-            </span>
-            <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
-          </button>
-          
-          <div id="price-menu" class="absolute mt-2 right-0 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50" style="width: 340px; padding: 16px 20px 12px;">
-            {{-- Header --}}
-            <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2" style="letter-spacing:.05em;">Task Price</label>
-
-            {{-- Price display box --}}
-            <div class="border border-gray-300 rounded-md px-3 py-2 mb-5 text-center">
-              <span id="price-display" class="text-[15px] font-semibold text-gray-800">
-                €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
-              </span>
-            </div>
-
-            {{-- Slider --}}
-            <div class="range-slider" style="margin-bottom: 20px;">
-               <div class="track-bg"></div>
-               <div id="price-track" class="track-fill"></div>
-               <input id="price-min" name="min_price" type="range" min="1000" max="20000" step="50"
-                      value="{{ max(1000, (int)($filters['min_price'] ?? 1000)) }}">
-               <input id="price-max" name="max_price" type="range" min="1000" max="20000" step="50"
-                      value="{{ min(20000, (int)($filters['max_price'] ?? 20000)) }}">
-            </div>
-
-            {{-- Buttons --}}
-            <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
-              <button type="button" id="price-cancel" class="flex-1 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors">Cancel</button>
-              <button type="button" id="price-apply" class="flex-1 py-2 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">Apply</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sort -->
-        <div class="hidden lg:block h-8 w-px bg-gray-300 mx-4"></div>
-        <select name="sort" id="sort-filter" class="bg-transparent text-sm font-medium text-gray-600 hover:text-gray-900 cursor-pointer outline-none">
-            <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>Sort: Recent</option>
-            <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>Sort: Closest</option>
-            <option value="due" @selected(($filters['sort'] ?? '')==='due')>Sort: Due Soon</option>
-            <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>Price: Low to High</option>
-            <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>Price: High to Low</option>
-        </select>
       </div>
-    </form>
-
-    <!-- Mobile Filter Trigger (Visible only on mobile) -->
-    <div class="md:hidden px-4 pb-3 bg-white">
-        <button type="button" id="mobile-filter-trigger" 
-                class="w-full h-11 flex items-center justify-between border border-gray-200 rounded-full px-5 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer text-sm shadow-sm">
-            <div class="flex items-center gap-3 overflow-hidden">
-                <i data-feather="search" class="w-4 h-4 text-blue-600"></i>
-                <div class="flex flex-col items-start overflow-hidden">
-                    <span class="font-bold text-gray-900 text-[13px] leading-tight truncate">
-                         @if($filters['q'] ?? '') 
-                            "{{ $filters['q'] }}" 
-                        @else 
-                            Browse everything
-                        @endif
-                    </span>
-                    <span class="text-[11px] text-gray-500 leading-tight">
-                        @if($filters['type'] ?? '')
-                            {{ $filters['type'] === 'remote' ? 'Remote' : 'In-person' }}
-                        @else
-                            Any mode
-                        @endif
-                        ·
-                        @if($filters['category'] ?? '')
-                            {{ $categories->firstWhere('id', $filters['category'])->name ?? 'All' }}
-                        @else
-                            All categories
-                        @endif
-                    </span>
-                </div>
-            </div>
-            <div class="flex items-center gap-2 border-l pl-3 ml-2 shrink-0">
-                <i data-feather="sliders" class="w-4 h-4 text-gray-600"></i>
-            </div>
-        </button>
     </div>
   </section>
 
@@ -460,17 +464,25 @@
   </div>
  
   <!-- Main Content -->
-  <section class="bg-gray-50 pt-0 h-[700px]">
+  <section class="bg-gray-50 pt-6 h-[700px]">
    <div class="flex max-w-7xl mx-auto px-6 gap-6 h-full pb-6">
      
       <!-- Left: Tasks Pane -->
       <div id="tasks-pane" class="flex flex-col w-[360px] shrink-0 h-full">
         <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-3">
           @forelse (($tasks ?? []) as $task)
-            <div class="group bg-white p-4 rounded-xl border border-gray-200 hover:border-blue-400 hover:shadow-md transition-all duration-200 relative">
+            @php
+                $hasOffer = Auth::check() && $task->offers->contains('user_id', Auth::id());
+            @endphp
+            <div class="group p-4 rounded-xl border hover:border-blue-400 hover:shadow-md transition-all duration-200 relative {{ $hasOffer ? 'bg-blue-50 border-blue-300' : 'bg-white border-gray-200' }}">
              
               <div class="flex justify-between items-start mb-1.5">
                 <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600">
+                    @if($hasOffer)
+                        <span class="inline-flex items-center justify-center bg-blue-100 text-blue-600 rounded-full p-1 mr-1" title="You made an offer">
+                            <i data-feather="check-circle" class="w-3.5 h-3.5"></i>
+                        </span>
+                    @endif
                     {{ $task->title }}
                 </h3>
                 <span class="text-green-600 text-sm font-bold whitespace-nowrap ml-2">
@@ -506,15 +518,25 @@
                             Sign in to make an offer
                          </a>
                      @else
-                         <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
-                         @if(count($missingSteps) > 0)
-                            <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                Make an offer
-                            </button>
+                         @if($hasOffer)
+                            <form method="POST" action="{{ route('tasks.offers.destroy', $task->id) }}" class="inline m-0 p-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-xs font-semibold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap inline-flex items-center gap-1">
+                                    <i data-feather="x" class="w-3 h-3"></i> Cancel offer
+                                </button>
+                            </form>
                          @else
-                            <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                Make an offer
-                            </a>
+                             <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
+                             @if(count($missingSteps) > 0)
+                                <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
+                                    Make an offer
+                                </button>
+                             @else
+                                <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
+                                    Make an offer
+                                </a>
+                             @endif
                          @endif
                      @endguest
                  </div>

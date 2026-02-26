@@ -21,11 +21,11 @@
 
 <section class="py-8 min-h-screen bg-gray-50">
   <!-- FIX 1: Increased the subtraction in calc() slightly to prevent page scroll -->
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-[calc(100vh-140px)]">
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden h-full grid grid-cols-1 md:grid-cols-3">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row h-[750px]">
       
-      <!-- Sidebar -->
-      <aside class="border-r border-gray-200 flex flex-col h-full">
+      <!-- Sidebar (aligned with Logo) -->
+      <aside class="w-full md:w-1/5 border-r border-gray-200 flex flex-col h-full bg-white">
         <div class="p-4 border-b border-gray-100">
           <h2 class="text-xl font-bold text-gray-800 mb-4">{{ __('messages_page.title') }}</h2>
           <div class="relative">
@@ -43,8 +43,8 @@
                 @endphp
                 <a href="?user_id={{ $otherUser->id }}" class="block p-4 hover:bg-gray-50 transition border-b border-gray-50 {{ $isActive ? 'bg-blue-50 border-l-4 border-l-blue-600' : '' }}">
                     <div class="flex items-center gap-3">
-                        <div class="relative">
-                            <img src="{{ $otherUser->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-gray-200">
+                        <div class="relative shrink-0">
+                            <img src="{{ $otherUser->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-sm">
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex justify-between items-baseline mb-1">
@@ -68,36 +68,37 @@
         </div>
       </aside>
 
-      <!-- Main Chat Area -->
-      <!-- FIX 2: Added 'overflow-hidden' here. This forces the flex children to stay within bounds. -->
-      <main class="col-span-2 flex flex-col h-full bg-white relative overflow-hidden">
+      <!-- Main Chat Area (aligned with Nav Links) -->
+      <main class="flex-1 flex flex-col h-full bg-white relative overflow-hidden md:pl-10">
         @if($activeConversation)
             @php $chatUser = $activeConversation->getOtherUser(Auth::id()); @endphp
             
             <!-- Chat Header -->
             <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-white z-10 flex-shrink-0">
-                    <div class="relative">
-                        <img src="{{ $chatUser->avatar_url }}" class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                <div class="flex items-center gap-3">
+                    <div class="relative shrink-0">
+                        <img src="{{ $chatUser->avatar_url }}" class="w-10 h-10 rounded-full object-cover border border-gray-200 shadow-sm">
                     </div>
-                    <div>
-                        <h2 class="font-bold text-gray-900">{{ $chatUser->first_name }} {{ $chatUser->last_name }}</h2>
+                    <div class="min-w-0">
+                        <h2 class="font-bold text-gray-900 truncate">{{ $chatUser->first_name }} {{ $chatUser->last_name }}</h2>
                         <span class="text-xs text-green-500 font-medium flex items-center gap-1">
-                            <span class="w-2 h-2 bg-green-500 rounded-full"></span> {{ __('messages_page.online') }}
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> {{ __('messages_page.online') }}
                         </span>
                     </div>
                 </div>
+
                 {{-- Actions --}}
                 <div class="relative">
-                    <button id="chat-options-btn" class="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition">
+                    <button id="chat-options-btn" class="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-600 transition">
                         <i data-feather="more-vertical" class="w-5 h-5"></i>
                     </button>
                     <!-- Dropdown Menu -->
                     <div id="chat-options-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 hidden z-50 overflow-hidden">
-                        <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-b border-gray-50">
-                            <i data-feather="user" class="w-4 h-4 inline-block mr-2"></i> {{ __('messages_page.view_profile') }}
+                        <a href="{{ route('public-profile', $chatUser->id) }}" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-b border-gray-50 no-underline">
+                            <i data-feather="user" class="w-4 h-4"></i> {{ __('messages_page.view_profile') }}
                         </a>
-                        <button class="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-b border-gray-50">
-                            <i data-feather="flag" class="w-4 h-4 inline-block mr-2"></i> {{ __('messages_page.report_user') }}
+                        <button class="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-0 bg-transparent text-left">
+                            <i data-feather="flag" class="w-4 h-4"></i> {{ __('messages_page.report_user') }}
                         </button>
                     </div>
                 </div>

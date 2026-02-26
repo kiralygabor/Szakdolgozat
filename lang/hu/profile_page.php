@@ -23,6 +23,7 @@ return [
         'phone' => 'Telefonszám',
         'save' => 'Profil mentése',
         'confirm_update' => 'Biztosan módosítja az adatait?',
+        'confirm_delete' => 'Biztosan törölni szeretné a fiókját? Ez a művelet nem vonható vissza.',
     ],
     'account' => [
         'title' => 'Fiók beállítások',

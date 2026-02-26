@@ -144,7 +144,7 @@
                 <a class="nav-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw"></i> {{ __('profile_page.sidebar.back_home') }}</a>
                 <div class="my-2 border-bottom"></div>
                 
-                <a class="nav-link" href="#">{{ __('profile_page.sidebar.dashboard') }}</a>
+                <a class="nav-link" href="{{ route('my-tasks') }}"><i class="fas fa-columns fa-fw"></i> {{ __('profile_page.sidebar.dashboard') }}</a>
                 <a class="nav-link" id="notification-tab" data-bs-toggle="pill" href="#notification" role="tab">{{ __('profile_page.sidebar.notifications') }}</a>
                 
                 <!-- Active Tab styling matches the screenshot logic -->
@@ -266,37 +266,45 @@
                 <div class="tab-pane fade" id="account" role="tabpanel">
                     <h1 class="page-title">{{ __('profile_page.account.title') }}</h1>
                     
-                    <div class="mb-5 custom-input-group">
-                        <h6 class="section-label">{{ __('navbar.language') }}</h6>
-                        <select id="lang-select" class="form-control form-control-custom w-full md:w-1/2">
-                            <option value="en" @selected(app()->getLocale() == 'en')>English</option>
-                            <option value="hu" @selected(app()->getLocale() == 'hu')>Hungarian</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-5 custom-input-group">
-                        <h6 class="section-label">{{ __('navbar.theme') }}</h6>
-                        <select id="theme-select" class="form-control form-control-custom w-full md:w-1/2">
-                            <option value="light">{{ __('navbar.light') }}</option>
-                            <option value="dark">{{ __('navbar.dark') }}</option>
-                            <option value="system">{{ __('navbar.system_default') }}</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <button type="button" id="apply-settings-btn" class="btn btn-primary btn-primary-custom px-5">
-                            {{ __('Apply') }}
-                        </button>
-                    </div>
-
-                    <form>
-                        <hr class="my-4">
-                        <div class="mb-3">
-                            <label class="text-danger fw-bold">{{ __('profile_page.account.delete_title') }}</label>
-                            <p class="text-muted small">{{ __('profile_page.account.delete_desc') }}</p>
-                            <button class="btn btn-danger rounded-pill px-4" type="button">{{ __('profile_page.account.delete_btn') }}</button>
+                    <div class="max-w-2xl">
+                        <div class="mb-5 custom-input-group">
+                            <h6 class="section-label">{{ __('navbar.language') }}</h6>
+                            <select id="lang-select" class="form-control form-control-custom w-full md:w-2/3">
+                                <option value="en" @selected(app()->getLocale() == 'en')>English</option>
+                                <option value="hu" @selected(app()->getLocale() == 'hu')>Hungarian</option>
+                            </select>
                         </div>
-                    </form>
+
+                        <div class="mb-5 custom-input-group">
+                            <h6 class="section-label">{{ __('navbar.theme') }}</h6>
+                            <select id="theme-select" class="form-control form-control-custom w-full md:w-2/3">
+                                <option value="light">{{ __('navbar.light') }}</option>
+                                <option value="dark">{{ __('navbar.dark') }}</option>
+                                <option value="system">{{ __('navbar.system_default') }}</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-5">
+                            <button type="button" id="apply-settings-btn" class="btn btn-primary btn-primary-custom px-8">
+                                {{ __('Apply') }}
+                            </button>
+                        </div>
+
+                        <div class="mt-12 pt-8 border-t border-gray-100">
+                            <div class="bg-red-50 rounded-2xl p-6 border border-red-100">
+                                <h6 class="text-red-700 font-bold mb-2">{{ __('profile_page.account.delete_title') }}</h6>
+                                <p class="text-red-600 offset-sm text-sm mb-4">{{ __('profile_page.account.delete_desc') }}</p>
+                                
+                                <form action="{{ route('profile.delete') }}" method="POST" onsubmit="return confirm('{{ __('profile_page.profile.confirm_delete') ?? 'Are you sure you want to delete your account? This action cannot be undone.' }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-danger rounded-pill px-6 font-bold" type="submit">
+                                        {{ __('profile_page.account.delete_btn') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Security Tab -->

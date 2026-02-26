@@ -559,6 +559,20 @@
                         <span class="task-label">{{ __('mytasks.details.status_label', ['status' => ucfirst($activeTask->status)]) }}</span>
                         <h2 class="task-main-title">{{ $activeTask->title }}</h2>
                         
+                        @if(($viewMode ?? 'posted') === 'applied' && $activeTask->employer)
+                            <div class="mb-5">
+                                <a href="{{ route('public-profile', $activeTask->employer->id) }}" class="inline-flex items-center gap-2 group no-underline">
+                                    <div class="relative">
+                                        <img src="{{ $activeTask->employer->avatar_url }}" class="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm group-hover:border-blue-100 transition-all" alt="{{ $activeTask->employer->first_name }}">
+                                        <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm font-bold text-gray-600 group-hover:text-blue-600 transition-colors uppercase tracking-tight">
+                                        {{ $activeTask->employer->first_name }} {{ $activeTask->employer->last_name }}
+                                    </span>
+                                </a>
+                            </div>
+                        @endif
+                        
                         {{-- 
                            STRICT 50 CHAR LIMIT LOGIC:
                            Using Blade Str::limit to physically cut the text at 50 characters.

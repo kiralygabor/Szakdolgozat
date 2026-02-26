@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::get('index', [PagesController::class, 'index'])->name('index');
 Route::get('profile', [PagesController::class, 'profile'])->name('profile');
 Route::put('profile', [PagesController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
+Route::delete('profile', [PagesController::class, 'deleteProfile'])->name('profile.delete')->middleware('auth');
 Route::get('profile/{id}', [PagesController::class, 'publicProfile'])->name('public-profile');
 Route::post('profile/{id}/review', [PagesController::class, 'storeReview'])->name('public-profile.review')->middleware('auth');
 Route::get('category', [PagesController::class, 'category'])->name('category');
@@ -37,6 +38,7 @@ Route::get('post-task', [PagesController::class, 'postTask'])->name('post-task')
 Route::post('post-task', [PagesController::class, 'storeTask'])->name('post-task.store');
 Route::get('tasks/{task}', [PagesController::class, 'showTask'])->name('tasks.show');
 Route::post('tasks/{task}/offers', [OfferController::class, 'store'])->name('tasks.offers.store')->middleware('auth');
+Route::delete('tasks/{task}/offers', [OfferController::class, 'destroy'])->name('tasks.offers.destroy')->middleware('auth');
 Route::post('offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept')->middleware('auth');
 Route::post('reports', [ReportController::class, 'store'])->name('reports.store')->middleware('auth');
 Route::post('user-reports', [UserReportController::class, 'store'])->name('user-reports.store')->middleware('auth');

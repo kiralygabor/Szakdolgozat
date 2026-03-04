@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class NewOfferNotification extends Notification
@@ -28,7 +29,28 @@ class NewOfferNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        $channels = ['database'];
+        if ($notifiable->email_notifications) {
+            $channels[] = 'mail';
+        }
+        return $channels;
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        $url = route('my-tasks', ['task_id' => $this->task->id]);
+
+        return (new MailMessage)
+            ->subject('New Offer on "' . $this->task->title . '"')
+            ->greeting('Hello ' . $notifiable->first_name . '!')
+            ->line($this->user->first_name . ' has made a **£' . $this->offer->price . '** offer on your task **"' . $this->task->title . '"**.')
+            ->line('**Message from ' . $this->user->first_name . ':**')
+            ->line('"' . $this->offer->message . '"')
+            ->action('View Offers', $url)
+            ->line('Log in to review and accept or decline this offer.');
     }
 
     /**

@@ -111,7 +111,7 @@
         align-items: center;
         justify-content: center;
         font-size: 2rem;
-        margin-right: 20px;
+        flex-shrink: 0;
     }
 
     /* Verification Bar */
@@ -143,29 +143,34 @@
             <nav class="nav flex-column nav-pills settings-nav" id="settingsTab" role="tablist" aria-orientation="vertical">
                 <a class="nav-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw"></i> {{ __('profile_page.sidebar.back_home') }}</a>
                 <div class="my-2 border-bottom"></div>
-                
+               
+                @auth
                 <a class="nav-link" href="{{ route('my-tasks') }}"><i class="fas fa-columns fa-fw"></i> {{ __('profile_page.sidebar.dashboard') }}</a>
                 <a class="nav-link" id="notification-tab" data-bs-toggle="pill" href="#notification" role="tab">{{ __('profile_page.sidebar.notifications') }}</a>
-                
+               
                 <!-- Active Tab styling matches the screenshot logic -->
-                <a class="nav-link active" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab">{{ __('profile_page.sidebar.profile') }}</a>
-                <a class="nav-link" id="account-tab" data-bs-toggle="pill" href="#account" role="tab">{{ __('profile_page.sidebar.settings') }}</a>
+                <a class="nav-link {{ auth()->check() ? 'active' : '' }}" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab">{{ __('profile_page.sidebar.profile') }}</a>
+                @endauth
+                <a class="nav-link {{ !auth()->check() ? 'active' : '' }}" id="account-tab" data-bs-toggle="pill" href="#account" role="tab">{{ __('profile_page.sidebar.settings') }}</a>
+                @auth
                 <a class="nav-link" id="security-tab" data-bs-toggle="pill" href="#security" role="tab">{{ __('profile_page.sidebar.security') }}</a>
                 <a class="nav-link" id="billing-tab" data-bs-toggle="pill" href="#billing" role="tab">{{ __('profile_page.sidebar.billing') }}</a>
+                @endauth
             </nav>
         </div>
 
         <!-- Main Content Area -->
         <div class="flex-1 md:pl-10">
-            
+           
             <div class="tab-content" id="settingsTabContent">
-                
+               
                 <!-- Profile Tab (Matches Screenshot) -->
-                <div class="tab-pane fade show active" id="profile" role="tabpanel">
-                    
+                @auth
+                <div class="tab-pane fade {{ auth()->check() ? 'show active' : '' }}" id="profile" role="tabpanel">
+                   
                     <div class="d-flex justify-content-between align-items-start mb-4">
                         <h1 class="page-title">{{ __('profile_page.profile.title') }}</h1>
-                        
+                       
                     </div>
 
                     @if (session('success'))
@@ -261,11 +266,12 @@
                         </div>
                     </form>
                 </div>
+                @endauth
 
                 <!-- Account Tab (Settings) -->
-                <div class="tab-pane fade" id="account" role="tabpanel">
+                <div class="tab-pane fade {{ !auth()->check() ? 'show active' : '' }}" id="account" role="tabpanel">
                     <h1 class="page-title">{{ __('profile_page.account.title') }}</h1>
-                    
+                   
                     <div class="max-w-2xl">
                         <div class="mb-5 custom-input-group">
                             <h6 class="section-label">{{ __('navbar.language') }}</h6>
@@ -290,11 +296,12 @@
                             </button>
                         </div>
 
+                        @auth
                         <div class="mt-12 pt-8 border-t border-gray-100">
                             <div class="bg-red-50 rounded-2xl p-6 border border-red-100">
                                 <h6 class="text-red-700 font-bold mb-2">{{ __('profile_page.account.delete_title') }}</h6>
                                 <p class="text-red-600 offset-sm text-sm mb-4">{{ __('profile_page.account.delete_desc') }}</p>
-                                
+                               
                                 <form action="{{ route('profile.delete') }}" method="POST" onsubmit="return confirm('{{ __('profile_page.profile.confirm_delete') ?? 'Are you sure you want to delete your account? This action cannot be undone.' }}');">
                                     @csrf
                                     @method('DELETE')
@@ -304,53 +311,101 @@
                                 </form>
                             </div>
                         </div>
+                        @endauth
                     </div>
                 </div>
 
                 <!-- Security Tab -->
+                @auth
                 <div class="tab-pane fade" id="security" role="tabpanel">
                     <h1 class="page-title">{{ __('profile_page.security.title') }}</h1>
                     <form>
                         <div class="mb-4 custom-input-group">
                             <label class="form-label">{{ __('profile_page.security.old_password') }}</label>
                             <input type="password" class="form-control form-control-custom mb-3">
-                            
+                           
                             <label class="form-label">{{ __('profile_page.security.new_password') }}</label>
                             <input type="password" class="form-control form-control-custom mb-3">
-                            
+                           
                             <label class="form-label">{{ __('profile_page.security.confirm_password') }}</label>
                             <input type="password" class="form-control form-control-custom">
                         </div>
                         <button class="btn btn-primary btn-primary-custom px-4">{{ __('profile_page.security.update_password') }}</button>
                     </form>
                 </div>
+                @endauth
 
                 <!-- Notification Tab -->
+                @auth
                 <div class="tab-pane fade" id="notification" role="tabpanel">
                     <h1 class="page-title">{{ __('profile_page.notifications.title') }}</h1>
-                    <form>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="emailAlerts" checked>
-                            <label class="form-check-label" for="emailAlerts">
-                                {{ __('profile_page.notifications.email_alerts') }}
-                            </label>
+                    
+                    <form method="POST" action="{{ route('profile.update') }}">
+                        @csrf
+                        @method('PUT')
+                        
+                        <!-- Hidden profile fields to avoid overwriting them with empty if not in this tab -->
+                        <input type="hidden" name="first_name" value="{{ $user->first_name }}">
+                        <input type="hidden" name="last_name" value="{{ $user->last_name }}">
+                        <input type="hidden" name="email" value="{{ $user->email }}">
+                        <input type="hidden" name="phone_number" value="{{ $user->phone_number }}">
+                        <input type="hidden" name="birthdate" value="{{ $user->birthdate ? $user->birthdate->format('Y-m-d') : '' }}">
+                        <input type="hidden" name="city_id" value="{{ $user->city_id }}">
+
+                        <div class="mb-5">
+                            <h6 class="section-label">Email Preferences</h6>
+                            
+                            <div class="space-y-4">
+                                <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" name="email_notifications" value="1" {{ $user->email_notifications ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <div>
+                                        <span class="block font-bold text-blue-900">Offer Updates</span>
+                                        <span class="text-sm text-gray-600">Email me when I receive an offer on my task or when my offer is accepted</span>
+                                    </div>
+                                </label>
+
+                                <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" name="email_task_digest" value="1" id="digest_toggle_profile" {{ $user->email_task_digest ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <div>
+                                        <span class="block font-bold text-blue-900">Task Digest</span>
+                                        <span class="text-sm text-gray-600">Send me a daily summary of new tasks posted in categories I follow</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- category selection (shown only if digest is enabled) -->
+                            <div id="category_selection_profile" class="{{ $user->email_task_digest ? '' : 'hidden' }} pl-11 mt-4">
+                                <p class="text-xs font-bold text-blue-900 mb-3 uppercase tracking-wide">Tracked Categories:</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-4 border border-blue-100 rounded-xl bg-blue-50/30 max-h-64 overflow-y-auto">
+                                    @foreach($categories as $cat)
+                                    <label class="flex items-center gap-2 cursor-pointer hover:bg-white p-2 rounded-lg transition-colors border border-transparent hover:border-blue-100">
+                                        <input type="checkbox" name="tracked_categories[]" value="{{ $cat->id }}" 
+                                            {{ $user->trackedCategories->contains($cat->id) ? 'checked' : '' }}
+                                            class="w-4 h-4 text-blue-600 border-gray-300 rounded">
+                                        <span class="text-sm text-gray-700 font-medium">{{ $cat->name }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" value="" id="emailSummary" checked>
-                            <label class="form-check-label" for="emailSummary">
-                                {{ __('profile_page.notifications.email_summary') }}
-                            </label>
+
+                        <div class="mt-8">
+                            <button type="submit" class="btn btn-primary btn-primary-custom px-8 py-2 font-bold text-white shadow-lg shadow-blue-500/20">
+                                {{ __('profile_page.notifications.save') }}
+                            </button>
                         </div>
-                        <button class="btn btn-primary btn-primary-custom px-4 mt-2">{{ __('profile_page.notifications.save') }}</button>
                     </form>
                 </div>
+                @endauth
 
                 <!-- Billing Tab -->
+                @auth
                 <div class="tab-pane fade" id="billing" role="tabpanel">
                     <h1 class="page-title">{{ __('profile_page.billing.title') }}</h1>
                     <button class="btn btn-primary btn-primary-custom mb-4" type="button">{{ __('profile_page.billing.add_method') }}</button>
                     <div class="p-4 bg-light text-center rounded text-muted">{{ __('profile_page.billing.no_payments') }}</div>
                 </div>
+                @endauth
 
             </div>
         </div>
@@ -480,7 +535,7 @@
             if (applyBtn) {
                 applyBtn.addEventListener('click', function() {
                     console.log('Apply button clicked');
-                    
+                   
                     // 1. Apply Theme
                     if (themeSelect) {
                         applyTheme(themeSelect.value);
@@ -492,7 +547,7 @@
                         const currentLocale = '{{ app()->getLocale() }}';
                         const newLocale = langSelect.value;
                         console.log('Current locale:', currentLocale, 'New locale:', newLocale);
-                        
+                       
                         if (newLocale !== currentLocale) {
                             const form = document.createElement('form');
                             form.method = 'POST';
@@ -504,13 +559,28 @@
                             form.appendChild(csrfInput);
                             document.body.appendChild(form);
                             form.submit();
-                            return; 
+                            return;
                         }
                     }
-                    
+                   
                     alert('Settings applied successfully!');
                 });
             }
+        })();
+
+        // --- Notification Settings Toggles ---
+        (function handleNotificationToggles() {
+            const digestToggle = document.getElementById('digest_toggle_profile');
+            const categorySelection = document.getElementById('category_selection_profile');
+            if (!digestToggle || !categorySelection) return;
+
+            digestToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    categorySelection.classList.remove('hidden');
+                } else {
+                    categorySelection.classList.add('hidden');
+                }
+            });
         })();
     });
 </script>

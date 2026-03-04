@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class OfferAcceptedNotification extends Notification
@@ -26,7 +27,27 @@ class OfferAcceptedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        $channels = ['database'];
+        if ($notifiable->email_notifications) {
+            $channels[] = 'mail';
+        }
+        return $channels;
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        $url = route('tasks.show', ['task' => $this->task->id]);
+
+        return (new MailMessage)
+            ->subject('Your Offer Was Accepted!')
+            ->greeting('Great news, ' . $notifiable->first_name . '!')
+            ->line($this->employer->first_name . ' has **accepted** your offer for the task **"' . $this->task->title . '"**.')
+            ->line('You can now start working on this task and communicate with the employer through the messaging system.')
+            ->action('View Task', $url)
+            ->line('Good luck with the task!');
     }
 
     /**

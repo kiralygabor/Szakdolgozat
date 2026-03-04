@@ -39,7 +39,8 @@ class AuthController extends Controller
     public function registration_settings(): View
     {
         $counties = \App\Models\County::orderBy('name')->get();
-        return view('auth.registration_settings', compact('counties'));
+        $categories = \App\Models\Category::orderBy('name')->get();
+        return view('auth.registration_settings', compact('counties', 'categories'));
     }
 
     /**
@@ -168,7 +169,14 @@ class AuthController extends Controller
             'phone_number'    => $validated['phone_number'],
             'city_id'         => (int) $validated['city_id'],
             'avatar'          => 'assets/img/default.jpg',
+            'email_notifications' => $request->has('email_notifications'),
+            'email_task_digest' => $request->has('email_task_digest'),
         ]);
+
+        // Sync tracked categories if opted in
+        if ($request->has('email_task_digest') && $request->has('tracked_categories')) {
+            $user->trackedCategories()->sync($request->input('tracked_categories'));
+        }
 
         // Create verification token
         $verifyUser = VerifyUser::create([

@@ -10,7 +10,7 @@
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm">
       <div class="p-4 border-b border-gray-200 flex items-center justify-between">
         <span class="text-sm text-gray-600">{{ __('notifications_page.latest_updates') }}</span>
-        <a href="#" class="text-sm text-blue-600 hover:underline">{{ __('notifications_page.mark_all_read') }}</a>
+        <a href="#" id="mark-all-read" class="text-sm text-blue-600 hover:underline">{{ __('notifications_page.mark_all_read') }}</a>
       </div>
       <div class="divide-y divide-gray-200">
         @forelse(($notifications ?? []) as $n)
@@ -34,6 +34,30 @@
     </div>
   </div>
   </section>
+  <script>
+    document.getElementById('mark-all-read').addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      fetch('{{ route("notifications.mark-read") }}', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.reload();
+        }
+      })
+      .catch(error => {
+        console.error('Error marking notifications as read:', error);
+      });
+    });
+  </script>
 @endsection
 
 

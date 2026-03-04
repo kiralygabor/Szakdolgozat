@@ -158,6 +158,8 @@
         transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         overflow-y: auto;
         box-shadow: 4px 0 25px rgba(0,0,0,0.15);
+        padding-bottom: 80px; /* Extra space for system nav bars */
+        overscroll-behavior: contain;
       }
       .mobile-sidebar.active {
         left: 0;
@@ -454,6 +456,9 @@
           <a href="{{ route('my-tasks') }}">
             <i data-feather="grid"></i> {{ __('navbar.dashboard') }}
           </a>
+          <a href="{{ route('messages') }}">
+            <i data-feather="message-square"></i> {{ __('navbar.messages') ?? 'Messages' }}
+          </a>
           <a href="{{ route('notifications') }}">
             <i data-feather="bell"></i> {{ __('navbar.notifications') }}
             @if($mobileUnread > 0)
@@ -521,6 +526,9 @@
     <a href="{{ url('category') }}" class="mobile-sidebar-link">
       <i data-feather="grid"></i> {{ __('navbar.categories') }}
     </a>
+    <a href="{{ route('messages') }}" class="mobile-sidebar-link">
+      <i data-feather="message-square"></i> {{ __('navbar.messages') ?? 'Messages' }}
+    </a>
 
     <a href="{{ route('post-task') }}" onclick="return checkLogin(event)" class="mobile-sidebar-cta">
       {{ __('navbar.post_task') }}
@@ -558,6 +566,9 @@
     <a href="{{ route('profile', ['tab' => 'account']) }}" class="mobile-sidebar-link">
       <i data-feather="settings"></i> {{ __('navbar.settings') }}
     </a>
+
+    <div class="mobile-sidebar-divider"></div>
+      
   </div>
 
   @guest
@@ -732,6 +743,9 @@
           <a href="{{ route('my-tasks') }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="grid" class="w-4 h-4"></i> {{ __('navbar.dashboard') }}
           </a>
+          <a href="{{ route('messages') }}" class="sub-menu-link flex items-center gap-2">
+            <i data-feather="message-square" class="w-4 h-4"></i> {{ __('navbar.messages') ?? 'Messages' }}
+          </a>
           <a href="{{ route('notifications') }}" class="sub-menu-link flex items-center gap-2">
             <i data-feather="bell" class="w-4 h-4"></i> {{ __('navbar.notifications') }}
           </a>
@@ -873,6 +887,8 @@
     </main>
 
     <!-- 🔹 FOOTER -->
+    @hasSection('hideFooter')
+    @else
     <footer class="bg-gray-50 border-t border-gray-200 pt-16 pb-8 mt-auto shadow-[0_-1px_2px_rgba(0,0,0,0.03)]">
         <div class="container mx-auto px-6 max-w-7xl">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
@@ -938,6 +954,7 @@
             </div>
         </div>
     </footer>
+    @endif
 
     <script>
       // Navbar settings dropdown behavior
@@ -1036,30 +1053,27 @@
                 submenu.style.pointerEvents = 'none';
               }
             });
-            // Theme option clicks
-            var themeOptions = submenu.querySelectorAll('[data-theme]');
-            themeOptions.forEach(function(opt){
-              opt.addEventListener('click', function(){
+            // Theme option clicks (Global)
+            document.querySelectorAll('[data-theme]').forEach(function(opt){
+              opt.addEventListener('click', function(e){
+                e.stopPropagation();
                 applyTheme(opt.getAttribute('data-theme'));
               });
             });
-            // Language option clicks
-            var langOptions = submenu.querySelectorAll('[data-lang]');
-            langOptions.forEach(function(opt){
-              opt.addEventListener('click', function(){
+
+            // Language option clicks (Global)
+            document.querySelectorAll('[data-lang]').forEach(function(opt){
+              opt.addEventListener('click', function(e){
+                e.stopPropagation();
                 var locale = opt.getAttribute('data-lang');
-                // Create a form and submit it to switch language
                 var form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '/language/' + locale;
-                
-                // Add CSRF token
+                form.action = '{{ url("/language") }}/' + locale;
                 var csrfInput = document.createElement('input');
                 csrfInput.type = 'hidden';
                 csrfInput.name = '_token';
                 csrfInput.value = '{{ csrf_token() }}';
                 form.appendChild(csrfInput);
-                
                 document.body.appendChild(form);
                 form.submit();
               });
@@ -1246,5 +1260,172 @@
         return true;
       }
     </script>
+    {{-- =========================================
+         FLOATING SUPPORT CHATBOT
+         ========================================= --}}
+    <!-- Floating Button -->
+    <button id="chatbot-toggle" onclick="toggleChatbot()" class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-indigo-300 hover:bg-indigo-700 hover:-translate-y-1 transition-all z-[100] focus:outline-none">
+        <i data-feather="message-circle" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div id="chatbot-window" class="fixed bottom-24 right-6 w-[90vw] max-w-[380px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[100] flex flex-col transition-all duration-300 transform opacity-0 translate-y-4 pointer-events-none" style="height: 500px; max-height: 70vh;">
+        <!-- Header -->
+        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center rounded-t-2xl">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
+                    <i data-feather="help-circle" class="w-4 h-4 text-white"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm m-0 leading-tight">MiniJobz Assistant</h3>
+                    <p class="text-indigo-200 text-xs m-0">Online - How can we help?</p>
+                </div>
+            </div>
+            <button onclick="toggleChatbot()" class="text-white hover:text-indigo-200 transition focus:outline-none rounded p-1">
+                <i data-feather="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Chat Area -->
+        <div id="chatbot-messages" class="flex-1 p-4 bg-gray-50 overflow-y-auto flex flex-col gap-4 custom-scrollbar">
+            <!-- Initial Greeting -->
+            <div class="flex items-start gap-2">
+                <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
+                    <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
+                </div>
+                <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm text-sm text-gray-700 inline-block max-w-[85%]">
+                    Hi there! 👋 I'm your MiniJobz virtual assistant. Please select one of the common questions below to learn more.
+                </div>
+            </div>
+
+            <!-- FAQ Buttons Container -->
+            <div id="chatbot-faq-options" class="flex flex-col gap-2 pl-8">
+                <button onclick="handleFaqClick('how-to-post')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
+                    How do I post a task?
+                </button>
+                <button onclick="handleFaqClick('how-to-apply')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
+                    How do I apply for a task?
+                </button>
+                <button onclick="handleFaqClick('payment')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
+                    How does payment work?
+                </button>
+                <button onclick="handleFaqClick('fees')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
+                    Are there any fees?
+                </button>
+            </div>
+        </div>
+
+        <!-- Input Area (Visual only for FAQ bot) -->
+        <div class="p-3 bg-white border-t border-gray-100 flex items-center gap-2 rounded-b-2xl">
+            <input type="text" placeholder="Select an option above..." disabled class="flex-1 bg-gray-50 border border-gray-100 rounded-full px-4 py-2 text-sm focus:ring-0 cursor-not-allowed text-gray-400">
+            <button disabled class="w-9 h-9 rounded-full bg-gray-100 text-gray-300 flex items-center justify-center cursor-not-allowed border border-gray-100">
+                <i data-feather="send" class="w-4 h-4 ml-0.5 mt-0.5"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Dictionary of FAQ Answers
+        const chatbotFaqs = {
+            'how-to-post': "To post a task, make sure you are logged in. Click the <strong>'Post a Task'</strong> button in the top navigation bar. Fill out details like the title, category, location, and your budget, then click <strong>'Publish'</strong>. Your task will instantly be visible to all Taskers!",
+            'how-to-apply': "To apply for a task, go to the <strong>'Browse Tasks'</strong> page and click on a task you're interested in. You will see a <strong>'Make an offer'</strong> section where you can propose your price and send a message to the employer.",
+            'payment': "Currently, MiniJobz connects people who need help with those who can provide it. Payment terms should be discussed directly between the Employer and the Tasker via our built-in <strong>Messages</strong> system before work begins.",
+            'fees': "MiniJobz is currently <strong>100% free</strong> to use! There are no fees for posting tasks, making offers, or communicating. You keep everything you earn."
+        };
+
+        function toggleChatbot() {
+            const wind = document.getElementById('chatbot-window');
+            if (wind.classList.contains('opacity-0')) {
+                // Open
+                wind.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                wind.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                // Close
+                wind.classList.remove('opacity-100', 'translate-y-0');
+                wind.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }
+        }
+
+        function handleFaqClick(faqKey) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const optionsContainer = document.getElementById('chatbot-faq-options');
+            
+            // Get the text from the clicked button
+            const clickedBtn = event.currentTarget;
+            const questionText = clickedBtn.innerText;
+            
+            // Hide the options immediately
+            optionsContainer.style.display = 'none';
+
+            // Add the user message bubble
+            const userMsgHtml = `
+                <div class="flex items-end justify-end mt-2 animate-fade-in-up">
+                    <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-sm shadow-sm text-sm inline-block max-w-[85%]">
+                        ${questionText}
+                    </div>
+                </div>
+            `;
+            messagesContainer.insertAdjacentHTML('beforeend', userMsgHtml);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Add "Typing" indicator
+            const typingHtml = `
+                <div id="bot-typing" class="flex items-start gap-2 mt-4 animate-fade-in-up">
+                    <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
+                        <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
+                    </div>
+                    <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm flex gap-1 items-center h-[42px] max-w-[85%]">
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: -0.3s"></div>
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: -0.15s"></div>
+                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
+                    </div>
+                </div>
+            `;
+            messagesContainer.insertAdjacentHTML('beforeend', typingHtml);
+            if (window.feather) window.feather.replace();
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Simulate network delay for the bot response
+            setTimeout(() => {
+                const typingIndicator = document.getElementById('bot-typing');
+                if (typingIndicator) typingIndicator.remove();
+
+                const answer = chatbotFaqs[faqKey];
+
+                const botResponseHtml = `
+                    <div class="flex items-start gap-2 mt-2 animate-fade-in-up">
+                        <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
+                            <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
+                        </div>
+                        <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm text-sm text-gray-700 leading-relaxed inline-block max-w-[85%] relative">
+                            ${answer}
+                        </div>
+                    </div>
+                `;
+                messagesContainer.insertAdjacentHTML('beforeend', botResponseHtml);
+                
+                // Show options again at the bottom
+                setTimeout(() => {
+                     optionsContainer.style.display = 'flex';
+                     messagesContainer.appendChild(optionsContainer);
+                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }, 800);
+
+                if (window.feather) window.feather.replace();
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 800);
+        }
+    </script>
+    
+    <style>
+        .animate-fade-in-up {
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+
 </body>
 </html>

@@ -9,7 +9,48 @@
                 <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" class="h-8 w-auto">
             </a>
         </div>
-        <div>
+            <div class="flex items-center gap-3">
+            <!-- Settings dropdown -->
+            <div class="relative">
+                <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
+                    <i data-feather="settings"></i>
+                </button>
+                <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
+                    <div class="flex flex-col">
+                        <div class="group relative">
+                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+                                <i data-feather="chevron-left" class="w-4 h-4"></i>
+                                {{ __('navbar.theme') }}
+                            </div>
+                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="light">{{ __('navbar.light') }}</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="dark">{{ __('navbar.dark') }}</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="system">{{ __('navbar.system_default') }}</div>
+                            </div>
+                        </div>
+                        <div class="group relative">
+                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+                                <i data-feather="chevron-left" class="w-4 h-4"></i>
+                                {{ __('navbar.language') }}
+                            </div>
+                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">English</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">Hungarian</div>
+                            </div>
+                        </div>
+                        <div class="group relative">
+                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+                                <i data-feather="chevron-left" class="w-4 h-4"></i>
+                                {{ __('navbar.extras') }}
+                            </div>
+                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.help_faq') }}</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.contact_support') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <a href="{{ route('logout') }}" class="text-gray-500 hover:text-gray-700 font-medium flex items-center gap-1">
                 Cancel <span class="text-xl leading-none">&times;</span>
             </a>

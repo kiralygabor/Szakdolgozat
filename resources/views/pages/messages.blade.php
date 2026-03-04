@@ -1,7 +1,9 @@
 @extends('layout')
-
+ 
 @section('title', __('messages_page.title'))
-
+ 
+@section('hideFooter', true)
+ 
 @section('content')
 <style>
     /* Smooth fade in/out for the delete button */
@@ -11,25 +13,25 @@
         transform: translateY(5px);
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
+ 
     /* Apply hover only directly on the bubble container, not the full width row */
     .message-bubble-container:hover .delete-overlay {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
     }
-
+ 
     /* Tighten footer for messages page */
     footer {
         padding-top: 2rem !important;
     }
 </style>
-
+ 
 <section class="py-0 md:py-8 bg-gray-50">
   <!-- FIX 1: Increased the subtraction in calc() slightly to prevent page scroll -->
   <div class="max-w-7xl mx-auto px-0 md:px-6">
     <div class="bg-white border-0 md:border border-gray-200 rounded-none md:rounded-2xl shadow-sm overflow-hidden flex flex-col md:flex-row h-[calc(100dvh-56px)] md:h-[750px]">
-
+ 
       <!-- Sidebar (aligned with Logo) -->
       <aside class="{{ $activeConversation ? 'hidden md:flex' : 'flex' }} w-full md:w-1/5 border-r border-gray-200 flex flex-col h-full bg-white">
         <div class="p-4 border-b border-gray-100">
@@ -39,7 +41,7 @@
             <input type="text" placeholder="{{ __('messages_page.search_placeholder') }}" class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
           </div>
         </div>
-
+ 
         <div class="flex-1 overflow-y-auto custom-scrollbar">
             @forelse($conversations as $conversation)
                 @php
@@ -73,12 +75,12 @@
             @endforelse
         </div>
       </aside>
-
+ 
       <!-- Main Chat Area (aligned with Nav Links) -->
       <main class="{{ $activeConversation ? 'flex' : 'hidden md:flex' }} flex-1 flex flex-col h-full bg-white relative overflow-hidden md:pl-10">
         @if($activeConversation)
             @php $chatUser = $activeConversation->getOtherUser(Auth::id()); @endphp
-
+ 
             <!-- Chat Header -->
             <div class="p-3 md:p-4 border-b border-gray-200 flex items-center justify-between bg-white z-10 flex-shrink-0">
                 <div class="flex items-center gap-2 md:gap-3">
@@ -96,7 +98,7 @@
                         </span>
                     </div>
                 </div>
-
+ 
                 {{-- Actions --}}
                 <div class="relative">
                     <button id="chat-options-btn" class="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-600 transition">
@@ -113,7 +115,7 @@
                     </div>
                 </div>
             </div>
-
+ 
             <!-- Messages List -->
             <!-- flex-1 ensures it takes available space, overflow-y-auto makes IT scroll, not the page -->
             <div id="messages-container" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-6 space-y-4 bg-gray-50">
@@ -121,7 +123,7 @@
                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                 </div>
             </div>
-
+ 
             <!-- Input Area -->
             <!-- flex-shrink-0 prevents it from being squashed or pushed out -->
             <div class="px-4 pt-3 pb-2 bg-white border-t border-gray-200 flex-shrink-0 z-20">
@@ -141,39 +143,49 @@
             </div>
         @else
             <!-- Empty State -->
-            <div class="flex-1 flex flex-col items-center justify-center text-gray-500 p-8">
-                <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+            <div class="flex-1 flex flex-col items-center justify-center text-gray-500 p-8 bg-gray-50/30">
+                <div class="w-24 h-24 bg-blue-50/50 rounded-full flex items-center justify-center mb-6 shadow-sm ring-8 ring-white">
                     <i data-feather="message-circle" class="w-12 h-12 text-blue-500"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ __('messages_page.empty_state_title') }}</h2>
-                <p class="text-center max-w-md">{{ __('messages_page.empty_state_desc') }}</p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ __('messages_page.select_chat_title') ?? 'Your Messages' }}</h2>
+                <p class="text-center max-w-md text-gray-500 leading-relaxed">{{ __('messages_page.select_chat_desc') ?? 'Choose a conversation from the sidebar to start messaging, or browse tasks to find new opportunities.' }}</p>
+                @if($conversations->isEmpty())
+                    <div class="mt-8 flex flex-col items-center">
+                        <p class="text-sm text-gray-400 mb-4">{{ __('messages_page.no_active_chats') ?? 'You don\'t have any active messages yet.' }}</p>
+                        <a href="{{ route('tasks') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200 no-underline">
+                            <i data-feather="search" class="w-4 h-4"></i>
+                            {{ __('navbar.browse_tasks') }}
+                        </a>
+                    </div>
+                @endif
             </div>
         @endif
       </main>
     </div>
   </div>
 </section>
-
+ 
 <!-- The JS remains exactly the same as the previous version -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         if (window.feather) window.feather.replace();
-
-        const authUserId = "{{ Auth::id() }}"; 
+ 
+        const authUserId = "{{ Auth::id() }}";
         const authUserAvatar = "{{ Auth::user()->avatar_url }}";
         const conversationId = "{{ $activeConversation ? $activeConversation->id : '' }}";
-        let otherUserAvatar = ""; 
+        const appUrl = "{{ url('/') }}";
+        let otherUserAvatar = "";
         @if($activeConversation)
             otherUserAvatar = "{{ $activeConversation->getOtherUser(Auth::id())->avatar_url }}";
         @endif
         const messagesContainer = document.getElementById('messages-container');
         const messageForm = document.getElementById('message-form');
         const messageInput = document.getElementById('message-input');
-
+ 
         // --- UI Handlers ---
         const chatOptionsBtn = document.getElementById('chat-options-btn');
         const chatOptionsDropdown = document.getElementById('chat-options-dropdown');
-
+ 
         if (chatOptionsBtn && chatOptionsDropdown) {
             chatOptionsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -185,7 +197,7 @@
                 }
             });
         }
-
+ 
         if(messageInput) {
             messageInput.addEventListener('input', function() {
                 this.style.height = 'auto';
@@ -198,13 +210,13 @@
                 }
             });
         }
-
+ 
         const attachmentInput = document.getElementById('attachment-input');
         const attachmentBtn = document.getElementById('attachment-btn');
         const attachmentPreview = document.getElementById('attachment-preview');
-
+ 
         if(attachmentBtn) attachmentBtn.addEventListener('click', () => attachmentInput.click());
-
+ 
         if(attachmentInput) {
             attachmentInput.addEventListener('change', function() {
                 const file = this.files[0];
@@ -232,7 +244,7 @@
                 }
             });
         }
-
+ 
         window.clearAttachment = function() {
             if(attachmentInput) attachmentInput.value = '';
             if(attachmentPreview) {
@@ -240,20 +252,20 @@
                 attachmentPreview.classList.add('hidden');
             }
         }
-
+ 
         // --- Sending Logic ---
         if(messageForm) {
             messageForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 const body = messageInput.value.trim();
                 const file = attachmentInput.files[0];
-
+ 
                 if (!body && !file) return;
-
+ 
                 const formData = new FormData();
                 formData.append('body', body);
                 if (file) formData.append('attachment', file);
-
+ 
                 let tempMsg = {
                     id: 'temp-' + Date.now(),
                     sender_id: authUserId,
@@ -261,7 +273,7 @@
                     created_at: new Date().toISOString(),
                     is_temp: true
                 };
-
+ 
                 if (file && file.type.startsWith('image/')) {
                     tempMsg.attachment = URL.createObjectURL(file);
                     tempMsg.attachment_type = 'image';
@@ -270,22 +282,22 @@
                     tempMsg.attachment_type = 'file';
                     tempMsg.attachment_name = file.name;
                 }
-
+ 
                 appendMessage(tempMsg);
-
+ 
                 messageInput.value = '';
                 messageInput.style.height = 'auto';
                 clearAttachment();
                 scrollToBottom();
-
-                fetch(`/conversations/${conversationId}/messages`, {
+ 
+                fetch(`${appUrl}conversations/${conversationId}/messages`, {
                     method: 'POST',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: formData 
+                    body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
-                    lastMessageId = data.id; 
+                    lastMessageId = data.id;
                     const tempEl = document.getElementById(`message-${tempMsg.id}`);
                     if(tempEl) {
                         tempEl.id = `message-${data.id}`;
@@ -296,34 +308,38 @@
                 .catch(err => console.error(err));
             });
         }
-
+ 
         // --- Polling Logic ---
         let lastMessageId = 0;
         if (conversationId) {
             loadMessages();
             setInterval(checkNewMessages, 3000);
         }
-
+ 
         function loadMessages() {
-            fetch(`/conversations/${conversationId}`)
+            fetch(`${appUrl}conversations/${conversationId}`)
                 .then(res => res.json())
                 .then(data => {
-                    messagesContainer.innerHTML = ''; 
+                    messagesContainer.innerHTML = '';
                     data.messages.forEach(msg => {
                         appendMessage(msg);
                         lastMessageId = Math.max(lastMessageId, msg.id);
                     });
                     scrollToBottom();
+                })
+                .catch(err => {
+                    console.error("Failed to load messages:", err);
+                    messagesContainer.innerHTML = '<div class="p-8 text-center text-red-500">Failed to load messages.</div>';
                 });
         }
-
+ 
         function checkNewMessages() {
-            fetch(`/conversations/${conversationId}/check?last_message_id=${lastMessageId}`)
+            fetch(`${appUrl}conversations/${conversationId}/check?last_message_id=${lastMessageId}`)
                 .then(res => res.json())
                 .then(messages => {
                     if (messages.length > 0) {
                         messages.forEach(msg => {
-                            if (String(msg.sender_id) !== String(authUserId)) { 
+                            if (String(msg.sender_id) !== String(authUserId)) {
                                 appendMessage(msg);
                                 lastMessageId = Math.max(lastMessageId, msg.id);
                             }
@@ -332,30 +348,30 @@
                     }
                 });
         }
-
+ 
         // --- UPDATED APPEND FUNCTION ---
         function appendMessage(msg) {
             const isMe = String(msg.sender_id) === String(authUserId);
-
+ 
             const div = document.createElement('div');
-            div.className = `flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'} mb-8`; 
+            div.className = `flex items-end gap-2 ${isMe ? 'flex-row-reverse' : 'flex-row'} mb-8`;
             div.id = `message-${msg.id}`;
-
+ 
             const time = new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+ 
             let contentHtml = '';
-
+ 
             if (msg.is_deleted) {
                 contentHtml = `
                     <p class="text-sm italic text-gray-400 flex items-center gap-1">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg> 
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                         Message deleted
                     </p>`;
             } else {
                 if (msg.attachment) {
-                    const attachmentUrl = msg.is_temp ? msg.attachment : `/storage/${msg.attachment}`;
+                    const attachmentUrl = msg.is_temp ? msg.attachment : `${appUrl}storage/${msg.attachment}`;
                     if (msg.attachment_type === 'image') {
-                        contentHtml += `<div class="mb-2"><img src="${attachmentUrl}" class="max-w-xs rounded-lg border border-gray-200 cursor-pointer hover:opacity-90 transition" onclick="window.open(this.src)" onload="scrollToBottom()"></div>`;
+                        contentHtml += `<div class="mb-2"><img src="${attachmentUrl}" class="max-w-full h-auto rounded-lg border border-gray-200 cursor-pointer hover:opacity-90 transition" onclick="window.open(this.src)" onload="scrollToBottom()"></div>`;
                     } else {
                         contentHtml += `
                             <a href="${attachmentUrl}" target="_blank" class="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200 mb-2 hover:bg-gray-100 transition text-gray-700 no-underline">
@@ -367,13 +383,13 @@
                     contentHtml += `<p class="text-sm leading-relaxed break-words">${escapeHtml(msg.body)}</p>`;
                 }
             }
-
+ 
             // RED DELETE BUBBLE OUTSIDE (Fixed hover area by making it absolute relative to bubble)
             let deleteOverlay = '';
             if (isMe && !msg.is_deleted) {
                 deleteOverlay = `
                     <div class="delete-overlay absolute top-[-10px] right-2 z-20 pointer-events-none group-hover:pointer-events-auto">
-                        <button onclick="deleteMessage('${msg.id}', this)" 
+                        <button onclick="deleteMessage('${msg.id}', this)"
                                 class="flex items-center gap-1 bg-red-500 hover:bg-red-600 text-white text-[10px] font-bold py-1 px-2 rounded-full shadow-md transition-all active:scale-95"
                                 title="Delete Message">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -385,9 +401,9 @@
                     </div>
                 `;
             }
-
+ 
             const avatarUrl = isMe ? authUserAvatar : otherUserAvatar;
-
+ 
             div.innerHTML = `
                 <div class="shrink-0 mb-1">
                     <img src="${avatarUrl}" class="w-8 h-8 rounded-full object-cover border border-gray-200 shadow-sm">
@@ -402,12 +418,12 @@
             `;
             messagesContainer.appendChild(div);
         }
-
+ 
         window.deleteMessage = function(messageId, btn) {
             if(String(messageId).startsWith('temp')) return;
             if(!confirm('Are you sure you want to delete this message?')) return;
-
-            fetch(`/conversations/${conversationId}/messages/${messageId}`, {
+ 
+            fetch(`${appUrl}conversations/${conversationId}/messages/${messageId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -436,16 +452,15 @@
                 }
             });
         };
-
+ 
         function scrollToBottom() {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
-
+ 
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
-            return div.innerHTML.replace(/\n/g, '
-');
+            return div.innerHTML.replace(/\n/g, '<br>');
         }
     });
 </script>

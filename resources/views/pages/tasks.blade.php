@@ -154,7 +154,7 @@
   <!-- FILTERS NAVBAR -->
   <section class="bg-gray-50 z-20 relative pt-4">
     <div class="max-w-7xl mx-auto px-4 md:px-6">
-      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+      <div class="bg-white border border-gray-200 rounded-2xl shadow-sm">
         <!-- Desktop Form (Hidden on mobile) -->
         <form method="GET" action="{{ route('tasks') }}" id="filters-form"
               class="flex items-center gap-4 px-6 py-3 h-16 hidden md:flex">
@@ -464,11 +464,11 @@
   </div>
  
   <!-- Main Content -->
-  <section class="bg-gray-50 pt-6 h-[700px]">
-   <div class="flex max-w-7xl mx-auto px-6 gap-6 h-full pb-6">
+ <section class="bg-gray-50 pt-6 md:pt-10 h-auto md:h-[700px] overflow-hidden">
+   <div class="flex flex-col md:flex-row max-w-7xl mx-auto px-4 md:px-6 gap-4 md:gap-6 h-full pb-6">
      
       <!-- Left: Tasks Pane -->
-      <div id="tasks-pane" class="flex flex-col w-[360px] shrink-0 h-full">
+     <div id="tasks-pane" class="flex flex-col w-full md:w-[360px] shrink-0 h-[600px] md:h-full">
         <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-3">
           @forelse (($tasks ?? []) as $task)
             @php
@@ -568,8 +568,8 @@
         </div>
       </div>
  
-      <!-- Right: Map -->
-      <div class="flex-1 bg-gray-200 rounded-xl overflow-hidden shadow-inner border border-gray-300 relative">
+    <!-- Right: Map (Hidden on mobile) -->
+      <div class="hidden md:flex flex-1 bg-gray-200 rounded-xl overflow-hidden shadow-inner border border-gray-300 relative">
         <div id="map"></div>
         <div class="pointer-events-none absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-black/5 to-transparent z-10"></div>
       </div>

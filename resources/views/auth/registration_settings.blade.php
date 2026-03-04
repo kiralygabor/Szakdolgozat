@@ -9,7 +9,48 @@
                 <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" class="h-8 w-auto">
             </a>
         </div>
-        <div>
+        <div class="flex items-center gap-3">
+            <!-- Settings dropdown -->
+            <div class="relative">
+                <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
+                    <i data-feather="settings"></i>
+                </button>
+                <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
+                    <div class="flex flex-col">
+                        <div class="group relative">
+                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+                                <i data-feather="chevron-left" class="w-4 h-4"></i>
+                                {{ __('navbar.theme') }}
+                            </div>
+                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="light">{{ __('navbar.light') }}</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="dark">{{ __('navbar.dark') }}</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="system">{{ __('navbar.system_default') }}</div>
+                            </div>
+                        </div>
+                        <div class="group relative">
+                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+                                <i data-feather="chevron-left" class="w-4 h-4"></i>
+                                {{ __('navbar.language') }}
+                            </div>
+                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">English</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">Hungarian</div>
+                            </div>
+                        </div>
+                        <div class="group relative">
+                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+                                <i data-feather="chevron-left" class="w-4 h-4"></i>
+                                {{ __('navbar.extras') }}
+                            </div>
+                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.help_faq') }}</div>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.contact_support') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <a href="{{ route('logout') }}" class="text-gray-500 hover:text-gray-700 font-medium flex items-center gap-1">
                 Cancel <span class="text-xl leading-none">&times;</span>
             </a>
@@ -87,6 +128,33 @@
                         I agree to the Minijobz <a href="#" class="text-blue-600 hover:underline">Terms & Conditions</a>, <a href="#" class="text-blue-600 hover:underline">Community Guidelines</a>, and <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a> *
                     </span>
                 </label>
+
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" name="email_notifications" value="1" class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked>
+                    <span class="text-sm text-gray-600 leading-snug">
+                        Email me when I receive an offer on my task or when my offer is accepted
+                    </span>
+                </label>
+
+                <label class="flex items-start gap-3 cursor-pointer">
+                    <input type="checkbox" name="email_task_digest" value="1" id="digest_toggle" class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <span class="text-sm text-gray-600 leading-snug">
+                        Send me a daily summary of new tasks posted in categories I follow
+                    </span>
+                </label>
+
+                <!-- category selection (shown only if digest is enabled) -->
+                <div id="category_selection" class="hidden pl-8 mt-2">
+                    <p class="text-xs font-bold text-blue-900 mb-2 uppercase tracking-wide">Select categories to track:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 border border-blue-50 rounded-lg bg-blue-50/30">
+                        @foreach($categories as $cat)
+                        <label class="flex items-center gap-2 cursor-pointer hover:bg-white p-1 rounded transition-colors">
+                            <input type="checkbox" name="tracked_categories[]" value="{{ $cat->id }}" class="w-4 h-4 text-blue-600 border-gray-300 rounded">
+                            <span class="text-sm text-gray-600">{{ $cat->name }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
             </div>
 
             <!-- Submit Button -->
@@ -103,6 +171,18 @@
     if (window.feather && typeof window.feather.replace === 'function') {
         window.feather.replace();
     }
+
+    // Toggle Category Selection visibility
+    const digestToggle = document.getElementById('digest_toggle');
+    const categorySelection = document.getElementById('category_selection');
+
+    digestToggle.addEventListener('change', function() {
+        if (this.checked) {
+            categorySelection.classList.remove('hidden');
+        } else {
+            categorySelection.classList.add('hidden');
+        }
+    });
 
     // City Autocomplete Logic
     const cityInput = document.getElementById('city_search');

@@ -135,9 +135,11 @@ class PagesController extends Controller
      public function profile(): View
     {
         $user = Auth::user();
+        $categories = Category::orderBy('name')->get();
 
         return view('pages.profile', [
             'user' => $user,
+            'categories' => $categories,
         ]);
     }
 
@@ -157,6 +159,10 @@ class PagesController extends Controller
             'birthdate'    => ['nullable', 'date', 'before:today'],
             'city_id'      => ['nullable', 'integer', 'exists:cities,id'],
             'avatar'       => ['nullable', 'image', 'max:5120'], // max 5MB
+            'email_notifications' => ['nullable', 'boolean'],
+            'email_task_digest' => ['nullable', 'boolean'],
+            'tracked_categories' => ['nullable', 'array'],
+            'tracked_categories.*' => ['integer', 'exists:categories,id'],
         ]);
 
         $user->first_name   = $request->first_name;
@@ -165,6 +171,15 @@ class PagesController extends Controller
         $user->phone_number = $request->phone_number;
         $user->birthdate    = $request->birthdate;
         $user->city_id      = $request->city_id;
+        $user->email_notifications = $request->has('email_notifications');
+        $user->email_task_digest = $request->has('email_task_digest');
+
+        // Sync categories if digest is enabled
+        if ($user->email_task_digest) {
+            $user->trackedCategories()->sync($request->input('tracked_categories', []));
+        } else {
+            $user->trackedCategories()->detach();
+        }
 
         if ($request->hasFile('avatar')) {
             // delete old avatar if exists and it's not the default asset or a Google URL

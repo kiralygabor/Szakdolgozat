@@ -14,4 +14,7 @@ return [
     'deleted' => 'Message deleted',
     'delete' => 'Delete',
     'confirm_delete' => 'Are you sure you want to delete this message?',
+    'select_chat_title' => 'Your Messages',
+    'select_chat_desc' => 'Choose a conversation from the sidebar to start messaging, or browse tasks to find new opportunities.',
+    'no_active_chats' => 'You don\'t have any active messages yet.',
 ];

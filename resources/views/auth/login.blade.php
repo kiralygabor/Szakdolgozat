@@ -16,6 +16,7 @@
       align-items: center;
       min-height: 100vh;
       flex-direction: column;
+      padding: 1.5rem;
     }
     .auth-box {
       width: 100%;

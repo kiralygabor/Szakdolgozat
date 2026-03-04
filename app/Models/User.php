@@ -31,6 +31,8 @@ class User extends Authenticatable
          'avatar',
          'google_id',
          'verified',
+         'email_notifications',
+         'email_task_digest',
     ];
 
     /**
@@ -54,6 +56,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'birthdate' => 'date:Y-m-d',
             'password' => 'hashed',
+            'email_notifications' => 'boolean',
+            'email_task_digest' => 'boolean',
         ];
     }
      public function city()
@@ -75,6 +79,13 @@ class User extends Authenticatable
     public function advertisements()
     {
         return $this->hasMany(Advertisement::class, 'employer_id', 'id');
+    }
+
+    public function trackedCategories()
+    {
+        return $this->belongsToMany(Category::class, 'tracked_categories')
+            ->withPivot('last_digest_sent_at')
+            ->withTimestamps();
     }
 
     public function reviewsReceived()

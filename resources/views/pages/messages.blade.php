@@ -173,7 +173,7 @@
         const authUserId = "{{ Auth::id() }}";
         const authUserAvatar = "{{ Auth::user()->avatar_url }}";
         const conversationId = "{{ $activeConversation ? $activeConversation->id : '' }}";
-        const appUrl = "{{ url('/') }}";
+        const appUrl = "{{ url('/') }}/";
         let otherUserAvatar = "";
         @if($activeConversation)
             otherUserAvatar = "{{ $activeConversation->getOtherUser(Auth::id())->avatar_url }}";

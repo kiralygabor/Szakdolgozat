@@ -26,7 +26,9 @@ class PagesController extends Controller
             ->get()
             ->map(function ($category) {
                 // Get 6 jobs for this category
-                $jobs = Advertisement::where('categories_id', $category->id)
+                $jobs = Advertisement::whereHas('job', function($q) use ($category) {
+                    $q->where('categories_id', $category->id);
+                })
                     ->where('status', 'open')
                     ->with(['category', 'employer.city'])
                     ->orderByDesc('created_at')
@@ -68,7 +70,9 @@ class PagesController extends Controller
         if ($request->filled('category')) {
             $categoryId = (int) $request->input('category');
             if ($categoryId > 0) {
-                $query->where('categories_id', $categoryId);
+                $query->whereHas('job', function($q) use ($categoryId) {
+                    $q->where('categories_id', $categoryId);
+                });
             }
         }
 
@@ -256,7 +260,9 @@ class PagesController extends Controller
         if ($request->filled('category')) {
             $categoryId = (int) $request->input('category');
             if ($categoryId > 0) {
-                $query->where('categories_id', $categoryId);
+                $query->whereHas('job', function($q) use ($categoryId) {
+                    $q->where('categories_id', $categoryId);
+                });
             }
         }
 

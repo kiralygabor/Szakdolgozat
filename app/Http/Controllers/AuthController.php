@@ -162,7 +162,6 @@ class AuthController extends Controller
             'email'           => $registration['email'],
             'password'        => Hash::make($registration['password']),
             'account_id'      => $accountId,
-            'subscription_id' => 1,
             'first_name'      => $validated['first_name'],
             'last_name'       => $validated['last_name'],
             'birthdate'       => $validated['birthdate'],

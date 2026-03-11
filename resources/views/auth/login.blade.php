@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login - Minijobz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
       background: #fff;
@@ -70,10 +71,14 @@
       align-items: center;
       margin-bottom: 1rem;
     }
+    .password-toggle {
+      cursor: pointer;
+      color: #777;
+    }
   </style>
 </head>
 <body>
-
+ 
 <div class="auth-wrapper">
   <div class="auth-box">
     <div style="margin-bottom: 24px;">
@@ -82,7 +87,7 @@
       </a>
     </div>
     <h2 class="auth-title">Login to your account</h2>
-
+ 
     <!-- Success / Warning / Errors -->
     @if (session('status'))
       <div class="alert alert-success">{{ session('status') }}</div>
@@ -93,13 +98,13 @@
     @if ($errors->any())
       <div class="alert alert-danger">{{ $errors->first() }}</div>
     @endif
-
+ 
     <form method="POST" action="{{ route('login.post') }}">
       @csrf
       @if(request()->has('returnUrl'))
         <input type="hidden" name="returnUrl" value="{{ request('returnUrl') }}">
       @endif
-
+ 
       <!-- Email -->
       <div class="mb-3">
         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
@@ -108,16 +113,19 @@
           <span class="text-danger small">{{ $message }}</span>
         @enderror
       </div>
-
+ 
       <!-- Password -->
       <div class="mb-3">
-        <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
-               placeholder="Password" required>
+        <div class="position-relative">
+          <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror"
+                 placeholder="Password" required>
+          <i class="fa fa-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 password-toggle" id="togglePassword"></i>
+        </div>
         @error('password')
           <span class="text-danger small">{{ $message }}</span>
         @enderror
       </div>
-
+ 
       <!-- Remember Me + Forgot Password -->
       <div class="remember-forgot">
         <div class="form-check">
@@ -129,18 +137,18 @@
           {{ __('Forgot password?') }}
         </a>
       </div>
-
+ 
       <!-- Login Button -->
       <div class="d-grid mb-3">
         <button type="submit" class="btn btn-primary">Login</button>
       </div>
-
+ 
       <div class="auth-links mb-3">
         <p class="mb-1">Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>
       </div>
-
+ 
       <div class="divider">OR</div>
-
+ 
       <!-- Google Continue -->
       <div class="d-grid mb-2">
         <a href="{{ route('login.google') }}" class="btn btn-outline">
@@ -148,7 +156,7 @@
           Login with Google
         </a>
       </div>
-
+ 
       <!-- Facebook Continue -->
       <div class="d-grid">
         <button type="button" class="btn btn-outline">
@@ -159,7 +167,7 @@
     </form>
   </div>
 </div>
-
+ 
 <!-- Forgot Password Modal -->
 <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -168,7 +176,7 @@
         <h5 class="modal-title auth-title" id="forgotPasswordModalLabel">Reset your password</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-
+ 
       <div class="modal-body">
         <form method="POST" action="{{ route('password.email') }}">
           @csrf
@@ -180,11 +188,24 @@
           </div>
         </form>
       </div>
-
+ 
     </div>
   </div>
 </div>
-
+ 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const togglePassword = document.querySelector('#togglePassword');
+  const password = document.querySelector('#password');
+ 
+  togglePassword.addEventListener('click', function (e) {
+    // toggle the type attribute
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    // toggle the eye slash icon
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+  });
+</script>
 </body>
 </html>

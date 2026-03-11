@@ -11,10 +11,10 @@ class AdvertisementsSeeder extends Seeder
     {
         // ensure required foreigns exist
         $userIds = DB::table('users')->pluck('id')->values();
-        $categoryIds = DB::table('categories')->pluck('id')->values();
+        $jobIds = DB::table('jobs')->pluck('id')->values();
         $reviewIds = DB::table('reviews')->pluck('id')->values();
 
-        if ($userIds->count() < 1 || $categoryIds->count() < 1 || $reviewIds->count() < 1) {
+        if ($userIds->count() < 1 || $jobIds->count() < 1 || $reviewIds->count() < 1) {
             return;
         }
 
@@ -30,12 +30,12 @@ class AdvertisementsSeeder extends Seeder
         for ($i = 0; $i < count($samples); $i++) {
             $employerIndex = $i % $userIds->count();
             $employeeIndex = ($i + 1) % $userIds->count();
-            $categoryIndex = $i % $categoryIds->count();
+            $jobIndex = $i % $jobIds->count();
             $reviewIndex = $i % $reviewIds->count();
 
             $sample = $samples[$i];
             $ads[] = [
-                'categories_id' => $categoryIds[$categoryIndex],
+                'jobs_id' => $jobIds[$jobIndex],
                 'reviews_id' => $reviewIds[$reviewIndex],
                 'employer_id' => $userIds[$employerIndex],
                 'employee_id' => $userIds[$employeeIndex],
@@ -53,12 +53,12 @@ class AdvertisementsSeeder extends Seeder
         $testUserId = DB::table('users')->where('email', 'test2@example.hu')->value('id');
         $fallbackEmployerId = $userIds[0] ?? null;
         $employeeId = $userIds[1] ?? $fallbackEmployerId;
-        $categoryId = $categoryIds[0] ?? null;
+        $jobId = $jobIds[0] ?? null;
         $reviewId = $reviewIds[0] ?? null;
 
-        if ($testUserId && $categoryId && $reviewId) {
+        if ($testUserId && $jobId && $reviewId) {
             $ads[] = [
-                'categories_id' => $categoryId,
+                'jobs_id' => $jobId,
                 'reviews_id' => $reviewId,
                 'employer_id' => $testUserId,
                 'employee_id' => $employeeId,

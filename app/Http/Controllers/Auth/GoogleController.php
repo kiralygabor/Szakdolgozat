@@ -40,7 +40,6 @@ class GoogleController extends Controller
                     'google_id'=> $user->id,
                     'account_id' => $accountId,
                     'verified' => true,
-                    'subscription_id' => 1,
                     'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(16))
                 ]);
 

@@ -240,7 +240,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 <div>
 <label for="categorySelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.category_label') }}</label>
-<select id="categorySelect" name="categories_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition">
+<select id="categorySelect" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition">
 <option value="">{{ __('post-task.step1.category_placeholder') }}</option>
                       @foreach($categories as $category)
 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -588,15 +588,21 @@ document.addEventListener('DOMContentLoaded', function() {
   // Form Submission
   const form = document.getElementById('postTaskForm');
   form.addEventListener('submit', function(e){
+      if (submitBtn.disabled) {
+          e.preventDefault();
+          return;
+      }
       // Update hidden fields
       const isOnline = onlineOption.classList.contains('selected');
       document.getElementById('input_task_type').value = isOnline ? 'online' : 'in-person';
       const flexibleActive = flexibleBtn && flexibleBtn.getAttribute('data-active') === 'true';
       document.getElementById('input_is_date_flexible').value = flexibleActive ? '1' : '0';
-      if (submitBtn.disabled) {
-          e.preventDefault();
-          alert("{{ __('post-task.error_header') }}");
-      }
+
+      // Disable button to prevent double-click
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+      submitBtn.innerHTML = '<i data-feather="loader" class="animate-spin w-4 h-4 inline mr-2"></i> {{ __('post-task.nav.submitting') ?? 'Submitting...' }}';
+      if (window.feather) feather.replace();
   });
   // Date dropdown functionality
   const onDateBtn = document.getElementById('onDateBtn');

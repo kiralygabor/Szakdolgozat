@@ -10,7 +10,6 @@ class Advertisement extends Model
     // Use Eloquent timestamps (created_at/updated_at)
 
     protected $fillable = [
-        'categories_id',
         'reviews_id',
         'employer_id',
         'employee_id',
@@ -42,7 +41,7 @@ class Advertisement extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'categories_id');
+        return $this->hasOneThrough(Category::class, Job::class, 'id', 'id', 'jobs_id', 'categories_id');
     }
  
     public function employer()

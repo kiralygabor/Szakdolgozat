@@ -145,6 +145,21 @@
     .step-add-btn:hover {
         background-color: #1d4ed8;
     }
+
+    /* Map Customizations */
+    .custom-task-popup .maplibregl-popup-content {
+      border-radius: 1rem;
+      padding: 0;
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      border: 1px solid rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    .custom-task-popup .maplibregl-popup-tip {
+      display: none;
+    }
+    .task-card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
   </style>
 
   <!-- MapLibre GL -->
@@ -474,7 +489,7 @@
             @php
                 $hasOffer = Auth::check() && $task->offers->contains('user_id', Auth::id());
             @endphp
-            <div class="group p-4 rounded-xl border hover:border-blue-400 hover:shadow-md transition-all duration-200 relative {{ $hasOffer ? 'bg-blue-50 border-blue-300' : 'bg-white border-gray-200' }}">
+            <div id="task-card-{{ $task->id }}" class="group task-card p-4 rounded-xl border hover:border-blue-400 hover:shadow-md transition-all duration-200 relative {{ $hasOffer ? 'bg-blue-50 border-blue-300' : 'bg-white border-gray-200' }}" data-task-id="{{ $task->id }}">
              
               <div class="flex justify-between items-start mb-1.5">
                 <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600">
@@ -712,13 +727,16 @@
     @php
       $source = ($tasks instanceof \Illuminate\Pagination\AbstractPaginator) ? $tasks->items() : ($tasks ?? []);
       $taskPoints = collect($source)->map(function($t){
+        $loc = $t->location ?? $t->employer->city->name ?? null;
+        $isRemote = $loc && stripos($loc, 'remote') !== false;
         return [ 
             'id' => $t->id ?? null, 
             'title' => $t->title ?? '', 
             'price' => (int)($t->price ?? 0), 
-            'city' => $t->employer->city->name ?? null 
+            'location' => $loc,
+            'is_remote' => $isRemote
         ];
-      })->filter(fn($r) => $r['id'] && $r['city'])->values();
+      })->filter(fn($r) => $r['id'] && $r['location'] && !$r['is_remote'])->values();
     @endphp
     const tasksData = @json($taskPoints);
 
@@ -744,34 +762,87 @@
     }
 
     (async function plotTasks(){
-      const uniqueCities = [...new Set(tasksData.map(t => t.city))];
-      const cityToCoords = {};
-      for (const city of uniqueCities) {
-        const coords = await geocodeCity(city);
-        if (coords) cityToCoords[city] = coords;
+      const locations = [...new Set(tasksData.map(t => t.location))];
+      const locationToCoords = {};
+      for (const loc of locations) {
+        const coords = await geocodeCity(loc);
+        if (coords) locationToCoords[loc] = coords;
         await new Promise(r => setTimeout(r, 400));
       }
 
       const bounds = new maplibregl.LngLatBounds();
+      const markers = {};
+
       tasksData.forEach(t => {
-        const coords = cityToCoords[t.city];
-        if (!coords) return;
+        const baseCoords = locationToCoords[t.location];
+        if (!baseCoords) return;
+
+        // Apply slight jitter to separate markers in same city
+        const jitter = 0.008;
+        const lng = baseCoords.lng + (Math.random() - 0.5) * jitter;
+        const lat = baseCoords.lat + (Math.random() - 0.5) * jitter;
 
         const el = document.createElement('div');
-        el.innerHTML = `<div class="w-3 h-3 bg-blue-600 rounded-full border-2 border-white shadow-sm"></div>`;
-        const popupHTML = `
-            <div class="px-2 py-1 text-center">
-                <div class="font-bold text-xs text-gray-800">${t.title}</div>
-                <div class="text-xs text-blue-600 font-bold">€${t.price}</div>
+        el.className = 'map-marker-container group';
+        el.style.cursor = 'pointer';
+        el.innerHTML = `
+            <div class="relative flex items-center justify-center">
+                <div class="absolute w-8 h-8 bg-blue-500/20 rounded-full animate-ping opacity-75"></div>
+                <div class="w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-lg relative z-10 transition-all duration-300 group-hover:scale-125 group-hover:bg-blue-500"></div>
             </div>
         `;
-        new maplibregl.Marker({ element: el })
-          .setLngLat([coords.lng, coords.lat])
-          .setPopup(new maplibregl.Popup({ offset: 10, closeButton: false }).setHTML(popupHTML))
+
+        const popupHTML = `
+            <div class="p-3 min-w-[180px]">
+                <div class="text-[10px] font-bold text-blue-500 uppercase tracking-wider mb-1">${t.location}</div>
+                <div class="font-bold text-sm text-gray-900 mb-1 leading-tight">${t.title}</div>
+                <div class="text-blue-600 font-extrabold text-sm mb-3">€${t.price.toLocaleString()}</div>
+                <a href="/tasks/${t.id}" class="block w-full py-2 text-center bg-blue-600 text-white text-[11px] font-bold rounded-lg hover:bg-blue-700 transition-colors no-underline">View Details</a>
+            </div>
+        `;
+
+        const marker = new maplibregl.Marker({ element: el })
+          .setLngLat([lng, lat])
+          .setPopup(new maplibregl.Popup({ 
+              offset: 15, 
+              closeButton: false,
+              className: 'custom-task-popup'
+          }).setHTML(popupHTML))
           .addTo(map);
-        bounds.extend([coords.lng, coords.lat]);
+        
+        markers[t.id] = marker;
+        bounds.extend([lng, lat]);
+
+        // Hover Effect: Card -> Marker
+        const card = document.getElementById(`task-card-${t.id}`);
+        if(card) {
+            card.addEventListener('mouseenter', () => {
+                el.querySelector('.animate-ping').classList.remove('animate-ping');
+                el.querySelector('.absolute').classList.add('scale-150', 'bg-blue-400/40');
+                el.querySelector('.z-10').classList.add('scale-150', 'bg-blue-500');
+            });
+            card.addEventListener('mouseleave', () => {
+                el.querySelector('.animate-ping')?.classList.add('animate-ping');
+                el.querySelector('.absolute').classList.remove('scale-150', 'bg-blue-400/40');
+                el.querySelector('.z-10').classList.remove('scale-150', 'bg-blue-500');
+            });
+        }
+
+        // Hover Effect: Marker -> Card
+        el.addEventListener('mouseenter', () => {
+            if(card) {
+                card.classList.add('border-blue-400', 'ring-4', 'ring-blue-50', 'shadow-xl', '-translate-y-1');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
+        el.addEventListener('mouseleave', () => {
+            if(card) {
+                card.classList.remove('border-blue-400', 'ring-4', 'ring-blue-50', 'shadow-xl', '-translate-y-1');
+            }
+        });
       });
-      if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 50, maxZoom: 14 });
+
+      if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 70, maxZoom: 13 });
     })();
 
     // 4. Dropdowns (Price/Type)

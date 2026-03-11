@@ -15,7 +15,6 @@ return new class extends Migration
 
     $table->id();
     $table->unsignedBigInteger('city_id')->nullable();
-    $table->unsignedBigInteger('subscription_id')->nullable();
 
     $table->string('account_id', 15)->unique();
     $table->string('first_name', 50)->nullable();
@@ -28,7 +27,6 @@ return new class extends Migration
     $table->boolean('verified')->default(false);
 
     $table->foreign('city_id')->references('id')->on('cities')->onDelete('set null');
-    $table->foreign('subscription_id')->references('id')->on('subscription')->onDelete('set null');
 });
 
     }

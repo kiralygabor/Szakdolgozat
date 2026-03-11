@@ -49,10 +49,11 @@ class ReviewScenarioSeeder extends Seeder
 
         // 2. Create a Completed Task where Target is Employer
         $category = Category::first() ?? Category::create(['name' => 'General']);
+        $job = \App\Models\Job::first() ?? \App\Models\Job::create(['name' => 'General Job', 'categories_id' => $category->id]);
 
         $task = Advertisement::create([
             'employer_id' => $target->id,
-            'categories_id' => $category->id,
+            'jobs_id' => $job->id,
             'title' => 'Completed Task for Review Test',
             'description' => 'This is a test task that has been completed so the reviewer can leave a review.',
             'location' => 'Remote',

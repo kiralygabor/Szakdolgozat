@@ -38,7 +38,9 @@ class SendTaskDigest extends Command
             $categoryIds = $trackedCategories->pluck('id')->toArray();
 
             // Find new tasks posted in the last 24 hours in tracked categories
-            $newTasks = Advertisement::whereIn('categories_id', $categoryIds)
+            $newTasks = Advertisement::whereHas('job', function($q) use ($categoryIds) {
+                    $q->whereIn('categories_id', $categoryIds);
+                })
                 ->where('status', 'open')
                 ->where('created_at', '>=', now()->subDay())
                 ->where('employer_id', '!=', $user->id) // Don't notify about own tasks

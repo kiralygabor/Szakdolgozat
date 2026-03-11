@@ -27,7 +27,6 @@ class User extends Authenticatable
          'password',
          'account_id',
          'city_id',
-         'subscription_id',
          'avatar',
          'google_id',
          'verified',
@@ -65,10 +64,7 @@ class User extends Authenticatable
         return $this->belongsTo(City::class);
     }
 
-    public function subscription()
-    {
-        return $this->belongsTo(Subscription::class);
-    }
+
      public function verifyUser()
     {
         return $this->hasOne(VerifyUser::class);

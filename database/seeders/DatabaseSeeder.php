@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             CitiesSeeder::class,
             CategoriesSeeder::class,
             ReviewsSeeder::class,
-            SubscriptionsSeeder::class,
             UsersSeeder::class,
             AdvertisementsSeeder::class,
             JobsSeeder::class,

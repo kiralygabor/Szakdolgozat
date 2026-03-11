@@ -56,7 +56,6 @@ class PostTaskTest extends TestCase
             'price' => 150,
             'location' => 'Budapest',
             'task_type' => 'in-person',
-            'categories_id' => $category->id,
             'jobs_id' => $jobId,
             'is_date_flexible' => 0,
         ];
@@ -68,7 +67,6 @@ class PostTaskTest extends TestCase
         $this->assertDatabaseHas('advertisements', [
             'title' => 'Test Task',
             'employer_id' => $user->id,
-            'categories_id' => $category->id,
             'price' => 150,
         ]);
     }

@@ -1,171 +1,369 @@
 @extends('layout')
-
+ 
 @section('content')
 <div class="bg-white text-slate-900 font-sans antialiased">
-    
-    <!-- Hero Section: Clean & Focused -->
-    <section class="relative bg-[#f6f8fa] py-16 md:py-24 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div class="z-10">
-                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                    {!! __('howitworks.hero_title') !!}
-                </h1>
-                <p class="mt-6 text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
-                    {{ __('howitworks.hero_desc') }}
-                </p>
-                <div class="mt-10">
-                    <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg hover:shadow-indigo-200">
-                        {{ __('howitworks.hero_btn') }}
+   
+    <!-- Hero Section (Text Left, Image Right) -->
+    <section class="relative bg-[#f8fafc] py-20 md:py-28 overflow-hidden border-b border-slate-100">
+        <div class="absolute top-0 right-0 w-1/3 h-full bg-indigo-50/40 hidden lg:block -skew-x-12 translate-x-24"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Text -->
+                <div class="max-w-xl">
+                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+                        Post your first task <br>
+                        <span class="text-indigo-600">in minutes</span>
+                    </h1>
+                    <p class="mt-6 text-lg md:text-xl text-slate-600 leading-relaxed">
+                        Whether you need a hand around the house or a specialized professional, Minijobz is the easiest way to get things done.
+                    </p>
+                    <div class="mt-10">
+                        <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
+                            Post a task
+                        </a>
+                    </div>
+                </div>
+                <!-- Image -->
+                <div class="relative">
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
+                        <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1000&q=80" alt="Professional tasker" class="w-full h-auto object-contain">
+                    </div>
+                    <div class="absolute -top-6 -right-6 w-32 h-32 bg-indigo-100 rounded-full mix-blend-multiply opacity-60"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- SECTION 1 (Image LEFT, Text RIGHT) -->
+    <section class="py-20 md:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Image FIRST (Left) -->
+                <div class="relative lg:order-1">
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
+                        <img src="{{ asset('assets/img/Basics.jpg') }}" alt="Describe what you need" class="w-full h-auto object-contain">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-50 rounded-full"></div>
+                </div>
+                <!-- Text SECOND (Right) -->
+                <div class="lg:order-2">
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Describe what you need</h2>
+                    <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
+                        It’s free to post. Simply tell us what you need done, when and where you need it. You can even upload photos to help Taskers understand the job.
+                    </p>
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Set a realistic budget</li>
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Choose a date and time</li>
+                    </ul>
+                    <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
+                        Post a task
                     </a>
                 </div>
             </div>
-            <div class="relative">
-                <!-- Using a more lifestyle-oriented image placeholder -->
-                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6954?auto=format&fit=crop&w=800&q=80" alt="Person working" class="rounded-2xl shadow-2xl z-10 relative">
-                <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-indigo-100 rounded-full -z-0"></div>
-            </div>
         </div>
     </section>
-
-    <!-- How it Works: The Z-Pattern Layout -->
-    <section class="py-24 px-6">
-        <div class="max-w-6xl mx-auto space-y-32">
-            
-            <!-- Step 1 -->
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="order-2 md:order-1">
-                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="Post a task" class="rounded-2xl shadow-xl">
-                </div>
-                <div class="order-1 md:order-2">
-                    <span class="text-indigo-600 font-bold uppercase tracking-widest text-sm">{{ __('howitworks.step1.badge') }}</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6">{{ __('howitworks.step1.title') }}</h2>
-                    <p class="text-lg text-slate-600 leading-relaxed">
-                        {{ __('howitworks.step1.desc') }}
-                    </p>
-                    <ul class="mt-6 space-y-3">
-                        <li class="flex items-center gap-3 text-slate-700"><i data-feather="check" class="text-emerald-500 w-5"></i> {{ __('howitworks.step1.item1') }}</li>
-                        <li class="flex items-center gap-3 text-slate-700"><i data-feather="check" class="text-emerald-500 w-5"></i> {{ __('howitworks.step1.item2') }}</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <span class="text-indigo-600 font-bold uppercase tracking-widest text-sm">{{ __('howitworks.step2.badge') }}</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6">{{ __('howitworks.step2.title') }}</h2>
-                    <p class="text-lg text-slate-600 leading-relaxed">
-                        {{ __('howitworks.step2.desc') }}
-                    </p>
-                    <div class="mt-8 p-6 bg-slate-50 rounded-xl border-l-4 border-indigo-500 italic text-slate-600">
-                        {!! __('howitworks.step2.quote') !!}
-                    </div>
-                </div>
-                <div>
-                    <img src="https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&w=800&q=80" alt="Pick a tasker" class="rounded-2xl shadow-xl">
-                </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div class="order-2 md:order-1">
-                    <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=800&q=80" alt="Job done" class="rounded-2xl shadow-xl">
-                </div>
-                <div class="order-1 md:order-2">
-                    <span class="text-indigo-600 font-bold uppercase tracking-widest text-sm">{{ __('howitworks.step3.badge') }}</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-6">{{ __('howitworks.step3.title') }}</h2>
-                    <p class="text-lg text-slate-600 leading-relaxed">
-                        {{ __('howitworks.step3.desc') }}
-                    </p>
-                    <div class="mt-8 flex gap-4">
-                        <div class="flex -space-x-3">
-                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/100?u=1" alt="">
-                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/100?u=2" alt="">
-                            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white" src="https://i.pravatar.cc/100?u=3" alt="">
-                        </div>
-                        <p class="text-sm text-slate-500 self-center">{{ __('howitworks.step3.users_count') }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trust & Safety Section: Icon Grid -->
-    <section class="bg-slate-900 py-24 text-white">
+ 
+    <!-- SECTION 2 (Text LEFT, Image RIGHT) -->
+    <section class="py-20 md:py-28 bg-slate-50">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold">{{ __('howitworks.safety.title') }}</h2>
-                <p class="mt-4 text-slate-400 text-lg">{{ __('howitworks.safety.desc') }}</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-12 text-center">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Text FIRST (Left) -->
                 <div>
-                    <div class="mx-auto w-16 h-16 bg-indigo-500/20 flex items-center justify-center rounded-full mb-6 text-indigo-400">
-                        <i data-feather="shield" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">{{ __('howitworks.safety.insurance_title') }}</h3>
-                    <p class="text-slate-400">{{ __('howitworks.safety.insurance_desc') }}</p>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Set your budget</h2>
+                    <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
+                        You're in control of your budget. Set the price you're willing to pay, or let Taskers suggest their own rates. Compare offers and choose the one that fits your needs and budget best.
+                    </p>
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Set your own price or receive quotes</li>
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Compare offers from multiple Taskers</li>
+                    </ul>
+                    <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
+                        Post a task
+                    </a>
                 </div>
-                <div>
-                    <div class="mx-auto w-16 h-16 bg-indigo-500/20 flex items-center justify-center rounded-full mb-6 text-indigo-400">
-                        <i data-feather="lock" class="w-8 h-8"></i>
+                <!-- Image SECOND (Right) -->
+                <div class="relative">
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
+                        <img src="{{ asset('assets/img/Budget.jpg') }}" alt="Set your budget" class="w-full h-auto object-contain">
                     </div>
-                    <h3 class="text-xl font-bold mb-3">{{ __('howitworks.safety.payments_title') }}</h3>
-                    <p class="text-slate-400">{{ __('howitworks.safety.payments_desc') }}</p>
-                </div>
-                <div>
-                    <div class="mx-auto w-16 h-16 bg-indigo-500/20 flex items-center justify-center rounded-full mb-6 text-indigo-400">
-                        <i data-feather="star" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">{{ __('howitworks.safety.reviews_title') }}</h3>
-                    <p class="text-slate-400">{{ __('howitworks.safety.reviews_desc') }}</p>
+                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- Earn Money Section: Two-Tone CTA -->
-    <section class="py-24 px-6 bg-white text-center">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl font-bold mb-6">{{ __('howitworks.earn.title') }}</h2>
-            <p class="text-xl text-slate-600 mb-10 leading-relaxed">
-                {{ __('howitworks.earn.desc') }}
+ 
+    <!-- SECTION 3 (Image LEFT, Text RIGHT) -->
+    <section class="py-20 md:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Image FIRST (Left) -->
+                <div class="relative lg:order-1">
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
+                        <img src="{{ asset('assets/img/Offer.jpg') }}" alt="Review & Choose" class="w-full h-auto object-contain">
+                    </div>
+                    <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
+                </div>
+                <!-- Text SECOND (Right) -->
+                <div class="lg:order-2">
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Review & Choose</h2>
+                    <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
+                        Receive quotes from available Taskers. Review their profiles, ratings, and completion rates to find the perfect match for your task.
+                    </p>
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium">
+                            <i data-feather="user-check" class="text-emerald-500 w-6 h-6"></i>
+                            View Tasker profiles and reviews
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium">
+                            <i data-feather="message-square" class="text-emerald-500 w-6 h-6"></i>
+                            Chat directly with Taskers
+                        </li>
+                    </ul>
+                    <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
+                        Post a task
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- SECTION 4 (Text LEFT, Image RIGHT) -->
+    <section class="py-20 md:py-28 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Text FIRST (Left) -->
+                <div>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Get it done</h2>
+                    <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
+                        When the task is complete, simply release the payment. It's that easy! Your payment is held securely by Minijobz Pay until the job is finished.
+                    </p>
+                    <div class="flex items-center gap-6 mb-10">
+                        <div class="flex -space-x-4">
+                            <img class="h-14 w-14 rounded-full ring-4 ring-white" src="https://i.pravatar.cc/100?u=11" alt="">
+                            <img class="h-14 w-14 rounded-full ring-4 ring-white" src="https://i.pravatar.cc/100?u=12" alt="">
+                            <img class="h-14 w-14 rounded-full ring-4 ring-white" src="https://i.pravatar.cc/100?u=13" alt="">
+                        </div>
+                        <p class="text-lg font-bold text-slate-500">20,000+ happy users</p>
+                    </div>
+                    <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
+                        Post a task
+                    </a>
+                </div>
+                <!-- Image SECOND (Right) -->
+                <div class="relative">
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
+                        <img src="{{ asset('assets/img/Task_Complete.jpg') }}" alt="Get it done" class="w-full h-auto object-contain">
+                    </div>
+                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+<!-- REDESIGNED Safety Section: We've got you covered -->
+    <section class="py-20 md:py-28 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Main Heading -->
+                <div>
+                    <h2 class="text-5xl md:text-6xl font-black text-[#000033] tracking-tighter leading-none mb-8">
+                        We've got you covered
+                    </h2>
+                    <p class="text-xl md:text-2xl text-[#000033] leading-snug mb-10 max-w-md">
+                        Whether you’re a posting a task or completing a task, you can do both with the peace of mind that Minijobz is there to support.
+                    </p>
+                </div>
+ 
+                <!-- Right: Two Column Features -->
+                <div class="grid sm:grid-cols-2 gap-12">
+                    <div>
+                        <div class="text-[#000033] mb-4">
+                            <i data-feather="user" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#000033] mb-4">Public liability insurance</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            Minijobz Insurance covers you for any accidental injury to the customer or property damage whilst performing certain task activities.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="text-[#000033] mb-4">
+                            <i data-feather="star" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#000033] mb-4">Top rated insurance</h3>
+                        <p class="text-slate-600 leading-relaxed">
+                            Minijobz Insurance is provided by world-class partners, ensuring some of the world’s most reputable, stable and innovative insurance support.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- NEW Section: Ratings & Reviews -->
+    <section class="py-20 md:py-28 bg-slate-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Image with Decorative Circle -->
+                <div class="relative">
+                    <!-- Main Image -->
+                    <div class="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-slate-200">
+                        <img src="{{ asset('assets/img/Review.jpg') }}" alt="Tasker" class="w-full h-auto object-contain">
+                    </div>
+ 
+                    <!-- Decorative Circle -->
+                    <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
+                </div>
+ 
+                <!-- Right: Text Content -->
+                <div class="lg:pl-12">
+                    <h2 class="text-5xl md:text-6xl font-black text-[#000033] tracking-tighter leading-none mb-8">
+                        Ratings & reviews
+                    </h2>
+                    <p class="text-lg md:text-xl text-[#000033] leading-relaxed mb-10">
+                        Review Tasker's portfolios, skills, badges on their profile, and see their transaction verified ratings, reviews & completion rating (to see their reliability) on tasks they’ve previously completed on Minijobz. This empowers you to make sure you’re choosing the right person for your task.
+                    </p>
+                    <a href="{{ route('post-task') }}" class="inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
+                        Get started for free
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- NEW Section: Communication -->
+    <section class="py-20 md:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Image Container -->
+                <div class="relative">
+                    <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
+                        <img src="{{ asset('assets/img/Messages.jpg') }}" alt="Communication" class="w-full h-auto object-contain">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-40 h-40 bg-indigo-50 rounded-full -z-0"></div>
+                </div>
+ 
+                <!-- Right: Text Content -->
+                <div class="lg:pl-12">
+                    <h2 class="text-5xl md:text-6xl font-black text-[#000033] tracking-tighter leading-none mb-8">
+                        Communication
+                    </h2>
+                    <p class="text-lg md:text-xl text-[#000033] leading-relaxed mb-10">
+                        Use Minijobz to stay in contact from the moment your task is posted until it’s completed. Accept an offer and you can privately message the Tasker to discuss final details, and get your task completed.
+                    </p>
+                    <a href="{{ route('post-task') }}" class="inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
+                        Get started for free
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+ 
+    <!-- Take Minijobz Anywhere - Modern App Card -->
+    <section class="py-24 px-4 md:px-6 bg-white transition-colors duration-300">
+     
+      <!-- Main Gradient Card -->
+      <div class="max-w-7xl mx-auto bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[2.5rem] shadow-2xl overflow-hidden relative">
+       
+        <!-- Decorative Background Glows -->
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-white opacity-10 blur-[120px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-400 opacity-20 blur-[100px] rounded-full pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
+ 
+        <div class="grid lg:grid-cols-12 gap-12 items-center relative z-10 p-8 md:p-16">
+         
+          <!-- Left Content (Text + Buttons) -->
+          <div class="lg:col-span-7 flex flex-col justify-center text-center lg:text-left">
+            <div class="inline-flex items-center justify-center lg:justify-start gap-2 mb-6">
+              <span class="px-3 py-1 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-100 text-xs font-bold uppercase tracking-widest backdrop-blur-sm">
+                {{ __('index.mobile_app_badge') }}
+              </span>
+            </div>
+           
+            <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
+              @lang('index.mobile_app_title')
+            </h2>
+           
+            <p class="text-lg text-indigo-100 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              {{ __('index.mobile_app_desc') }}
             </p>
-            <a href="#" class="inline-block border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white font-bold py-4 px-10 rounded-full transition-all">
-                {{ __('howitworks.earn.btn') }}
-            </a>
-        </div>
-    </section>
-
-    <!-- App Download Section: Modern Mockup Style -->
-    <section class="bg-indigo-600 py-20 px-6 overflow-hidden">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div class="text-white">
-                <h2 class="text-4xl font-bold mb-6">{{ __('howitworks.app.title') }}</h2>
-                <p class="text-indigo-100 text-lg mb-8">{{ __('howitworks.app.desc') }}</p>
+ 
+            <!-- Buttons & QR Row -->
+            <div class="flex flex-col sm:flex-row items-center gap-8 justify-center lg:justify-start">
+             
+              <!-- Store Buttons (Updated to White) -->
                 <div class="flex gap-4">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-12 cursor-pointer">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-12 cursor-pointer">
+                  <a href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-12 cursor-pointer transition-transform hover:scale-105">
+                  </a>
+                  <a href="#">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-12 cursor-pointer transition-transform hover:scale-105">
+                  </a>
                 </div>
-            </div>
-            <div class="relative flex justify-center">
-                <!-- Simple Mobile Placeholder -->
-                <div class="w-64 h-[500px] bg-slate-800 rounded-[3rem] border-[8px] border-slate-900 shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 w-full h-6 bg-slate-900"></div>
-                    <div class="p-4 space-y-4">
-                        <div class="h-4 w-3/4 bg-slate-700 rounded mt-8"></div>
-                        <div class="h-32 w-full bg-slate-700 rounded"></div>
-                        <div class="h-4 w-full bg-slate-700 rounded"></div>
-                        <div class="h-4 w-2/3 bg-slate-700 rounded"></div>
-                    </div>
+ 
+              <!-- Divider for Mobile -->
+              <div class="hidden sm:block w-px h-24 bg-indigo-400/30"></div>
+ 
+              <!-- QR Code Block -->
+              <div class="hidden sm:flex flex-col items-center gap-3">
+                <div class="p-2 bg-white rounded-xl shadow-inner">
+                  <!-- Placeholder QR Code -->
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=MinijobzAppDownload" alt="Scan to download" class="w-24 h-24 mix-blend-multiply opacity-90">
                 </div>
+                <span class="text-xs font-medium text-indigo-200 tracking-wide uppercase">{{ __('index.scan_to_install') }}</span>
+              </div>
+           
             </div>
+          </div>
+ 
+          <!-- Right Image (Phone Mockup) -->
+          <div class="lg:col-span-5 relative flex justify-center lg:justify-end h-full min-h-[300px] lg:min-h-auto mt-8 lg:mt-0">
+            <!-- The Image Container - Tilted Effect -->
+            <div class="relative w-64 md:w-80 lg:w-[22rem] transition-transform duration-500 hover:scale-[1.02] hover:-rotate-1">
+              <!-- Phone Shadow/Glow -->
+              <div class="absolute inset-4 bg-indigo-900 rounded-[3rem] blur-2xl opacity-60"></div>
+             
+              <!-- Actual Image -->
+              <img
+                src="https://assets.codepen.io/7729268/iphone-mockup-minijobz.png"
+                onerror="this.src='assets/img/phone_14_01.webp'"
+                alt="Minijobz App Interface"
+                class="relative z-10 drop-shadow-2xl transform lg:translate-y-12"
+              >
+             
+              <!-- Floating Elements (Decoration) -->
+              <div class="absolute -left-8 top-1/4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 3s;">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
+                    <i data-feather="check" class="w-4 h-4"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-gray-900">Task Completed!</p>
+                    <p class="text-[10px] text-gray-500">Payment Released</p>
+                  </div>
+                </div>
+              </div>
+ 
+              <!-- Notification Card -->
+              <div class="absolute -right-4 bottom-8 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
+                 <div class="flex items-center gap-3">
+                  <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
+                  <div>
+                    <p class="text-xs font-bold text-gray-900">New Offer: $45</p>
+                    <p class="text-[10px] text-gray-500">James W. is interested</p>
+                  </div>
+                </div>
+              </div>
+ 
+            </div>
+          </div>
+ 
         </div>
+      </div>
     </section>
-
+ 
 </div>
-
+ 
 <script>
-    // Initialize Feather icons
     feather.replace();
 </script>
 @endsection
+ 

@@ -698,25 +698,14 @@
         <div class="flex flex-col sm:flex-row items-center gap-8 justify-center lg:justify-start">
           
           <!-- Store Buttons (Updated to White) -->
-          <div class="flex flex-col gap-3 w-full sm:w-auto">
-            <!-- Apple Button -->
-            <a href="#" class="flex items-center gap-3 bg-white hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-xl transition-all duration-300 shadow-lg hover:-translate-y-1">
-              <img src="assets/img/apple.svg" alt="Apple Logo" class="w-8 h-8">
-              <div class="text-left leading-none">
-                <div class="text-[10px] uppercase tracking-wide opacity-60 mb-1">Download on the</div>
-                <div class="text-base font-bold font-sans">App Store</div>
-              </div>
-            </a>
-            
-            <!-- Google Play Button -->
-            <a href="#" class="flex items-center gap-3 bg-white hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-xl transition-all duration-300 shadow-lg hover:-translate-y-1">
-              <img src="assets/img/google-play.svg" alt="Google Play Logo" class="w-7 h-7">
-              <div class="text-left leading-none">
-                <div class="text-[10px] uppercase tracking-wide opacity-60 mb-1">Get it on</div>
-                <div class="text-base font-bold font-sans">Google Play</div>
-              </div>
-            </a>
-          </div>
+            <div class="flex gap-4">
+              <a href="#">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="h-12 cursor-pointer transition-transform hover:scale-105">
+              </a>
+              <a href="#">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-12 cursor-pointer transition-transform hover:scale-105">
+              </a>
+            </div>
 
           <!-- Divider for Mobile -->
           <div class="hidden sm:block w-px h-24 bg-indigo-400/30"></div>

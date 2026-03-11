@@ -12,7 +12,6 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         $cityId = DB::table('cities')->value('id');
-        $subId = DB::table('subscription')->value('id');
 
         $users = [
             [
@@ -77,7 +76,6 @@ class UsersSeeder extends Seeder
                     'password' => Hash::make('password'),
                     'email' => $u['email'],
                     'city_id' => $cityId,
-                    'subscription_id' => $subId,
                     'verified' => 1,
                     'created_at' => now(),
                     'updated_at' => now(),

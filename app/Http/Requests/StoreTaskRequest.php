@@ -45,7 +45,6 @@ class StoreTaskRequest extends FormRequest
         'is_date_flexible' => ['boolean'],
         'preferred_time' => ['nullable', 'array'],
         'preferred_time.*' => ['in:morning,midday,afternoon,evening'],
-        'categories_id' => ['nullable','exists:categories,id'],
         'jobs_id' => ['required', 'exists:jobs,id'],
         'photos.*' => ['nullable','image','max:5120'],
     ];

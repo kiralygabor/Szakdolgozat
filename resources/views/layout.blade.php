@@ -1263,10 +1263,10 @@
     {{-- =========================================
          FLOATING SUPPORT CHATBOT
          ========================================= --}}
-    <!-- Floating Button -->
+    <!-- Floating Button 
     <button id="chatbot-toggle" onclick="toggleChatbot()" class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-indigo-300 hover:bg-indigo-700 hover:-translate-y-1 transition-all z-[100] focus:outline-none">
         <i data-feather="message-circle" class="w-6 h-6"></i>
-    </button>
+    </button>-->
 
     <!-- Chatbot Window -->
     <div id="chatbot-window" class="fixed bottom-24 right-6 w-[90vw] max-w-[380px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[100] flex flex-col transition-all duration-300 transform opacity-0 translate-y-4 pointer-events-none" style="height: 500px; max-height: 70vh;">
@@ -1284,7 +1284,7 @@
             <button onclick="toggleChatbot()" class="text-white hover:text-indigo-200 transition focus:outline-none rounded p-1">
                 <i data-feather="x" class="w-5 h-5"></i>
             </button>
-        </div>
+        </div> 
 
         <!-- Chat Area -->
         <div id="chatbot-messages" class="flex-1 p-4 bg-gray-50 overflow-y-auto flex flex-col gap-4 custom-scrollbar">

@@ -431,25 +431,24 @@
   <div style="position: relative;">
     @auth
       @php
-        $mobileUser = auth()->user();
-        $mobileFullName = trim(($mobileUser->first_name ?? '') . ' ' . ($mobileUser->last_name ?? ''))
-            ?: ($mobileUser->name ?? $mobileUser->email);
-        $mobileAvatarSrc = $mobileUser->avatar_url;
+        $currentUser = auth()->user();
+        $fullName = trim(($currentUser->first_name ?? '') . ' ' . ($currentUser->last_name ?? ''))
+            ?: ($currentUser->name ?? $currentUser->email);
+        $avatarSrc = $currentUser->avatar_url;
+        $unreadCount = $currentUser->unreadNotifications()->count();
+        $notifications = $currentUser->notifications()->limit(5)->get();
       @endphp
       <button class="mobile-profile-btn" id="mobileProfileBtn" type="button">
-        <img src="{{ $mobileAvatarSrc }}" alt="Profile">
-        @php
-          $mobileUnread = auth()->user()->unreadNotifications()->count();
-        @endphp
-        @if($mobileUnread > 0)
-          <span style="position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#ef4444;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;">{{ $mobileUnread }}</span>
+        <img src="{{ $avatarSrc }}" alt="Profile">
+        @if($unreadCount > 0)
+          <span style="position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#ef4444;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;">{{ $unreadCount }}</span>
         @endif
       </button>
 
       {{-- Mobile profile dropdown --}}
       <div class="mobile-profile-dropdown" id="mobileProfileDropdown">
         <a href="{{ route('public-profile', auth()->id()) }}" class="mobile-profile-dropdown-user block no-underline transition-colors hover:bg-indigo-50">
-          <h4 class="text-sm font-bold text-gray-900 group-hover:text-indigo-600 mb-0">{{ $mobileFullName }}</h4>
+          <h4 class="text-sm font-bold text-gray-900 group-hover:text-indigo-600 mb-0">{{ $fullName }}</h4>
           <p class="text-xs text-gray-500 mt-1 mb-0">{{ __('navbar.public_profile') }}</p>
         </a>
         <div class="mobile-profile-dropdown-links">
@@ -461,8 +460,8 @@
           </a>
           <a href="{{ route('notifications') }}">
             <i data-feather="bell"></i> {{ __('navbar.notifications') }}
-            @if($mobileUnread > 0)
-              <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;">{{ $mobileUnread }}</span>
+            @if($unreadCount > 0)
+              <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;">{{ $unreadCount }}</span>
             @endif
           </a>
           <a href="{{ route('profile') }}">
@@ -513,9 +512,9 @@
 
   @auth
     <a href="{{ route('public-profile', auth()->id()) }}" class="mobile-sidebar-user flex items-center gap-3 no-underline transition-colors hover:bg-indigo-50">
-      <img src="{{ $mobileAvatarSrc }}" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200">
+      <img src="{{ $avatarSrc }}" alt="Profile" class="w-10 h-10 rounded-full object-cover border border-gray-200">
       <div>
-        <div class="mobile-sidebar-user-name text-sm font-bold text-gray-900">{{ $mobileFullName }}</div>
+        <div class="mobile-sidebar-user-name text-sm font-bold text-gray-900">{{ $fullName }}</div>
         <div class="mobile-sidebar-user-sub text-xs text-gray-400">{{ __('navbar.public_profile') }}</div>
       </div>
     </a>
@@ -555,8 +554,8 @@
       </a>
       <a href="{{ route('notifications') }}" class="mobile-sidebar-link">
         <i data-feather="bell"></i> {{ __('navbar.notifications') }}
-        @if($mobileUnread > 0)
-          <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;">{{ $mobileUnread }}</span>
+        @if($unreadCount > 0)
+          <span style="margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;">{{ $unreadCount }}</span>
         @endif
       </a>
     @endauth
@@ -724,12 +723,6 @@
   @auth
     <!-- Right: avatar dropdown -->
     <div class="relative ml-auto pr-4">
-      @php
-        $currentUser = auth()->user();
-        $fullName = trim(($currentUser->first_name ?? '') . ' ' . ($currentUser->last_name ?? ''))
-            ?: ($currentUser->name ?? $currentUser->email);
-        $avatarSrc = $currentUser->avatar_url;
-      @endphp
       <button type="button" class="rounded-full overflow-hidden w-9 h-9 ring-1 ring-gray-300 hover:ring-gray-400" onclick="toggleMenu()">
         <img src="{{ $avatarSrc }}" alt="Profile" class="w-full h-full object-cover">
       </button>
@@ -776,10 +769,6 @@
           <svg viewBox="0 0 448 512" class="bell">
             <path d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path>
           </svg>
-          @php
-              $unreadCount = auth()->user()->unreadNotifications()->count();
-              $notifications = auth()->user()->notifications()->limit(5)->get();
-          @endphp
           @if($unreadCount > 0)
             <span class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white bg-red-500 rounded-full border border-white transform translate-x-1 -translate-y-1">
                 {{ $unreadCount }}

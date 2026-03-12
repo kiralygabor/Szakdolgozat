@@ -219,11 +219,7 @@
                         class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
                   <option value="">All Services</option>
                   @if($filters['category'] ?? '')
-                    @php
-                        $selectedCategory = $categories->firstWhere('id', $filters['category']);
-                        $jobs = $selectedCategory ? $selectedCategory->jobs : [];
-                    @endphp
-                    @foreach($jobs as $job)
+                    @foreach(($selectedCategoryJobs ?? []) as $job)
                         <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
                             {{ $job->name }}
                         </option>
@@ -862,29 +858,15 @@
     setupDropdown('price-btn', 'price-menu');
     setupDropdown('type-btn', 'type-menu');
 
-    const categoriesData = @json($categories);
+    // Simplified category change logic - just submit to get new jobs
+    document.getElementById('category-filter')?.addEventListener('change', (e) => {
+        const jobFilter = document.getElementById('job-filter');
+        if (jobFilter) jobFilter.value = ''; // Reset job when category changes
+        document.getElementById('filters-form').submit();
+    });
 
-    ['category-filter', 'sort-filter', 'job-filter'].forEach(id => {
+    ['sort-filter', 'job-filter'].forEach(id => {
         document.getElementById(id)?.addEventListener('change', (e) => {
-            if (id === 'category-filter') {
-                const categoryId = e.target.value;
-                const jobFilter = document.getElementById('job-filter');
-                const jobContainer = document.getElementById('job-filter-container');
-                
-                if (categoryId) {
-                    const category = categoriesData.find(c => c.id == categoryId);
-                    if (category && category.jobs) {
-                        jobFilter.innerHTML = '<option value="">All Services</option>';
-                        category.jobs.forEach(j => {
-                            jobFilter.innerHTML += `<option value="${j.id}">${j.name}</option>`;
-                        });
-                        jobContainer.classList.remove('hidden');
-                    }
-                } else {
-                    jobContainer.classList.add('hidden');
-                    jobFilter.value = '';
-                }
-            }
             document.getElementById('filters-form').submit();
         });
     });

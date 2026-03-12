@@ -19,4 +19,16 @@ class Category extends Model
     public function jobs() {
         return $this->hasMany(Job::class, 'categories_id');
     }
+
+    public function advertisements()
+    {
+        return $this->hasManyThrough(
+            Advertisement::class,
+            Job::class,
+            'categories_id', // Foreign key on jobs table...
+            'jobs_id',       // Foreign key on advertisements table...
+            'id',            // Local key on categories table...
+            'id'             // Local key on jobs table...
+        );
+    }
 }

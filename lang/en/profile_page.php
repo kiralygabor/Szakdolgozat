@@ -22,6 +22,7 @@ return [
         'email' => 'Email',
         'phone' => 'Phone Number',
         'save' => 'Save Profile',
+        'update_success' => 'Profile has been updated successfully',
         'confirm_update' => 'Are you sure you want to update your data?',
         'confirm_delete' => 'Are you sure you want to delete your account? This action cannot be undone.',
     ],

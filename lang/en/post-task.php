@@ -63,5 +63,6 @@ return [
         'back' => 'Back',
         'next' => 'Next',
         'get_quotes' => 'Get quotes',
+        'submitting' => 'Submitting...',
     ],
 ];

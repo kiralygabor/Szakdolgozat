@@ -22,6 +22,7 @@ return [
         'email' => 'Email',
         'phone' => 'Telefonszám',
         'save' => 'Profil mentése',
+        'update_success' => 'A profil sikeresen frissítve lett.',
         'confirm_update' => 'Biztosan módosítja az adatait?',
         'confirm_delete' => 'Biztosan törölni szeretné a fiókját? Ez a művelet nem vonható vissza.',
     ],

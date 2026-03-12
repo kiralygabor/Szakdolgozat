@@ -63,5 +63,6 @@ return [
         'back' => 'Vissza',
         'next' => 'Következő',
         'get_quotes' => 'Ajánlatkérés',
+        'submitting' => 'Küldés...',
     ],
 ];

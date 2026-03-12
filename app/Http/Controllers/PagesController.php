@@ -19,30 +19,27 @@ class PagesController extends Controller
 {
     public function index() : View
     {
-        // Get categories excluding "Renovations & Construction" and "Events"
+        // Get categories excluding specific ones
         $excludedCategories = ['Renovations & Construction', 'Events', 'Renovation & Construction', 'Events & Creative'];
+        
+        // Use eager loading to avoid N+1 queries
         $categories = Category::whereNotIn('name', $excludedCategories)
+            ->with(['advertisements' => function($query) {
+                $query->where('status', 'open')
+                      ->with(['employer.city'])
+                      ->orderByDesc('created_at');
+            }])
             ->orderBy('name')
             ->get()
+            ->filter(function ($category) {
+                // Only include categories that have at least one job
+                return $category->advertisements->count() > 0;
+            })
             ->map(function ($category) {
-                // Get 6 jobs for this category
-                $jobs = Advertisement::whereHas('job', function($q) use ($category) {
-                    $q->where('categories_id', $category->id);
-                })
-                    ->where('status', 'open')
-                    ->with(['category', 'employer.city'])
-                    ->orderByDesc('created_at')
-                    ->limit(6)
-                    ->get();
-
                 return [
                     'category' => $category,
-                    'jobs' => $jobs,
+                    'jobs' => $category->advertisements->take(6),
                 ];
-            })
-            ->filter(function ($item) {
-                // Only include categories that have at least one job
-                return $item['jobs']->count() > 0;
             });
 
         return view('pages.index', [
@@ -327,32 +324,34 @@ class PagesController extends Controller
             $query->orderByRaw('(SELECT COUNT(*) FROM offers WHERE offers.advertisement_id = advertisements.id AND offers.user_id = ?) DESC', [$userId]);
         }
 
+        // Only fetch what we need for the task list
         $tasks = $query->paginate(20)->withQueryString();
-        $categories = Category::with('jobs')->orderBy('name')->get();
-        $cities = City::orderBy('name')->get();
+
+        // OPTIMIZATION: Only fetch Category names for the dropdown, not the whole job tree
+        $categories = Category::orderBy('name')->get(['id', 'name']);
+        
+        // We only need the jobs for the selected category if one is filtered
+        $selectedCategoryJobs = [];
+        if ($request->filled('category')) {
+            $selectedCategoryJobs = Job::where('categories_id', $request->input('category'))->orderBy('name')->get(['id', 'name']);
+        }
 
         $missingSteps = [];
         $user = Auth::user();
 
         if ($user) {
-            if (empty($user->avatar)) {
-                $missingSteps[] = 'Upload a profile picture';
-            }
-            if (empty($user->birthdate)) {
-                $missingSteps[] = 'Add your date of birth';
-            }
-            if (empty($user->phone_number)) {
-                $missingSteps[] = 'Verify your mobile';
-            }
-            if (empty($user->city_id)) {
-                $missingSteps[] = 'Add your location';
-            }
+            $missingSteps = array_filter([
+                empty($user->avatar) ? 'Upload a profile picture' : null,
+                empty($user->birthdate) ? 'Add your date of birth' : null,
+                empty($user->phone_number) ? 'Verify your mobile' : null,
+                empty($user->city_id) ? 'Add your location' : null,
+            ]);
         }
 
         return view('pages.tasks', [
             'tasks' => $tasks,
             'categories' => $categories,
-            'cities' => $cities,
+            'selectedCategoryJobs' => $selectedCategoryJobs,
             'filters' => [
                 'q' => (string) $request->query('q', ''),
                 'city_search' => (string) $request->query('city_search', ''),
@@ -363,7 +362,6 @@ class PagesController extends Controller
                 'max_price' => $maxPrice,
                 'type' => $type,
             ],
-
             'missingSteps' => $missingSteps,
         ]);
     }
@@ -524,7 +522,10 @@ class PagesController extends Controller
 
     public function showTask($id): View
     {
-        $task = Advertisement::with(['category', 'employer.city', 'offers.user'])->findOrFail($id);
+        // Optimized loading: only category and employer, plus count of offers
+        $task = Advertisement::with(['category', 'employer'])
+            ->withCount('offers')
+            ->findOrFail($id);
 
         // Increment view count
         $task->increment('views');
@@ -533,22 +534,15 @@ class PagesController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            if (empty($user->avatar)) {
-                $missingSteps[] = 'Upload a profile picture';
-            }
-            if (empty($user->birthdate)) {
-                $missingSteps[] = 'Add your date of birth';
-            }
-            if (empty($user->phone_number)) {
-                $missingSteps[] = 'Verify your mobile';
-            }
-            if (empty($user->city_id)) {
-                $missingSteps[] = 'Add your location';
-            }
+            $missingSteps = array_filter([
+                empty($user->avatar) ? 'Upload a profile picture' : null,
+                empty($user->birthdate) ? 'Add your date of birth' : null,
+                empty($user->phone_number) ? 'Verify your mobile' : null,
+                empty($user->city_id) ? 'Add your location' : null,
+            ]);
         }
 
         return view('pages.task-details', [
-            'task' => $task,
             'task' => $task,
             'missingSteps' => $missingSteps,
         ]);

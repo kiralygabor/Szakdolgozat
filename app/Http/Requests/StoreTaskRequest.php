@@ -40,13 +40,14 @@ class StoreTaskRequest extends FormRequest
             // When task_type is online, prepareForValidation sets location to "Online"
             'location' => ['required_if:task_type,in-person','string','max:150'],
         'task_type' => ['required','in:in-person,online'],
-        'required_date' => ['nullable','date','after_or_equal:today'],
-        'required_before_date' => ['nullable','date','after_or_equal:today'],
+        'required_date' => $this->isMethod('post') ? ['nullable','date','after_or_equal:today'] : ['nullable','date'],
+        'required_before_date' => $this->isMethod('post') ? ['nullable','date','after_or_equal:today'] : ['nullable','date'],
         'is_date_flexible' => ['boolean'],
         'preferred_time' => ['nullable', 'array'],
         'preferred_time.*' => ['in:morning,midday,afternoon,evening'],
         'jobs_id' => ['required', 'exists:jobs,id'],
         'photos.*' => ['nullable','image','max:5120'],
+        'employee_id' => ['nullable', 'exists:users,id'],
     ];
 }
 }

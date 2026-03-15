@@ -25,7 +25,8 @@ class Advertisement extends Model
         'preferred_time',
         'task_type',
         'photos',
-        'jobs_id'
+        'jobs_id',
+        'is_direct'
     ];
 
     protected $casts = [
@@ -35,8 +36,9 @@ class Advertisement extends Model
         'required_before_date' => 'date',
         'price' => 'integer',
         'is_date_flexible' => 'boolean',
-        'photos' => 'array',
-        'preferred_time' => 'array'
+        'photos',
+        'preferred_time' => 'array',
+        'is_direct' => 'boolean'
     ];
 
     public function category()
@@ -62,5 +64,10 @@ class Advertisement extends Model
     public function offers()
     {
         return $this->hasMany(Offer::class, 'advertisement_id');
+    }
+
+    public function distinctViews()
+    {
+        return $this->hasMany(AdvertisementView::class, 'advertisement_id');
     }
 }

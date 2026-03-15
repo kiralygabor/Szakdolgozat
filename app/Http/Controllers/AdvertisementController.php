@@ -7,6 +7,8 @@ use App\Models\Advertisement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\DirectQuoteReceivedNotification;
+use App\Notifications\DirectQuoteCancelledNotification;
 
 class AdvertisementController extends Controller
 {
@@ -36,7 +38,18 @@ class AdvertisementController extends Controller
     $advert->employer_id = Auth::id();
     $advert->expiration_date = now()->addDays(30);
     $advert->status = 'open';
+    if ($advert->employee_id) {
+        $advert->is_direct = true;
+    }
     $advert->save();
+
+    // Send notification if it was a direct quote request
+    if ($advert->employee_id) {
+        $employee = \App\Models\User::find($advert->employee_id);
+        if ($employee) {
+            $employee->notify(new DirectQuoteReceivedNotification($advert, Auth::user()));
+        }
+    }
 
     return redirect()->route('my-tasks')->with('success', 'Your task has been posted successfully!');
 }
@@ -87,6 +100,14 @@ class AdvertisementController extends Controller
         if (is_array($advertisement->photos)) {
             foreach ($advertisement->photos as $p) {
                 Storage::disk('public')->delete($p);
+            }
+        }
+
+        // Send notification if it was a direct quote request
+        if ($advertisement->employee_id) {
+            $employee = \App\Models\User::find($advertisement->employee_id);
+            if ($employee) {
+                $employee->notify(new DirectQuoteCancelledNotification($advertisement, Auth::user()));
             }
         }
 

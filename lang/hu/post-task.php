@@ -65,4 +65,6 @@ return [
         'get_quotes' => 'Ajánlatkérés',
         'submitting' => 'Küldés...',
     ],
+    'requesting_quote_from' => 'Ajánlatkérés tőle:',
+    'requesting_quote_desc' => 'Ez a feladat kifejezetten neki lesz elküldve.',
 ];

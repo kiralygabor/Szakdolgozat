@@ -32,6 +32,7 @@ class User extends Authenticatable
          'verified',
          'email_notifications',
          'email_task_digest',
+         'email_direct_quotes',
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'email_notifications' => 'boolean',
             'email_task_digest' => 'boolean',
+            'email_direct_quotes' => 'boolean',
         ];
     }
      public function city()

@@ -7,11 +7,14 @@ use App\Models\Advertisement;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Job;
+use App\Models\AdvertisementView;
 use App\Http\Requests\StoreTaskRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
+use App\Notifications\DirectQuoteReceivedNotification;
+use App\Notifications\DirectQuoteCancelledNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -26,6 +29,7 @@ class PagesController extends Controller
         $categories = Category::whereNotIn('name', $excludedCategories)
             ->with(['advertisements' => function($query) {
                 $query->where('status', 'open')
+                      ->whereNull('employee_id')
                       ->with(['employer.city'])
                       ->orderByDesc('created_at');
             }])
@@ -49,7 +53,7 @@ class PagesController extends Controller
 
     public function mainpage(Request $request): View
     {
-        $query = Advertisement::where('status', 'open')->with(['category', 'employer.city']);
+        $query = Advertisement::where('status', 'open')->whereNull('employee_id')->with(['category', 'employer.city']);
 
         if ($request->filled('q')) {
             $q = trim((string) $request->query('q'));
@@ -162,6 +166,7 @@ class PagesController extends Controller
             'avatar'       => ['nullable', 'image', 'max:5120'], // max 5MB
             'email_notifications' => ['nullable', 'boolean'],
             'email_task_digest' => ['nullable', 'boolean'],
+            'email_direct_quotes' => ['nullable', 'boolean'],
             'tracked_categories' => ['nullable', 'array'],
             'tracked_categories.*' => ['integer', 'exists:categories,id'],
         ]);
@@ -174,6 +179,7 @@ class PagesController extends Controller
         $user->city_id      = $request->city_id;
         $user->email_notifications = $request->has('email_notifications');
         $user->email_task_digest = $request->has('email_task_digest');
+        $user->email_direct_quotes = $request->has('email_direct_quotes');
 
         // Sync categories if digest is enabled
         if ($user->email_task_digest) {
@@ -223,9 +229,9 @@ class PagesController extends Controller
 
     public function category(): View
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::orderByRaw("name = 'Other' ASC, name ASC")->get();
         $jobsByCategory = Job::whereIn('categories_id', $categories->pluck('id'))
-            ->orderBy('name')
+            ->orderByRaw("name = 'Other' ASC, name ASC")
             ->get()
             ->groupBy('categories_id');
 
@@ -236,7 +242,7 @@ class PagesController extends Controller
     }
     public function tasks(Request $request): View
     {
-        $query = Advertisement::where('status', 'open')->with(['category', 'employer.city', 'offers']);
+        $query = Advertisement::where('status', 'open')->whereNull('employee_id')->with(['category', 'employer.city', 'offers']);
 
         // Multi-search by q (title, description, category name, city name)
         if ($request->filled('q')) {
@@ -297,6 +303,14 @@ class PagesController extends Controller
             });
         }
 
+        $userId = Auth::id();
+        if ($userId) {
+            // Priority 1: My own tasks
+            $query->orderByRaw('CASE WHEN employer_id = ? THEN 1 ELSE 0 END DESC', [$userId]);
+            // Priority 2: Tasks where I have an active offer
+            $query->orderByRaw('(SELECT COUNT(*) FROM offers WHERE offers.advertisement_id = advertisements.id AND offers.user_id = ?) DESC', [$userId]);
+        }
+
         // Sorting
         $sort = (string) $request->query('sort', 'recent');
         switch ($sort) {
@@ -318,22 +332,16 @@ class PagesController extends Controller
                 $query->orderByDesc('created_at');
         }
 
-        $userId = Auth::id();
-        if ($userId) {
-            // Put tasks with my offers at the top
-            $query->orderByRaw('(SELECT COUNT(*) FROM offers WHERE offers.advertisement_id = advertisements.id AND offers.user_id = ?) DESC', [$userId]);
-        }
-
         // Only fetch what we need for the task list
         $tasks = $query->paginate(20)->withQueryString();
 
         // OPTIMIZATION: Only fetch Category names for the dropdown, not the whole job tree
-        $categories = Category::orderBy('name')->get(['id', 'name']);
+        $categories = Category::orderByRaw("name = 'Other' ASC, name ASC")->get(['id', 'name']);
         
         // We only need the jobs for the selected category if one is filtered
         $selectedCategoryJobs = [];
         if ($request->filled('category')) {
-            $selectedCategoryJobs = Job::where('categories_id', $request->input('category'))->orderBy('name')->get(['id', 'name']);
+            $selectedCategoryJobs = Job::where('categories_id', $request->input('category'))->orderByRaw("name = 'Other' ASC, name ASC")->get(['id', 'name']);
         }
 
         $missingSteps = [];
@@ -401,22 +409,27 @@ class PagesController extends Controller
         $viewMode = $request->query('view', 'posted'); // 'posted' or 'applied'
 
         $query = Advertisement::query()
-            ->with(['category', 'employer.city', 'offers.user'])
-            ->withCount('offers');
+            ->with(['category', 'employer.city', 'offers.user', 'employee'])
+            ->withCount(['offers', 'distinctViews as views']);
 
         // Context Switch
         if ($viewMode === 'applied') {
-            // Tasks I have applied to (where I have an offer)
-            $query->whereHas('offers', function($q) use ($userId) {
-                $q->where('user_id', $userId);
+            // Tasks I have applied to (where I have an offer) OR where I'm the requested employee
+            $query->where(function($q) use ($userId) {
+                $q->whereHas('offers', function($sub) use ($userId) {
+                    $sub->where('user_id', $userId);
+                })->orWhere('employee_id', $userId);
             });
+        } elseif ($viewMode === 'direct') {
+            // Direct quote requests I SENT (started as direct)
+            $query->where('employer_id', $userId)->where('is_direct', true);
         } else {
-            // Tasks I posted (default)
-            $query->where('employer_id', $userId);
+            // General Tasks I posted (started as public)
+            $query->where('employer_id', $userId)->where('is_direct', false);
         }
 
         // Filter by task status (posted, pending, completed)
-        $status = $request->string('status', '');
+        $status = (string) $request->query('status', '');
 
         // If no status is explicitly set, set default defaults per view mode
         if (empty($status)) {
@@ -425,7 +438,8 @@ class PagesController extends Controller
 
         switch ($status) {
             case 'pending':
-                $query->where('status', 'pending');
+            case 'assigned':
+                $query->where('status', 'assigned');
                 break;
             case 'completed':
                 $query->where('status', 'completed'); 
@@ -455,10 +469,43 @@ class PagesController extends Controller
         // Sort by most recent first
         $query->orderByDesc('created_at');
 
+        // Handle single task focus from #fragment in browser-side or task_id query
+        $requestedTaskId = (int) $request->query('task_id');
+        
+        // Explicitly fetch the requested task if it's not in the regular query to ensure it exists and belongs to user
+        $focusedTask = null;
+        if ($requestedTaskId) {
+            $focusedTaskQuery = Advertisement::with(['category', 'employer.city', 'offers.user', 'employee'])
+                ->withCount(['offers', 'distinctViews as views'])
+                ->where('id', $requestedTaskId)
+                ->where(function($q) use ($userId) {
+                    $q->where('employer_id', $userId)
+                      ->orWhere('employee_id', $userId)
+                      ->orWhereHas('offers', fn($off) => $off->where('user_id', $userId));
+                });
+
+            // Apply the same status filter so a task can't appear on the wrong tab
+            switch ($status) {
+                case 'pending':
+                case 'assigned':
+                    $focusedTaskQuery->where('status', 'assigned');
+                    break;
+                case 'completed':
+                    $focusedTaskQuery->where('status', 'completed');
+                    break;
+                default:
+                    $focusedTaskQuery->where('status', 'open');
+                    break;
+            }
+
+            $focusedTask = $focusedTaskQuery->first();
+        }
+
         $tasks = $query->paginate(20)->withQueryString();
 
         return view('pages.mytasks', [
             'tasks' => $tasks,
+            'focusedTask' => $focusedTask,
             'viewMode' => $viewMode,
             'filters' => [
                 'q' => (string) $request->query('q', ''),
@@ -479,15 +526,21 @@ class PagesController extends Controller
         return view('pages.messages');
     }
 
-    public function postTask(): View
+    public function postTask(Request $request): View
     {
         $categories = Category::with(['jobs' => function($query) {
-            $query->orderBy('name');
-        }])->orderBy('name')->get();
+            $query->orderByRaw("name = 'Other' ASC, name ASC");
+        }])->orderByRaw("name = 'Other' ASC, name ASC")->get();
 
         $otherJobId = Job::where('name', 'Other')->value('id');
+        
+        $targetUserId = old('employee_id', $request->input('for_user'));
+        $targetUser = null;
+        if ($targetUserId) {
+            $targetUser = \App\Models\User::find($targetUserId);
+        }
 
-        return view('pages.post-task', compact('categories', 'otherJobId'));
+        return view('pages.post-task', compact('categories', 'otherJobId', 'targetUser'));
     }
 
     /**
@@ -514,10 +567,26 @@ class PagesController extends Controller
         $advertisement->created_at = now();
         $advertisement->expiration_date = now()->addDays(30); // Tasks expire in 30 days
         $advertisement->status = 'open';
+        if ($advertisement->employee_id) {
+            $advertisement->is_direct = true;
+        }
 
         $advertisement->save();
 
-        return redirect()->route('my-tasks')->with('success', 'Your task has been posted successfully!');
+        if ($advertisement->employee_id) {
+            $employee = \App\Models\User::find($advertisement->employee_id);
+            if ($employee) {
+                $employee->notify(new DirectQuoteReceivedNotification($advertisement, Auth::user()));
+            }
+        }
+
+        if ($advertisement->is_direct) {
+            return redirect()->route('my-tasks', ['view' => 'direct', 'status' => 'posted', 'task_id' => $advertisement->id])
+                ->with('success', 'Your quote request has been sent successfully!');
+        }
+
+        return redirect()->route('my-tasks', ['status' => 'posted', 'task_id' => $advertisement->id])
+            ->with('success', 'Your task has been posted successfully!');
     }
 
     public function showTask($id): View
@@ -527,8 +596,30 @@ class PagesController extends Controller
             ->withCount('offers')
             ->findOrFail($id);
 
-        // Increment view count
-        $task->increment('views');
+        // Record distinct view
+        $ip = request()->ip();
+        $userId = Auth::id();
+
+        if ($userId) {
+            // Logged in user: unique by user_id
+            AdvertisementView::firstOrCreate([
+                'advertisement_id' => $task->id,
+                'user_id' => $userId,
+            ], [
+                'ip_address' => $ip,
+            ]);
+        } else {
+            // Guest: unique by IP for this task
+            AdvertisementView::firstOrCreate([
+                'advertisement_id' => $task->id,
+                'user_id' => null,
+                'ip_address' => $ip,
+            ]);
+        }
+
+        // Update the main views count on the task based on unique viewers
+        $distinctCount = AdvertisementView::where('advertisement_id', $task->id)->count();
+        $task->update(['views' => $distinctCount]);
 
         $missingSteps = [];
         $user = Auth::user();
@@ -580,10 +671,18 @@ class PagesController extends Controller
             $canReview = ($completedTasksCount > $givenReviewsCount);
         }
 
+        // Fetch user's open tasks for display on their profile
+        $activeTasks = \App\Models\Advertisement::where('employer_id', $user->id)
+            ->where('status', 'open')
+            ->latest()
+            ->take(3)
+            ->get();
+
         return view('pages.public-profile', [
             'user' => $user,
             'reviews' => $user->reviewsReceived()->latest()->get(),
-            'canReview' => $canReview
+            'canReview' => $canReview,
+            'activeTasks' => $activeTasks,
         ]);
     }
 

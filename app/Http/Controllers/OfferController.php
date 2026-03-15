@@ -46,6 +46,12 @@ class OfferController extends Controller
         // Notify the employer
         $task->employer->notify(new \App\Notifications\NewOfferNotification($offer, $task, $user));
 
+        // If it's a direct task, redirect back to "My Tasks" (Applied tab) instead of browse tasks list
+        if ($task->is_direct) {
+            return redirect()->route('my-tasks', ['view' => 'applied', 'task_id' => $task->id])
+                ->with('success', 'Your quote has been sent successfully!');
+        }
+
         return redirect()->route('tasks')
             ->with('success', 'Your offer has been sent to the task owner.');
     }
@@ -63,16 +69,54 @@ class OfferController extends Controller
         // Update offer status
         $offer->update(['status' => 'accepted']);
 
-        // Update the task status to 'pending' and assign employee
+        // Update the task status to 'assigned' and assign employee
         $task->update([
-            'status' => 'pending',
+            'status' => 'assigned',
             'employee_id' => $offer->user_id,
         ]);
 
         // Notify the Tasker
         $offer->user->notify(new \App\Notifications\OfferAcceptedNotification($task, $user));
 
-        return redirect()->back()->with('success', 'Offer accepted! You can now message the Tasker.');
+        // Redirect to the correct view based on whether it's a direct task
+        $redirectParams = ['status' => 'pending', 'task_id' => $task->id];
+        if ($task->is_direct) {
+            $redirectParams['view'] = 'direct';
+        }
+
+        return redirect()->route('my-tasks', $redirectParams)
+            ->with('success', 'Offer accepted! You can now message the Tasker.');
+    }
+
+    /**
+     * Accept a direct quote request at the employer's budget — skip the offer step entirely.
+     */
+    public function acceptDirect(Advertisement $task): RedirectResponse
+    {
+        $user = Auth::user();
+        if (!$user) {
+            abort(403);
+        }
+
+        // Only the requested employee can accept
+        if ((int) $task->employee_id !== (int) $user->id) {
+            abort(403, 'You are not the requested tasker for this task.');
+        }
+
+        if ($task->status !== 'open') {
+            return redirect()->back()->with('error', 'This task is no longer open.');
+        }
+
+        // Directly assign the task
+        $task->update([
+            'status' => 'assigned',
+        ]);
+
+        // Notify the employer that their direct request was accepted
+        $task->employer->notify(new \App\Notifications\OfferAcceptedNotification($task, $user));
+
+        return redirect()->route('my-tasks', ['view' => 'applied', 'status' => 'pending', 'task_id' => $task->id])
+            ->with('success', 'You accepted the task! You can now message the employer.');
     }
 
     public function destroy(Advertisement $task): RedirectResponse

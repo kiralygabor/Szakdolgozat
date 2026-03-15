@@ -8,7 +8,7 @@
         @php
             $progressWidth = '1/3'; // Default open
             $isOpen = $task->status === 'open';
-            $isAssigned = $task->status === 'pending'; // In this app, pending = assigned/in-progress
+            $isAssigned = $task->status === 'assigned'; // In this app, assigned = in-progress
             $isCompleted = $task->status === 'completed';
             
             if ($isAssigned) {
@@ -136,7 +136,7 @@
                             <div class="px-2 py-1 bg-green-50 text-green-700 rounded-md text-[10px] font-bold uppercase tracking-wide border border-green-100">
                                 {{ __('task_details.status.open') }}
                             </div>
-                        @elseif($task->status === 'pending')
+                        @elseif($task->status === 'assigned')
                             <div class="px-2 py-1 bg-yellow-50 text-yellow-700 rounded-md text-[10px] font-bold uppercase tracking-wide border border-yellow-100">
                                 {{ __('task_details.status.assigned') }}
                             </div>
@@ -161,7 +161,9 @@
                             
                             {{-- Price Input with Currency Prefix --}}
                             <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">{{ __('task_details.form.your_offer') }}</label>
+                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">
+                                    {{ (auth()->id() == $task->employee_id) ? __('Your Quote') : __('task_details.form.your_offer') }}
+                                </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <span class="text-gray-500 font-bold sm:text-sm">£</span>
@@ -177,14 +179,14 @@
                                 <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">{{ __('task_details.form.message') }}</label>
                                 <textarea name="message" rows="3"
                                     class="w-full px-3 py-2.5 bg-gray-50 border border-transparent text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent transition-all resize-none"
-                                    placeholder="{{ __('task_details.form.message_placeholder') }}" required></textarea>
+                                    placeholder="{{ (auth()->id() == $task->employee_id) ? __('Add a message with your quote...') : __('task_details.form.message_placeholder') }}" required></textarea>
                             </div>
                         </div>
 
                         <!-- Action Buttons -->
                         <div class="space-y-2">
                             <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 transform transition-all active:scale-[0.98] flex items-center justify-center gap-2 text-sm">
-                                <span>{{ __('task_details.form.submit') }}</span>
+                                <span>{{ (auth()->id() == $task->employee_id) ? __('Send Quote') : __('task_details.form.submit') }}</span>
                                 <i data-feather="arrow-right" class="w-4 h-4"></i>
                             </button>
                             

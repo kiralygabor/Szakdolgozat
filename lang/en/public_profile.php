@@ -29,4 +29,12 @@ return [
     'work_with_footer_desc' => 'Send a request to start a project together.',
     'contact_me' => 'Contact :name',
     'viewing_own_profile' => 'You are viewing your own profile',
+    'looking_for_tasker' => ':name is looking for a Tasker',
+    'looking_for_help' => ':name is looking for help with',
+    'are_you_the_one' => 'Are you the one?',
+    'make_an_offer' => 'Make an offer',
+    'see_all_tasks' => 'See all :count tasks',
+    'work_with_footer' => 'Want to work with :name?',
+    'work_with_footer_action' => 'Post a task and request a quote',
+    'request_quote' => 'Request a quote',
 ];

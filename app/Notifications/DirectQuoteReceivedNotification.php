@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OfferAcceptedNotification extends Notification
+class DirectQuoteReceivedNotification extends Notification
 {
     use Queueable;
 
@@ -25,11 +25,13 @@ class OfferAcceptedNotification extends Notification
 
     /**
      * Get the notification's delivery channels.
+     *
+     * @return array<int, string>
      */
     public function via(object $notifiable): array
     {
         $channels = ['database'];
-        if ($notifiable->email_notifications) {
+        if ($notifiable->email_direct_quotes) {
             $channels[] = 'mail';
         }
         return $channels;
@@ -40,28 +42,29 @@ class OfferAcceptedNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = route('tasks.show', ['task' => $this->task->id]);
-
         return (new MailMessage)
-            ->subject('Your Offer Was Accepted!')
-            ->greeting('Great news, ' . $notifiable->first_name . '!')
-            ->line($this->employer->first_name . ' has **accepted** your offer for the task **"' . $this->task->title . '"**.')
-            ->line('You can now start working on this task and communicate with the employer through the messaging system.')
-            ->action('View Task', $url)
-            ->line('Good luck with the task!');
+            ->subject('New Quote Request from ' . $this->employer->first_name)
+            ->greeting('Hello ' . $notifiable->first_name . ',')
+            ->line($this->employer->first_name . ' has requested a quote from you for their task: "' . $this->task->title . '".')
+            ->line('Budget: $' . $this->task->price)
+            ->action('View Task & Send Offer', route('my-tasks', ['view' => 'applied', 'task_id' => $this->task->id]))
+            ->line('Send them an offer to get started!');
     }
 
     /**
      * Get the array representation of the notification.
+     *
+     * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => $this->employer->first_name . ' has accepted your offer',
-            'message' => $this->employer->first_name . ' accepted your offer for "' . $this->task->title . '"',
-            'link' => route('tasks.show', ['task' => $this->task->id]),
+            'type' => 'new_quote_request',
+            'title' => 'New Quote Request',
+            'message' => $this->employer->first_name . ' has requested a quote from you for: "' . $this->task->title . '".',
+            'link' => route('my-tasks', ['view' => 'applied', 'task_id' => $this->task->id]),
             'task_id' => $this->task->id,
-            'type' => 'success'
+            'requester_id' => $this->employer->id,
         ];
     }
 }

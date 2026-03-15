@@ -151,19 +151,21 @@
                 @endforelse
             </div>
         </div>
+
+
     </div>
 </div>
 
 @if(auth()->id() !== $user->id)
 {{-- Sticky Bottom Bar --}}
-<div class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-gray-100 p-4 z-50 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         <div>
-            <h4 class="font-bold text-gray-900 text-base">{{ __('public_profile.work_with', ['name' => $user->first_name]) }}</h4>
-            <p class="text-xs text-gray-500 hidden md:block">{{ __('public_profile.work_with_footer_desc') }}</p>
+            <h4 class="font-bold text-gray-900 text-base">{{ __('public_profile.work_with_footer', ['name' => $user->first_name]) }}</h4>
+            <p class="text-sm text-gray-500 hidden md:block">{{ __('public_profile.work_with_footer_action') }}</p>
         </div>
-        <a href="#" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-100 text-sm">
-            {{ __('public_profile.contact_me', ['name' => $user->first_name]) }}
+        <a href="{{ route('post-task', ['for_user' => $user->id]) }}" class="bg-blue-600 text-white px-8 py-3.5 rounded-full font-bold hover:bg-blue-700 active:scale-95 transition-all text-sm whitespace-nowrap">
+            {{ __('public_profile.request_quote') }}
         </a>
     </div>
 </div>

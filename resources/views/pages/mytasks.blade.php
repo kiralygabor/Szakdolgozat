@@ -106,32 +106,79 @@
         .hero-right { padding: 32px 24px; border-top: 1px solid #E5E7EB; }
     }
 
+    /* --- IMPROVED DROPDOWN --- */
     .more-options-container { position: absolute; top: 30px; right: 30px; z-index: 20; }
+
     .more-btn {
-        width: 44px; height: 44px; border-radius: 50%;
-        background: #EEF2FF; border: 1px solid #E5E7EB;
-        color: #4B5563; display: flex; align-items: center; justify-content: center;
-        cursor: pointer; transition: all 0.2s;
+        width: 38px; height: 38px; border-radius: 50%;
+        background: #FFFFFF; border: 1px solid #E2E8F0;
+        color: #64748B; display: flex; align-items: center; justify-content: center;
+        cursor: pointer; transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
-    
+    .more-btn:hover { 
+        background: #F8FAFC; color: #0F172A; border-color: #CBD5E1; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
     .custom-dropdown {
-        position: absolute; right: 0; top: 55px;
-        background: white; width: 220px;
-        border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        padding: 8px; opacity: 0; transform: translateY(-10px); pointer-events: none;
-        transition: all 0.2s ease;
+        position: absolute; right: 0; top: 48px;
+        background: #FFFFFF;
+        border-radius: 14px;
+        box-shadow: 0 16px 32px -4px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+        border: 1px solid #E2E8F0;
+        padding: 8px;
+        opacity: 0;
+        transform: scale(0.92) translateY(-8px);
+        transform-origin: top right;
+        pointer-events: none;
+        transition: opacity 0.18s cubic-bezier(0.16,1,0.3,1), transform 0.18s cubic-bezier(0.16,1,0.3,1);
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        min-width: max-content;
     }
-    .custom-dropdown.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .custom-dropdown.show { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+
     .dropdown-item {
-        display: flex; align-items: center; gap: 10px;
-        padding: 10px 12px; color: #374151; text-decoration: none;
-        font-size: 14px; font-weight: 500; border-radius: 8px;
+        display: flex; align-items: center; justify-content: center; gap: 7px;
+        padding: 9px 16px; border-radius: 9px;
+        font-size: 13px; font-weight: 700;
+        border: 1.5px solid transparent;
+        cursor: pointer; transition: all 0.15s ease;
+        text-decoration: none; white-space: nowrap;
+        background: transparent;
     }
-    .dropdown-item:hover { background: #F3F4F6; color: #111827; }
+
+    /* Edit Item — Blue */
+    .dropdown-item.edit {
+        background: #EFF6FF;
+        color: #2563EB;
+        border-color: #BFDBFE;
+    }
+    .dropdown-item.edit:hover {
+        background: #DBEAFE;
+        border-color: #93C5FD;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+        transform: translateY(-1px);
+    }
+
+    /* Danger Item — Red */
+    .dropdown-item.danger {
+        background: #FEF2F2;
+        color: #DC2626;
+        border-color: #FECACA;
+    }
+    .dropdown-item.danger:hover {
+        background: #FEE2E2;
+        border-color: #FCA5A5;
+        box-shadow: 0 2px 8px rgba(220,38,38,0.15);
+        transform: translateY(-1px);
+    }
 
     /* Task Content */
-    .task-label { color: #6B7280; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; display: block; }
-    .task-main-title { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; color: #111827; }
+    .task-label { color: #6B7280; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-flex; align-items: center; line-height: 1; margin-bottom: 0; }
+    .task-main-title { font-size: 32px; font-weight: 800; line-height: 1.2; margin-top: 4px; margin-bottom: 10px; color: #111827; }
     .price-display { font-size: 36px; font-weight: 700; color: #2563EB; margin: 24px 0; letter-spacing: -1px; }
 
     .data-row { display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-start; }
@@ -192,7 +239,6 @@
     }
     .filter-btn.active { background: #FFFFFF; color: #2563EB; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 
-    /* --- Modal & Overlays --- */
     /* --- Modal & Overlays --- */
     .task-details-modal {
         position: fixed; inset: 0; display: flex; justify-content: center; align-items: flex-start;
@@ -281,38 +327,41 @@
             $tasksCollection = $tasks ?? collect([]);
             $hasTasks = $tasksCollection->count() > 0;
             
-            if ($hasTasks) {
-                // Check if a specific task ID was clicked via URL query
-                $requestedTaskId = request('task_id');
-                
-                if ($requestedTaskId && $tasksCollection->contains('id', $requestedTaskId)) {
-                    $activeTask = $tasksCollection->where('id', $requestedTaskId)->first();
-                    $otherTasks = $tasksCollection->where('id', '!=', $requestedTaskId)->values();
-                } else {
-                    $activeTask = $tasksCollection->first();
-                    $otherTasks = $tasksCollection->slice(1)->values();
-                }
-                
+            $activeTask = $focusedTask ?? ($hasTasks ? $tasksCollection->first() : null);
+            
+            if ($activeTask) {
+                $otherTasks = $tasksCollection->where('id', '!=', $activeTask->id)->values();
                 $offerCount = $activeTask->offers_count ?? 0; 
                 $hasOffers = $offerCount > 0;
                 $viewCount = $activeTask->views ?? 0;
-                
-                // Offers only visible if task is Open AND we are the employer (default view)
-                // If applying, we might want different logic?
-                // Actually, if I am the employee, I shouldn't see OTHER people's offers details, 
-                // but maybe just my own? For now, 'mytasks' relies on showing offers list.
-                // We'll hide the generic offers list if we are in 'applied' mode, and show OUR offer details.
-                
-                $showOffers = $activeTask->status === 'open' && ($viewMode ?? 'posted') === 'posted';
+                $showOffers = $activeTask->status === 'open' && in_array(($viewMode ?? 'posted'), ['posted', 'direct']);
             }
         @endphp
 
-        {{-- MAIN TABS (Context Switcher) --}}
+        <script>
+            (function() {
+                const hash = window.location.hash;
+                if (hash && hash.startsWith('#task-')) {
+                    const taskId = hash.replace('#task-', '');
+                    const url = new URL(window.location.href);
+                    if (url.searchParams.get('task_id') !== taskId) {
+                        url.searchParams.set('task_id', taskId);
+                        window.location.href = url.toString();
+                    }
+                }
+            })();
+        </script>
+
+        {{-- MAIN TABS --}}
         <div class="flex justify-center mb-8">
             <div class="modern-tabs-wrapper">
                 <a href="{{ route('my-tasks', ['view' => 'posted']) }}" 
                    class="modern-tab {{ ($viewMode ?? 'posted') === 'posted' ? 'active' : '' }}">
                    {{ __('mytasks.tabs.posted') }}
+                </a>
+                <a href="{{ route('my-tasks', ['view' => 'direct']) }}" 
+                   class="modern-tab {{ ($viewMode ?? 'posted') === 'direct' ? 'active' : '' }}">
+                   {{ __('Direct Requests') }}
                 </a>
                 <a href="{{ route('my-tasks', ['view' => 'applied']) }}" 
                    class="modern-tab {{ ($viewMode ?? 'posted') === 'applied' ? 'active' : '' }}">
@@ -321,44 +370,40 @@
             </div>
         </div>
 
-        {{-- SCENARIO 1: TASKS EXIST --}}
-            <!-- Dashboard Header: Search & Filters -->
-            <div class="controls-bar">
-                <form method="GET" action="{{ route('my-tasks') }}" class="modern-search-wrapper hidden md:block">
-                    <i data-feather="search" class="search-icon" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input name="q" value="{{ $filters['q'] ?? '' }}" type="text" placeholder="{{ __('mytasks.search_placeholder') }}" class="modern-search-input" autocomplete="off">
-                    <input type="hidden" name="status" value="{{ $filters['status'] ?? 'posted' }}">
-                    <input type="hidden" name="view" value="{{ $viewMode ?? 'posted' }}">
-                </form>
+        {{-- CONTROLS BAR --}}
+        <div class="controls-bar">
+            <form method="GET" action="{{ route('my-tasks') }}" class="modern-search-wrapper hidden md:block">
+                <i data-feather="search" class="search-icon" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; width: 18px; height: 18px;"></i>
+                <input name="q" value="{{ $filters['q'] ?? '' }}" type="text" placeholder="{{ __('mytasks.search_placeholder') }}" class="modern-search-input" autocomplete="off">
+                <input type="hidden" name="status" value="{{ $filters['status'] ?? 'posted' }}">
+                <input type="hidden" name="view" value="{{ $viewMode ?? 'posted' }}">
+            </form>
 
-                <div class="modern-filter-group">
-                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'posted'])) }}" class="filter-btn {{ ($filters['status'] ?? 'posted') === 'posted' ? 'active' : '' }}">{{ __('mytasks.filters.posted') }}</a>
-                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'pending'])) }}" class="filter-btn {{ ($filters['status'] ?? '') === 'pending' ? 'active' : '' }}">{{ __('mytasks.filters.pending') }}</a>
-                    <a href="{{ route('my-tasks', array_merge(request()->query(), ['status' => 'completed'])) }}" class="filter-btn {{ ($filters['status'] ?? '') === 'completed' ? 'active' : '' }}">{{ __('mytasks.filters.completed') }}</a>
-                </div>
+            <div class="modern-filter-group">
+                <a href="{{ route('my-tasks', ['view' => $viewMode ?? 'posted', 'status' => 'posted']) }}" class="filter-btn {{ in_array(($filters['status'] ?? 'posted'), ['posted', '']) ? 'active' : '' }}">{{ __('mytasks.filters.posted') }}</a>
+                <a href="{{ route('my-tasks', ['view' => $viewMode ?? 'posted', 'status' => 'pending']) }}" class="filter-btn {{ in_array(($filters['status'] ?? ''), ['pending', 'assigned']) ? 'active' : '' }}">{{ __('mytasks.filters.pending') }}</a>
+                <a href="{{ route('my-tasks', ['view' => $viewMode ?? 'posted', 'status' => 'completed']) }}" class="filter-btn {{ in_array(($filters['status'] ?? ''), ['completed']) ? 'active' : '' }}">{{ __('mytasks.filters.completed') }}</a>
             </div>
+        </div>
+
         @if($hasTasks)
             
             <div class="task-hero">
                 
-                {{-- LEFT SIDE (Dynamic Content) --}}
+                {{-- LEFT SIDE --}}
                 <div class="hero-left">
-                    {{-- APPLIED VIEW LOGIC --}}
                     @if(($viewMode ?? 'posted') === 'applied')
                         @php
-                            // Find my offer for this task
                             $myOffer = $activeTask->offers->where('user_id', auth()->id())->first();
                         @endphp
 
-                        @if($activeTask->status === 'pending')
+                        @if($activeTask->status === 'assigned')
                             @if($activeTask->employee_id == auth()->id())
                                 <div class="status-badge active" style="color:#059669;">
                                     <span class="status-dot" style="background-color:#10B981;"></span> {{ __('mytasks.status.offer_accepted') }}
                                 </div>
                                 <h1 class="hero-headline">{{ __('mytasks.status.youre_hired') }}</h1>
-                                <p class="hero-subtext">
-                                    {{ __('mytasks.status.hired_desc') }}
-                                </p>
+                                <p class="hero-subtext">{{ __('mytasks.status.hired_desc') }}</p>
                                 <div class="mt-6 flex gap-3">
                                     <a href="{{ route('messages', ['user_id' => $activeTask->employer_id]) }}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition flex items-center gap-2 no-underline">
                                         <i data-feather="message-circle" class="w-5 h-5"></i> {{ __('mytasks.status.contact_employer') }}
@@ -369,9 +414,7 @@
                                     <span class="status-dot" style="background-color:#EF4444;"></span> {{ __('mytasks.status.offer_not_selected') }}
                                 </div>
                                 <h1 class="hero-headline">{{ __('mytasks.status.task_assigned') }}</h1>
-                                <p class="hero-subtext">
-                                    {{ __('mytasks.status.assigned_desc') }}
-                                </p>
+                                <p class="hero-subtext">{{ __('mytasks.status.assigned_desc') }}</p>
                                 <div class="mt-6">
                                     <a href="{{ route('tasks') }}" class="text-blue-600 font-bold hover:underline">{{ __('mytasks.status.browse_more') }}</a>
                                 </div>
@@ -383,82 +426,141 @@
                                     <span class="status-dot"></span> {{ __('mytasks.status.job_done') }}
                                 </div>
                                 <h1 class="hero-headline">{{ __('mytasks.status.task_completed') }}</h1>
-                                <p class="hero-subtext">
-                                    {{ __('mytasks.status.completed_desc') }}
-                                </p>
+                                <p class="hero-subtext">{{ __('mytasks.status.completed_desc') }}</p>
                             @else
                                 <div class="status-badge">
                                     <span class="status-dot"></span> {{ __('mytasks.status.closed') }}
                                 </div>
                                 <h1 class="hero-headline">{{ __('mytasks.status.task_completed') }}</h1>
-                                <p class="hero-subtext">
-                                    {{ __('mytasks.status.other_completed_desc') }}
-                                </p>
+                                <p class="hero-subtext">{{ __('mytasks.status.other_completed_desc') }}</p>
                             @endif
 
                         @else
-                            {{-- OPEN STATUS --}}
-                            <div class="status-badge" style="color:#2563EB;">
-                                <span class="status-dot" style="background-color:#3B82F6;"></span> {{ __('mytasks.status.application_sent') }}
-                            </div>
-                            <h1 class="hero-headline">{{ __('mytasks.status.waiting_response') }}</h1>
-                            <p class="hero-subtext">
-                                {{ __('mytasks.status.you_offered') }} <strong>£{{ number_format($myOffer->price ?? 0, 0) }}</strong>.
-                                {{ __('mytasks.status.notify_offers') }}
-                            </p>
-                            <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl mt-6">
-                                <h4 class="font-bold text-blue-900 text-sm mb-1">{{ __('mytasks.status.your_message') }}</h4>
-                                <p class="text-blue-700 text-sm italic">"{{ $myOffer->message ?? '' }}"</p>
-                            </div>
+                            @if($myOffer)
+                                <div class="flex items-center gap-2 mb-5">
+                                    <div class="status-badge" style="color:#2563EB; margin-bottom: 0;">
+                                        <span class="status-dot" style="background-color:#3B82F6;"></span> {{ __('mytasks.status.application_sent') }}
+                                    </div>
+                                    @if($activeTask->employee_id == auth()->id())
+                                    <div class="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2 py-1 rounded-full border border-blue-100 h-fit">
+                                        <i data-feather="user-check" class="w-3.5 h-3.5"></i>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('Directly requested from you') }}</span>
+                                    </div>
+                                    @endif
+                                </div>
+                                <h1 class="hero-headline">{{ __('mytasks.status.waiting_response') }}</h1>
+                                <p class="hero-subtext">
+                                    {{ __('mytasks.status.you_offered') }} <strong>£{{ number_format($myOffer->price ?? 0, 0) }}</strong>.
+                                    {{ __('mytasks.status.notify_offers') }}
+                                </p>
+                                <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl mt-6">
+                                    <h4 class="font-bold text-blue-900 text-sm mb-1">{{ __('mytasks.status.your_message') }}</h4>
+                                    <p class="text-blue-700 text-sm italic">"{{ $myOffer->message ?? '' }}"</p>
+                                </div>
+                            @elseif($activeTask->employee_id == auth()->id())
+                                <div class="status-badge" style="color:#6366f1;">
+                                    <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('New Quote Request') }}
+                                </div>
+                                <h1 class="hero-headline">{{ __('mytasks.status.direct_request_headline') }}</h1>
+                                <p class="hero-subtext">{{ __('mytasks.status.direct_request_subtext') }}</p>
+                                <div class="mt-8 flex flex-wrap gap-4">
+                                    <button type="button" onclick="openDirectQuoteModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-8 rounded-full shadow-lg shadow-indigo-200 transition-all flex items-center gap-2 cursor-pointer">
+                                        {{ __('mytasks.status.accept_or_counter') }} <i data-feather="arrow-right" class="w-5 h-5"></i>
+                                    </button>
+                                    <a href="{{ route('messages', ['user_id' => $activeTask->employer_id]) }}" class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-3.5 px-8 rounded-full transition-all flex items-center gap-2 no-underline">
+                                        <i data-feather="message-circle" class="w-5 h-5"></i> {{ __('Message Employer') }}
+                                    </a>
+                                </div>
+                            @endif
                         @endif
 
-                    {{-- POSTED VIEW LOGIC (Existing) --}}
-                    @elseif($activeTask->status === 'pending')
-                         <div class="status-badge" style="color: #F59E0B;">
+                    @elseif($activeTask->status === 'assigned')
+                        <div class="status-badge" style="color: #F59E0B;">
                             <span class="status-dot" style="background-color: #FBBF24;"></span> {{ __('mytasks.status.in_progress') }}
                         </div>
-                        <h1 class="hero-headline">{{ __('mytasks.status.task_underway') }}</h1>
-                        <p class="hero-subtext">
-                            {{ __('mytasks.status.underway_desc') }}
-                        </p>
                         
-                        {{-- Trigger Completion Modal --}}
-                        <div class="mt-6">
-                            <button type="button" onclick="openCompleteTaskModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:-translate-y-1 flex items-center gap-2">
-                                <i data-feather="check-circle" class="w-5 h-5"></i> {{ __('mytasks.status.mark_completed') }}
-                            </button>
-                        </div>
+                        @if($activeTask->employer_id == auth()->id())
+                            @if($activeTask->is_direct)
+                                <h1 class="hero-headline">{{ __('Your request has been accepted!') }}</h1>
+                                <p class="hero-subtext">{{ __('The tasker has accepted your direct request. You can now coordinate details and mark the task as completed once done.') }}</p>
+                            @else
+                                <h1 class="hero-headline">{{ __('mytasks.status.task_underway') }}</h1>
+                                <p class="hero-subtext">{{ __('mytasks.status.underway_desc') }}</p>
+                            @endif
+                            <div class="mt-6">
+                                <button type="button" onclick="openCompleteTaskModal()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:-translate-y-1 flex items-center gap-2">
+                                    <i data-feather="check-circle" class="w-5 h-5"></i> {{ __('mytasks.status.mark_completed') }}
+                                </button>
+                            </div>
+                        @else
+                            <h1 class="hero-headline">{{ __('mytasks.status.waiting_for_completion') }}</h1>
+                            <p class="hero-subtext">{{ __('mytasks.status.waiting_for_completion_desc') }}</p>
+                            <div class="mt-6">
+                                <a href="{{ route('messages', ['user_id' => $activeTask->employer_id]) }}" class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-3 px-8 rounded-full transition-all flex items-center gap-2 no-underline inline-flex">
+                                    <i data-feather="message-circle" class="w-5 h-5"></i> {{ __('mytasks.status.contact_employer') }}
+                                </a>
+                            </div>
+                        @endif
                     
                     @elseif($activeTask->status === 'completed')
                         <div class="status-badge active">
                             <span class="status-dot"></span> {{ __('mytasks.filters.completed') }}
                         </div>
-                        <h1 class="hero-headline">{{ __('mytasks.status.task_completed') }}</h1>
-                        <p class="hero-subtext">
-                            {{ __('mytasks.status.posted_completed_desc') }}
-                        </p>
+                        @if($activeTask->employer_id == auth()->id())
+                            <h1 class="hero-headline">{{ __('mytasks.status.task_completed_employer') }}</h1>
+                            <p class="hero-subtext">{{ __('mytasks.status.posted_completed_desc') }}</p>
+                        @else
+                            <h1 class="hero-headline">{{ __('mytasks.status.task_completed_employee') }}</h1>
+                            <p class="hero-subtext">{{ __('mytasks.status.completed_desc') }}</p>
+                        @endif
                     
                     @elseif($hasOffers)
-                        <div class="status-badge active">
-                            <span class="status-dot"></span> {{ __('mytasks.status.new_activity') }}
-                        </div>
-                        <h1 class="hero-headline">{{ __('mytasks.status.new_offers') }}</h1>
-                        <p class="hero-subtext">
-                            {{ __('mytasks.status.offers_desc', ['count' => $offerCount]) }}.
-                        </p>
+                        @if(($viewMode ?? 'posted') === 'direct')
+                            <div class="status-badge active" style="color:#6366f1;">
+                                <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('Quote Received') }}
+                            </div>
+                            <h1 class="hero-headline">{{ __('New response!') }}</h1>
+                            <p class="hero-subtext">{{ __('The expert has sent you a price quote for your request. Review it below to proceed.') }}</p>
+                        @else
+                            <div class="status-badge active">
+                                <span class="status-dot"></span> {{ __('mytasks.status.new_activity') }}
+                            </div>
+                            <h1 class="hero-headline">{{ __('mytasks.status.new_offers') }}</h1>
+                            <p class="hero-subtext">{{ __('mytasks.status.offers_desc', ['count' => $offerCount]) }}.</p>
+                        @endif
                     @else
-                        <div class="status-badge">
-                            <span class="status-dot"></span> {{ __('mytasks.status.task_posted') }}
-                        </div>
-                        <h1 class="hero-headline">{{ __('mytasks.status.find_taskers') }}</h1>
-                        <p class="hero-subtext">
-                            {{ __('mytasks.status.notify_offers') }}
-                        </p>
+                        @if(($viewMode ?? 'posted') === 'direct')
+                            <div class="status-badge" style="color:#6B7280;">
+                                <span class="status-dot"></span> {{ __('Request Sent') }}
+                            </div>
+                            <h1 class="hero-headline">{{ __('Waiting for response') }}</h1>
+                            <p class="hero-subtext">{{ __('You have requested a quote from :name. We will notify you as soon as they respond with their price.', ['name' => $activeTask->employee->first_name ?? 'the expert']) }}</p>
+                        @else
+                            <div class="status-badge">
+                                <span class="status-dot"></span> {{ __('mytasks.status.task_posted') }}
+                            </div>
+                            <h1 class="hero-headline">{{ __('mytasks.status.find_taskers') }}</h1>
+                            <p class="hero-subtext">{{ __('mytasks.status.notify_offers') }}</p>
+                        @endif
                     @endif
 
-
-                        <div class="offers-container mt-6">
-                        @if(($viewMode ?? 'posted') === 'posted' && $activeTask->status === 'open')
+                    <div class="offers-container mt-6">
+                        @if(($viewMode ?? 'posted') === 'direct' && $activeTask->status === 'open')
+                            <div class="offers-header mb-4">
+                                <div class="illustration-box">
+                                    <div class="bg-indigo-100 p-3 rounded-full inline-block">
+                                        <i data-feather="user-check" class="text-indigo-600 w-8 h-8"></i>
+                                    </div>
+                                </div>
+                                @if($hasOffers)
+                                    <h3 class="text-lg font-bold text-gray-800">{{ __('Review Quote') }}</h3>
+                                    <p class="questions-copy mt-2">{{ __('The requested expert has replied with their proposed price and details.') }}</p>
+                                @else
+                                    <h3 class="text-lg font-bold text-gray-800">{{ __('Awaiting Response') }}</h3>
+                                    <p class="questions-copy mt-2">{{ __('The expert hasn\'t responded to your request yet. We\'ll let you know when they do.') }}</p>
+                                @endif
+                            </div>
+                        @elseif(($viewMode ?? 'posted') === 'posted' && $activeTask->status === 'open')
                             <div class="offers-header mb-4">
                                 <div class="illustration-box">
                                     <div class="bg-blue-100 p-3 rounded-full inline-block">
@@ -467,14 +569,10 @@
                                 </div>
                                 @if($hasOffers)
                                     <h3 class="text-lg font-bold text-gray-800">{{ __('mytasks.offers.header_count', ['count' => $offerCount]) }}</h3>
-                                    <p class="questions-copy mt-2">
-                                        {{ __('mytasks.offers.header_desc') }}
-                                    </p>
+                                    <p class="questions-copy mt-2">{{ __('mytasks.offers.header_desc') }}</p>
                                 @else
                                     <h3 class="text-lg font-bold text-gray-800">{{ __('mytasks.offers.waiting') }}</h3>
-                                    <p class="questions-copy mt-2">
-                                        {{ __('mytasks.offers.waiting_desc') }}
-                                    </p>
+                                    <p class="questions-copy mt-2">{{ __('mytasks.offers.waiting_desc') }}</p>
                                 @endif
                             </div>
                         @endif
@@ -494,13 +592,9 @@
                                             price: '{{ number_format($offer->price, 0) }}',
                                             message: `{{ addslashes($offer->message) }}`
                                         })" class="group w-full p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer relative overflow-hidden">
-                                            {{-- Hover accent --}}
                                             <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
                                             <div class="flex items-start gap-3">
-                                                {{-- Avatar --}}
                                                 <img src="{{ $offer->user->avatar_url }}" alt="Avatar" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0">
-
                                                 <div class="flex-1 min-w-0">
                                                     <div class="flex justify-between items-start">
                                                         <div>
@@ -522,7 +616,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
                                                     <p class="text-xs text-gray-600 mt-2 leading-relaxed">
                                                         {{ \Illuminate\Support\Str::limit($offer->message, 50, '...') }}
                                                     </p>
@@ -532,11 +625,11 @@
                                     @endforeach
                                 </div>
                             @elseif(!$showOffers && $hasTasks)
-                                 <div class="text-center py-6">
+                                <div class="text-center py-6">
                                     <div class="bg-gray-100 p-2 rounded-full inline-block mb-2">
                                         <i data-feather="check" class="text-gray-400 w-5 h-5"></i>
                                     </div>
-                                     <p class="text-sm text-gray-500">{{ __('mytasks.offers.hidden', ['status' => $activeTask->status]) }}</p>
+                                    <p class="text-sm text-gray-500">{{ __('mytasks.offers.hidden', ['status' => $activeTask->status]) }}</p>
                                 </div>
                             @endif
                         </div>
@@ -547,32 +640,46 @@
                     </div>
                 </div>
 
-                {{-- RIGHT SIDE (Task Details) --}}
+                {{-- RIGHT SIDE --}}
                 <div class="hero-right">
                     
-                    {{-- Floating More Options --}}
+                    {{-- IMPROVED Dropdown --}}
                     @if(($viewMode ?? 'posted') === 'posted')
                         <div class="more-options-container">
                             <button class="more-btn" id="more-btn">
-                                <i data-feather="more-horizontal"></i>
+                                <i data-feather="more-horizontal" style="width:16px; height:16px;"></i>
                             </button>
                             <div class="custom-dropdown" id="more-menu">
-                                <a href="#" class="dropdown-item">
-                                    <i data-feather="edit-2" style="width:16px;"></i> {{ __('mytasks.actions.edit') }}
-                                </a>
-                                <a href="{{ url('howitworks') }}" class="dropdown-item">
-                                    <i data-feather="info" style="width:16px;"></i> {{ __('mytasks.actions.howitworks') }}
-                                </a>
-                                <div style="height:1px; background:#F3F4F6; margin:6px 0;"></div>
-                                <button class="dropdown-item danger w-full text-left">
-                                    <i data-feather="x-circle" style="width:16px;"></i> {{ __('mytasks.actions.cancel') }}
-                                </button>
+
+                                <form action="{{ route('advertisements.destroy', $activeTask->id) }}" method="POST" class="m-0 p-0 flex gap-[6px] w-full" onsubmit="return confirm('{{ __('Are you sure you want to cancel this task? This cannot be undone.') }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    
+                                    <button type="button" class="dropdown-item edit flex-1" onclick="openEditTaskModal()" title="{{ __('mytasks.actions.edit') }}">
+                                        <i data-feather="edit-2" style="width:14px; height:14px;"></i>
+                                        {{ __('mytasks.actions.edit') }}
+                                    </button>
+
+                                    <button type="submit" class="dropdown-item danger flex-1" title="{{ __('mytasks.actions.cancel') }}">
+                                        <i data-feather="trash-2" style="width:14px; height:14px;"></i>
+                                        {{ __('mytasks.actions.cancel') }}
+                                    </button>
+                                </form>
+
                             </div>
                         </div>
                     @endif
 
                     <div>
-                        <span class="task-label">{{ __('mytasks.details.status_label', ['status' => ucfirst($activeTask->status)]) }}</span>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="task-label">{{ __('mytasks.details.status_label', ['status' => ucfirst($activeTask->status)]) }}</span>
+                            @if(($viewMode ?? 'posted') === 'posted' && $activeTask->employee_id)
+                            <div class="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100">
+                                <i data-feather="user" class="w-3 h-3"></i>
+                                <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('Sent a quote to') }} {{ $activeTask->employee->first_name }}</span>
+                            </div>
+                            @endif
+                        </div>
                         <h2 class="task-main-title">{{ $activeTask->title }}</h2>
                         
                         @if(($viewMode ?? 'posted') === 'applied' && $activeTask->employer)
@@ -589,10 +696,6 @@
                             </div>
                         @endif
                         
-                        {{-- 
-                           STRICT 50 CHAR LIMIT LOGIC:
-                           Using Blade Str::limit to physically cut the text at 50 characters.
-                        --}}
                         @if(!empty($activeTask->description))
                             <button type="button" class="description-toggle" onclick="openTaskDetailsModal()" title="Click to read full description">
                                 <p class="task-description-truncated">
@@ -612,7 +715,17 @@
                             <div class="data-icon"><i data-feather="calendar"></i></div>
                             <div class="data-text">
                                 <h4>{{ __('mytasks.details.due_date') }}</h4>
-                                <p>{{ __('mytasks.details.flexible') }}</p>
+                                <p>
+                                    @if($activeTask->is_date_flexible)
+                                        {{ __('mytasks.details.flexible') }}
+                                    @elseif($activeTask->required_date)
+                                        {{ \Carbon\Carbon::parse($activeTask->required_date)->format('M d, Y') }}
+                                    @elseif($activeTask->required_before_date)
+                                      Before {{ \Carbon\Carbon::parse($activeTask->required_before_date)->format('M d, Y') }}
+                                    @else
+                                        {{ __('mytasks.details.flexible') }}
+                                    @endif
+                                </p>
                             </div>
                         </div>
                         <div class="data-row">
@@ -638,7 +751,7 @@
                         </div>
                     </div>
 
-                    {{-- MODAL FOR FULL DESCRIPTION (Variable height) --}}
+                    {{-- MODAL: Full Description --}}
                     <div id="task-details-modal" class="task-details-modal">
                         <div id="task-details-backdrop" class="task-details-backdrop"></div>
                         <div class="task-details-panel">
@@ -647,7 +760,6 @@
                             </button>
                             <div class="task-details-title">{{ $activeTask->title }}</div>
                             @if(!empty($activeTask->description))
-                                {{-- Full Description Here --}}
                                 <div class="task-details-body">{{ $activeTask->description }}</div>
                             @endif
                             <div class="task-details-actions">
@@ -657,18 +769,15 @@
                         </div>
                     </div>
 
-                    {{-- MODAL FOR COMPLETE & REVIEW --}}
+                    {{-- MODAL: Complete & Review --}}
                     <div id="complete-task-modal" class="task-details-modal">
                         <div class="task-details-backdrop" onclick="closeCompleteTaskModal()"></div>
                         <div class="task-details-panel" style="max-width: 450px;">
                             <button type="button" class="task-details-close" onclick="closeCompleteTaskModal()">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
-                            
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('mytasks.status.task_completed') }}</h3>
                             <p class="text-gray-500 mb-6">{{ __('Would you like to leave a review for the Tasker?') }}</p>
-                            
-                            {{-- Initial Choice Buttons --}}
                             <div id="complete-choice-buttons" class="grid grid-cols-1 gap-3">
                                 <button onclick="showReviewForm()" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
                                     <i data-feather="star" class="w-4 h-4"></i> {{ __('Yes, leave a review') }}
@@ -680,50 +789,40 @@
                                     </button>
                                 </form>
                             </div>
-
-                            {{-- Review Form (Hidden initially) --}}
                             <div id="complete-review-form" class="hidden">
                                 <form action="{{ route('advertisements.complete', $activeTask->id) }}" method="POST">
                                     @csrf
-                                    
                                     <div class="mb-4">
                                         <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Rating') }}</label>
                                         <div class="flex gap-2 text-2xl" id="star-rating-input">
                                             @for($i=1; $i<=5; $i++)
-                                                <i data-feather="star" class="cursor-pointer text-gray-300 hover:text-yellow-400 peer-checked:text-yellow-400" onclick="setRating({{ $i }})" id="star-{{ $i }}"></i>
+                                                <i data-feather="star" class="cursor-pointer text-gray-300 hover:text-yellow-400" onclick="setRating({{ $i }})" id="star-{{ $i }}"></i>
                                             @endfor
                                         </div>
                                         <input type="hidden" name="stars" id="rating-value" required>
                                     </div>
-                                    
                                     <div class="mb-6">
                                         <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Comment') }}</label>
                                         <textarea name="comment" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="{{ __('Write a short review...') }}"></textarea>
                                     </div>
-                                    
                                     <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
                                         {{ __('Complete & Review') }}
                                     </button>
                                 </form>
                             </div>
-
                         </div>
                     </div>
 
-                    {{-- MODAL FOR OFFER DETAILS --}}
+                    {{-- MODAL: Offer Details --}}
                     <div id="offer-details-modal" class="task-details-modal" style="z-index: 60;">
                         <div class="task-details-backdrop" onclick="closeOfferModal()"></div>
                         <div class="task-details-panel" style="max-width: 500px;">
                             <button type="button" class="task-details-close" onclick="closeOfferModal()">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
-                            
-                            {{-- Offer Header --}}
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                                 <a id="modal-profile-link" href="#" class="flex items-center gap-3 group text-decoration-none">
-                                    <div id="modal-offer-avatar" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xl sm:text-2xl border border-gray-200 group-hover:border-blue-400 transition-colors shrink-0">
-                                        <!-- Initials via JS -->
-                                    </div>
+                                    <div id="modal-offer-avatar" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 font-bold text-xl sm:text-2xl border border-gray-200 group-hover:border-blue-400 transition-colors shrink-0"></div>
                                     <div class="min-w-0">
                                         <h3 id="modal-offer-name" class="text-lg sm:text-xl font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors truncate"></h3>
                                         <div class="flex items-center gap-1 mt-1">
@@ -739,19 +838,14 @@
                                     <div class="text-[10px] text-gray-400 uppercase font-bold sm:mt-1 order-1 sm:order-2">{{ __('Offer Price') }}</div>
                                 </div>
                             </div>
-
-                            {{-- Offer Body --}}
                             <div class="bg-gray-50 rounded-2xl p-4 sm:p-5 mb-6 border border-gray-100">
                                 <h4 class="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ __('Message from Tasker') }}</h4>
                                 <p id="modal-offer-message" class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap break-words" style="overflow-wrap: break-word; word-break: break-word;"></p>
                             </div>
-
-                            {{-- Actions --}}
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <a id="message-tasker-btn" href="#" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-bold hover:bg-gray-50 transition text-center no-underline">
                                     <i data-feather="message-circle" class="w-4 h-4"></i> {{ __('Message') }}
                                 </a>
-                                
                                 <form id="accept-offer-form" method="POST" action="" class="h-14">
                                     @csrf
                                     @if($activeTask->status === 'open')
@@ -768,10 +862,413 @@
                         </div>
                     </div>
 
+                    {{-- MODAL: Direct Quote Response --}}
+                    @if($activeTask && $activeTask->employee_id == auth()->id() && $activeTask->status === 'open' && !$myOffer)
+                    <div id="direct-quote-modal" class="task-details-modal" style="z-index: 65;">
+                        <div class="task-details-backdrop" onclick="closeDirectQuoteModal()"></div>
+                        <div class="task-details-panel" style="max-width: 500px;">
+                            <button type="button" class="task-details-close" onclick="closeDirectQuoteModal()">
+                                <i data-feather="x" style="width:16px; height:16px;"></i>
+                            </button>
+
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                                    <i data-feather="send" class="w-5 h-5 text-indigo-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-900">{{ __('Respond to Quote Request') }}</h3>
+                                    <p class="text-sm text-gray-500">{{ $activeTask->employer->first_name ?? '' }} · {{ $activeTask->title }}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-6">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-indigo-700">{{ __('Their budget') }}</span>
+                                    <span class="text-lg font-bold text-indigo-800">£{{ number_format($activeTask->price ?? 0, 0) }}</span>
+                                </div>
+                            </div>
+
+                            {{-- Direct Accept: no offer needed, goes straight to assigned --}}
+                            <form action="{{ route('tasks.accept-direct', $activeTask->id) }}" method="POST" class="mb-4">
+                                @csrf
+                                <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-green-600 text-white font-bold hover:bg-green-700 transition shadow-lg shadow-green-200 cursor-pointer">
+                                    <i data-feather="check" class="w-4 h-4"></i> {{ __('Accept at budget') }} (£{{ number_format($activeTask->price ?? 0, 0) }})
+                                </button>
+                            </form>
+
+                            <div class="relative flex items-center my-5">
+                                <div class="flex-grow border-t border-gray-200"></div>
+                                <span class="mx-4 text-xs font-bold text-gray-400 uppercase">{{ __('or counter offer') }}</span>
+                                <div class="flex-grow border-t border-gray-200"></div>
+                            </div>
+
+                            {{-- Counter offer form --}}
+                            <form action="{{ route('tasks.offers.store', $activeTask->id) }}" method="POST">
+                                @csrf
+                                <div class="mb-4">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Your price (£)') }}</label>
+                                    <input type="number" name="offer_price" id="direct-quote-price" min="1" class="w-full border border-gray-300 rounded-xl p-3 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="Enter your price">
+                                </div>
+                                <div class="mb-6">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Message') }}</label>
+                                    <textarea name="message" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="{{ __('Describe your experience and how you can help...') }}"></textarea>
+                                </div>
+                                <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 cursor-pointer">
+                                    <i data-feather="send" class="w-4 h-4"></i> {{ __('Send counter offer') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- MODAL: Edit Task --}}
+                    @if($activeTask)
+                    <div id="edit-task-modal" class="task-details-modal" style="z-index: 100;">
+                        <div class="task-details-backdrop" onclick="closeEditTaskModal()"></div>
+                        <div class="task-details-panel" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+                            <button type="button" class="task-details-close" onclick="closeEditTaskModal()">
+                                <i data-feather="x" style="width:16px; height:16px;"></i>
+                            </button>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">{{ __('Edit Task') }}</h3>
+                            
+                            @php
+                                $allCategories = \App\Models\Category::with('jobs')->orderBy('name')->get();
+                            @endphp
+
+                            <form action="{{ route('advertisements.update', $activeTask->id) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+                                
+                                <div class="grid grid-cols-1 gap-4">
+                                    {{-- Title --}}
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Task Title') }}</label>
+                                        <input type="text" name="title" value="{{ old('title', $activeTask->title) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
+                                    </div>
+                                    
+                                    {{-- Category & Job --}}
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Category') }}</label>
+                                            <select id="editCategorySelect" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
+                                                <option value="">{{ __('Select Category') }}</option>
+                                                @foreach($allCategories as $cat)
+                                                    <option value="{{ $cat->id }}" {{ ($activeTask->job->categories_id ?? null) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Service') }}</label>
+                                            <select id="editJobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
+                                                <option value="{{ $activeTask->jobs_id }}" selected>{{ $activeTask->job->name ?? 'Select Service' }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {{-- Description --}}
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Details') }}</label>
+                                        <textarea name="description" rows="4" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>{{ old('description', $activeTask->description) }}</textarea>
+                                    </div>
+
+                                    {{-- Type & Location --}}
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Task Type') }}</label>
+                                            <select id="editTypeSelect" name="task_type" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
+                                                <option value="in-person" {{ $activeTask->task_type === 'in-person' ? 'selected' : '' }}>{{ __('In Person') }}</option>
+                                                <option value="online" {{ $activeTask->task_type === 'online' ? 'selected' : '' }}>{{ __('Online') }}</option>
+                                            </select>
+                                        </div>
+                                        <div id="editLocationContainer" class="{{ $activeTask->task_type === 'online' ? 'hidden' : '' }}">
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Location') }}</label>
+                                            <input type="text" name="location" id="editLocationInput" value="{{ old('location', $activeTask->location) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition">
+                                        </div>
+                                    </div>
+                                    
+                                    {{-- Budget --}}
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Budget') }} (€)</label>
+                                        <input type="number" name="price" min="10" max="9999" value="{{ old('price', $activeTask->price) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
+                                    </div>
+                                    
+                                    {{-- Options: Date & Time Miniature --}}
+                                    <style>
+                                        .modal-pill-btn { border: 1px solid #1e3a8a; color: #1e3a8a; border-radius: 9999px; padding: 0.4rem 1rem; font-size: 0.875rem; transition: background-color .2s, color .2s, border-color .2s; cursor: pointer; background: transparent; font-weight: 600; white-space: nowrap; outline: none; }
+                                        .modal-pill-btn:hover, .modal-pill-btn[data-active="true"] { background-color: #1e3a8a; color: #fff; border-color: #1e3a8a; }
+                                        .modal-date-btn { border: 1px solid #d1d5db; border-radius: 0.5rem; padding: 0.5rem 0.75rem; background: white; cursor: pointer; transition: all .2s; width: 100%; text-align: left; display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: #374151; }
+                                        .modal-date-btn:hover { border-color: #1e3a8a; }
+                                        .modal-date-btn.active { background-color: #1e3a8a; color: #fff; border-color: #1e3a8a; }
+                                        .modal-date-btn.active svg { stroke: #fff; }
+                                        .modal-time-option { border: 2px solid #e5e7eb; border-radius: 0.5rem; padding: 0.75rem 0.5rem; cursor: pointer; transition: all .2s; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0.25rem; }
+                                        .modal-time-option:hover { border-color: #93c5fd; background-color: #eff6ff; }
+                                        .modal-time-option.selected { border-color: #1e3a8a; background-color: #dbeafe; }
+                                        .modal-time-option .icon { width: 1.5rem; height: 1.5rem; color: #1e3a8a; }
+                                    </style>
+
+                                    <div class="border-b border-gray-100 pb-5">
+                                        <div class="mb-4">
+                                            <label class="block text-sm font-semibold text-gray-700 mb-2">{{ __('post-task.step1.date_label') ?? 'When do you need this done?' }}</label>
+                                            
+                                            <input type="hidden" name="is_date_flexible" id="edit_input_is_date_flexible" value="{{ $activeTask->is_date_flexible ? '1' : '0' }}" />
+
+                                            <div class="flex flex-wrap gap-2">
+                                                <div class="relative flex-1 min-w-[140px]">
+                                                    <button type="button" class="modal-date-btn {{ $activeTask->required_before_date && !$activeTask->is_date_flexible ? 'active' : '' }}" id="editBeforeDateBtn">
+                                                        <span id="editBeforeDateLabel">{{ $activeTask->required_before_date && !$activeTask->is_date_flexible ? Carbon\Carbon::parse($activeTask->required_before_date)->format('M d, Y') : __('post-task.step1.before_date') }}</span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                    </button>
+                                                    <input type="date" name="required_before_date" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10" id="editBeforeDateValue" value="{{ $activeTask->required_before_date?->format('Y-m-d') }}" style="{{ $activeTask->required_before_date && !$activeTask->is_date_flexible ? '' : 'pointer-events: none;' }}" />
+                                                </div>
+
+                                                <div class="relative flex-1 min-w-[140px]">
+                                                    <button type="button" class="modal-date-btn {{ $activeTask->required_date && !$activeTask->is_date_flexible ? 'active' : '' }}" id="editOnDateBtn">
+                                                        <span id="editOnDateLabel">{{ $activeTask->required_date && !$activeTask->is_date_flexible ? Carbon\Carbon::parse($activeTask->required_date)->format('M d, Y') : __('post-task.step1.on_date') }}</span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                    </button>
+                                                    <input type="date" name="required_date" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10" id="editOnDateValue" value="{{ $activeTask->required_date?->format('Y-m-d') }}" style="{{ $activeTask->required_date && !$activeTask->is_date_flexible ? '' : 'pointer-events: none;' }}" />
+                                                </div>
+
+                                                <button type="button" class="modal-pill-btn" id="editFlexibleBtn" data-active="{{ $activeTask->is_date_flexible ? 'true' : 'false' }}">
+                                                    {{ __('post-task.step1.flexible') ?? "I'm flexible" }}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        @php
+                                            $hasTime = is_array($activeTask->preferred_time) && count($activeTask->preferred_time) > 0;
+                                        @endphp
+
+                                        <div class="mt-4">
+                                            <label class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3 cursor-pointer">
+                                                <input type="checkbox" id="editNeedTimeCheckbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" {{ $hasTime ? 'checked' : '' }} />
+                                                <span>{{ __('post-task.step1.certain_time') ?? 'I need a certain time of day' }}</span>
+                                            </label>
+
+                                            <div id="editTimeOfDayOptions" class="grid grid-cols-2 sm:grid-cols-4 gap-2 {{ $hasTime ? '' : 'hidden' }}">
+                                                @php $ptimes = $activeTask->preferred_time ?? []; @endphp
+                                                <label class="modal-time-option {{ in_array('morning', $ptimes) ? 'selected' : '' }}" data-time="morning">
+                                                    <input type="checkbox" name="preferred_time[]" value="morning" class="hidden" {{ in_array('morning', $ptimes) ? 'checked' : '' }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="2" x2="12" y2="9"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="8 6 12 2 16 6"></polyline></svg>
+                                                    <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.morning') ?? 'Morning' }}</span>
+                                                </label>
+                                                <label class="modal-time-option {{ in_array('midday', $ptimes) ? 'selected' : '' }}" data-time="midday">
+                                                    <input type="checkbox" name="preferred_time[]" value="midday" class="hidden" {{ in_array('midday', $ptimes) ? 'checked' : '' }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                                                    <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.midday') ?? 'Midday' }}</span>
+                                                </label>
+                                                <label class="modal-time-option {{ in_array('afternoon', $ptimes) ? 'selected' : '' }}" data-time="afternoon">
+                                                    <input type="checkbox" name="preferred_time[]" value="afternoon" class="hidden" {{ in_array('afternoon', $ptimes) ? 'checked' : '' }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="16 5 12 9 8 5"></polyline></svg>
+                                                    <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.afternoon') ?? 'Afternoon' }}</span>
+                                                </label>
+                                                <label class="modal-time-option {{ in_array('evening', $ptimes) ? 'selected' : '' }}" data-time="evening">
+                                                    <input type="checkbox" name="preferred_time[]" value="evening" class="hidden" {{ in_array('evening', $ptimes) ? 'checked' : '' }}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                                                    <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.evening') ?? 'Evening' }}</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Photos --}}
+                                    <div class="mt-2">
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Update Photos') }}</label>
+                                        <input type="file" name="photos[]" multiple accept="image/*" class="w-full border border-gray-300 rounded-lg p-3 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition">
+                                        <p class="text-xs text-gray-500 mt-2 font-medium">{{ __('Uploading new photos will add to existing photos. (Max 5MB each)') }}</p>
+                                    </div>
+
+                                    <button type="submit" class="w-full h-14 mt-6 bg-blue-600 text-white font-bold text-lg rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
+                                        <i data-feather="save" class="w-5 h-5"></i>
+                                        {{ __('Save Changes') }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const allCategories = @json($allCategories);
+                            const editCategorySelect = document.getElementById('editCategorySelect');
+                            const editJobSelect = document.getElementById('editJobSelect');
+                            const editTypeSelect = document.getElementById('editTypeSelect');
+                            const editLocationContainer = document.getElementById('editLocationContainer');
+                            const editLocationInput = document.getElementById('editLocationInput');
+
+                            if (editCategorySelect && editJobSelect) {
+                                editCategorySelect.addEventListener('change', function() {
+                                    const catId = this.value;
+                                    editJobSelect.innerHTML = '<option value="">{{ __('Select Service') }}</option>';
+                                    if (!catId) return;
+                                    
+                                    const category = allCategories.find(c => c.id == catId);
+                                    if (category && category.jobs) {
+                                        const uniqueJobs = new Map();
+                                        category.jobs.forEach(j => uniqueJobs.set(j.id, j));
+                                        uniqueJobs.forEach(job => {
+                                            const option = document.createElement('option');
+                                            option.value = job.id;
+                                            option.textContent = job.name;
+                                            editJobSelect.appendChild(option);
+                                        });
+                                    }
+                                });
+                            }
+                            
+                            if (editTypeSelect && editLocationContainer) {
+                                        editTypeSelect.addEventListener('change', function() {
+                                            if (this.value === 'online') {
+                                                editLocationContainer.classList.add('hidden');
+                                                editLocationInput.value = 'Online';
+                                            } else {
+                                                editLocationContainer.classList.remove('hidden');
+                                                if (editLocationInput.value === 'Online') editLocationInput.value = '';
+                                            }
+                                        });
+                                    }
+
+                                    // --- Edit Task Modal: Date & Time Logic ---
+                                    const editBeforeBtn = document.getElementById('editBeforeDateBtn');
+                                    const editOnBtn = document.getElementById('editOnDateBtn');
+                                    const editFlexibleBtn = document.getElementById('editFlexibleBtn');
+                                    const editBeforeVal = document.getElementById('editBeforeDateValue');
+                                    const editOnVal = document.getElementById('editOnDateValue');
+                                    const editBeforeLabel = document.getElementById('editBeforeDateLabel');
+                                    const editOnLabel = document.getElementById('editOnDateLabel');
+                                    const editFlexInput = document.getElementById('edit_input_is_date_flexible');
+
+                                    function resetEditDateOptions() {
+                                        if(editBeforeBtn) editBeforeBtn.classList.remove('active');
+                                        if(editOnBtn) editOnBtn.classList.remove('active');
+                                        if(editFlexibleBtn) editFlexibleBtn.setAttribute('data-active', 'false');
+                                        
+                                        if(editBeforeVal) {
+                                            editBeforeVal.value = '';
+                                            editBeforeVal.style.pointerEvents = 'none';
+                                        }
+                                        if(editOnVal) {
+                                            editOnVal.value = '';
+                                            editOnVal.style.pointerEvents = 'none';
+                                        }
+                                        
+                                        if(editBeforeLabel) editBeforeLabel.textContent = "{{ __('post-task.step1.before_date') }}";
+                                        if(editOnLabel) editOnLabel.textContent = "{{ __('post-task.step1.on_date') }}";
+                                        if(editFlexInput) editFlexInput.value = '0';
+                                    }
+
+                                    if(editBeforeBtn && editBeforeVal) {
+                                        // When user clicks the button, enable the invisible date picker overlay
+                                        editBeforeBtn.addEventListener('click', () => {
+                                            resetEditDateOptions();
+                                            editBeforeBtn.classList.add('active');
+                                            editBeforeVal.style.pointerEvents = 'auto'; // enable picking
+                                            if ('showPicker' in HTMLInputElement.prototype) {
+                                                try { editBeforeVal.showPicker(); } catch(e) {}
+                                            }
+                                        });
+                                        editBeforeVal.addEventListener('change', (e) => {
+                                            if(e.target.value) {
+                                                const d = new Date(e.target.value);
+                                                editBeforeLabel.textContent = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+                                            }
+                                        });
+                                    }
+
+                                    if(editOnBtn && editOnVal) {
+                                        editOnBtn.addEventListener('click', () => {
+                                            resetEditDateOptions();
+                                            editOnBtn.classList.add('active');
+                                            editOnVal.style.pointerEvents = 'auto';
+                                            if ('showPicker' in HTMLInputElement.prototype) {
+                                                try { editOnVal.showPicker(); } catch(e) {}
+                                            }
+                                        });
+                                        editOnVal.addEventListener('change', (e) => {
+                                            if(e.target.value) {
+                                                const d = new Date(e.target.value);
+                                                editOnLabel.textContent = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+                                            }
+                                        });
+                                    }
+
+                                    if(editFlexibleBtn) {
+                                        editFlexibleBtn.addEventListener('click', () => {
+                                            resetEditDateOptions();
+                                            editFlexibleBtn.setAttribute('data-active', 'true');
+                                            if(editFlexInput) editFlexInput.value = '1';
+                                        });
+                                    }
+
+                                    // Form submission ensures logic stays correct
+                                    const editTaskForm = document.querySelector('#edit-task-modal form');
+                                    if(editTaskForm) {
+                                        editTaskForm.addEventListener('submit', () => {
+                                            // Ensure inputs that aren't active are wiped out before submit
+                                            if (!editBeforeBtn.classList.contains('active') && editBeforeVal) editBeforeVal.value = '';
+                                            if (!editOnBtn.classList.contains('active') && editOnVal) editOnVal.value = '';
+                                            if (editFlexibleBtn.getAttribute('data-active') === 'true' && editFlexInput) editFlexInput.value = '1';
+                                        });
+                                    }
+
+                                    // Time Checkbox Logic
+                                    const editNeedTimeCheckbox = document.getElementById('editNeedTimeCheckbox');
+                                    const editTimeOptions = document.getElementById('editTimeOfDayOptions');
+                                    if(editNeedTimeCheckbox && editTimeOptions) {
+                                        editNeedTimeCheckbox.addEventListener('change', function() {
+                                            if(this.checked) {
+                                                editTimeOptions.classList.remove('hidden');
+                                            } else {
+                                                editTimeOptions.classList.add('hidden');
+                                                // uncheck all time toggles
+                                                document.querySelectorAll('.modal-time-option input').forEach(ip => { ip.checked = false; });
+                                                document.querySelectorAll('.modal-time-option').forEach(lb => { lb.classList.remove('selected'); });
+                                            }
+                                        });
+                                    }
+                                    
+                                    // Time Pill Click Logic
+                                    document.querySelectorAll('.modal-time-option').forEach(label => {
+                                        label.addEventListener('click', function(e) {
+                                            // Let the native checkbox handle its own checked state 
+                                            // We just toggle the 'selected' visual class instantly
+                                            setTimeout(() => {
+                                                const checkbox = this.querySelector('input[type="checkbox"]');
+                                                if (checkbox.checked) {
+                                                    this.classList.add('selected');
+                                                } else {
+                                                    this.classList.remove('selected');
+                                                }
+                                            }, 10);
+                                        });
+                                    });
+
+                            window.openEditTaskModal = function() {
+                                const modal = document.getElementById('edit-task-modal');
+                                const dropdown = document.getElementById('more-menu');
+                                if (dropdown) dropdown.classList.remove('show');
+                                if (modal) {
+                                    modal.classList.add('show');
+                                    document.body.style.overflow = 'hidden';
+                                    if (window.feather) feather.replace();
+                                }
+                            };
+
+                            window.closeEditTaskModal = function() {
+                                const modal = document.getElementById('edit-task-modal');
+                                if (modal) {
+                                    modal.classList.remove('show');
+                                    document.body.style.overflow = '';
+                                }
+                            };
+                        });
+                    </script>
+                    @endif
+
                 </div>
             </div>
 
-            {{-- 5. OTHER TASKS LIST (Swaps Active Task In-Place) --}}
+            {{-- OTHER TASKS LIST --}}
             @if($otherTasks->count() > 0)
                 <div class="other-tasks-container">
                     <h3 class="text-xl font-bold text-gray-800 mb-4 px-2">{{ __('Other Tasks') }}</h3>
@@ -782,7 +1279,15 @@
                                     <i data-feather="clipboard" style="width:18px;"></i>
                                 </div>
                                 <div>
-                                    <div class="text-xs text-gray-400 font-bold uppercase">{{ $task->status ?? 'Posted' }}</div>
+                                    <div class="text-xs text-gray-400 font-bold uppercase flex items-center gap-2">
+                                        {{ $task->status ?? 'Posted' }}
+                                        @if((($viewMode ?? 'posted') === 'posted' || ($viewMode ?? 'posted') === 'direct') && $task->employee_id)
+                                            <div class="flex items-center gap-1 bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full border border-blue-100" title="{{ __('Sent to') }} {{ $task->employee->first_name }}">
+                                                <i data-feather="user" style="width:10px; height:10px;"></i>
+                                                <span class="text-[8px] tracking-tighter">{{ $task->employee->first_name }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <span class="text-base font-bold text-gray-800 hover:text-blue-600 transition">{{ $task->title }}</span>
                                 </div>
                             </div>
@@ -792,43 +1297,40 @@
                 </div>
             @endif
 
-        {{-- SCENARIO 2: NO TASKS (PRESERVED) --}}
         @else
-            <!-- Dashboard Header: Search & Filters (Always show to allow filtering even if empty, or just for consistency/reset) -->
-
-
-            <!-- Modern Empty State -->
+            {{-- EMPTY STATE --}}
             <div class="modern-empty-state">
                 <div class="empty-illustration">
                     <i data-feather="clipboard" style="width:48px; height:48px;"></i>
                 </div>
-                
                 <h3 class="empty-title">
-                     @if(($filters['status'] ?? 'posted') === 'posted' && empty($filters['q']))
+                    @if(($filters['status'] ?? 'posted') === 'posted' && empty($filters['q']) && ($viewMode ?? 'posted') === 'posted')
                         {{ __('No tasks yet') }}
                     @elseif(($viewMode ?? 'posted') === 'applied')
                         {{ __('No applications found') }}
+                    @elseif(($viewMode ?? 'posted') === 'direct')
+                        {{ __('No direct requests yet') }}
                     @else
                         {{ __('No tasks found') }}
                     @endif
                 </h3>
-                
                 <p class="empty-desc">
                     @if(($viewMode ?? 'posted') === 'applied')
                         {{ __("You haven't applied to any tasks in this category yet. Browse available tasks to get started.") }}
+                    @elseif(($viewMode ?? 'posted') === 'direct')
+                        {{ __("You haven't sent any direct quote requests to specific experts yet.") }}
                     @else
                         @if(($filters['status'] ?? 'posted') === 'posted')
-                             @if(!empty($filters['q']))
+                            @if(!empty($filters['q']))
                                 {{ __("We couldn't find any tasks matching your search.") }}
-                             @else
+                            @else
                                 {{ __("Put your task in front of thousands of people and get it done quickly.") }}
-                             @endif
+                            @endif
                         @else
                             {{ __("No tasks found with this status.") }}
                         @endif
                     @endif
                 </p>
-                
                 @if(($viewMode ?? 'posted') === 'applied')
                     <a href="{{ route('tasks') }}" class="cta-button">
                         <i data-feather="search" style="width:18px;"></i> {{ __('Browse Tasks') }}
@@ -844,7 +1346,6 @@
     </div>
 </section>
 
-<!-- Feather Icons & Logic -->
 <script src="https://unpkg.com/feather-icons"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -862,105 +1363,86 @@
             document.addEventListener('click', () => moreMenu.classList.remove('show'));
         }
 
-        // Task details modal logic
+        // Task details modal
         window.openTaskDetailsModal = function () {
             const modal = document.getElementById('task-details-modal');
-            if (modal) {
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden'; 
-            }
+            if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; }
         };
-
         window.closeTaskDetailsModal = function () {
             const modal = document.getElementById('task-details-modal');
-            if (modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = ''; 
-            }
+            if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
         };
-
         const backdrop = document.getElementById('task-details-backdrop');
-        if (backdrop) {
-            backdrop.addEventListener('click', () => window.closeTaskDetailsModal());
-        }
+        if (backdrop) backdrop.addEventListener('click', () => window.closeTaskDetailsModal());
 
-        // --- OFFER MODAL LOGIC ---
+        // Offer Modal
         window.openOfferModal = function(data) {
             const modal = document.getElementById('offer-details-modal');
             if(!modal) return;
 
-            // Populate Data
             const avatarEl = document.getElementById('modal-offer-avatar');
             if (data.avatarUrl) {
                 avatarEl.innerHTML = `<img src="${data.avatarUrl}" class="w-full h-full rounded-full object-cover">`;
             } else {
                 avatarEl.innerHTML = data.initials;
             }
-            
+
             document.getElementById('modal-offer-name').innerText = data.name;
             document.getElementById('modal-offer-rating').innerText = data.rating;
             document.getElementById('modal-offer-time').innerText = data.time + ' {{ __("mytasks.stats.ago") }}';
             document.getElementById('modal-offer-price').innerText = '£' + data.price;
             document.getElementById('modal-offer-message').innerText = data.message;
-            
-            // Set Profile Link
+
             const profileLink = document.getElementById('modal-profile-link');
-            if (profileLink) {
-                profileLink.href = '/profile/' + data.userId;
-            }
+            if (profileLink) profileLink.href = '/profile/' + data.userId;
 
-            // Set Form Action
             const form = document.getElementById('accept-offer-form');
-            if(form) {
-                form.action = `/offers/${data.id}/accept`;
-            }
+            if(form) form.action = `/offers/${data.id}/accept`;
 
-            // Set Message Button Link
             const msgBtn = document.getElementById('message-tasker-btn');
-            if(msgBtn) {
-                msgBtn.href = `/messages?user_id=${data.userId}`;
-            }
+            if(msgBtn) msgBtn.href = `/messages?user_id=${data.userId}`;
 
-            // Show Modal
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
-
         window.closeOfferModal = function() {
             const modal = document.getElementById('offer-details-modal');
-            if(modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
+            if(modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
         }
 
-        // --- COMPLETE MODAL LOGIC ---
+        // Direct Quote Response Modal
+        window.openDirectQuoteModal = function() {
+            const modal = document.getElementById('direct-quote-modal');
+            if(modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                if(window.feather) window.feather.replace();
+            }
+        }
+        window.closeDirectQuoteModal = function() {
+            const modal = document.getElementById('direct-quote-modal');
+            if(modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
+        }
+
+        // Complete Modal
         window.openCompleteTaskModal = function() {
             const modal = document.getElementById('complete-task-modal');
             if(modal) {
                 modal.classList.add('show');
                 document.body.style.overflow = 'hidden';
-                // Reset view
                 document.getElementById('complete-choice-buttons').classList.remove('hidden');
                 document.getElementById('complete-review-form').classList.add('hidden');
-                // Reset rating stars
                 setRating(0);
             }
         }
-
         window.closeCompleteTaskModal = function() {
             const modal = document.getElementById('complete-task-modal');
-            if(modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
+            if(modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
         }
-        
         window.showReviewForm = function() {
             document.getElementById('complete-choice-buttons').classList.add('hidden');
             document.getElementById('complete-review-form').classList.remove('hidden');
         }
-
         window.setRating = function(value) {
             document.getElementById('rating-value').value = value;
             for(let i=1; i<=5; i++) {
@@ -968,7 +1450,7 @@
                 if(i <= value) {
                     icon.classList.add('text-yellow-400');
                     icon.classList.remove('text-gray-300');
-                    icon.style.fill = 'currentColor'; // solid star
+                    icon.style.fill = 'currentColor';
                 } else {
                     icon.classList.remove('text-yellow-400');
                     icon.classList.add('text-gray-300');
@@ -977,7 +1459,6 @@
             }
             if(window.feather) window.feather.replace();
         }
-
     });
 </script>
 @endsection

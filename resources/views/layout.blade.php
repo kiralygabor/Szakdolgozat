@@ -728,8 +728,8 @@
       </button>
       <div class="sub-menu-wrap" id="subMenu">
         <div class="sub-menu">
-          <a href="{{ route('public-profile', Auth::id()) }}" class="user-info block px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors no-underline">
-            <h3 class="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{{ $fullName }}</h3>
+          <a href="{{ route('public-profile', Auth::id()) }}" class="user-info group block px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors no-underline">
+            <h3 class="text-base font-bold text-gray-900 group-hover:text-[#6366f1] transition-colors">{{ $fullName }}</h3>
             <p class="text-xs text-gray-500 mb-0">{{ __('navbar.public_profile') }}</p>
           </a>
           <hr>

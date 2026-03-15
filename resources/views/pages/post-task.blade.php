@@ -233,6 +233,19 @@
 </ul>
 </div>
         @endif
+        
+        @if(isset($targetUser))
+            <input type="hidden" name="employee_id" value="{{ $targetUser->id }}">
+            <div class="mb-8 bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img src="{{ $targetUser->avatar_url }}" alt="{{ $targetUser->first_name }}" class="w-12 h-12 rounded-full object-cover shadow-sm bg-white border border-blue-200">
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-sm md:text-base">{{ __('post-task.requesting_quote_from') ?? 'Requesting a quote from' }} {{ $targetUser->first_name }}</h3>
+                        <p class="text-xs md:text-sm text-gray-500">{{ __('post-task.requesting_quote_desc') ?? 'This task will be sent specifically to them.' }}</p>
+                    </div>
+                </div>
+            </div>
+        @endif
 <!-- STEP 1 -->
 <div id="step-1" class="step-pane">
 <h1 class="text-3xl font-bold text-blue-900 mb-8">{{ __('post-task.step1.title') }}</h1>
@@ -576,11 +589,33 @@ document.addEventListener('DOMContentLoaded', function() {
   categorySelect.addEventListener('change', function() {
       populateJobs(this.value);
   });
-  // --- PRE-SELECTION FROM URL ---
+  // --- RESTORE OLD SELECTION OR PRE-SELECTION FROM URL ---
+  @php
+      $oldJobId = old('jobs_id');
+      $oldCategoryId = '';
+      if ($oldJobId) {
+          foreach($categories as $cat) {
+              foreach($cat->jobs as $job) {
+                  if ($job->id == $oldJobId) {
+                      $oldCategoryId = $cat->id;
+                      break 2;
+                  }
+              }
+          }
+      }
+  @endphp
+
+  const oldCatId = "{{ $oldCategoryId }}";
+  const oldJobId = "{{ $oldJobId }}";
+
   const urlParams = new URLSearchParams(window.location.search);
   const preCat = urlParams.get('category'); // e.g. ?category=2
   const preService = urlParams.get('job') || urlParams.get('service'); // e.g. &job=5 or &service=5
-  if (preCat) {
+
+  if (oldCatId) {
+      categorySelect.value = oldCatId;
+      populateJobs(oldCatId, oldJobId);
+  } else if (preCat) {
       categorySelect.value = preCat;
       // We pass the job ID to select it automatically
       populateJobs(preCat, preService);

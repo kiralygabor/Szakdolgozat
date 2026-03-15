@@ -30,8 +30,9 @@ class GoogleController extends Controller
                 } while (User::where('account_id', $accountId)->exists());
 
                 // Split name or use raw data if available
-                $firstName = $user->offsetGet('given_name') ?? $user->getName();
-                $lastName = $user->offsetGet('family_name') ?? '';
+                $rawUser = $user->user;
+                $firstName = $rawUser['given_name'] ?? $user->getName();
+                $lastName = $rawUser['family_name'] ?? '';
 
                 $newUser = User::create([
                     'first_name' => $firstName,

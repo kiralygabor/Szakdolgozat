@@ -377,6 +377,14 @@
                                         <span class="text-sm text-gray-600">Email me when I receive an offer on my task or when my offer is accepted</span>
                                     </div>
                                 </label>
+
+                                <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <input type="checkbox" name="email_direct_quotes" value="1" {{ $user->email_direct_quotes ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <div>
+                                        <span class="block font-bold text-blue-900">Direct Quotes</span>
+                                        <span class="text-sm text-gray-600">Email me when someone requests a quote specifically from me</span>
+                                    </div>
+                                </label>
  
                                 <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                     <input type="checkbox" name="email_task_digest" value="1" id="digest_toggle_profile" {{ $user->email_task_digest ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">

@@ -28,4 +28,13 @@ return [
     'review_after_test_warning' => 'Csak közös munka elvégzése után írhat véleményt.',
     'work_with_footer_desc' => 'Küldjön kérést a közös projekt elindításához.',
     'contact_me' => 'Kapcsolatfelvétel :name-vel',
+    'looking_for_tasker' => ':name keres egy Tasker-t',
+    'looking_for_help' => ':name segítséget keres ezzel kapcsolatban:',
+    'are_you_the_one' => 'Ön lenne a megfelelő?',
+    'make_an_offer' => 'Ajánlat küldése',
+    'see_all_tasks' => 'Összes :count feladat megtekintése',
+    'work_with_footer' => 'Együtt szeretne dolgozni :name-vel?',
+    'work_with_footer_action' => 'Tegyen közzé egy feladatot és kérjen ajánlatot',
+    'request_quote' => 'Ajánlat kérése',
+    'viewing_own_profile' => 'Saját profilját nézi',
 ];

@@ -1,6 +1,31 @@
 @extends('layout')
 
 @section('content')
+  @php
+    $source = ($tasks instanceof \Illuminate\Pagination\AbstractPaginator) ? $tasks->items() : ($tasks ?? []);
+    $remoteCount = 0;
+    $taskPoints = collect($source)->map(function($t) use (&$remoteCount) {
+      $loc = (string)($t->location ?? $t->employer->city->name ?? '');
+      // Detect online/remote tasks
+      $isRemote = $t->task_type === 'online' || 
+                  stripos($loc, 'remote') !== false || 
+                  stripos($loc, 'online') !== false;
+      
+      if ($isRemote) {
+          $remoteCount++;
+      }
+
+      return [ 
+          'id' => $t->id ?? null, 
+          'title' => $t->title ?? '', 
+          'price' => (int)($t->price ?? 0), 
+          'location' => $loc,
+          'is_remote' => $isRemote,
+          'is_my_task' => Auth::check() && $t->employer_id === Auth::id()
+      ];
+    })->filter(fn($r) => $r['id'] && $r['location'] && !$r['is_remote'])->values();
+  @endphp
+
   <style>
     /* Custom Scrollbar */
     .custom-scroll::-webkit-scrollbar {
@@ -17,10 +42,14 @@
       background-color: #94a3b8;
     }
 
-    /* Modal Overlay */
-    .modal-overlay {
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(2px);
+    /* Remote Cloud Pulse Animation */
+    @keyframes cloud-pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+      70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+    }
+    .animate-cloud-pulse {
+      animation: cloud-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
     }
 
     /* Map Styling */
@@ -483,17 +512,37 @@
         <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-3">
           @forelse (($tasks ?? []) as $task)
             @php
+                $isMyTask = Auth::check() && $task->employer_id === Auth::id();
                 $hasOffer = Auth::check() && $task->offers->contains('user_id', Auth::id());
+                
+                $cardClasses = 'bg-white border-gray-200';
+                if ($isMyTask) {
+                    $cardClasses = 'bg-violet-50 border-violet-300 ring-2 ring-violet-100 ring-inset';
+                } elseif ($hasOffer) {
+                    $cardClasses = 'bg-blue-50 border-blue-300';
+                }
             @endphp
-            <div id="task-card-{{ $task->id }}" class="group task-card p-4 rounded-xl border hover:border-blue-400 hover:shadow-md transition-all duration-200 relative {{ $hasOffer ? 'bg-blue-50 border-blue-300' : 'bg-white border-gray-200' }}" data-task-id="{{ $task->id }}">
+            <div id="task-card-{{ $task->id }}" class="group task-card p-4 rounded-xl border hover:border-blue-400 hover:shadow-md transition-all duration-200 relative {{ $cardClasses }}" data-task-id="{{ $task->id }}">
              
-              <div class="flex justify-between items-start mb-1.5">
-                <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600">
+              {{-- Status Badges (Top Row) --}}
+              @if($isMyTask || $hasOffer)
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                    @if($isMyTask)
+                        <span class="inline-flex items-center justify-center bg-violet-100 text-violet-700 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider" title="Your own task">
+                            My Task
+                        </span>
+                    @endif
                     @if($hasOffer)
-                        <span class="inline-flex items-center justify-center bg-blue-100 text-blue-600 rounded-full p-1 mr-1" title="You made an offer">
+                        <span class="inline-flex items-center justify-center bg-blue-100 text-blue-600 rounded-full p-1" title="You made an offer">
                             <i data-feather="check-circle" class="w-3.5 h-3.5"></i>
                         </span>
                     @endif
+                </div>
+              @endif
+
+              {{-- Title and Price Row --}}
+              <div class="flex justify-between items-start mb-2">
+                <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600">
                     {{ $task->title }}
                 </h3>
                 <span class="text-green-600 text-sm font-bold whitespace-nowrap ml-2">
@@ -515,42 +564,53 @@
               </div>
  
               <div class="pt-2 border-t border-gray-50 flex justify-between items-center">
-                 <span class="text-[10px] text-gray-400">
-                    {{ $task->created_at?->diffForHumans(null, true, true) }} ago
-                 </span>
                  <div class="flex items-center gap-2">
-                     @auth
-                         <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="text-xs font-semibold text-gray-500 hover:text-red-600 transition-colors" title="Report this task">
-                             <i data-feather="flag" class="w-3.5 h-3.5"></i>
-                         </button>
-                     @endauth
-                     @guest
-                         <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:underline">
-                            Sign in to make an offer
-                         </a>
-                     @else
-                         @if($hasOffer)
-                            <form method="POST" action="{{ route('tasks.offers.destroy', $task->id) }}" class="inline m-0 p-0">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-xs font-semibold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap inline-flex items-center gap-1">
-                                    <i data-feather="x" class="w-3 h-3"></i> Cancel offer
-                                </button>
-                            </form>
-                         @else
-                             <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
-                             @if(count($missingSteps) > 0)
-                                <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                    Make an offer
-                                </button>
-                             @else
-                                <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                    Make an offer
-                                </a>
-                             @endif
-                         @endif
-                     @endguest
+                     <a href="{{ route('public-profile', $task->employer_id) }}" class="shrink-0 group/avatar" title="{{ $task->employer->first_name ?? 'User' }}">
+                         <img src="{{ $task->employer->avatar_url ?? '' }}" alt="{{ $task->employer->first_name ?? 'User' }}" class="w-7 h-7 rounded-full object-cover border-2 border-gray-100 shadow-sm group-hover/avatar:border-blue-400 group-hover/avatar:shadow-md transition-all duration-200">
+                     </a>
+                     <span class="text-[10px] text-gray-400">
+                        {{ $task->created_at?->diffForHumans(null, true, true) }} ago
+                     </span>
                  </div>
+                  <div class="flex items-center gap-2">
+                      @auth
+                          @if(!$isMyTask)
+                            <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="text-xs font-semibold text-gray-500 hover:text-red-600 transition-colors" title="Report this task">
+                                <i data-feather="flag" class="w-3.5 h-3.5"></i>
+                            </button>
+                          @endif
+                      @endauth
+                      @guest
+                          <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:underline">
+                             Sign in to make an offer
+                          </a>
+                      @else
+                          @if($isMyTask)
+                              <a href="{{ route('my-tasks') }}#task-{{ $task->id }}" class="text-xs font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                                  <i data-feather="eye" class="w-3 h-3"></i> View Details
+                              </a>
+                          @elseif($hasOffer)
+                             <form method="POST" action="{{ route('tasks.offers.destroy', $task->id) }}" class="inline m-0 p-0">
+                                 @csrf
+                                 @method('DELETE')
+                                 <button type="submit" class="text-xs font-semibold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap inline-flex items-center gap-1">
+                                     <i data-feather="x" class="w-3 h-3"></i> Cancel offer
+                                 </button>
+                             </form>
+                          @else
+                              <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
+                              @if(count($missingSteps) > 0)
+                                 <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
+                                     Make an offer
+                                 </button>
+                              @else
+                                 <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
+                                     Make an offer
+                                 </a>
+                              @endif
+                          @endif
+                      @endguest
+                  </div>
               </div>
             </div>
           @empty
@@ -582,6 +642,58 @@
     <!-- Right: Map (Hidden on mobile) -->
       <div class="hidden md:flex flex-1 bg-gray-200 rounded-xl overflow-hidden shadow-inner border border-gray-300 relative">
         <div id="map"></div>
+        
+        <!-- Remote Tasks Pulsing Icon (Top Right) -->
+        @if($remoteCount > 0)
+            <div class="absolute top-4 right-4 z-20">
+                <div class="relative">
+                    {{-- Minimalist Cloud Icon with Pulse --}}
+                    <button type="button" 
+                            onclick="toggleRemoteInfo()"
+                            class="w-8 h-8 bg-white shadow-xl border border-blue-50 rounded-full flex items-center justify-center text-blue-600 transition-all duration-300 relative z-30 animate-cloud-pulse">
+                        <i data-feather="cloud" class="w-4 h-4"></i>
+                        {{-- Task Count Badge --}}
+                        <div class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                            {{ $remoteCount }}
+                        </div>
+                    </button>
+
+                    {{-- Detailed Info Card (Reveals on Click) --}}
+                    <div id="remote-info-pop" class="hidden absolute right-0 top-full mt-3 animate-fade-in-up z-40">
+                        <div class="bg-white/95 backdrop-blur-sm border border-blue-50 text-gray-800 rounded-2xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] p-4 min-w-[200px] border-t-4 border-t-blue-500">
+                           <div class="flex items-center gap-2 mb-2">
+                               <i data-feather="info" class="w-3.5 h-3.5 text-blue-500"></i>
+                               <div class="text-[10px] font-black text-blue-500 uppercase tracking-[0.15em]">Digital Opportunities</div>
+                           </div>
+                           <p class="text-[12px] font-medium leading-relaxed text-slate-600">
+                               There are <span class="text-blue-600 font-bold">{{ $remoteCount }}</span> tasks with no physical location. We've hidden them from the map to keep your view clear—you can find them in the list on the left.
+                           </p>
+                        </div>
+                    </div>
+
+                    <script>
+                        function toggleRemoteInfo() {
+                            const el = document.getElementById('remote-info-pop');
+                            const isHidden = el.classList.contains('hidden');
+                            
+                            // Close all other instances if needed
+                            el.classList.toggle('hidden');
+                            
+                            if (isHidden) {
+                                // Refresh icons in the newly shown card
+                                if (window.feather) window.feather.replace();
+                                
+                                // Auto-hide after 5 seconds
+                                setTimeout(() => {
+                                    el.classList.add('hidden');
+                                }, 5000);
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        @endif
+
         <div class="pointer-events-none absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-black/5 to-transparent z-10"></div>
       </div>
  
@@ -720,20 +832,6 @@
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
     // 3. Map Data & Markers
-    @php
-      $source = ($tasks instanceof \Illuminate\Pagination\AbstractPaginator) ? $tasks->items() : ($tasks ?? []);
-      $taskPoints = collect($source)->map(function($t){
-        $loc = $t->location ?? $t->employer->city->name ?? null;
-        $isRemote = $loc && stripos($loc, 'remote') !== false;
-        return [ 
-            'id' => $t->id ?? null, 
-            'title' => $t->title ?? '', 
-            'price' => (int)($t->price ?? 0), 
-            'location' => $loc,
-            'is_remote' => $isRemote
-        ];
-      })->filter(fn($r) => $r['id'] && $r['location'] && !$r['is_remote'])->values();
-    @endphp
     const tasksData = @json($taskPoints);
 
     const cityCache = {
@@ -781,19 +879,26 @@
         const el = document.createElement('div');
         el.className = 'map-marker-container group';
         el.style.cursor = 'pointer';
+
+        const markerColor = t.is_my_task ? 'bg-indigo-900' : 'bg-blue-600';
+        const pingColor = t.is_my_task ? 'bg-indigo-900/20' : 'bg-blue-500/20';
+
         el.innerHTML = `
             <div class="relative flex items-center justify-center">
-                <div class="absolute w-8 h-8 bg-blue-500/20 rounded-full animate-ping opacity-75"></div>
-                <div class="w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-lg relative z-10 transition-all duration-300 group-hover:scale-125 group-hover:bg-blue-500"></div>
+                <div class="absolute w-8 h-8 ${pingColor} rounded-full animate-ping opacity-75"></div>
+                <div class="w-4 h-4 ${markerColor} rounded-full border-2 border-white shadow-lg relative z-10 transition-all duration-300 group-hover:scale-125 group-hover:opacity-90"></div>
             </div>
         `;
 
         const popupHTML = `
             <div class="p-3 min-w-[180px]">
-                <div class="text-[10px] font-bold text-blue-500 uppercase tracking-wider mb-1">${t.location}</div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">${t.location}</div>
+                    ${t.is_my_task ? '<span class="px-1.5 py-0.5 bg-violet-100 text-violet-700 text-[9px] font-bold uppercase rounded-md">My Task</span>' : ''}
+                </div>
                 <div class="font-bold text-sm text-gray-900 mb-1 leading-tight">${t.title}</div>
                 <div class="text-blue-600 font-extrabold text-sm mb-3">€${t.price.toLocaleString()}</div>
-                <a href="/tasks/${t.id}" class="block w-full py-2 text-center bg-blue-600 text-white text-[11px] font-bold rounded-lg hover:bg-blue-700 transition-colors no-underline">View Details</a>
+                <a href="${t.is_my_task ? '/my-tasks#task-'+t.id : '/tasks/'+t.id}" class="block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">View Details</a>
             </div>
         `;
 
@@ -812,28 +917,37 @@
         // Hover Effect: Card -> Marker
         const card = document.getElementById(`task-card-${t.id}`);
         if(card) {
+            const hColor = t.is_my_task ? 'bg-indigo-900' : 'bg-blue-500';
+            const hPing = t.is_my_task ? 'bg-indigo-700/40' : 'bg-blue-400/40';
+
             card.addEventListener('mouseenter', () => {
-                el.querySelector('.animate-ping').classList.remove('animate-ping');
-                el.querySelector('.absolute').classList.add('scale-150', 'bg-blue-400/40');
-                el.querySelector('.z-10').classList.add('scale-150', 'bg-blue-500');
+                const pingEl = el.querySelector('.animate-ping');
+                if(pingEl) pingEl.classList.remove('animate-ping');
+                el.querySelector('.absolute').classList.add('scale-150', hPing);
+                el.querySelector('.z-10').classList.add('scale-150', hColor);
             });
             card.addEventListener('mouseleave', () => {
-                el.querySelector('.animate-ping')?.classList.add('animate-ping');
-                el.querySelector('.absolute').classList.remove('scale-150', 'bg-blue-400/40');
-                el.querySelector('.z-10').classList.remove('scale-150', 'bg-blue-500');
+                const pingEl = el.querySelector('.absolute:not(.z-10)');
+                if(pingEl) pingEl.classList.add('animate-ping');
+                el.querySelector('.absolute').classList.remove('scale-150', hPing);
+                el.querySelector('.z-10').classList.remove('scale-150', hColor);
             });
         }
 
         // Hover Effect: Marker -> Card
         el.addEventListener('mouseenter', () => {
             if(card) {
-                card.classList.add('border-blue-400', 'ring-4', 'ring-blue-50', 'shadow-xl', '-translate-y-1');
+                const ringColor = t.is_my_task ? 'ring-violet-50' : 'ring-blue-50';
+                const borderColor = t.is_my_task ? 'border-violet-400' : 'border-blue-400';
+                card.classList.add(borderColor, 'ring-4', ringColor, 'shadow-xl', '-translate-y-1');
                 card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         });
         el.addEventListener('mouseleave', () => {
             if(card) {
-                card.classList.remove('border-blue-400', 'ring-4', 'ring-blue-50', 'shadow-xl', '-translate-y-1');
+                const ringColor = t.is_my_task ? 'ring-violet-50' : 'ring-blue-50';
+                const borderColor = t.is_my_task ? 'border-violet-400' : 'border-blue-400';
+                card.classList.remove(borderColor, 'ring-4', ringColor, 'shadow-xl', '-translate-y-1');
             }
         });
       });

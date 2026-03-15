@@ -65,4 +65,6 @@ return [
         'get_quotes' => 'Get quotes',
         'submitting' => 'Submitting...',
     ],
+    'requesting_quote_from' => 'Requesting a quote from',
+    'requesting_quote_desc' => 'This task will be sent specifically to them.',
 ];

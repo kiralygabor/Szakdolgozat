@@ -40,6 +40,7 @@ Route::get('tasks/{task}', [PagesController::class, 'showTask'])->name('tasks.sh
 Route::post('tasks/{task}/offers', [OfferController::class, 'store'])->name('tasks.offers.store')->middleware('auth');
 Route::delete('tasks/{task}/offers', [OfferController::class, 'destroy'])->name('tasks.offers.destroy')->middleware('auth');
 Route::post('offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept')->middleware('auth');
+Route::post('tasks/{task}/accept-direct', [OfferController::class, 'acceptDirect'])->name('tasks.accept-direct')->middleware('auth');
 Route::post('reports', [ReportController::class, 'store'])->name('reports.store')->middleware('auth');
 Route::post('user-reports', [UserReportController::class, 'store'])->name('user-reports.store')->middleware('auth');
 Route::get('api/cities', [PagesController::class, 'searchCities'])->name('api.cities.search');

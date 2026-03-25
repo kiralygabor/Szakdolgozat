@@ -433,7 +433,7 @@
 <div class="flex items-center justify-between mt-10">
 <button type="button" id="backBtn" class="w-40 bg-blue-50 text-blue-700 font-semibold py-3 rounded-full disabled:opacity-50" disabled>{{ __('post-task.nav.back') }}</button>
 <div class="flex gap-3">
-<button type="button" id="nextBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full">{{ __('post-task.nav.next') }}</button>
+<button type="button" id="nextBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full opacity-60 cursor-not-allowed" disabled>{{ __('post-task.nav.next') }}</button>
 <button type="submit" id="submitBtn" class="w-40 bg-blue-600 text-white font-semibold py-3 rounded-full opacity-60 cursor-not-allowed hidden" disabled>{{ __('post-task.nav.get_quotes') }}</button>
 </div>
 </div>
@@ -497,8 +497,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let ok = true;
     let budgetErrorTimeout;
     if (stepIndex === 0) {
-      // Must have Task title AND Category AND Job
-      ok = taskInput.value.trim().length > 0 && categorySelect.value !== "" && jobSelect.value !== "";
+      const titleOk = taskInput.value.trim().length > 0;
+      const categoryOk = categorySelect.value !== "";
+      const jobOk = jobSelect.value !== "";
+      
+      const onDate = document.getElementById('onDateValue').value;
+      const beforeDate = document.getElementById('beforeDateValue').value;
+      const isFlexible = flexibleBtn && flexibleBtn.getAttribute('data-active') === 'true';
+      const dateOk = onDate !== "" || beforeDate !== "" || isFlexible;
+
+      ok = titleOk && categoryOk && jobOk && dateOk;
     } else if (stepIndex === 1) {
       const isInPerson = inPersonOption.classList.contains('selected');
       ok = !isInPerson || (isInPerson && pickupSuburb.value.trim().length > 0);
@@ -542,6 +550,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 }
     nextBtn.disabled = !ok;
+    nextBtn.classList.toggle('opacity-60', !ok);
+    nextBtn.classList.toggle('cursor-not-allowed', !ok);
+    
     submitBtn.disabled = !ok;
     submitBtn.classList.toggle('opacity-60', !ok);
     submitBtn.classList.toggle('cursor-not-allowed', !ok);
@@ -659,6 +670,7 @@ document.addEventListener('DOMContentLoaded', function() {
     beforeDateValue.value = '';
     onDateLabel.textContent = "{{ __('post-task.step1.on_date') }}";
     beforeDateLabel.textContent = "{{ __('post-task.step1.before_date') }}";
+    validateCurrent();
   }
   onDateBtn.addEventListener('click', function(e) {
     e.stopPropagation();
@@ -677,6 +689,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const date = new Date(this.value + 'T00:00:00');
       onDateLabel.textContent = date.toLocaleDateString('{{ app()->getLocale() == 'hu' ? 'hu-HU' : 'en-US' }}', { month: 'short', day: 'numeric', year: 'numeric' });
       onDateBtn.classList.add('active');
+      validateCurrent();
     }
   });
   onDateValue.addEventListener('click', function(e) { e.stopPropagation(); });
@@ -685,6 +698,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const date = new Date(this.value + 'T00:00:00');
       beforeDateLabel.textContent = date.toLocaleDateString('{{ app()->getLocale() == 'hu' ? 'hu-HU' : 'en-US' }}', { month: 'short', day: 'numeric', year: 'numeric' });
       beforeDateBtn.classList.add('active');
+      validateCurrent();
     }
   });
   beforeDateValue.addEventListener('click', function(e) { e.stopPropagation(); });
@@ -692,6 +706,7 @@ document.addEventListener('DOMContentLoaded', function() {
     flexibleBtn.addEventListener('click', function() {
       resetDateOptions();
       this.setAttribute('data-active','true');
+      validateCurrent();
     });
   }
   // Time of day checkbox and options

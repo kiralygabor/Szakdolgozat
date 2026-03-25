@@ -107,73 +107,41 @@
     }
 
     /* --- IMPROVED DROPDOWN --- */
-    .more-options-container { position: absolute; top: 30px; right: 30px; z-index: 20; }
-
-    .more-btn {
-        width: 38px; height: 38px; border-radius: 50%;
-        background: #FFFFFF; border: 1px solid #E2E8F0;
-        color: #64748B; display: flex; align-items: center; justify-content: center;
-        cursor: pointer; transition: all 0.2s ease;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    }
-    .more-btn:hover { 
-        background: #F8FAFC; color: #0F172A; border-color: #CBD5E1; 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    }
-
-    .custom-dropdown {
-        position: absolute; right: 0; top: 48px;
-        background: #FFFFFF;
-        border-radius: 14px;
-        box-shadow: 0 16px 32px -4px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
-        border: 1px solid #E2E8F0;
-        padding: 8px;
-        opacity: 0;
-        transform: scale(0.92) translateY(-8px);
-        transform-origin: top right;
-        pointer-events: none;
-        transition: opacity 0.18s cubic-bezier(0.16,1,0.3,1), transform 0.18s cubic-bezier(0.16,1,0.3,1);
+    /* --- MANAGEMENT PILLS --- */
+    .management-pills {
         display: flex;
-        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    .pill-action {
+        display: inline-flex;
+        align-items: center;
         gap: 6px;
-        min-width: max-content;
+        padding: 6px 14px;
+        border-radius: 99px;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        text-decoration: none;
+        border: 1px solid #E5E7EB;
+        background: #FFFFFF;
+        color: #64748B;
     }
-    .custom-dropdown.show { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
-
-    .dropdown-item {
-        display: flex; align-items: center; justify-content: center; gap: 7px;
-        padding: 9px 16px; border-radius: 9px;
-        font-size: 13px; font-weight: 700;
-        border: 1.5px solid transparent;
-        cursor: pointer; transition: all 0.15s ease;
-        text-decoration: none; white-space: nowrap;
-        background: transparent;
-    }
-
-    /* Edit Item — Blue */
-    .dropdown-item.edit {
-        background: #EFF6FF;
+    
+    .pill-action:hover {
+        border-color: #3B82F6;
         color: #2563EB;
-        border-color: #BFDBFE;
-    }
-    .dropdown-item.edit:hover {
-        background: #DBEAFE;
-        border-color: #93C5FD;
-        box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+        background: #F8FAFC;
         transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
-
-    /* Danger Item — Red */
-    .dropdown-item.danger {
-        background: #FEF2F2;
-        color: #DC2626;
+    
+    .pill-action.danger:hover {
         border-color: #FECACA;
-    }
-    .dropdown-item.danger:hover {
-        background: #FEE2E2;
-        border-color: #FCA5A5;
-        box-shadow: 0 2px 8px rgba(220,38,38,0.15);
-        transform: translateY(-1px);
+        color: #E11D48;
+        background: #FFF1F2;
     }
 
     /* Task Content */
@@ -642,41 +610,33 @@
 
                 {{-- RIGHT SIDE --}}
                 <div class="hero-right">
-                    
-                    {{-- IMPROVED Dropdown --}}
-                    @if(($viewMode ?? 'posted') === 'posted')
-                        <div class="more-options-container">
-                            <button class="more-btn" id="more-btn">
-                                <i data-feather="more-horizontal" style="width:16px; height:16px;"></i>
-                            </button>
-                            <div class="custom-dropdown" id="more-menu">
-
-                                <form action="{{ route('advertisements.destroy', $activeTask->id) }}" method="POST" class="m-0 p-0 flex gap-[6px] w-full" onsubmit="return confirm('{{ __('Are you sure you want to cancel this task? This cannot be undone.') }}');">
-                                    @csrf
-                                    @method('DELETE')
-                                    
-                                    <button type="button" class="dropdown-item edit flex-1" onclick="openEditTaskModal()" title="{{ __('mytasks.actions.edit') }}">
-                                        <i data-feather="edit-2" style="width:14px; height:14px;"></i>
-                                        {{ __('mytasks.actions.edit') }}
-                                    </button>
-
-                                    <button type="submit" class="dropdown-item danger flex-1" title="{{ __('mytasks.actions.cancel') }}">
-                                        <i data-feather="trash-2" style="width:14px; height:14px;"></i>
-                                        {{ __('mytasks.actions.cancel') }}
-                                    </button>
-                                </form>
-
-                            </div>
-                        </div>
-                    @endif
 
                     <div>
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="task-label">{{ __('mytasks.details.status_label', ['status' => ucfirst($activeTask->status)]) }}</span>
-                            @if(($viewMode ?? 'posted') === 'posted' && $activeTask->employee_id)
-                            <div class="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100">
-                                <i data-feather="user" class="w-3 h-3"></i>
-                                <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('Sent a quote to') }} {{ $activeTask->employee->first_name }}</span>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="task-label">{{ __('mytasks.details.status_label', ['status' => ucfirst($activeTask->status)]) }}</span>
+                                @if(($viewMode ?? 'posted') === 'posted' && $activeTask->employee_id)
+                                <div class="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100">
+                                    <i data-feather="user" class="w-3 h-3"></i>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('Sent a quote to') }} {{ $activeTask->employee->first_name }}</span>
+                                </div>
+                                @endif
+                            </div>
+
+                            @if(($viewMode ?? 'posted') === 'posted' && $activeTask->status === 'open')
+                            <div class="management-pills">
+                                <button type="button" class="pill-action" onclick="openEditTaskModal()">
+                                    <i data-feather="edit-2" style="width:12px; height:12px;"></i>
+                                    {{ __('Edit') }}
+                                </button>
+                                <form action="{{ route('advertisements.destroy', $activeTask->id) }}" method="POST" class="m-0 p-0" onsubmit="return confirm('{{ __('Are you sure you want to cancel this task? This cannot be undone.') }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="pill-action danger">
+                                        <i data-feather="trash-2" style="width:12px; height:12px;"></i>
+                                        {{ __('Cancel') }}
+                                    </button>
+                                </form>
                             </div>
                             @endif
                         </div>

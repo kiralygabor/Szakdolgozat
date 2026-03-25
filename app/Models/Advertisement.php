@@ -26,7 +26,8 @@ class Advertisement extends Model
         'task_type',
         'photos',
         'jobs_id',
-        'is_direct'
+        'is_direct',
+        'views'
     ];
 
     protected $casts = [

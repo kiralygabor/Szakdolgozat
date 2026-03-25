@@ -13,7 +13,7 @@
         <a href="#" id="mark-all-read" class="text-sm text-blue-600 hover:underline">{{ __('notifications_page.mark_all_read') }}</a>
       </div>
       <div class="divide-y divide-gray-200">
-        @forelse(($notifications ?? []) as $n)
+        @forelse($notifications ?? [] as $n)
           <a href="{{ $n->data['link'] ?? '#' }}" class="p-4 flex items-start gap-3 hover:bg-gray-50 no-underline transition-colors {{ $n->read_at ? 'opacity-60' : 'bg-blue-50/20' }}">
             <div class="w-10 h-10 rounded-full {{ ($n->data['type'] ?? '') === 'success' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600' }} flex items-center justify-center flex-shrink-0">
               <i data-feather="{{ ($n->data['type'] ?? '') === 'success' ? 'check-circle' : 'bell' }}" class="w-5 h-5"></i>

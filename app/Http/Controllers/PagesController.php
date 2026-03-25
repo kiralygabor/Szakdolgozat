@@ -597,7 +597,6 @@ class PagesController extends Controller
             ->findOrFail($id);
 
         // Record distinct view
-        $ip = request()->ip();
         $userId = Auth::id();
 
         if ($userId) {
@@ -605,21 +604,12 @@ class PagesController extends Controller
             AdvertisementView::firstOrCreate([
                 'advertisement_id' => $task->id,
                 'user_id' => $userId,
-            ], [
-                'ip_address' => $ip,
             ]);
-        } else {
-            // Guest: unique by IP for this task
-            AdvertisementView::firstOrCreate([
-                'advertisement_id' => $task->id,
-                'user_id' => null,
-                'ip_address' => $ip,
-            ]);
-        }
 
-        // Update the main views count on the task based on unique viewers
-        $distinctCount = AdvertisementView::where('advertisement_id', $task->id)->count();
-        $task->update(['views' => $distinctCount]);
+            // Update the main views count on the task based on unique viewers
+            $distinctCount = AdvertisementView::where('advertisement_id', $task->id)->count();
+            $task->update(['views' => $distinctCount]);
+        }
 
         $missingSteps = [];
         $user = Auth::user();

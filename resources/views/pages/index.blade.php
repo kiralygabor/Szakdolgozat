@@ -71,6 +71,97 @@
     transform: translateX(0);
     will-change: transform, opacity;
   }
+
+  /* --- REDUCED MOTION OVERRIDES --- */
+  .reduced-motion .animate-scroll-up .task-column,
+  .reduced-motion .animate-scroll-down .task-column,
+  .reduced-motion .animate-scroll-left,
+  .reduced-motion .animate-scroll-right,
+  .reduced-motion .animate-bounce,
+  .reduced-motion .animate-cloud-pulse {
+    animation: none !important;
+    transform: none !important;
+  }
+  .reduced-motion .task-column {
+    animation: none !important;
+  }
+  /* Disable hover "popups" and scaling in Reduced Motion */
+  .reduced-motion .group:hover,
+  .reduced-motion .group:hover *,
+  .reduced-motion .hover:scale-105:hover,
+  .reduced-motion .hover\:-translate-y-1:hover,
+  .reduced-motion .hover\:-translate-y-2:hover,
+  .reduced-motion .hover\:scale-\[1\.02\]:hover,
+  .reduced-motion .hover\:-rotate-1:hover,
+  .reduced-motion .group:hover .bg-white {
+    transform: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+  .reduced-motion .task-column {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+  }
+  .reduced-motion .task-column > div {
+    flex: 1 1 calc(50% - 1.5rem) !important;
+    aspect-ratio: 1/1.2 !important;
+  }
+  .reduced-motion .grid-cols-2 {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  /* Show 4 big cards in a 2x2 grid */
+  .reduced-motion #col-left {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+    gap: 1rem !important;
+  }
+  .reduced-motion #col-left > div {
+     aspect-ratio: 1/1 !important;
+  }
+  .reduced-motion #col-left > *:nth-child(n+5) { display: none !important; }
+  .reduced-motion #col-right { display: none !important; }
+
+  /* --- HIGH CONTRAST OVERRIDES --- */
+  .high-contrast .skew-bg { display: none !important; }
+  .high-contrast .how-it-works-right { background: #000000 !important; border: 4px solid #000000 !important; }
+  .high-contrast .how-it-works-inner { background: #ffffff !important; border: 4px solid #000000 !important; }
+  .high-contrast .how-it-works-inner .how-it-works-text { color: #ffffff !important; font-weight: 800 !important; }
+  .high-contrast .how-it-works-inner .how-it-works-text-p { color: #ffffff !important; opacity: 1 !important; }
+  
+  /* Fix header in marketplace window */
+  .high-contrast .how-it-works-inner > div:first-child,
+  .high-contrast .how-it-works-inner > div:first-child * { 
+      background-color: #ffffff !important; 
+      color: #000000 !important;
+      opacity: 1 !important;
+      backdrop-filter: none !important; 
+      -webkit-backdrop-filter: none !important;
+      border-color: #000000 !important;
+      z-index: 50 !important;
+  }
+  .high-contrast .how-it-works-inner h3,
+  .high-contrast .how-it-works-inner p,
+  .high-contrast .how-it-works-inner span { 
+      color: #000000 !important; 
+      opacity: 1 !important; 
+      font-weight: 900 !important;
+  }
+  /* Explicitly target the Explore title and subtitle classes to overrule Tailwind dark:* */
+  .high-contrast .how-it-works-inner .text-2xl,
+  .high-contrast .how-it-works-inner .text-sm {
+      color: #000000 !important;
+  }
+  /* Remove the fog fading gradients */
+  .high-contrast .h-24.bg-gradient-to-b,
+  .high-contrast .h-24.bg-gradient-to-t {
+      display: none !important;
+  }
+  /* Remove color bars from cards in High Contrast */
+  .high-contrast .group .absolute.top-0.left-0.w-full.h-1 { display: none !important; }
 </style>
 
 <!-- Hero Section -->
@@ -108,7 +199,7 @@
 <section class="py-24 px-6 bg-white dark:bg-slate-900 transition-colors duration-300 relative overflow-hidden">
   
   <!-- Background Pattern -->
-  <div class="absolute top-0 right-0 w-[45%] h-full bg-slate-50 dark:bg-slate-800/20 -skew-x-12 translate-x-20 pointer-events-none border-l border-slate-100 dark:border-slate-800"></div>
+  <div class="absolute top-0 right-0 w-[45%] h-full bg-slate-50 dark:bg-slate-800/20 -skew-x-12 translate-x-20 pointer-events-none border-l border-slate-100 dark:border-slate-800 skew-bg"></div>
 
   <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10">
     
@@ -169,10 +260,10 @@
     <div class="relative px-2 lg:px-0">
       
       <!-- Double Background (Expanded & Tilted) -->
-      <div class="absolute -inset-6 bg-gradient-to-tr from-indigo-50 to-blue-50 dark:from-slate-800 dark:to-slate-800 rounded-[3rem] transform rotate-2 border border-gray-100 dark:border-slate-700/50"></div>
+      <div class="absolute -inset-6 bg-gradient-to-tr from-indigo-50 to-blue-50 dark:from-slate-800 dark:to-slate-800 rounded-[3rem] transform rotate-2 border border-gray-100 dark:border-slate-700/50 how-it-works-right"></div>
       
       <!-- Main Container -->
-      <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-gray-200 dark:border-slate-700 relative overflow-hidden h-[750px] transform transition-transform hover:scale-[1.002] duration-500 flex flex-col">
+      <div class="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-gray-200 dark:border-slate-700 relative overflow-hidden h-[750px] transform transition-transform hover:scale-[1.002] duration-500 flex flex-col how-it-works-inner">
         
         <!-- Header: Clean "Trending" State -->
         <div class="relative z-30 flex items-center justify-between px-8 py-6 border-b border-gray-100 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl">
@@ -210,8 +301,8 @@
                 <img src="assets/img/handyman.jpg" alt="Handyman" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">Handyman</h4>
-                  <p class="text-xs text-gray-300 font-medium">Repairs & Installs</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Handyman</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Repairs & Installs</p>
                 </div>
               </div>
               
@@ -220,8 +311,8 @@
                 <img src="assets/img/plumbing.jpg" alt="Plumbing" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">Plumbing</h4>
-                  <p class="text-xs text-gray-300 font-medium">Leaks & Drains</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Plumbing</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Leaks & Drains</p>
                 </div>
               </div>
 
@@ -230,8 +321,8 @@
                 <img src="assets/img/delivery.jpg" alt="Delivery" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">Delivery</h4>
-                  <p class="text-xs text-gray-300 font-medium">Parcels & Food</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Delivery</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Parcels & Food</p>
                 </div>
               </div>
 
@@ -240,8 +331,8 @@
                 <img src="assets/img/gardening.jpg" alt="Gardening" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">Gardening</h4>
-                  <p class="text-xs text-gray-300 font-medium">Mowing & Planting</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Gardening</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Mowing & Planting</p>
                 </div>
               </div>
             </template>
@@ -256,8 +347,8 @@
                 <img src="assets/img/house_cleaning.jpg" alt="Cleaning" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">Cleaning</h4>
-                  <p class="text-xs text-gray-300 font-medium">Home & Office</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Cleaning</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Home & Office</p>
                 </div>
               </div>
 
@@ -266,8 +357,8 @@
                 <img src="assets/img/barbers.jpg" alt="Moving" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">Moving Help</h4>
-                  <p class="text-xs text-gray-300 font-medium">Heavy Lifting</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Moving Help</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Heavy Lifting</p>
                 </div>
               </div>
 
@@ -276,8 +367,8 @@
                 <img src="assets/img/car_wash.jpg" alt="Car Wash" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">Car Wash</h4>
-                  <p class="text-xs text-gray-300 font-medium">Mobile Detailing</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Car Wash</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Mobile Detailing</p>
                 </div>
               </div>
 
@@ -286,8 +377,8 @@
                 <img src="assets/img/mechanic.jpg" alt="IT Support" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1">IT Support</h4>
-                  <p class="text-xs text-gray-300 font-medium">Tech & Setup</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">IT Support</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Tech & Setup</p>
                 </div>
               </div>
             </template>
@@ -666,6 +757,7 @@
   </div>
 </section>
  
+<!-- Take Minijobz Anywhere - Modern App Card -->
 <!-- Take Minijobz Anywhere - Modern App Card -->
 <section class="py-24 px-4 md:px-6 bg-white dark:bg-slate-900 transition-colors duration-300">
   

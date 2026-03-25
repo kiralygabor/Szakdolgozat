@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="hu">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,6 +98,326 @@
       @media (max-width: 767px) {
         .mobile-navbar { display: flex; }
         .desktop-navbar { display: none !important; }
+      }
+
+      /* Standard Mode: Using Tailwind defaults to maintain original aesthetics */
+      
+      /* Navbar Link Contrast */
+      .desktop-navbar a.text-gray-500, .desktop-navbar span.text-gray-500, .desktop-navbar a.text-gray-600 {
+          color: #6b7280;
+      }
+      
+      /* Footer Contrast Improvements */
+      footer .text-gray-500 { color: #6b7280; }
+      footer .text-gray-400 { color: #9ca3af; }
+
+      /* Accessibility Overrides (Toggled via settings) */
+      .reduced-motion *, .reduced-motion *:before, .reduced-motion *:after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      /* Enhanced High Contrast Mode (WCAG AAA alignment) */
+      .high-contrast {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+
+      /* === 1. HERO SECTION: Strong overlay + ALL text white === */
+      .high-contrast .bg-gray-900 .bg-gradient-to-r {
+        background: rgba(0, 0, 0, 0.90) !important;
+      }
+      .high-contrast .bg-gray-900 img.object-cover {
+        opacity: 0.1 !important;
+      }
+      /* Force ALL hero text to white EXCEPT buttons */
+      .high-contrast .bg-gray-900 h1,
+      .high-contrast .bg-gray-900 h1 span:not(.btn),
+      .high-contrast .bg-gray-900 h1 *:not(.btn):not(a),
+      .high-contrast .bg-gray-900 p,
+      .high-contrast .bg-gray-900 .text-gray-200,
+      .high-contrast .bg-gray-900 .text-indigo-500:not(a),
+      .high-contrast .bg-gray-900 .text-indigo-600:not(a),
+      .high-contrast .bg-gray-900 .text-blue-600:not(a),
+      .high-contrast .bg-gray-900 .text-violet-600:not(a),
+      .high-contrast .bg-gray-900 div.relative.z-10 > h1,
+      .high-contrast .bg-gray-900 div.relative.z-10 > p {
+        color: #ffffff !important;
+      }
+      /* Hero buttons (Force black text on white background) */
+      .high-contrast .bg-gray-900 a.bg-white,
+      .high-contrast .bg-gray-900 a.bg-indigo-500 {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 4px solid #000000 !important;
+        font-weight: 900 !important;
+      }
+
+      /* === 2. ALL SECONDARY TEXT: Force black on white === */
+      .high-contrast .text-gray-400,
+      .high-contrast .text-gray-500,
+      .high-contrast .text-gray-600,
+      .high-contrast .text-slate-400,
+      .high-contrast .text-slate-500,
+      .high-contrast .text-slate-600,
+      .high-contrast .text-gray-300 {
+        color: #000000 !important;
+      }
+      .high-contrast .text-gray-700,
+      .high-contrast .text-gray-800,
+      .high-contrast .text-gray-900 {
+        color: #000000 !important;
+      }
+      .high-contrast .text-green-600,
+      .high-contrast .text-red-600,
+      .high-contrast .text-emerald-600 {
+        color: #000000 !important;
+        font-weight: 700 !important;
+      }
+      .high-contrast p,
+      .high-contrast span,
+      .high-contrast li,
+      .high-contrast h1,
+      .high-contrast h2,
+      .high-contrast h3,
+      .high-contrast h4,
+      .high-contrast blockquote p {
+        color: #000000 !important;
+      }
+
+      /* === 3. CATEGORY & FEATURE CARDS: High visibility === */
+      .high-contrast .bg-white {
+        background-color: #ffffff !important;
+      }
+      .high-contrast .bg-gray-50,
+      .high-contrast .bg-slate-50,
+      .high-contrast .bg-blue-50,
+      .high-contrast .bg-violet-50 {
+        background-color: #ffffff !important;
+      }
+      .high-contrast .bg-blue-50,
+      .high-contrast .bg-emerald-50,
+      .high-contrast .bg-indigo-50,
+      .high-contrast .bg-blue-200 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+      }
+      .high-contrast .bg-green-100, .high-contrast .bg-red-100, .high-contrast .bg-blue-100, .high-contrast .bg-violet-100, .high-contrast .bg-purple-100, .high-contrast .bg-orange-100, .high-contrast .bg-teal-100, .high-contrast .bg-indigo-100 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+      }
+      /* Ensure text inside colored badges is white */
+      .high-contrast .text-blue-700, .high-contrast .text-green-700, .high-contrast .text-purple-700,
+      .high-contrast .text-orange-700, .high-contrast .text-red-700, .high-contrast .text-teal-700,
+      .high-contrast .text-indigo-700 {
+        color: #ffffff !important;
+      }
+      .high-contrast .text-blue-600, .high-contrast .text-indigo-600, .high-contrast .text-violet-600 {
+        color: #000044 !important;
+        font-weight: 800 !important;
+      }
+      .high-contrast #cat-desc {
+        color: #ffffff !important;
+        padding: 8px 16px !important;
+        border-radius: 0.5rem !important;
+      }
+
+      /* === 4. PURPLE GRADIENT SECTION (Mobile App CTA) === */
+      .high-contrast .bg-gradient-to-br.from-indigo-600 {
+        background: #000000 !important;
+      }
+      .high-contrast .bg-gradient-to-br.from-indigo-600 h2,
+      .high-contrast .bg-gradient-to-br.from-indigo-600 p,
+      .high-contrast .bg-gradient-to-br.from-indigo-600 span {
+        color: #ffffff !important;
+      }
+      .high-contrast .text-indigo-100,
+      .high-contrast .text-indigo-200 {
+        color: #ffffff !important;
+      }
+      .high-contrast .text-indigo-400,
+      .high-contrast .text-indigo-600 {
+        color: #000044 !important;
+        font-weight: 700 !important;
+      }
+
+      /* === 5. BUTTONS (Secondary): Strong borders === */
+      .high-contrast .border, .high-contrast .border-gray-200, .high-contrast .border-gray-100, .high-contrast .border-slate-200, .high-contrast .border-gray-300 {
+        border-color: #000000 !important;
+        border-width: 2px !important;
+      }
+      .high-contrast .bg-blue-600, .high-contrast .bg-indigo-600, .high-contrast .bg-violet-600, .high-contrast .bg-primary-500, .high-contrast .bg-secondary-500, .high-contrast .bg-indigo-500 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+      }
+      .high-contrast .bg-white.text-gray-900 {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 3px solid #000000 !important;
+        font-weight: 800 !important;
+      }
+
+      /* === 6. FOOTER: All text to high contrast === */
+      .high-contrast footer {
+        background-color: #ffffff !important;
+      }
+      .high-contrast footer .text-gray-500,
+      .high-contrast footer .text-gray-400,
+      .high-contrast footer .text-gray-600,
+      .high-contrast footer .text-sm {
+        color: #000000 !important;
+      }
+      .high-contrast footer a {
+        color: #000000 !important;
+        font-weight: 600 !important;
+      }
+
+      /* === GENERAL HIGH CONTRAST HELPERS === */
+      .high-contrast *, .high-contrast *:before, .high-contrast *:after {
+        border-color: #000000 !important;
+        --tw-text-opacity: 1 !important;
+        --tw-border-opacity: 1 !important;
+      }
+      .high-contrast .task-card {
+        background-color: #ffffff !important;
+        border: 3px solid #000000 !important;
+        box-shadow: none !important;
+      }
+      .high-contrast .btn, .high-contrast button, .high-contrast .sub-menu-link {
+        font-weight: 700 !important;
+      }
+      .high-contrast .maplibregl-popup-content .bg-blue-600, 
+      .high-contrast .maplibregl-popup-content .bg-violet-600 {
+        border: none !important;
+      }
+      .high-contrast a:hover:not(.flex.items-center), 
+      .high-contrast button:hover {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        text-decoration: underline !important;
+      }
+      /* Exclude logo from black background on hover */
+      .high-contrast a.flex.items-center:hover {
+        background-color: transparent !important;
+      }
+      /* Navbar Settings & Links */
+      .high-contrast .desktop-navbar a {
+        text-decoration: underline !important;
+        font-weight: 700 !important;
+      }
+      /* Navbar Settings Dropdown & Submenus */
+      .high-contrast #settings-menu,
+      .high-contrast #settings-menu .submenu {
+          background-color: #ffffff !important;
+          border: 3px solid #000000 !important;
+          color: #000000 !important;
+          z-index: 100 !important;
+      }
+      .high-contrast #settings-menu div:not([id*="-indicator"]):not(.dot),
+      .high-contrast #settings-menu button {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+          text-decoration: underline !important;
+          text-underline-offset: 4px;
+          font-weight: 800 !important;
+          border: none !important;
+      }
+      /* Hover state: Parent item or current button/div turns black */
+      .high-contrast #settings-menu div:hover:not([id*="-indicator"]):not(.dot),
+      .high-contrast #settings-menu button:hover,
+      .high-contrast #settings-menu .group:hover > div:first-child {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+      }
+      /* Accessibility Toggles in High Contrast */
+      .high-contrast [id*="-indicator"] {
+          background-color: #ffffff !important;
+          border: 3px solid #000000 !important;
+          width: 2.5rem !important; /* Slightly wider */
+          height: 1.25rem !important;
+          opacity: 1 !important;
+      }
+      .high-contrast [id*="-indicator"].bg-blue-600 {
+          background-color: #000000 !important;
+      }
+      .high-contrast [id*="-indicator"] .dot {
+          background-color: #000000 !important;
+          border: 1px solid #ffffff;
+          width: 0.75rem !important;
+          height: 0.75rem !important;
+          top: 1.5px !important;
+          left: 1.5px !important;
+      }
+      .high-contrast [id*="-indicator"].bg-blue-600 .dot {
+          background-color: #ffffff !important;
+          border: 1px solid #000000;
+          transform: translateX(20px) !important;
+      }
+      /* Submenu items visibility */
+      .high-contrast #settings-menu .submenu div,
+      .high-contrast #settings-menu .submenu button {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+      }
+      .high-contrast #settings-menu .submenu div:hover {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+      }
+      /* Maintain hidden state correctly */
+      .high-contrast #settings-menu.hidden { display: none !important; }
+      .high-contrast #settings-menu:not(.show) { opacity: 0 !important; pointer-events: none !important; }
+      .high-contrast #settings-menu.show { opacity: 1 !important; transform: none !important; }
+      .high-contrast #settings-menu .group > .submenu {
+          opacity: 0 !important;
+          pointer-events: none !important;
+      }
+      .high-contrast #settings-menu .group:hover > .submenu {
+          opacity: 1 !important;
+          pointer-events: auto !important;
+          transform: none !important;
+          display: block !important;
+      }
+
+      /* Footer Highlighting */
+      .high-contrast footer p, 
+      .high-contrast footer div.text-sm,
+      .high-contrast footer .text-gray-500,
+      .high-contrast footer .text-gray-400 {
+        color: #000000 !important;
+        font-weight: 600 !important;
+        opacity: 1 !important;
+      }
+
+      /* Global Reduced Motion Hover Fix */
+      .reduced-motion *:hover:not(.dot):not(img),
+      .reduced-motion .group:hover:not(.dot):not(img),
+      .reduced-motion .group:hover *:not(.dot):not(img) {
+        transform: none !important;
+        -webkit-transform: none !important;
+        transition: none !important;
+        -webkit-transition: none !important;
+        box-shadow: none !important;
+      }
+      .high-contrast input, .high-contrast select, .high-contrast textarea {
+        border: 2px solid #000000 !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        opacity: 1 !important;
+      }
+      .high-contrast ::placeholder {
+        color: #000000 !important;
+        opacity: 0.7 !important;
+      }
+      /* Decorative blobs/dots should be hidden in high contrast */
+      .high-contrast [style*="radial-gradient"],
+      .high-contrast [class*="blur-"] {
+        opacity: 0 !important;
+      }
+      .high-contrast .sr-only:not(:focus) {
+          /* Ensure sr-only stays hidden but accessible */
       }
 
       /* Hamburger button */
@@ -404,8 +723,11 @@
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 </head>
-
-<body>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+    <!-- Skip to Main Content Link -->
+    <a href="#main-content" id="skip-link" class="focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg sr-only">
+        Skip to main content
+    </a>
 
 
     <!-- 🔹 NAVBAR (overrideable) -->
@@ -414,9 +736,9 @@
 @else
 
 {{-- ===== MOBILE NAVBAR (visible < 768px) ===== --}}
-<nav class="mobile-navbar">
+<nav class="mobile-navbar" aria-label="Mobile main navigation">
   {{-- Left: Hamburger --}}
-  <button class="mobile-hamburger" id="mobileHamburger" aria-label="Open menu">
+  <button class="mobile-hamburger" id="mobileHamburger" aria-label="Open sidebar menu" aria-controls="mobileSidebar" aria-expanded="false">
     <span></span>
     <span></span>
     <span></span>
@@ -438,10 +760,11 @@
         $unreadCount = $currentUser->unreadNotifications()->count();
         $notifications = $currentUser->notifications()->limit(5)->get();
       @endphp
-      <button class="mobile-profile-btn" id="mobileProfileBtn" type="button">
-        <img src="{{ $avatarSrc }}" alt="Profile">
+      <button class="mobile-profile-btn" id="mobileProfileBtn" type="button" aria-label="Open profile menu" aria-controls="mobileProfileDropdown" aria-expanded="false">
+        <img src="{{ $avatarSrc }}" alt="" aria-hidden="true" class="w-8 h-8 rounded-full object-cover">
         @if($unreadCount > 0)
-          <span style="position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#ef4444;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;">{{ $unreadCount }}</span>
+          <span class="sr-only">{{ $unreadCount }} unread notifications</span>
+          <span style="position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#ef4444;color:#fff;font-size:9px;font-weight:700;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #fff;" aria-hidden="true">{{ $unreadCount }}</span>
         @endif
       </button>
 
@@ -502,7 +825,7 @@
 <div class="mobile-sidebar-overlay" id="mobileSidebarOverlay"></div>
 
 {{-- Mobile Sidebar --}}
-<div class="mobile-sidebar" id="mobileSidebar">
+<div class="mobile-sidebar" id="mobileSidebar" role="dialog" aria-modal="true" aria-label="Main menu sidebar">
   <div class="mobile-sidebar-header">
     <a href="{{ url('/index') }}">
       <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="height: 26px; width: auto;">
@@ -579,7 +902,7 @@
 </div>
 
 {{-- ===== DESKTOP NAVBAR (visible >= 768px) ===== --}}
-<nav class="desktop-navbar bg-white border-b border-gray-200 shadow-sm w-full z-50">
+<nav class="desktop-navbar bg-white border-b border-gray-200 shadow-sm w-full z-50" aria-label="Desktop main navigation">
   <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
     <!-- LEFT: Logo (aligned with Sidebar location) -->
     <div class="flex items-center md:w-1/5">
@@ -597,9 +920,9 @@
  
   <!-- Mega Menu -->
   <div id="categories-group" class="relative group">
-    <a href="{{ url('category') }}" class="text-gray-600 hover:text-secondary-500 font-medium inline-flex items-center px-2 py-2">
+    <a href="{{ url('category') }}" id="categories-toggle" class="text-gray-600 hover:text-blue-700 font-medium inline-flex items-center px-2 py-2" aria-haspopup="true" aria-expanded="false">
       {{ __('navbar.categories') }}
-      <svg class="ml-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg class="ml-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
     </a>
@@ -715,7 +1038,7 @@
     <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white">
       {{ __('navbar.login') }}
     </a>
-    <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg border border-primary-500 text-primary-500 hover:bg-primary-500/10">
+    <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white">
       {{ __('navbar.sign_up') }}
     </a>
   @endguest
@@ -723,10 +1046,11 @@
   @auth
     <!-- Right: avatar dropdown -->
     <div class="relative ml-auto pr-4">
-      <button type="button" class="rounded-full overflow-hidden w-9 h-9 ring-1 ring-gray-300 hover:ring-gray-400" onclick="toggleMenu()">
-        <img src="{{ $avatarSrc }}" alt="Profile" class="w-full h-full object-cover">
+      <button type="button" class="rounded-full overflow-hidden w-9 h-9 ring-1 ring-gray-300 hover:ring-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+              id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleMenu()" aria-label="Open user profile menu">
+        <img src="{{ $avatarSrc }}" alt="" class="w-full h-full object-cover">
       </button>
-      <div class="sub-menu-wrap" id="subMenu">
+      <div class="sub-menu-wrap" id="subMenu" role="menu" aria-labelledby="user-menu-button" aria-orientation="vertical">
         <div class="sub-menu">
           <a href="{{ route('public-profile', Auth::id()) }}" class="user-info group block px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors no-underline">
             <h3 class="text-base font-bold text-gray-900 group-hover:text-[#6366f1] transition-colors">{{ $fullName }}</h3>
@@ -765,19 +1089,24 @@
 
     <!-- Notification Bell & Dropdown -->
     <div class="relative">
-        <button class="notification-btn" type="button" onclick="toggleNotifications()">
-          <svg viewBox="0 0 448 512" class="bell">
+        <button class="notification-btn focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full" 
+                type="button" onclick="toggleNotifications()" 
+                id="notifications-menu-button" aria-expanded="false" aria-haspopup="true" aria-label="Notifications">
+          <svg viewBox="0 0 448 512" class="bell" aria-hidden="true">
             <path d="M224 0c-17.7 0-32 14.3-32 32V49.9C119.5 61.4 64 124.2 64 200v33.4c0 45.4-15.5 89.5-43.8 124.9L5.3 377c-5.8 7.2-6.9 17.1-2.9 25.4S14.8 416 24 416H424c9.2 0 17.6-5.3 21.6-13.6s2.9-18.2-2.9-25.4l-14.9-18.6C399.5 322.9 384 278.8 384 233.4V200c0-75.8-55.5-138.6-128-150.1V32c0-17.7-14.3-32-32-32zm0 96h8c57.4 0 104 46.6 104 104v33.4c0 47.9 13.9 94.6 39.7 134.6H72.3C98.1 328 112 281.3 112 233.4V200c0-57.4 46.6-104 104-104h8zm64 352H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7s18.7-28.3 18.7-45.3z"></path>
           </svg>
           @if($unreadCount > 0)
-            <span class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white bg-red-500 rounded-full border border-white transform translate-x-1 -translate-y-1">
+            <span class="sr-only">{{ $unreadCount }} unread notifications</span>
+            <span class="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-[9px] font-bold text-white bg-red-500 rounded-full border border-white transform translate-x-1 -translate-y-1" aria-hidden="true">
                 {{ $unreadCount }}
             </span>
           @endif
         </button>
 
         <!-- Dropdown Menu -->
-        <div id="notification-dropdown" class="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden hidden transform origin-top-right transition-all duration-200 z-50">
+        <div id="notification-dropdown" 
+             role="menu" aria-labelledby="notifications-menu-button"
+             class="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden hidden transform origin-top-right transition-all duration-200 z-50">
             <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h3 class="font-bold text-gray-800">Notifications</h3>
                 @if($unreadCount > 0)
@@ -850,6 +1179,26 @@
             <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">Hungarian</div>
           </div>
         </div>
+        <div class="group relative" id="nav-accessibility-section">
+          <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+            <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
+            Accessibility
+          </div>
+          <div class="submenu absolute top-0 right-full w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto p-1">
+             <button type="button" onclick="toggleAccessibilitySetting('reduced-motion')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
+                <span>Reduced Motion</span>
+                <div id="nav-reduced-motion-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
+                    <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
+                </div>
+             </button>
+             <button type="button" onclick="toggleAccessibilitySetting('high-contrast')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
+                <span>High Contrast</span>
+                <div id="nav-high-contrast-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
+                    <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
+                </div>
+             </button>
+          </div>
+        </div>
         <div class="group relative">
           <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
             <i data-feather="chevron-left" class="w-4 h-4"></i>
@@ -871,7 +1220,7 @@
 
 
     <!-- 🔹 MAIN CONTENT -->
-    <main>
+    <main id="main-content" tabindex="-1">
         @yield('content')
     </main>
 
@@ -933,7 +1282,7 @@
                 </div>
             </div>
 
-            <div class="border-t border-gray-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-sm text-gray-500">
                     &copy; {{ date('Y') }} Minijobz. {{ __('footer.all_rights_reserved') }}
                 </p>
@@ -966,10 +1315,35 @@
             localStorage.setItem('theme','light');
           }
         }
-        // Init theme on load
+        function applyAcc(type, val) {
+            root.classList.toggle(type, val);
+            localStorage.setItem(type, val);
+            const indicator = document.getElementById('nav-' + type + '-indicator');
+            if (indicator) {
+                indicator.classList.toggle('bg-blue-600', val);
+                indicator.classList.toggle('bg-gray-200', !val);
+                const dot = indicator.querySelector('.dot');
+                if (dot) dot.style.transform = val ? 'translateX(16px)' : 'translateX(0)';
+            }
+        }
+        window.applyAccMode = function(enabled) {
+            localStorage.setItem('accessibility-mode', enabled);
+        }
+        window.toggleAccessibilitySetting = function(type) {
+            const current = localStorage.getItem(type) === 'true';
+            applyAcc(type, !current);
+        }
+        // Init theme and accessibility on load
         try {
           var saved = localStorage.getItem('theme') || 'system';
           applyTheme(saved);
+          
+          // Always apply specific accessibility settings from localStorage on load
+          applyAcc('reduced-motion', localStorage.getItem('reduced-motion') === 'true');
+          applyAcc('high-contrast', localStorage.getItem('high-contrast') === 'true');
+
+          const accMode = localStorage.getItem('accessibility-mode') === 'true';
+          window.applyAccMode(accMode);
           // react to system changes if system mode selected
           window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(){
             if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
@@ -1073,7 +1447,9 @@
         // Avatar submenu toggle helper
         window.toggleMenu = function(){
           if (!subMenu) return;
-          subMenu.classList.toggle('open-menu');
+          const isOpen = subMenu.classList.toggle('open-menu');
+          const btn = document.getElementById('user-menu-button');
+          if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         };
         
         if (catGroup && catMenu) {
@@ -1082,6 +1458,8 @@
           var showCat = function(){
             clearTimeout(catTimeout);
             catMenu.classList.remove('hidden');
+            const toggle = document.getElementById('categories-toggle');
+            if (toggle) toggle.setAttribute('aria-expanded', 'true');
             // small delay to allow display change to register before opacity transition
             requestAnimationFrame(() => {
                 catMenu.classList.remove('opacity-0','pointer-events-none','translate-y-2');
@@ -1094,6 +1472,8 @@
             catTimeout = setTimeout(function(){
                 catMenu.classList.remove('opacity-100');
                 catMenu.classList.add('opacity-0');
+                const toggle = document.getElementById('categories-toggle');
+                if (toggle) toggle.setAttribute('aria-expanded', 'false');
                 // delay pointer-events toggle to allow transition
                 setTimeout(function(){ 
                     if(catMenu.classList.contains('opacity-0')) {
@@ -1132,14 +1512,20 @@
           if (!sidebar || !overlay) return;
           sidebar.classList.add('active');
           overlay.classList.add('active');
-          if (hamburger) hamburger.classList.add('active');
+          if (hamburger) {
+              hamburger.classList.add('active');
+              hamburger.setAttribute('aria-expanded', 'true');
+          }
           document.body.style.overflow = 'hidden';
         }
         function closeSidebar() {
           if (!sidebar || !overlay) return;
           sidebar.classList.remove('active');
           overlay.classList.remove('active');
-          if (hamburger) hamburger.classList.remove('active');
+          if (hamburger) {
+              hamburger.classList.remove('active');
+              hamburger.setAttribute('aria-expanded', 'false');
+          }
           document.body.style.overflow = '';
         }
 
@@ -1157,11 +1543,13 @@
         if (profileBtn && profileDropdown) {
           profileBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            profileDropdown.classList.toggle('active');
+            const isActive = profileDropdown.classList.toggle('active');
+            profileBtn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
           });
           document.addEventListener('click', function(e) {
             if (profileDropdown && !profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
               profileDropdown.classList.remove('active');
+              profileBtn.setAttribute('aria-expanded', 'false');
             }
           });
         }
@@ -1178,8 +1566,10 @@
       // Notification Dropdown Logic
       function toggleNotifications() {
           const dropdown = document.getElementById('notification-dropdown');
+          const btn = document.getElementById('notifications-menu-button');
           if (dropdown.classList.contains('hidden')) {
               dropdown.classList.remove('hidden');
+              btn.setAttribute('aria-expanded', 'true');
               setTimeout(() => {
                   dropdown.classList.remove('opacity-0', 'scale-95');
                   dropdown.classList.add('opacity-100', 'scale-100');
@@ -1187,6 +1577,7 @@
           } else {
               dropdown.classList.remove('opacity-100', 'scale-100');
               dropdown.classList.add('opacity-0', 'scale-95');
+              btn.setAttribute('aria-expanded', 'false');
               setTimeout(() => {
                   dropdown.classList.add('hidden');
               }, 200);
@@ -1252,10 +1643,10 @@
     {{-- =========================================
          FLOATING SUPPORT CHATBOT
          ========================================= --}}
-    <!-- Floating Button 
+   Floating Button 
     <button id="chatbot-toggle" onclick="toggleChatbot()" class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-indigo-300 hover:bg-indigo-700 hover:-translate-y-1 transition-all z-[100] focus:outline-none">
         <i data-feather="message-circle" class="w-6 h-6"></i>
-    </button>-->
+    </button>
 
     <!-- Chatbot Window -->
     <div id="chatbot-window" class="fixed bottom-24 right-6 w-[90vw] max-w-[380px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[100] flex flex-col transition-all duration-300 transform opacity-0 translate-y-4 pointer-events-none" style="height: 500px; max-height: 70vh;">
@@ -1304,13 +1695,13 @@
             </div>
         </div>
 
-        <!-- Input Area (Visual only for FAQ bot) -->
-        <div class="p-3 bg-white border-t border-gray-100 flex items-center gap-2 rounded-b-2xl">
-            <input type="text" placeholder="Select an option above..." disabled class="flex-1 bg-gray-50 border border-gray-100 rounded-full px-4 py-2 text-sm focus:ring-0 cursor-not-allowed text-gray-400">
-            <button disabled class="w-9 h-9 rounded-full bg-gray-100 text-gray-300 flex items-center justify-center cursor-not-allowed border border-gray-100">
+        <!-- Input Area (Enabled for FAQ bot) -->
+        <form id="chatbot-form" onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-gray-100 flex items-center gap-2 rounded-b-2xl">
+            <input type="text" id="chatbot-input" placeholder="Ask me something..." class="flex-1 bg-gray-50 border border-gray-100 rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all text-gray-700">
+            <button type="submit" class="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 transition shadow-sm">
                 <i data-feather="send" class="w-4 h-4 ml-0.5 mt-0.5"></i>
             </button>
-        </div>
+        </form>
     </div>
 
     <script>
@@ -1319,47 +1710,94 @@
             'how-to-post': "To post a task, make sure you are logged in. Click the <strong>'Post a Task'</strong> button in the top navigation bar. Fill out details like the title, category, location, and your budget, then click <strong>'Publish'</strong>. Your task will instantly be visible to all Taskers!",
             'how-to-apply': "To apply for a task, go to the <strong>'Browse Tasks'</strong> page and click on a task you're interested in. You will see a <strong>'Make an offer'</strong> section where you can propose your price and send a message to the employer.",
             'payment': "Currently, MiniJobz connects people who need help with those who can provide it. Payment terms should be discussed directly between the Employer and the Tasker via our built-in <strong>Messages</strong> system before work begins.",
-            'fees': "MiniJobz is currently <strong>100% free</strong> to use! There are no fees for posting tasks, making offers, or communicating. You keep everything you earn."
+            'fees': "MiniJobz is currently <strong>100% free</strong> to use! There are no fees for posting tasks, making offers, or communicating. You keep everything you earn.",
+            'profile': "You can manage your profile by clicking on your avatar in the navbar and selecting <strong>'Profile'</strong>. There you can update your bio, skills, and contact information.",
+            'notifications': "Notifications alert you to new messages, offers on your tasks, or when your offer is accepted. You can view them by clicking the <strong>Bell icon</strong> in the navbar.",
+            'security': "To update your password or manage account security, go to <strong>'Profile'</strong> and then select the <strong>'Security'</strong> tab.",
+            'direct-quotes': "If you see a professional you like, you can send them a **Direct Quote** request from their profile. This lets you negotiate specifically with one person.",
+            'dashboard': "Your <strong>Dashboard</strong> (My Tasks) is where you track all tasks you've posted or applied for. It helps you stay organized with your active jobs."
         };
 
         function toggleChatbot() {
             const wind = document.getElementById('chatbot-window');
+            const btn = document.getElementById('chatbot-toggle');
             if (wind.classList.contains('opacity-0')) {
                 // Open
                 wind.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
                 wind.classList.add('opacity-100', 'translate-y-0');
+                btn.setAttribute('aria-expanded', 'true');
             } else {
                 // Close
                 wind.classList.remove('opacity-100', 'translate-y-0');
                 wind.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                btn.setAttribute('aria-expanded', 'false');
             }
         }
 
         function handleFaqClick(faqKey) {
+            const questionText = chatbotFaqs[faqKey].question || event.currentTarget.innerText;
+            processUserMessage(questionText, faqKey);
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatbot-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+            processUserMessage(text);
+        }
+
+        function processUserMessage(text, forcedKey = null) {
             const messagesContainer = document.getElementById('chatbot-messages');
             const optionsContainer = document.getElementById('chatbot-faq-options');
             
-            // Get the text from the clicked button
-            const clickedBtn = event.currentTarget;
-            const questionText = clickedBtn.innerText;
-            
-            // Hide the options immediately
+            // Hide options
             optionsContainer.style.display = 'none';
 
-            // Add the user message bubble
+            // Add user bubble
             const userMsgHtml = `
                 <div class="flex items-end justify-end mt-2 animate-fade-in-up">
                     <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-sm shadow-sm text-sm inline-block max-w-[85%]">
-                        ${questionText}
+                        ${text}
                     </div>
                 </div>
             `;
             messagesContainer.insertAdjacentHTML('beforeend', userMsgHtml);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            
-            // Add "Typing" indicator
+
+            // Intent Matching Logic if no forced key
+            let matchKey = forcedKey;
+            if (!matchKey) {
+                const lowerText = text.toLowerCase();
+                
+                // Keyword mapping
+                const keywords = {
+                    'how-to-post': ['post', 'create', 'publish', 'add task', 'list task', 'new task', 'upload task'],
+                    'how-to-apply': ['apply', 'make offer', 'bid', 'work', 'get hired', 'send offer', 'start working'],
+                    'payment': ['pay', 'money', 'get paid', 'transaction', 'payout', 'bank', 'transfer', 'cash', 'earn'],
+                    'fees': ['commission', 'fee', 'free', 'cost', 'charge', 'price', 'expensive', 'cheap'],
+                    'profile': ['profile', 'avatar', 'bio', 'description', 'my info', 'skills'],
+                    'notifications': ['notification', 'bell', 'alert', 'notice', 'unread'],
+                    'security': ['password', 'security', 'login', 'access', 'privacy', 'private'],
+                    'direct-quotes': ['direct', 'quote', 'specific', 'professional', 'hire now'],
+                    'dashboard': ['dashboard', 'my tasks', 'history', 'tracking', 'manage jobs'],
+                    'greeting': ['hi', 'hello', 'hey', 'greetings', 'sup', 'yo', 'morning', 'evening']
+                };
+
+                for (const [key, words] of Object.entries(keywords)) {
+                    if (words.some(word => lowerText.includes(word))) {
+                        matchKey = key;
+                        break;
+                    }
+                }
+            }
+
+            // Show typing
+            const typingId = 'bot-typing-' + Date.now();
             const typingHtml = `
-                <div id="bot-typing" class="flex items-start gap-2 mt-4 animate-fade-in-up">
+                <div id="${typingId}" class="flex items-start gap-2 mt-4 animate-fade-in-up">
                     <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
                         <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
                     </div>
@@ -1374,26 +1812,30 @@
             if (window.feather) window.feather.replace();
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            // Simulate network delay for the bot response
             setTimeout(() => {
-                const typingIndicator = document.getElementById('bot-typing');
-                if (typingIndicator) typingIndicator.remove();
+                document.getElementById(typingId)?.remove();
 
-                const answer = chatbotFaqs[faqKey];
+                let answer;
+                if (matchKey === 'greeting') {
+                    answer = "Hello! 👋 I'm here to help you navigate MiniJobz. You can ask me about posting tasks, applying for jobs, or how payments work.";
+                } else if (matchKey) {
+                    answer = chatbotFaqs[matchKey];
+                } else {
+                    answer = "I'm not exactly sure about that yet. 🤖 My knowledge is currently limited to the basics of MiniJobz. You can try selecting one of the common questions below, or contact support!";
+                }
 
                 const botResponseHtml = `
                     <div class="flex items-start gap-2 mt-2 animate-fade-in-up">
                         <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
                             <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
                         </div>
-                        <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm text-sm text-gray-700 leading-relaxed inline-block max-w-[85%] relative">
+                        <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm text-sm text-gray-700 leading-relaxed inline-block max-w-[85%]">
                             ${answer}
                         </div>
                     </div>
                 `;
                 messagesContainer.insertAdjacentHTML('beforeend', botResponseHtml);
                 
-                // Show options again at the bottom
                 setTimeout(() => {
                      optionsContainer.style.display = 'flex';
                      messagesContainer.appendChild(optionsContainer);
@@ -1402,7 +1844,7 @@
 
                 if (window.feather) window.feather.replace();
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }, 800);
+            }, 1000);
         }
     </script>
     

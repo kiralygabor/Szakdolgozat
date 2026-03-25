@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('advertisement_views', function (Blueprint $table) {
             $table->id();
             $table->foreignId('advertisement_id')->constrained('advertisements')->onDelete('cascade');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->string('ip_address', 45)->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
 
             // Unique index to prevent duplicates for the same user on the same task

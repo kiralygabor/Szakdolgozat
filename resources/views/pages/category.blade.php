@@ -48,7 +48,7 @@
                                 $firstCategory = ($categories ?? collect())->first();
                                 $fallbackImage = 'https://via.placeholder.com/1200x600?text=Category';
                             @endphp
-                            @foreach(($categories ?? []) as $category)
+                            @foreach($categories ?? [] as $category)
                                 <li class="flex-shrink-0 md:w-full">
                                     <button type="button" 
                                         class="w-max md:w-full text-left text-sm sm:text-base px-4 md:px-3 py-2 rounded-lg transition-colors duration-200 whitespace-nowrap

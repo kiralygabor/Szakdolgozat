@@ -294,6 +294,37 @@
                                 <option value="system">{{ __('navbar.system_default') }}</option>
                             </select>
                         </div>
+
+                        <div class="mb-5 custom-input-group">
+                            <h6 class="section-label">Accessibility</h6>
+                            <div class="space-y-4 pt-2">
+                                <label class="flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" id="accessibility-master-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-semibold text-gray-800">Enable accessibility features</span>
+                                        <span class="text-xs text-gray-500">Show accessibility options (reduced motion, high contrast) in menus.</span>
+                                    </div>
+                                </label>
+
+                                <div id="access-sub-options" class="hidden pl-8 space-y-4 pt-2 border-l-2 border-blue-50 ml-2">
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" id="reduced-motion-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-semibold text-gray-800">Reduced Motion</span>
+                                            <span class="text-xs text-gray-500">Minimize animations and transitions.</span>
+                                        </div>
+                                    </label>
+                                    
+                                    <label class="flex items-center gap-3 cursor-pointer group">
+                                        <input type="checkbox" id="high-contrast-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-semibold text-gray-800">High Contrast</span>
+                                            <span class="text-xs text-gray-500">Increase color contrast for better readability.</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
  
                         <div class="mb-5">
                             <button type="button" id="apply-settings-btn" class="btn btn-primary btn-primary-custom px-8">
@@ -531,6 +562,17 @@
                     localStorage.setItem('theme', 'light');
                 }
             }
+
+            function applyAccessibility(prefs) {
+                root.classList.toggle('reduced-motion', prefs.reducedMotion);
+                root.classList.toggle('high-contrast', prefs.highContrast);
+                localStorage.setItem('reduced-motion', prefs.reducedMotion);
+                localStorage.setItem('high-contrast', prefs.highContrast);
+                localStorage.setItem('accessibility-mode', prefs.master);
+                
+                // Refresh visibility
+                if (window.applyAccMode) window.applyAccMode(prefs.master);
+            }
  
  
         // Avatar Preview Logic
@@ -550,9 +592,28 @@
             });
         }
  
-            // Init select state
+            // Init states
             const savedTheme = localStorage.getItem('theme') || 'system';
             if (themeSelect) themeSelect.value = savedTheme;
+
+            const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
+            const highContrastToggle = document.getElementById('high-contrast-toggle');
+            const masterAccToggle = document.getElementById('accessibility-master-toggle');
+            const subOptions = document.getElementById('access-sub-options');
+            
+            if (masterAccToggle) {
+                masterAccToggle.checked = localStorage.getItem('accessibility-mode') === 'true';
+                if (masterAccToggle.checked) subOptions?.classList.remove('hidden');
+                masterAccToggle.addEventListener('change', function() {
+                    subOptions?.classList.toggle('hidden', !this.checked);
+                });
+            }
+            if (reducedMotionToggle) {
+                reducedMotionToggle.checked = localStorage.getItem('reduced-motion') === 'true';
+            }
+            if (highContrastToggle) {
+                highContrastToggle.checked = localStorage.getItem('high-contrast') === 'true';
+            }
  
             if (applyBtn) {
                 applyBtn.addEventListener('click', function() {
@@ -562,6 +623,15 @@
                     if (themeSelect) {
                         applyTheme(themeSelect.value);
                         console.log('Theme applied:', themeSelect.value);
+                    }
+
+                    // 2. Apply Accessibility
+                    if (masterAccToggle) {
+                        applyAccessibility({
+                            master: masterAccToggle.checked,
+                            reducedMotion: reducedMotionToggle ? reducedMotionToggle.checked : false,
+                            highContrast: highContrastToggle ? highContrastToggle.checked : false
+                        });
                     }
  
                     // 2. Apply Language (Redirect if changed)

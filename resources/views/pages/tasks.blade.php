@@ -189,6 +189,23 @@
     .task-card {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    .browse-container {
+        height: 750px;
+    }
+    @media (max-width: 768px) {
+        .browse-container { height: auto }
+    }
+    /* Filter Bar — Reset Bootstrap form margins for perfect centering */
+    #filters-form,
+    #filters-form select,
+    #filters-form input,
+    #filters-form button,
+    #filters-form label,
+    #filters-form div {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
   </style>
 
   <!-- MapLibre GL -->
@@ -201,12 +218,12 @@
       <div class="bg-white border border-gray-200 rounded-2xl shadow-sm">
         <!-- Desktop Form (Hidden on mobile) -->
         <form method="GET" action="{{ route('tasks') }}" id="filters-form"
-              class="flex items-center gap-4 px-6 py-3 h-16 hidden md:flex">
+              class="flex items-center gap-4 px-6 py-2.5 hidden md:flex">
 
           <!-- Search Bar -->
-          <div class="relative flex-grow max-w-md group border-r pr-6 mr-2">
+          <div class="relative flex-grow max-w-md group border-r border-gray-100 pr-6 mr-2 flex items-center">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i data-feather="search" class="h-4 w-4 text-gray-400 group-  focus-within:text-blue-500"></i>
+              <i data-feather="search" class="h-4 w-4 text-gray-500 group-focus-within:text-blue-500" aria-hidden="true"></i>
             </div>
             <input
               id="search-q"
@@ -214,24 +231,26 @@
               value="{{ $filters['q'] ?? '' }}"
               type="text"
               placeholder="Search for a task name..."
+              aria-label="Search for a task name"
               class="w-full pl-10 pr-12 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
               autocomplete="off"
             >
-            <button type="submit" class="absolute right-7 top-1 bottom-1 px-3 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-sm">
+            <button type="submit" class="absolute right-7 py-2 inset-y-1 px-3 flex items-center justify-center bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-sm" aria-label="Search">
                <i data-feather="search" class="w-3.5 h-3.5"></i>
             </button>
             <input type="hidden" name="city_search" id="city-search-hidden" value="{{ $filters['city_search'] ?? '' }}">
           </div>
 
           <!-- Filters -->
-          <div class="flex items-center gap-3 h-full">
+          <div class="flex items-center gap-3">
 
             <!-- Category -->
             <div class="relative">
-                <select name="category" id="category-filter" 
+                <select name="category" id="category-filter"
+                        aria-label="Select Category"
                         class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
                   <option value="">All Categories</option>
-                  @foreach(($categories ?? []) as $category)
+                  @foreach($categories ?? [] as $category)
                     <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
                       {{ $category->name }}
                     </option>
@@ -244,11 +263,12 @@
 
             <!-- Job/Service -->
             <div class="relative {{ ($filters['category'] ?? '') ? '' : 'hidden' }}" id="job-filter-container">
-                <select name="job" id="job-filter" 
+                <select name="job" id="job-filter"
+                        aria-label="Select Service"
                         class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
                   <option value="">All Services</option>
                   @if($filters['category'] ?? '')
-                    @foreach(($selectedCategoryJobs ?? []) as $job)
+                    @foreach($selectedCategoryJobs ?? [] as $job)
                         <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
                             {{ $job->name }}
                         </option>
@@ -263,10 +283,11 @@
             <!-- Work Type -->
             <div class="relative">
               <button type="button" id="type-btn"
+                      aria-haspopup="true" aria-expanded="false" aria-controls="type-menu"
                       class="min-w-[120px] justify-between px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
-                <i data-feather="briefcase" class="w-3.5 h-3.5 text-gray-500"></i>
+                <i data-feather="briefcase" class="w-3.5 h-3.5 text-gray-500" aria-hidden="true"></i>
                 <span id="type-text">Type</span>
-                <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
+                <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400" aria-hidden="true"></i>
               </button>
 
               <div id="type-menu" class="absolute mt-3 right-0 bg-white border border-gray-100 rounded-xl shadow-xl p-4 w-64 hidden z-50">
@@ -302,16 +323,17 @@
             <!-- Price -->
             <div class="relative">
               <button type="button" id="price-btn"
+                      aria-haspopup="true" aria-expanded="false" aria-controls="price-menu"
                       class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
-                <i data-feather="dollar-sign" class="w-3.5 h-3.5 text-gray-500"></i>
-                <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'text-blue-600' : '' }}">
+                <i data-feather="dollar-sign" class="w-3.5 h-3.5 text-gray-500" aria-hidden="true"></i>
+                <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'text-blue-700' : '' }}">
                   @if(isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000))
                     €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
                   @else
                     Price
                   @endif
                 </span>
-                <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400"></i>
+                <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400" aria-hidden="true"></i>
               </button>
 
               <div id="price-menu" class="absolute mt-2 right-0 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50" style="width: 340px; padding: 16px 20px 12px;">
@@ -344,8 +366,8 @@
             </div>
 
             <!-- Sort -->
-            <div class="hidden lg:block h-8 w-px bg-gray-300 mx-4"></div>
-            <select name="sort" id="sort-filter" class="bg-transparent text-sm font-medium text-gray-600 hover:text-gray-900 cursor-pointer outline-none">
+            <div class="hidden lg:block h-8 w-px bg-gray-300 mx-4" aria-hidden="true"></div>
+            <select name="sort" id="sort-filter" aria-label="Sort tasks by" class="bg-transparent py-2 text-sm font-medium text-gray-700 hover:text-gray-900 cursor-pointer outline-none">
                 <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>Sort: Recent</option>
                 <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>Sort: Closest</option>
                 <option value="due" @selected(($filters['sort'] ?? '')==='due')>Sort: Due Soon</option>
@@ -358,6 +380,7 @@
         <!-- Mobile Filter Trigger (Visible only on mobile) -->
         <div class="md:hidden px-4 py-3 bg-white">
             <button type="button" id="mobile-filter-trigger" 
+                    aria-label="Open search and filters" aria-haspopup="dialog"
                     class="w-full h-11 flex items-center justify-between border border-gray-200 rounded-full px-5 bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer text-sm shadow-sm">
                 <div class="flex items-center gap-3 overflow-hidden">
                     <i data-feather="search" class="w-4 h-4 text-blue-600"></i>
@@ -424,7 +447,7 @@
               <div class="relative">
                   <select name="category" id="mobile-category" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
                       <option value="">All Categories</option>
-                      @foreach(($categories ?? []) as $category)
+                      @foreach($categories ?? [] as $category)
                           <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
                               {{ $category->name }}
                           </option>
@@ -504,13 +527,13 @@
   </div>
  
   <!-- Main Content -->
- <section class="bg-gray-50 pt-6 md:pt-10 h-auto md:h-[700px] overflow-hidden">
-   <div class="flex flex-col md:flex-row max-w-7xl mx-auto px-4 md:px-6 gap-4 md:gap-6 h-full pb-6">
+ <section class="bg-gray-50 pt-6 md:pt-10 h-auto overflow-hidden">
+   <div class="flex flex-col md:flex-row max-w-7xl mx-auto px-4 md:px-6 gap-4 md:gap-6 pb-6 browse-container">
      
       <!-- Left: Tasks Pane -->
      <div id="tasks-pane" class="flex flex-col w-full md:w-[360px] shrink-0 h-[600px] md:h-full">
-        <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-3">
-          @forelse (($tasks ?? []) as $task)
+        <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-3 pb-4">
+          @forelse ($tasks ?? [] as $task)
             @php
                 $isMyTask = Auth::check() && $task->employer_id === Auth::id();
                 $hasOffer = Auth::check() && $task->offers->contains('user_id', Auth::id());
@@ -542,7 +565,7 @@
 
               {{-- Title and Price Row --}}
               <div class="flex justify-between items-start mb-2">
-                <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600">
+                <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600" style="margin-left: 8px;">
                     {{ $task->title }}
                 </h3>
                 <span class="text-green-600 text-sm font-bold whitespace-nowrap ml-2">
@@ -550,7 +573,7 @@
                 </span>
               </div>
  
-              <p class="text-gray-500 text-xs mb-3 line-clamp-2 leading-relaxed">
+              <p class="text-gray-500 text-xs mb-3 line-clamp-2 leading-relaxed" style="margin-left: 8px;">
                   {{ $task->description }}
               </p>
  
@@ -575,7 +598,7 @@
                   <div class="flex items-center gap-2">
                       @auth
                           @if(!$isMyTask)
-                            <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="text-xs font-semibold text-gray-500 hover:text-red-600 transition-colors" title="Report this task">
+                            <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="text-xs font-semibold text-gray-600 hover:text-red-700 transition-colors p-2" aria-label="Report this task" title="Report this task">
                                 <i data-feather="flag" class="w-3.5 h-3.5"></i>
                             </button>
                           @endif
@@ -826,8 +849,8 @@
           maxzoom: 19
         }]
       },
-      center: [19.0402, 47.4979], // Budapest
-      zoom: 12
+      center: [19.1483, 47.1629], // Centered broad view of entire Hungary
+      zoom: 6.4
     });
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
 
@@ -880,15 +903,20 @@
         el.className = 'map-marker-container group';
         el.style.cursor = 'pointer';
 
-        const markerColor = t.is_my_task ? 'bg-indigo-900' : 'bg-blue-600';
-        const pingColor = t.is_my_task ? 'bg-indigo-900/20' : 'bg-blue-500/20';
+        const mColor = t.is_my_task ? '#9333EA' : '#2563EB';
+        const pColor = t.is_my_task ? '#9333EA22' : '#2563EB22';
 
         el.innerHTML = `
             <div class="relative flex items-center justify-center">
-                <div class="absolute w-8 h-8 ${pingColor} rounded-full animate-ping opacity-75"></div>
-                <div class="w-4 h-4 ${markerColor} rounded-full border-2 border-white shadow-lg relative z-10 transition-all duration-300 group-hover:scale-125 group-hover:opacity-90"></div>
+                <div class="absolute w-8 h-8 rounded-full animate-ping opacity-75" style="background-color: ${pColor}"></div>
+                <div class="w-4 h-4 rounded-full border-2 border-white shadow-lg relative z-10 transition-all duration-300" 
+                     style="background-color: ${mColor}"></div>
             </div>
         `;
+
+        const loginUrl = "{{ route('login') }}?returnUrl=" + encodeURIComponent('/tasks/' + t.id);
+        const detailsUrl = t.is_my_task ? '/my-tasks#task-'+t.id : '/tasks/'+t.id;
+        const finalUrl = window.isAuthenticated ? detailsUrl : loginUrl;
 
         const popupHTML = `
             <div class="p-3 min-w-[180px]">
@@ -898,7 +926,7 @@
                 </div>
                 <div class="font-bold text-sm text-gray-900 mb-1 leading-tight">${t.title}</div>
                 <div class="text-blue-600 font-extrabold text-sm mb-3">€${t.price.toLocaleString()}</div>
-                <a href="${t.is_my_task ? '/my-tasks#task-'+t.id : '/tasks/'+t.id}" class="block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">View Details</a>
+                <a href="${finalUrl}" class="block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">View Details</a>
             </div>
         `;
 
@@ -917,20 +945,24 @@
         // Hover Effect: Card -> Marker
         const card = document.getElementById(`task-card-${t.id}`);
         if(card) {
-            const hColor = t.is_my_task ? 'bg-indigo-900' : 'bg-blue-500';
-            const hPing = t.is_my_task ? 'bg-indigo-700/40' : 'bg-blue-400/40';
-
+            const hColor = t.is_my_task ? '#3730A3' : '#1D4ED8'; 
             card.addEventListener('mouseenter', () => {
-                const pingEl = el.querySelector('.animate-ping');
-                if(pingEl) pingEl.classList.remove('animate-ping');
-                el.querySelector('.absolute').classList.add('scale-150', hPing);
-                el.querySelector('.z-10').classList.add('scale-150', hColor);
+                const markerEl = el.querySelector('.z-10');
+                const pingEl = el.querySelector('.absolute');
+                if(pingEl) pingEl.classList.add('scale-150');
+                if(markerEl) {
+                    markerEl.classList.add('scale-150');
+                    markerEl.style.backgroundColor = hColor;
+                }
             });
             card.addEventListener('mouseleave', () => {
-                const pingEl = el.querySelector('.absolute:not(.z-10)');
-                if(pingEl) pingEl.classList.add('animate-ping');
-                el.querySelector('.absolute').classList.remove('scale-150', hPing);
-                el.querySelector('.z-10').classList.remove('scale-150', hColor);
+                const markerEl = el.querySelector('.z-10');
+                const pingEl = el.querySelector('.absolute');
+                if(pingEl) pingEl.classList.remove('scale-150');
+                if(markerEl) {
+                    markerEl.classList.remove('scale-150');
+                    markerEl.style.backgroundColor = mColor;
+                }
             });
         }
 
@@ -952,7 +984,8 @@
         });
       });
 
-      if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 70, maxZoom: 13 });
+      // Map fixed position (Budapest) - commented out bounds fitting
+      // if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 70, maxZoom: 13 });
     })();
 
     // 4. Dropdowns (Price/Type)

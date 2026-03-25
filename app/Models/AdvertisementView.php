@@ -9,7 +9,6 @@ class AdvertisementView extends Model
     protected $fillable = [
         'advertisement_id',
         'user_id',
-        'ip_address',
     ];
 
     public function user()

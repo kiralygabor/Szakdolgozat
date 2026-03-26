@@ -7,6 +7,27 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
+    html.dark body { background: #0f172a; color: #e2e8f0; }
+    html.dark .auth-box { color: #e2e8f0; }
+    html.dark .auth-title { color: #f1f5f9; }
+    html.dark .form-control { background: #1e293b; border-color: #475569; color: #e2e8f0; }
+    html.dark .form-control:focus { background: #0f172a; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,0.2); }
+    html.dark .form-control::placeholder { color: #64748b; }
+    html.dark .btn-outline { background: #1e293b; border-color: #334155; color: #e2e8f0; }
+    html.dark .btn-outline:hover { background: #334155; color: #f1f5f9; }
+    html.dark .divider { color: #64748b; }
+    html.dark .divider::before, html.dark .divider::after { background: #334155; }
+    html.dark .auth-links p, html.dark .auth-links label { color: #94a3b8; }
+    html.dark .remember-forgot label { color: #94a3b8; }
+    html.dark .text-secondary { color: #94a3b8 !important; }
+    html.dark .alert { border: 1px solid; }
+    html.dark .alert-success { background: rgba(20,83,45,0.3); color: #86efac; border-color: #166534; }
+    html.dark .alert-warning { background: rgba(120,53,15,0.3); color: #fde68a; border-color: #92400e; }
+    html.dark .alert-danger { background: rgba(127,29,29,0.3); color: #fca5a5; border-color: #991b1b; }
+    html.dark .modal-content { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+    html.dark .modal-header { border-color: #334155; }
+    html.dark .btn-close { filter: invert(1); }
+    html.dark .password-toggle { color: #94a3b8; }
     body {
       background: #fff;
       font-family: Arial, sans-serif;
@@ -75,7 +96,63 @@
       cursor: pointer;
       color: #777;
     }
+   
+    /* Accessibility Modes */
+    .reduced-motion *, .reduced-motion *:before, .reduced-motion *:after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .high-contrast body, .high-contrast .auth-wrapper {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .high-contrast p, .high-contrast span, .high-contrast label, .high-contrast .auth-title, .high-contrast .divider, .high-contrast .password-toggle {
+      color: #000000 !important;
+      font-weight: 800 !important;
+    }
+    .high-contrast .auth-links a, .high-contrast a.auth-links {
+      color: #000000 !important;
+      font-weight: 800 !important;
+      text-decoration: underline !important;
+      text-decoration-color: #ffffff !important;
+    }
+    .high-contrast .form-control {
+      border: 3px solid #000000 !important;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .high-contrast .btn-primary {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 3px solid #000000 !important;
+      font-weight: 900 !important;
+    }
+    .high-contrast .btn-outline {
+      border: 3px solid #000000 !important;
+      color: #000000 !important;
+      background-color: #ffffff !important;
+      font-weight: 900 !important;
+    }
+    .high-contrast a:hover {
+      text-decoration: underline !important;
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
   </style>
+ 
+  <script>
+    (function(){
+      var root = document.documentElement;
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark');
+      }
+      if(localStorage.getItem('high-contrast') === 'true') root.classList.add('high-contrast');
+      if(localStorage.getItem('reduced-motion') === 'true') root.classList.add('reduced-motion');
+    })();
+  </script>
 </head>
 <body>
  

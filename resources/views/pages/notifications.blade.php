@@ -3,6 +3,13 @@
 @section('title', __('notifications_page.title'))
 
 @section('content')
+<style>
+  html.dark .bg-white { background-color: #1e293b !important; }
+  html.dark .border-gray-200 { border-color: #334155 !important; }
+  html.dark .divide-gray-200 > * + * { border-color: #334155 !important; }
+  html.dark .hover\:bg-gray-50:hover { background-color: #334155 !important; }
+</style>
+
 <section class="py-8">
   <div class="max-w-5xl mx-auto px-6">
     <h1 class="text-3xl font-bold text-gray-900 mb-6">{{ __('notifications_page.title') }}</h1>

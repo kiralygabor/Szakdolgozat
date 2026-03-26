@@ -220,20 +220,39 @@
     }
 
     .task-details-close {
-        position: absolute; top: 16px; left: 16px;
-        width: 36px; height: 36px; border-radius: 50%;
-        background: #FFFFFF; border: 1px solid #E5E7EB; color: #6B7280;
+        position: absolute; top: 12px; left: 12px;
+        width: 32px; height: 32px; border-radius: 50%;
+        background: #F3F4F6; border: 1px solid #E5E7EB; color: #4B5563;
         display: flex; align-items: center; justify-content: center;
         cursor: pointer; z-index: 50; transition: all 0.2s;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
-    .task-details-close:hover { background: #F9FAFB; color: #111827; transform: rotate(90deg); }
+    .task-details-close:hover { background: #E5E7EB; color: #111827; }
+
+    .task-details-body {
+        font-size: 15px; color: #4B5563; line-height: 1.6;
+        padding-top: 10px;
+    }
 
     @media (max-width: 640px) {
         .task-details-modal { padding: 20px 0; }
         .task-details-panel { padding: 48px 20px 24px; width: 95%; border-radius: 20px; }
-        .task-details-close { top: 12px; left: 12px; }
     }
+
+    /* --- High Contrast Overrides --- */
+    .high-contrast .task-details-panel {
+        background: #ffffff !important;
+        border: 4px solid #000000 !important;
+        box-shadow: none !important;
+    }
+    .high-contrast .task-details-close {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+    .high-contrast .task-details-body {
+        color: #000000 !important;
+    }
+
 
     /* Modern Empty State */
     .modern-empty-state {
@@ -284,6 +303,303 @@
         .compact-task-row { padding: 14px 16px; }
         .compact-task-row .text-base { font-size: 14px; }
     }
+
+    /* --- High Contrast Overrides --- */
+    .high-contrast .modern-tab {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+    .high-contrast .modern-tab.active {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border-color: #000000 !important;
+    }
+    .high-contrast .modern-tabs-wrapper {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .high-contrast .controls-bar {
+        border: 3px solid #000000 !important;
+    }
+    .high-contrast .modern-filter-group {
+        background: transparent !important;
+        border: none !important;
+    }
+    .high-contrast .filter-btn {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+        margin: 0 2px !important;
+    }
+    .high-contrast .filter-btn.active {
+        background: #000000 !important;
+        color: #ffffff !important;
+    }
+
+    .high-contrast .task-hero {
+        border: 4px solid #000000 !important;
+        background-color: #ffffff !important;
+    }
+    .high-contrast .hero-right {
+        background-color: #ffffff !important;
+        border-left: 3px solid #000000 !important;
+    }
+    @media(max-width: 900px) {
+        .high-contrast .hero-right {
+            border-left: none !important;
+            border-top: 3px solid #000000 !important;
+        }
+    }
+
+    .high-contrast .status-badge.active {
+        color: #000000 !important;
+    }
+    .high-contrast .status-badge.active .status-dot {
+        background-color: #000000 !important;
+        box-shadow: 0 0 0 3px #000000 !important;
+    }
+
+    .high-contrast .view-count {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+    }
+
+    .high-contrast .pill-action {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+    .high-contrast .pill-action:hover {
+        background: #000000 !important;
+        color: #ffffff !important;
+    }
+
+    .high-contrast .bg-blue-100,
+    .high-contrast .bg-indigo-100,
+    .high-contrast .bg-blue-50,
+    .high-contrast .bg-indigo-50 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+    .high-contrast .bg-blue-100 *,
+    .high-contrast .bg-indigo-100 *,
+    .high-contrast .bg-blue-50 *,
+    .high-contrast .bg-indigo-50 * {
+        color: #ffffff !important;
+    }
+
+    .high-contrast .hero-left .group.cursor-pointer,
+    .high-contrast .offers-list .group {
+        border: 2px solid #000000 !important;
+        background: #ffffff !important;
+    }
+    .high-contrast .offers-list .group *,
+    .high-contrast .price-display,
+    .high-contrast .text-blue-600,
+    .high-contrast .text-blue-900,
+    .high-contrast .text-blue-700,
+    .high-contrast .status-badge,
+    .high-contrast #offer-details-modal * {
+        color: #000000 !important;
+    }
+    .high-contrast #offer-details-modal .bg-blue-600,
+    .high-contrast #offer-details-modal .bg-indigo-600 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    .high-contrast #offer-details-modal .bg-blue-600 *,
+    .high-contrast #offer-details-modal .bg-indigo-600 * {
+        color: #ffffff !important;
+    }
+    .high-contrast #offer-details-modal a:hover span {
+        color: #000000 !important;
+        text-decoration: underline !important;
+    }
+
+    .high-contrast .modern-empty-state {
+        border: 4px dashed #000000 !important;
+        background-color: #ffffff !important;
+    }
+    .high-contrast .empty-illustration {
+        background: #ffffff !important;
+        border: 3px solid #000000 !important;
+        box-shadow: none !important;
+    }
+    .high-contrast .empty-illustration i {
+        color: #000000 !important;
+        filter: none !important;
+    }
+    .high-contrast .empty-illustration::before {
+        border-color: #000000 !important;
+    }
+    .high-contrast .cta-button {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+    }
+    .high-contrast .cta-button:hover {
+        background: #ffffff !important;
+        color: #000000 !important;
+        text-decoration: underline !important;
+    }
+
+    .high-contrast .bg-green-600,
+    .high-contrast .bg-indigo-600,
+    .high-contrast .bg-blue-600 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+    .high-contrast .bg-green-600 *,
+    .high-contrast .bg-indigo-600 *,
+    .high-contrast .bg-blue-600 * {
+        color: #ffffff !important;
+    }
+    .high-contrast .bg-green-600:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        text-decoration: underline !important;
+    }
+    .high-contrast .bg-green-600:hover * {
+        color: #000000 !important;
+    }
+
+    .high-contrast [style*="color: #F59E0B"],
+    .high-contrast [style*="color:#F59E0B"],
+    .high-contrast .status-badge[style*="color"] {
+        color: #000000 !important;
+    }
+    .high-contrast [style*="background-color: #FBBF24"],
+    .high-contrast [style*="background-color:#FBBF24"] {
+        background-color: #000000 !important;
+        box-shadow: 0 0 0 3px #000000 !important;
+    }
+
+    .high-contrast .data-icon {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+    .high-contrast .data-icon i {
+        color: #000000 !important;
+    }
+
+    .high-contrast .text-gray-500,
+    .high-contrast .text-slate-500 {
+        color: #000000 !important;
+    }
+
+    .high-contrast .bg-gray-100 i {
+        color: #000000 !important;
+    }
+
+    /* ========== DARK MODE OVERRIDES ========== */
+    html.dark body { background-color: #0f172a !important; }
+
+    /* Hero Card */
+    html.dark .task-hero { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .hero-left { background-color: #273449 !important; }
+    html.dark .hero-right { background-color: #1e293b !important; border-color: #334155 !important; }
+    @media(max-width: 900px) {
+        html.dark .hero-right { border-top-color: #334155 !important; }
+    }
+
+    /* Tabs */
+    html.dark .modern-tabs-wrapper { background-color: #1e293b !important; }
+    html.dark .modern-tab { color: #94a3b8 !important; }
+    html.dark .modern-tab.active { background-color: #334155 !important; color: #60a5fa !important; }
+
+    /* Controls Bar */
+    html.dark .controls-bar { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .modern-search-input { background-color: #0f172a !important; border-color: #334155 !important; color: #f8fafc !important; }
+    html.dark .modern-search-input:focus { background-color: #1e293b !important; border-color: #3b82f6 !important; }
+    html.dark .modern-filter-group { background-color: #0f172a !important; border-color: #334155 !important; }
+    html.dark .filter-btn { color: #94a3b8 !important; }
+    html.dark .filter-btn.active { background-color: #334155 !important; color: #60a5fa !important; }
+
+    /* Status & Headlines */
+    html.dark .hero-headline { color: #f8fafc !important; }
+    html.dark .hero-subtext { color: #cbd5e1 !important; }
+    html.dark .status-badge { color: #94a3b8 !important; }
+    html.dark .view-count { background-color: #334155 !important; color: #94a3b8 !important; box-shadow: none !important; border: 1px solid #475569 !important; }
+
+    /* Price & Data */
+    html.dark .price-display { color: #60a5fa !important; }
+    html.dark .task-label { color: #94a3b8 !important; }
+    html.dark .task-main-title { color: #f8fafc !important; }
+    html.dark .data-icon { background-color: #334155 !important; color: #94a3b8 !important; }
+    html.dark .data-text h4 { color: #94a3b8 !important; }
+    html.dark .data-text p { color: #f1f5f9 !important; }
+
+    /* Description */
+    html.dark .task-description-truncated { color: #cbd5e1 !important; }
+
+    /* Offer Cards */
+    html.dark .offers-list .group { background-color: #0f172a !important; border-color: #334155 !important; }
+    html.dark .offers-list .group:hover { border-color: #3b82f6 !important; }
+    html.dark .offers-list .group h4 { color: #f8fafc !important; }
+    html.dark .offers-header h3 { color: #f8fafc !important; }
+    html.dark .questions-copy { color: #94a3b8 !important; }
+
+    /* Pill Actions (Edit / Cancel) */
+    html.dark .pill-action { background-color: #0f172a !important; border-color: #334155 !important; color: #94a3b8 !important; }
+    html.dark .pill-action:hover { border-color: #3b82f6 !important; color: #60a5fa !important; background-color: #1e293b !important; }
+    html.dark .pill-action.danger:hover { border-color: #f87171 !important; color: #f87171 !important; background-color: #1e293b !important; }
+
+    /* Modals */
+    html.dark .task-details-panel { background-color: #1e293b !important; color: #f8fafc !important; }
+    html.dark .task-details-close { background-color: #334155 !important; border-color: #475569 !important; color: #94a3b8 !important; }
+    html.dark .task-details-close:hover { background-color: #475569 !important; color: #f8fafc !important; }
+    html.dark .task-details-body { color: #cbd5e1 !important; }
+
+    /* Empty State */
+    html.dark .modern-empty-state { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .empty-title { color: #f8fafc !important; }
+    html.dark .empty-desc { color: #94a3b8 !important; }
+    html.dark .empty-illustration { background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important; }
+
+    /* Compact Task Rows (Other Tasks) */
+    html.dark .compact-task-row { background-color: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
+    html.dark .compact-task-row:hover { border-color: #3b82f6 !important; }
+
+    /* Blue badges */
+    html.dark .bg-blue-50 { background-color: rgba(37, 99, 235, 0.15) !important; border-color: #1e40af !important; }
+    html.dark .bg-blue-100 { background-color: rgba(37, 99, 235, 0.2) !important; }
+    html.dark .bg-indigo-100 { background-color: rgba(99, 102, 241, 0.2) !important; }
+    html.dark .text-blue-900 { color: #93c5fd !important; }
+    html.dark .text-blue-700 { color: #60a5fa !important; }
+    html.dark .border-blue-100 { border-color: #1e3a8a !important; }
+
+    /* Text Utilities */
+    html.dark .text-gray-900 { color: #f8fafc !important; }
+    html.dark .text-gray-800 { color: #f1f5f9 !important; }
+    html.dark .text-gray-700 { color: #e2e8f0 !important; }
+    html.dark .text-gray-600 { color: #cbd5e1 !important; }
+    html.dark .text-gray-500 { color: #94a3b8 !important; }
+    html.dark .text-gray-400 { color: #64748b !important; }
+    html.dark .text-gray-300 { color: #475569 !important; }
+
+    /* Border Utilities */
+    html.dark .border-gray-200, html.dark .border-gray-100 { border-color: #334155 !important; }
+    html.dark .bg-white { background-color: #1e293b !important; }
+    html.dark .bg-gray-100 { background-color: #334155 !important; }
+
+    /* Offer Details Modal */
+    html.dark #offer-details-modal .bg-white { background-color: #1e293b !important; }
+    html.dark #offer-details-modal .border-gray-100 { border-color: #334155 !important; }
+
+    /* Complete Task Modal */
+    html.dark #complete-task-modal .bg-white { background-color: #1e293b !important; }
+
+    /* Scrollbar */
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #475569 !important; }
 </style>
 
 @section('content')
@@ -713,19 +1029,14 @@
 
                     {{-- MODAL: Full Description --}}
                     <div id="task-details-modal" class="task-details-modal">
-                        <div id="task-details-backdrop" class="task-details-backdrop"></div>
+                        <div id="task-details-backdrop" class="task-details-backdrop" onclick="closeTaskDetailsModal()"></div>
                         <div class="task-details-panel">
-                            <button type="button" class="task-details-close" onclick="closeTaskDetailsModal()">
+                            <button type="button" class="task-details-close" onclick="closeTaskDetailsModal()" aria-label="Close modal">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
-                            <div class="task-details-title">{{ $activeTask->title }}</div>
                             @if(!empty($activeTask->description))
-                                <div class="task-details-body">{{ $activeTask->description }}</div>
+                                <div id="task-details-body" class="task-details-body">{{ $activeTask->description }}</div>
                             @endif
-                            <div class="task-details-actions">
-                                <button type="button" class="ghost" onclick="closeTaskDetailsModal()">{{ __('mytasks.actions.close') }}</button>
-                                <a href="#" class="primary">{{ __('mytasks.actions.edit') }}</a>
-                            </div>
                         </div>
                     </div>
 

@@ -25,6 +25,145 @@
     footer {
         padding-top: 2rem !important;
     }
+ 
+    /* --- High Contrast Overrides --- */
+    .high-contrast .bg-white,
+    .high-contrast .bg-gray-50,
+    .high-contrast aside,
+    .high-contrast main {
+        background-color: #ffffff !important;
+        border-color: #000000 !important;
+    }
+ 
+    .high-contrast .border,
+    .high-contrast .border-r,
+    .high-contrast .border-b,
+    .high-contrast .border-t {
+        border-color: #000000 !important;
+        border-width: 2px !important;
+    }
+   
+    /* Avoid double borders in the middle */
+    .high-contrast aside { border-right: 2px solid #000000 !important; }
+    .high-contrast main { border-left: none !important; }
+ 
+    .high-contrast #message-input,
+    .high-contrast aside input {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+    }
+    .high-contrast #message-input:hover,
+    .high-contrast #message-input:focus,
+    .high-contrast aside input:hover,
+    .high-contrast aside input:focus {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border-width: 3px !important;
+    }
+ 
+    .high-contrast .message-bubble {
+        border: 2px solid #000000 !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+    }
+    .high-contrast .message-bubble.bg-blue-600 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    .high-contrast .message-bubble.bg-blue-600 * {
+        color: #ffffff !important;
+    }
+ 
+    .high-contrast .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #000000 !important;
+        border: 1px solid #ffffff !important;
+    }
+    .high-contrast .custom-scrollbar::-webkit-scrollbar-track {
+        background-color: #ffffff !important;
+        border-left: 1px solid #000000 !important;
+    }
+ 
+    .high-contrast aside a.bg-blue-50 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border-bottom: 2px solid #ffffff !important;
+    }
+    .high-contrast aside a.bg-blue-50 * {
+        color: #ffffff !important;
+    }
+    .high-contrast aside a:hover:not(.bg-blue-50) {
+        background-color: #eeeeee !important;
+        text-decoration: underline !important;
+    }
+ 
+    .high-contrast #chat-options-dropdown {
+        background-color: #ffffff !important;
+        border: 3px solid #000000 !important;
+    }
+    .high-contrast #chat-options-dropdown * {
+        color: #000000 !important;
+    }
+    .high-contrast #chat-options-dropdown a:hover,
+    .high-contrast #chat-options-dropdown button:hover {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+
+    /* ========== DARK MODE OVERRIDES ========== */
+    html.dark .bg-gray-50 { background-color: #0f172a !important; }
+
+    /* Outer container & card */
+    html.dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .border-gray-200, html.dark .border-gray-100, html.dark .border-gray-50 { border-color: #334155 !important; }
+
+    /* Sidebar */
+    html.dark aside { background-color: #1e293b !important; }
+    html.dark aside input { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
+
+    /* Conversation list items */
+    html.dark aside a:hover { background-color: #334155 !important; }
+    html.dark aside a.bg-blue-50 { background-color: rgba(37, 99, 235, 0.15) !important; }
+
+    /* Main chat area - LIGHTER than the sidebar */
+    html.dark main { background-color: #273449 !important; }
+    html.dark #messages-container { background-color: #273449 !important; }
+
+    /* Chat header & input area */
+    html.dark main .border-b, html.dark main .border-t { border-color: #334155 !important; }
+    html.dark main > div:first-child { background-color: #1e293b !important; }
+    html.dark main > div:last-child { background-color: #1e293b !important; }
+
+    /* Message input */
+    html.dark #message-input { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
+    html.dark #message-input:focus { background-color: #1e293b !important; }
+
+    /* Received message bubbles */
+    html.dark .message-bubble.bg-white { background-color: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
+    html.dark .message-bubble.bg-gray-50 { background-color: #334155 !important; border-color: #475569 !important; }
+    html.dark .message-bubble.bg-gray-100 { background-color: #334155 !important; border-color: #475569 !important; }
+
+    /* Text colors */
+    html.dark .text-gray-900 { color: #f8fafc !important; }
+    html.dark .text-gray-800 { color: #f1f5f9 !important; }
+    html.dark .text-gray-700 { color: #e2e8f0 !important; }
+    html.dark .text-gray-600 { color: #cbd5e1 !important; }
+    html.dark .text-gray-500 { color: #94a3b8 !important; }
+    html.dark .text-gray-400 { color: #64748b !important; }
+
+    /* Dropdown */
+    html.dark #chat-options-dropdown { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark #chat-options-dropdown a:hover,
+    html.dark #chat-options-dropdown button:hover { background-color: #334155 !important; }
+
+    /* Empty state */
+    html.dark .ring-white { --tw-ring-color: #1e293b !important; }
+    html.dark .bg-blue-50\/50 { background-color: rgba(37, 99, 235, 0.15) !important; }
+
+    /* Scrollbar */
+    html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #475569 !important; }
 </style>
  
 <section class="py-0 md:py-8 bg-gray-50">
@@ -49,7 +188,7 @@
                     $lastMessage = $conversation->messages->first();
                     $isActive = $activeConversation && $activeConversation->id === $conversation->id;
                 @endphp
-                <a href="?user_id={{ $otherUser->id }}" class="block p-4 hover:bg-gray-50 transition border-b border-gray-50 {{ $isActive ? 'bg-blue-50 border-l-4 border-l-blue-600' : '' }}">
+                <a id="conv-{{ $conversation->id }}" href="?user_id={{ $otherUser->id }}" class="block p-4 hover:bg-gray-50 transition border-b border-gray-50 {{ $isActive ? 'bg-blue-50 border-l-4 border-l-blue-600' : '' }}">
                     <div class="flex items-center gap-3">
                         <div class="relative shrink-0">
                             <img src="{{ $otherUser->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-gray-200 shadow-sm">
@@ -58,10 +197,10 @@
                             <div class="flex justify-between items-baseline mb-1">
                                 <h3 class="font-bold text-gray-900 truncate">{{ $otherUser->first_name }} {{ $otherUser->last_name }}</h3>
                                 @if($lastMessage)
-                                    <span class="text-xs text-gray-400 whitespace-nowrap">{{ $lastMessage->created_at->diffForHumans(null, true, true) }}</span>
+                                    <span class="text-xs text-gray-400 whitespace-nowrap conversation-time">{{ $lastMessage->created_at->diffForHumans(null, true, true) }}</span>
                                 @endif
                             </div>
-                            <p class="text-sm text-gray-500 truncate {{ $lastMessage && !$lastMessage->is_read && $lastMessage->sender_id !== Auth::id() ? 'font-bold text-gray-800' : '' }}">
+                            <p class="text-sm text-gray-500 truncate conversation-snippet {{ $lastMessage && !$lastMessage->is_read && $lastMessage->sender_id !== Auth::id() ? 'font-bold text-gray-800' : '' }}">
                                 {{ $lastMessage ? $lastMessage->body : __('messages_page.start_conversation') }}
                             </p>
                         </div>
@@ -77,7 +216,7 @@
       </aside>
  
       <!-- Main Chat Area (aligned with Nav Links) -->
-      <main class="{{ $activeConversation ? 'flex' : 'hidden md:flex' }} flex-1 flex flex-col h-full bg-white relative overflow-hidden md:pl-10">
+      <main class="{{ $activeConversation ? 'flex' : 'hidden md:flex' }} flex-1 flex flex-col h-full bg-white relative overflow-hidden">
         @if($activeConversation)
             @php $chatUser = $activeConversation->getOtherUser(Auth::id()); @endphp
  
@@ -118,7 +257,7 @@
  
             <!-- Messages List -->
             <!-- flex-1 ensures it takes available space, overflow-y-auto makes IT scroll, not the page -->
-            <div id="messages-container" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-6 space-y-4 bg-gray-50">
+            <div id="messages-container" class="flex-1 min-h-0 overflow-y-auto overflow-x-hidden p-4 space-y-4 bg-gray-50">
                 <div class="flex justify-center py-4">
                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                 </div>
@@ -417,6 +556,12 @@
                 </div>
             `;
             messagesContainer.appendChild(div);
+
+            // Update sidebar info
+            if (msg.body || msg.attachment) {
+                const body = msg.body ? msg.body : (msg.attachment_type === 'image' ? 'Sent an image' : 'Sent a file');
+                updateSidebar(conversationId, body, isMe);
+            }
         }
  
         window.deleteMessage = function(messageId, btn) {
@@ -448,6 +593,9 @@
                         }
                         const overlay = container.querySelector('.delete-overlay');
                         if(overlay) overlay.remove();
+
+                        // Update sidebar if it was the last message
+                        updateSidebar(conversationId, 'Message deleted', true);
                     }
                 }
             });
@@ -461,6 +609,34 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
+        function updateSidebar(cid, body, isMe) {
+            const convEl = document.getElementById(`conv-${cid}`);
+            if (!convEl) return;
+
+            // Updated snippet text
+            const snippet = convEl.querySelector('.conversation-snippet');
+            if (snippet) {
+                snippet.textContent = body;
+                if (!isMe) {
+                    snippet.classList.add('font-bold', 'text-gray-800');
+                } else {
+                    snippet.classList.remove('font-bold', 'text-gray-800');
+                }
+            }
+
+            // Update timestamp
+            const timeEl = convEl.querySelector('.conversation-time');
+            if (timeEl) {
+                timeEl.textContent = '1m'; // Simplified "just now"
+            }
+
+            // Move to top
+            const container = convEl.parentElement;
+            if (container && container.firstChild !== convEl) {
+                container.prepend(convEl);
+            }
         }
     });
 </script>

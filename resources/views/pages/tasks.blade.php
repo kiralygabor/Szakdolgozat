@@ -206,6 +206,72 @@
       margin-bottom: 0;
     }
 
+    /* Dark Mode Overrides for Tasks Page */
+    html.dark .custom-task-popup .maplibregl-popup-content { background-color: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
+    html.dark #type-menu, html.dark #price-menu { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .range-slider { height: 30px !important; position: relative !important; background: transparent !important; }
+    html.dark .range-slider .track-bg { background-color: #475569 !important; height: 6px !important; width: 100% !important; z-index: 1 !important; display: block !important; top: 50% !important; transform: translateY(-50%) !important; position: absolute !important; }
+    html.dark .range-slider .track-fill { background-color: #2563eb !important; height: 6px !important; z-index: 2 !important; display: block !important; top: 50% !important; transform: translateY(-50%) !important; position: absolute !important; }
+    html.dark .range-slider input[type=range] { background: transparent !important; border: none !important; z-index: 5 !important; height: 100% !important; pointer-events: none !important; }
+    html.dark .range-slider input[type=range]::-webkit-slider-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; appearance: none; -webkit-appearance: none; width: 22px !important; height: 22px !important; border-radius: 50% !important; cursor: pointer !important; position: relative !important; z-index: 10 !important; margin-top: 0 !important; pointer-events: all !important; }
+    html.dark .range-slider input[type=range]::-moz-range-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; width: 22px !important; height: 22px !important; border-radius: 50% !important; cursor: pointer !important; z-index: 10 !important; pointer-events: all !important; }
+    html.dark .step-icon-circle { background-color: #334155 !important; color: #cbd5e1 !important; }
+    html.dark .modal-overlay .bg-white { background-color: #1e293b !important; }
+    html.dark #mobile-filters-modal.bg-white { background-color: #0f172a !important; }
+    
+    /* Search Bar and Filter Container */
+    html.dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .hover\:bg-gray-50:hover, 
+    html.dark .hover\:bg-blue-50:hover,
+    html.dark [class*="hover:bg-gray-50"]:hover,
+    html.dark [class*="hover:bg-blue-50"]:hover { background-color: #334155 !important; color: #f8fafc !important; }
+    
+    html.dark #type-city-dropdown div:hover { background-color: #334155 !important; color: #f8fafc !important; }
+    html.dark #search-q, html.dark #type-city-search, html.dark #mobile-city-search-input { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
+    html.dark #search-q:focus, html.dark #type-city-search:focus { background-color: #1e293b !important; border-color: #6366f1 !important; }
+
+    /* Borders and Dividers */
+    html.dark .border, 
+    html.dark .border-t, 
+    html.dark .border-b, 
+    html.dark .border-l, 
+    html.dark .border-r { border-color: #334155 !important; }
+    html.dark .divide-y > * + * { border-color: #334155 !important; }
+
+    /* Radio Inputs in Menus */
+    html.dark input[type="radio"] { background-color: #1e293b !important; border-color: #475569 !important; }
+    html.dark input[type="radio"]:checked { background-color: #6366f1 !important; border-color: #6366f1 !important; }
+
+
+    /* Task Cards - Specific States */
+    html.dark .task-card { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .bg-violet-50 { background-color: rgba(139, 92, 246, 0.1) !important; color: #ddd6fe !important; }
+    html.dark .border-violet-300 { border-color: #5b21b6 !important; }
+    html.dark .ring-violet-100 { --tw-ring-color: rgba(139, 92, 246, 0.2) !important; }
+    html.dark .bg-violet-100 { background-color: #4c1d95 !important; color: #ddd6fe !important; }
+    html.dark .text-violet-700 { color: #c4b5fd !important; }
+    
+    html.dark .bg-blue-50 { background-color: rgba(37, 99, 235, 0.1) !important; color: #bfdbfe !important; }
+    html.dark .border-blue-300 { border-color: #1e40af !important; }
+    html.dark .bg-blue-100 { background-color: #1e3a8a !important; color: #bfdbfe !important; }
+    
+    html.dark .bg-gray-100 { background-color: #334155 !important; color: #f8fafc !important; }
+    html.dark .bg-gray-50 { background-color: #0f172a !important; color: #e2e8f0 !important; }
+    html.dark .border-gray-200 { border-color: #334155 !important; }
+    html.dark .text-gray-900 { color: #f8fafc !important; }
+    html.dark .text-gray-800 { color: #f1f5f9 !important; }
+    html.dark .text-gray-700 { color: #e2e8f0 !important; }
+    html.dark .text-gray-600 { color: #cbd5e1 !important; }
+    html.dark .text-gray-500 { color: #94a3b8 !important; }
+    html.dark .text-gray-400 { color: #64748b !important; }
+    
+    html.dark select { background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; }
+    html.dark input { background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; }
+    
+    html.dark .maplibregl-popup-content a { background-color: #4f46e5 !important; color: white !important; }
+    html.dark .maplibregl-popup-content .text-gray-900 { color: #f8fafc !important; }
+    html.dark .maplibregl-popup-content .text-blue-600 { color: #93c5fd !important; }
+
   </style>
 
   <!-- MapLibre GL -->

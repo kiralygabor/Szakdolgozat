@@ -1,6 +1,14 @@
 @extends('layout')
  
 @section('content')
+<style>
+  html.dark .bg-white { background-color: #1e293b !important; }
+  html.dark .border-gray-100 { border-color: #334155 !important; }
+  html.dark .text-slate-900, html.dark .text-slate-800 { color: #ffffff !important; }
+  html.dark .bg-gray-100, html.dark .bg-gray-50 { background-color: #0f172a !important; }
+  html.dark #details-fade { background-image: linear-gradient(to top, #1e293b, transparent) !important; }
+</style>
+
 <div class="max-w-4xl mx-auto px-4 sm:px-6 py-8 font-sans">
    
     {{-- Progress Bar Section --}}
@@ -161,7 +169,7 @@
                             
                             {{-- Price Input with Currency Prefix --}}
                             <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">
+                                <label class="block text-xs font-semibold text-gray-800 mb-1 ml-1">
                                     {{ (auth()->id() == $task->employee_id) ? __('Your Quote') : __('task_details.form.your_offer') }}
                                 </label>
                                 <div class="relative">
@@ -176,7 +184,7 @@
 
                             {{-- Message Input --}}
                             <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1 ml-1">{{ __('task_details.form.message') }}</label>
+                                <label class="block text-xs font-semibold text-gray-800 mb-1 ml-1">{{ __('task_details.form.message') }}</label>
                                 <textarea name="message" rows="3"
                                     class="w-full px-3 py-2.5 bg-gray-50 border border-transparent text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent transition-all resize-none"
                                     placeholder="{{ (auth()->id() == $task->employee_id) ? __('Add a message with your quote...') : __('task_details.form.message_placeholder') }}" required></textarea>
@@ -268,7 +276,7 @@
             </div>
             @endif
            
-            <div id="details-fade" class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+            <div id="details-fade" class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white dark:from-[#1e293b] to-transparent pointer-events-none"></div>
         </div>
     </div>
  

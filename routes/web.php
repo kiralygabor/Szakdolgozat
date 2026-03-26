@@ -1,5 +1,5 @@
 <?php
-
+ 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\CityController;
@@ -10,13 +10,13 @@ use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
-
+ 
 use App\Http\Controllers\UserReportController;
-
+ 
 Route::get('/', function () {
     return view('welcome');
 });
-
+ 
 Route::get('index', [PagesController::class, 'index'])->name('index');
 Route::get('profile', [PagesController::class, 'profile'])->name('profile');
 Route::put('profile', [PagesController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
@@ -26,6 +26,11 @@ Route::post('profile/{id}/review', [PagesController::class, 'storeReview'])->nam
 Route::get('category', [PagesController::class, 'category'])->name('category');
 Route::get('tasks', [PagesController::class, 'tasks'])->name('tasks');
 Route::get('/howitworks', function () {return view('pages.howitworks');})->name('howitworks');
+Route::get('/terms', function () {return view('pages.terms-and-conditions');})->name('terms');
+Route::get('/guidelines', function () {return view('pages.community-guidelines');})->name('guidelines');
+Route::get('/privacy', function () {return view('pages.privacy-policy');})->name('privacy');
+Route::get('/help-faq', function () {return view('pages.help-faq');})->name('help-faq');
+Route::get('/contact-support', function () {return view('pages.contact-support');})->name('contact-support');
 Route::get('my-tasks', [PagesController::class, 'myTasks'])->name('my-tasks');
 Route::get('notifications', [PagesController::class, 'notifications'])->name('notifications');
 Route::post('notifications/mark-read', [PagesController::class, 'markAllRead'])->name('notifications.mark-read')->middleware('auth');
@@ -44,7 +49,7 @@ Route::post('tasks/{task}/accept-direct', [OfferController::class, 'acceptDirect
 Route::post('reports', [ReportController::class, 'store'])->name('reports.store')->middleware('auth');
 Route::post('user-reports', [UserReportController::class, 'store'])->name('user-reports.store')->middleware('auth');
 Route::get('api/cities', [PagesController::class, 'searchCities'])->name('api.cities.search');
-
+ 
 // Language switching
 Route::post('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'hu'])) {
@@ -53,7 +58,7 @@ Route::post('language/{locale}', function ($locale) {
     }
     return back();
 })->name('language.switch');
-
+ 
 // Advertisement REST endpoints (optional API for CRUD)
 // Allow visiting /advertisements (or common misspelling) via GET by redirecting to tasks list
 Route::get('advertisements', function () {
@@ -66,40 +71,40 @@ Route::post('advertisements', [AdvertisementController::class, 'store'])->name('
 Route::match(['put', 'patch'], 'advertisements/{advertisement}', [AdvertisementController::class, 'update'])->name('advertisements.update')->middleware('auth');
 Route::delete('advertisements/{advertisement}', [AdvertisementController::class, 'destroy'])->name('advertisements.destroy')->middleware('auth');
 Route::post('advertisements/{advertisement}/complete', [AdvertisementController::class, 'complete'])->name('advertisements.complete')->middleware('auth');
-
+ 
 Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post'); 
+Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');
 Route::get('registration', [AuthController::class, 'registration'])->name('register');
-Route::post('post-registration', [AuthController::class, 'postRegistration'])->name('register.post'); 
+Route::post('post-registration', [AuthController::class, 'postRegistration'])->name('register.post');
  
 Route::match(['get', 'post'], 'logout', [AuthController::class, 'logout'])->name('logout');
-
+ 
 Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-
+ 
 Route::get('/user/verify/{token}', [AuthController::class, 'verifyUser']);
 Route::get('registration_settings', [AuthController::class, 'registration_settings'])->name('registeration_settings');
 Route::post('post-registration_settings', [AuthController::class, 'postRegistrationSettings'])->name('registration_settings.post');
-
-
-
+ 
+ 
+ 
 // Forgot Password Form
 Route::get('forgot-password', [AuthController::class, 'showForgotPasswordForm'])
     ->name('password.request');
-
-// Send Reset Link 
+ 
+// Send Reset Link
 Route::post('forgot-password', [AuthController::class, 'sendResetLinkEmail'])
     ->name('password.email');
-
+ 
 // Reset Password Form (from email link)
 Route::get('reset-password/{token}', [AuthController::class, 'showResetForm'])
     ->name('password.reset');
-
+ 
 // Handle Reset Password Submission
 Route::post('reset-password', [AuthController::class, 'resetPassword'])
     ->name('password.update');
-
-
+ 
+ 
 Route::get('/verify-code', [AuthController::class, 'showVerifyCodeForm'])->name('verify.code.form');
 Route::post('/verify-code', [AuthController::class, 'verifyCode'])->name('verify.code');
 Route::get('/resend-code', [AuthController::class, 'resendCode'])->name('resend.code');

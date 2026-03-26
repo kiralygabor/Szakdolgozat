@@ -203,8 +203,185 @@
   margin-left: 4px;
   font-weight: 500;
 }
-</style>
 
+  /* Dark Mode Overrides */
+  html.dark .step-pane h1,
+  html.dark aside h2,
+  html.dark #sidebarSteps li,
+  html.dark .block.text-lg.font-medium,
+  html.dark .text-lg.font-medium.text-gray-800,
+  html.dark .text-gray-600,
+  html.dark p.text-lg.font-medium { color: #f8fafc !important; }
+  
+  html.dark .date-dropdown-btn { background: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
+  html.dark .date-dropdown-btn.active { background-color: #6366f1 !important; border-color: #6366f1 !important; }
+  html.dark .time-option { border-color: #334155 !important; background-color: #1e293b !important; }
+  html.dark .time-option:hover { background-color: #334155 !important; border-color: #475569 !important; }
+  html.dark .time-option.selected { border-color: #6366f1 !important; background-color: rgba(99,102,241,0.15) !important; }
+  html.dark .location-option { border-color: #334155 !important; background-color: #1e293b !important; }
+  html.dark .location-option:hover { background-color: #334155 !important; border-color: #475569 !important; }
+  html.dark .location-option.selected { border-color: #6366f1 !important; background-color: rgba(99,102,241,0.15) !important; }
+  html.dark .location-option .title { color: #f8fafc !important; }
+  html.dark .location-option .description { color: #94a3b8 !important; }
+  html.dark .photo-upload-plus { border-color: #334155 !important; background-color: #1e293b !important; }
+  html.dark .photo-upload-plus:hover { background-color: #334155 !important; border-color: #475569 !important; }
+  html.dark .photo-upload-plus .plus-icon { color: #94a3b8 !important; }
+  html.dark .photo-upload-plus .text { color: #f8fafc !important; }
+  html.dark .photo-upload-plus .subtext { color: #64748b !important; }
+
+  /* Form Fields Dark Mode */
+  html.dark #taskDescription,
+  html.dark #categorySelect,
+  html.dark #jobSelect,
+  html.dark #pickupSuburb,
+  html.dark #taskDetails,
+  html.dark #budgetInput {
+    background-color: #1e293b !important;
+    border-color: #475569 !important;
+    color: #f8fafc !important;
+  }
+  html.dark #budgetWrapper { border-color: #475569 !important; background-color: #1e293b !important; }
+  html.dark #budgetWrapper span { 
+    background-color: #1e293b !important; 
+    border-color: #475569 !important; 
+    color: #94a3b8 !important; 
+  }
+  html.dark #taskDetails::placeholder,
+  html.dark #taskDescription::placeholder,
+  html.dark #budgetInput::placeholder {
+    color: #64748b !important;
+  }
+  html.dark #backBtn { background-color: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; }
+  html.dark .time-option .font-semibold.text-gray-800 { color: #f8fafc !important; }
+  html.dark .photo-upload-plus .subtext { color: #64748b !important; }
+
+ 
+/* High Contrast mode overrides for Post a Task */
+.high-contrast .step-pane h1,
+.high-contrast aside h2,
+.high-contrast #sidebarSteps li {
+    color: #000000 !important;
+}
+ 
+.high-contrast .date-dropdown-btn {
+    border: 2px solid #000000 !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+ 
+.high-contrast .date-dropdown-btn:hover,
+.high-contrast .date-dropdown-btn.active {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+ 
+.high-contrast .date-dropdown-btn:hover *,
+.high-contrast .date-dropdown-btn.active * {
+    color: #ffffff !important;
+}
+ 
+.high-contrast .date-dropdown-btn.active svg {
+    stroke: #ffffff !important;
+}
+ 
+.high-contrast .pill-btn {
+    border: 2px solid #000000 !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+ 
+.high-contrast .pill-btn:hover,
+.high-contrast .pill-btn[data-active="true"] {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+ 
+.high-contrast .pill-btn:hover *,
+.high-contrast .pill-btn[data-active="true"] * {
+    color: #ffffff !important;
+}
+ 
+.high-contrast .time-option,
+.high-contrast .location-option {
+    border: 2px solid #000000 !important;
+    background-color: #ffffff !important;
+}
+ 
+.high-contrast .time-option:hover,
+.high-contrast .time-option.selected,
+.high-contrast .location-option:hover,
+.high-contrast .location-option.selected {
+    background-color: #000000 !important;
+}
+ 
+.high-contrast .time-option:hover *,
+.high-contrast .time-option.selected *,
+.high-contrast .location-option:hover *,
+.high-contrast .location-option.selected * {
+    color: #ffffff !important;
+}
+ 
+.high-contrast .time-option .icon,
+.high-contrast .location-option .icon {
+    color: #000000 !important;
+}
+ 
+.high-contrast .photo-upload-plus {
+    border: 3px dashed #000000 !important;
+    background-color: #ffffff !important;
+}
+ 
+.high-contrast .photo-upload-plus:hover {
+    background-color: #000000 !important;
+}
+ 
+.high-contrast .photo-upload-plus:hover *,
+.high-contrast .photo-upload-plus:hover .plus-icon {
+    color: #ffffff !important;
+}
+ 
+.high-contrast .photo-upload-plus .plus-icon {
+    color: #000000 !important;
+}
+ 
+.high-contrast #backBtn {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+ 
+.high-contrast #backBtn:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+ 
+.high-contrast #nextBtn,
+.high-contrast #submitBtn {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+ 
+.high-contrast #nextBtn:hover,
+.high-contrast #submitBtn:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+ 
+.high-contrast input:focus,
+.high-contrast select:focus,
+.high-contrast textarea:focus {
+    border-color: #000000 !important;
+    box-shadow: 0 0 0 3px #000000 !important;
+    outline: 2px solid #000000 !important;
+}
+ 
+.high-contrast input[type="checkbox"] {
+    accent-color: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+</style>
+ 
 <div class="min-h-screen flex flex-col items-center bg-white">
 <div class="w-full max-w-7xl flex flex-col md:flex-row px-6 py-10">
 <!-- Sidebar -->
@@ -233,7 +410,7 @@
 </ul>
 </div>
         @endif
-        
+       
         @if(isset($targetUser))
             <input type="hidden" name="employee_id" value="{{ $targetUser->id }}">
             <div class="mb-8 bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-center justify-between">
@@ -445,7 +622,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Categories Data
   const categoriesData = @json($categories);
-
+ 
   // Step handling
   const panes = [
     document.getElementById('step-1'),
@@ -500,12 +677,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const titleOk = taskInput.value.trim().length > 0;
       const categoryOk = categorySelect.value !== "";
       const jobOk = jobSelect.value !== "";
-      
+     
       const onDate = document.getElementById('onDateValue').value;
       const beforeDate = document.getElementById('beforeDateValue').value;
       const isFlexible = flexibleBtn && flexibleBtn.getAttribute('data-active') === 'true';
       const dateOk = onDate !== "" || beforeDate !== "" || isFlexible;
-
+ 
       ok = titleOk && categoryOk && jobOk && dateOk;
     } else if (stepIndex === 1) {
       const isInPerson = inPersonOption.classList.contains('selected');
@@ -552,7 +729,7 @@ document.addEventListener('DOMContentLoaded', function() {
     nextBtn.disabled = !ok;
     nextBtn.classList.toggle('opacity-60', !ok);
     nextBtn.classList.toggle('cursor-not-allowed', !ok);
-    
+   
     submitBtn.disabled = !ok;
     submitBtn.classList.toggle('opacity-60', !ok);
     submitBtn.classList.toggle('cursor-not-allowed', !ok);
@@ -615,14 +792,14 @@ document.addEventListener('DOMContentLoaded', function() {
           }
       }
   @endphp
-
+ 
   const oldCatId = "{{ $oldCategoryId }}";
   const oldJobId = "{{ $oldJobId }}";
-
+ 
   const urlParams = new URLSearchParams(window.location.search);
   const preCat = urlParams.get('category'); // e.g. ?category=2
   const preService = urlParams.get('job') || urlParams.get('service'); // e.g. &job=5 or &service=5
-
+ 
   if (oldCatId) {
       categorySelect.value = oldCatId;
       populateJobs(oldCatId, oldJobId);
@@ -643,7 +820,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('input_task_type').value = isOnline ? 'online' : 'in-person';
       const flexibleActive = flexibleBtn && flexibleBtn.getAttribute('data-active') === 'true';
       document.getElementById('input_is_date_flexible').value = flexibleActive ? '1' : '0';
-
+ 
       // Disable button to prevent double-click
       submitBtn.disabled = true;
       submitBtn.classList.add('opacity-60', 'cursor-not-allowed');

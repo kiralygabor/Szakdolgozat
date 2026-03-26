@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
@@ -33,6 +33,12 @@
                     }
                 }
             }
+        }
+        // Apply theme early to prevent flash
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
         }
     </script>
     <style>
@@ -197,26 +203,41 @@
         background-color: #ffffff !important;
       }
       .high-contrast .bg-blue-50,
+      .high-contrast .bg-blue-50 *,
       .high-contrast .bg-emerald-50,
+      .high-contrast .bg-emerald-50 *,
       .high-contrast .bg-indigo-50,
-      .high-contrast .bg-blue-200 {
+      .high-contrast .bg-indigo-50 *,
+      .high-contrast .bg-blue-200,
+      .high-contrast .bg-blue-200 * {
         background-color: #000000 !important;
         color: #ffffff !important;
       }
-      .high-contrast .bg-green-100, .high-contrast .bg-red-100, .high-contrast .bg-blue-100, .high-contrast .bg-violet-100, .high-contrast .bg-purple-100, .high-contrast .bg-orange-100, .high-contrast .bg-teal-100, .high-contrast .bg-indigo-100 {
+      .high-contrast .bg-green-100, .high-contrast .bg-green-100 *, 
+      .high-contrast .bg-red-100, .high-contrast .bg-red-100 *, 
+      .high-contrast .bg-blue-100, .high-contrast .bg-blue-100 *, 
+      .high-contrast .bg-violet-100, .high-contrast .bg-violet-100 *, 
+      .high-contrast .bg-purple-100, .high-contrast .bg-purple-100 *, 
+      .high-contrast .bg-orange-100, .high-contrast .bg-orange-100 *, 
+      .high-contrast .bg-teal-100, .high-contrast .bg-teal-100 *, 
+      .high-contrast .bg-indigo-100, .high-contrast .bg-indigo-100 *,
+      .high-contrast .bg-violet-50, .high-contrast .bg-violet-50 * {
         background-color: #000000 !important;
         color: #ffffff !important;
         border: 2px solid #000000 !important;
       }
-      /* Ensure text inside colored badges is white */
+      /* Ensure text inside colored badges is white (on black background) */
       .high-contrast .text-blue-700, .high-contrast .text-green-700, .high-contrast .text-purple-700,
       .high-contrast .text-orange-700, .high-contrast .text-red-700, .high-contrast .text-teal-700,
-      .high-contrast .text-indigo-700 {
+      .high-contrast .text-indigo-700, .high-contrast .text-green-600, .high-contrast .text-blue-600, 
+      .high-contrast .text-indigo-600, .high-contrast .text-violet-600 {
         color: #ffffff !important;
-      }
-      .high-contrast .text-blue-600, .high-contrast .text-indigo-600, .high-contrast .text-violet-600 {
-        color: #000044 !important;
         font-weight: 800 !important;
+      }
+      .high-contrast .task-card * .text-green-600,
+      .high-contrast .text-green-600 {
+        color: #ffffff !important;
+        font-weight: 900 !important;
       }
       .high-contrast #cat-desc {
         color: #ffffff !important;
@@ -283,8 +304,65 @@
       }
       .high-contrast .task-card {
         background-color: #ffffff !important;
-        border: 3px solid #000000 !important;
+        border: 4px solid #000000 !important;
         box-shadow: none !important;
+      }
+       .high-contrast .task-card * {
+        background-color: transparent !important;
+        color: #000000 !important;
+        border: none !important;
+      }
+      .high-contrast .task-card .bg-violet-100,
+      .high-contrast .task-card .bg-blue-100,
+      .high-contrast .task-card .bg-violet-50,
+      .high-contrast .task-card .bg-blue-50,
+      .high-contrast .task-card .bg-gray-100 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 1px solid #000000 !important;
+        display: inline-flex !important;
+      }
+      .high-contrast .task-card .bg-violet-100 *,
+      .high-contrast .task-card .bg-blue-100 *,
+      .high-contrast .task-card .bg-violet-50 *,
+      .high-contrast .task-card .bg-blue-50 *,
+      .high-contrast .task-card .bg-gray-100 * {
+          color: #ffffff !important;
+          border: none !important;
+      }
+      /* Keep borders on buttons and avatars */
+      .high-contrast .task-card a[class*="bg-"],
+      .high-contrast .task-card button[class*="bg-"],
+      .high-contrast .task-card img {
+          border: 2px solid #000000 !important;
+      }
+      .high-contrast .task-card a[class*="bg-"] *,
+      .high-contrast .task-card button[class*="bg-"] * {
+          color: #ffffff !important;
+      }
+
+
+      /* Notification Button Fix */
+      .high-contrast .notification-btn,
+      .high-contrast .notification-btn:focus,
+      .high-contrast #notifications-menu-button:focus {
+          ring: none !important;
+          outline: 3px solid #000000 !important;
+          box-shadow: none !important;
+          border-color: #000000 !important;
+      }
+      .high-contrast #unread-count,
+      .high-contrast [class*="unread-count"],
+      .high-contrast .bg-red-500,
+      .high-contrast .bg-red-600 {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+          border: 2px solid #ffffff !important;
+          opacity: 1 !important;
+      }
+      .high-contrast #unread-count *, 
+      .high-contrast .bg-red-500 * {
+          color: #ffffff !important;
       }
       .high-contrast .btn, .high-contrast button, .high-contrast .sub-menu-link {
         font-weight: 700 !important;
@@ -299,8 +377,10 @@
         color: #ffffff !important;
         text-decoration: underline !important;
       }
-      /* Exclude logo from black background on hover */
-      .high-contrast a.flex.items-center:hover {
+      /* Exclude main navbar logo from black background on hover */
+      .high-contrast .desktop-navbar a:hover img[src*="logo"],
+      .high-contrast .mobile-navbar a:hover img[src*="logo"],
+      .high-contrast a.flex.items-center.block:hover {
         background-color: transparent !important;
       }
       /* Navbar Settings & Links */
@@ -315,6 +395,7 @@
           border: 3px solid #000000 !important;
           color: #000000 !important;
           z-index: 100 !important;
+          box-shadow: none !important;
       }
       .high-contrast #settings-menu div:not([id*="-indicator"]):not(.dot),
       .high-contrast #settings-menu button {
@@ -327,9 +408,15 @@
       }
       /* Hover state: Parent item or current button/div turns black */
       .high-contrast #settings-menu div:hover:not([id*="-indicator"]):not(.dot),
-      .high-contrast #settings-menu button:hover,
+      .high-contrast #settings-menu button:hover:not([id*="-indicator"]):not(.dot),
       .high-contrast #settings-menu .group:hover > div:first-child {
           background-color: #000000 !important;
+          color: #ffffff !important;
+      }
+            /* Ensure text and icons inside hovered items turn white */
+      .high-contrast #settings-menu div:hover *,
+      .high-contrast #settings-menu button:hover *,
+      .high-contrast #settings-menu .group:hover > div:first-child * {
           color: #ffffff !important;
       }
       /* Accessibility Toggles in High Contrast */
@@ -356,16 +443,24 @@
           border: 1px solid #000000;
           transform: translateX(20px) !important;
       }
-      /* Submenu items visibility */
-      .high-contrast #settings-menu .submenu div,
-      .high-contrast #settings-menu .submenu button {
+       /* Submenu items visibility */
+      .high-contrast #settings-menu .submenu div:not(.dot):not([id*="-indicator"]),
+      .high-contrast #settings-menu .submenu button:not([id*="-indicator"]) {
           background-color: #ffffff !important;
           color: #000000 !important;
       }
-      .high-contrast #settings-menu .submenu div:hover {
+      .high-contrast #settings-menu .submenu div:hover:not(.dot):not([id*="-indicator"]),
+      .high-contrast #settings-menu .submenu button:hover:not(.dot):not([id*="-indicator"]) {
           background-color: #000000 !important;
           color: #ffffff !important;
       }
+      .high-contrast #settings-menu .submenu span {
+          color: #000000 !important;
+      }
+      .high-contrast #settings-menu .submenu div:hover span,
+      .high-contrast #settings-menu .submenu button:hover span {
+          color: #ffffff !important;
+      }      
       /* Maintain hidden state correctly */
       .high-contrast #settings-menu.hidden { display: none !important; }
       .high-contrast #settings-menu:not(.show) { opacity: 0 !important; pointer-events: none !important; }
@@ -393,13 +488,14 @@
 
       /* Global Reduced Motion Hover Fix */
       .reduced-motion *:hover:not(.dot):not(img),
-      .reduced-motion .group:hover:not(.dot):not(img),
-      .reduced-motion .group:hover *:not(.dot):not(img) {
+      .reduced-motion .group:hover *:not(.dot):not(img),
+      .reduced-motion img,
+      .reduced-motion img:hover {
         transform: none !important;
         -webkit-transform: none !important;
         transition: none !important;
         -webkit-transition: none !important;
-        box-shadow: none !important;
+        animation: none !important;
       }
       .high-contrast input, .high-contrast select, .high-contrast textarea {
         border: 2px solid #000000 !important;
@@ -411,6 +507,166 @@
         color: #000000 !important;
         opacity: 0.7 !important;
       }
+
+      /* Navbar & Dropdown Fixes for High Contrast */
+      .high-contrast .user-info:hover {
+          background-color: #000000 !important;
+      }
+      .high-contrast .user-info:hover * {
+          color: #ffffff !important;
+      }
+      .high-contrast .sub-menu-link:hover {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+      }
+      .high-contrast .sub-menu-link:hover * {
+          color: #ffffff !important;
+      }
+      .high-contrast #user-menu-button,
+      .high-contrast .mobile-profile-btn img,
+      .high-contrast .mobile-sidebar-user img {
+          border: 3px solid #000000 !important;
+          ring: none !important;
+          box-shadow: none !important;
+      }
+      .high-contrast .mobile-sidebar-user:hover {
+          background-color: #000000 !important;
+      }
+      .high-contrast .mobile-sidebar-user:hover * {
+          color: #ffffff !important;
+      }
+      .high-contrast .mobile-sidebar-link:hover {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+      }
+      .high-contrast .mobile-sidebar-link:hover i,
+      .high-contrast .mobile-sidebar-link:hover svg {
+          color: #ffffff !important;
+      }
+
+      /* Task & Offer Modals High Contrast Fixes */
+      .high-contrast .bg-blue-50.text-blue-600,
+      .high-contrast .bg-blue-50.text-blue-700 {
+          color: #ffffff !important;
+          background-color: #000000 !important;
+          border: 2px solid #ffffff !important;
+      }
+      .high-contrast .step-icon-circle {
+          background-color: #ffffff !important;
+          border: 1px solid #000000 !important;
+          color: #000000 !important;
+      }
+      .high-contrast .step-add-btn {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+          border: 1px solid #ffffff !important;
+      }
+      .high-contrast svg path[fill="#2563EB"],
+      .high-contrast svg path[stroke="#2563EB"] {
+          fill: #000000 !important;
+          stroke: #ffffff !important;
+          stroke-width: 2px !important;
+      }
+      .high-contrast .bg-yellow-400 {
+          background-color: #000000 !important;
+          border: 2px solid #ffffff !important;
+      }
+      .high-contrast .bg-yellow-400 * {
+          color: #ffffff !important;
+      }
+      .high-contrast #profile-steps-modal .bg-white {
+          border: 4px solid #000000 !important;
+      }
+
+      /* Global Gradient Fix for High Contrast - Exclude explore cards and text-clip titles to show images/content */
+      .high-contrast [class*="bg-gradient-to-"]:not(.absolute.inset-0.bg-gradient-to-t):not(.bg-clip-text) {
+          background: #000000 !important;
+          color: #ffffff !important;
+          border: 2px solid #000000 !important;
+      }
+      .high-contrast [class*="bg-gradient-to-"] * {
+          color: #ffffff !important;
+      }
+      
+      /* Explicitly hide overlays that black out images in Explore section */
+      .high-contrast .how-it-works-inner .bg-gradient-to-t {
+          background: transparent !important;
+          border: none !important;
+          opacity: 0 !important;
+      }
+
+      /* Meta info labels (Posted by, etc) */
+      .high-contrast .text-gray-400,
+      .high-contrast .text-slate-400,
+      .high-contrast .text-gray-500 {
+          color: #000000 !important;
+          font-weight: 700 !important;
+          opacity: 1 !important;
+      }
+
+      /* Progress Bar in HC */
+      .high-contrast .bg-green-500,
+      .high-contrast .bg-green-400,
+      .high-contrast .bg-teal-500 {
+          background-color: #000000 !important;
+          border-right: 2px solid #ffffff !important;
+      }
+
+      /* Light buttons (like Report Task) */
+      .high-contrast .bg-gray-100 {
+          background-color: #ffffff !important;
+          border: 2px solid #000000 !important;
+          color: #000000 !important;
+          opacity: 1 !important;
+      }
+      .high-contrast .bg-gray-100:hover {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+      }
+      /* Fix for badges (green-50, yellow-50, etc) */
+      .high-contrast .bg-green-50,
+      .high-contrast .bg-green-50 *,
+      .high-contrast .bg-yellow-50,
+      .high-contrast .bg-yellow-50 * {
+          background-color: #000000 !important;
+          color: #ffffff !important;
+      }
+
+      /* Global Button Hover Fix (Ensure child spans turn white) */
+      .high-contrast button:hover *,
+      .high-contrast .btn:hover *,
+      .high-contrast a:hover * {
+          color: #ffffff !important;
+      }
+      
+      /* Hide description fade out effect in High Contrast */
+      .high-contrast [id*="details-fade"],
+      .high-contrast .bg-gradient-to-t.from-white,
+      .high-contrast .bg-gradient-to-b.from-black\/5,
+      .high-contrast .bg-gradient-to-b.from-black\/3 {
+          display: none !important;
+          opacity: 0 !important;
+      }
+
+      /* Map & Map Components in High Contrast */
+      .high-contrast #map {
+          border: 4px solid #000000 !important;
+          border-radius: 0.75rem !important;
+      }
+      .high-contrast .maplibregl-ctrl-group {
+          background-color: #ffffff !important;
+          border: 2px solid #000000 !important;
+          box-shadow: none !important;
+      }
+      .high-contrast .maplibregl-popup-content {
+          background-color: #ffffff !important;
+          color: #000000 !important;
+          border: 3px solid #000000 !important;
+          box-shadow: none !important;
+      }
+      .high-contrast .maplibregl-popup-content * {
+          color: #000000 !important;
+      }
       /* Decorative blobs/dots should be hidden in high contrast */
       .high-contrast [style*="radial-gradient"],
       .high-contrast [class*="blur-"] {
@@ -418,6 +674,22 @@
       }
       .high-contrast .sr-only:not(:focus) {
           /* Ensure sr-only stays hidden but accessible */
+      }
+      
+      /* High Contrast Logo Fix */
+      .high-contrast img.logo-img {
+          filter: brightness(0) !important;
+          mix-blend-mode: normal !important;
+          opacity: 1 !important;
+      }
+      
+      /* Dark mode accessibility toggle hover neutralization */
+      html.dark #nav-accessibility-section .submenu button:hover {
+          background-color: rgba(255, 255, 255, 0.05) !important;
+      }
+      html.dark [id*="-indicator"], 
+      html.dark [id*="-indicator"] .dot {
+          pointer-events: none !important;
       }
 
       /* Hamburger button */
@@ -711,14 +983,251 @@
         background: #4f46e5;
       }
       .mobile-signup-btn {
-        border: 1.5px solid #6366f1;
+        border: 1.5px solid #334155 !important; /* dark slate/gray */
         color: #6366f1 !important;
         background: transparent;
+      }
+      html.dark .mobile-signup-btn {
+        border-color: #334155 !important;
       }
       .mobile-signup-btn:hover {
         background: rgba(99,102,241,0.08);
       }
     </style>
+
+    {{-- ===== GLOBAL DARK MODE STYLES ===== --}}
+    <style>
+      /* ─── Base ─── */
+      html.dark body,
+      html.dark { background-color: #0f172a; color: #e2e8f0; }
+
+      /* ─── Override common Tailwind utility backgrounds ─── */
+      html.dark .bg-white       { background-color: #1e293b !important; }
+      html.dark .bg-gray-50     { background-color: #0f172a !important; }
+      html.dark .bg-gray-100    { background-color: #1e293b !important; }
+      html.dark .bg-slate-50    { background-color: #0b1120 !important; }
+      html.dark .bg-blue-50     { background-color: #172554 !important; }
+      html.dark .bg-blue-50\/20 { background-color: rgba(23,37,84,0.2) !important; }
+      html.dark .bg-blue-50\/30 { background-color: rgba(23,37,84,0.3) !important; }
+      html.dark .bg-red-50      { background-color: rgba(127,29,29,0.25) !important; }
+      html.dark .bg-green-50    { background-color: rgba(20,83,45,0.25) !important; }
+      html.dark .bg-indigo-50   { background-color: rgba(55,48,163,0.2) !important; }
+
+      /* ─── Text ─── */
+      html.dark .text-gray-900  { color: #f8fafc !important; }
+      html.dark .text-gray-800  { color: #f1f5f9 !important; }
+      html.dark .text-gray-700  { color: #cbd5e1 !important; }
+      html.dark .text-gray-600  { color: #94a3b8 !important; }
+      html.dark .text-gray-500  { color: #64748b !important; }
+      html.dark .text-gray-400  { color: #64748b !important; }
+      html.dark .text-slate-900 { color: #f8fafc !important; }
+      html.dark .text-blue-900  { color: #93c5fd !important; }
+      html.dark .text-blue-600  { color: #60a5fa !important; }
+      html.dark .text-blue-700  { color: #93c5fd !important; }
+
+      /* ─── Borders ─── */
+      html.dark .border-gray-200 { border-color: #334155 !important; }
+      html.dark .border-gray-100 { border-color: #1e293b !important; }
+      html.dark .border-gray-300 { border-color: #475569 !important; }
+      html.dark .border-gray-50  { border-color: #1e293b !important; }
+
+      /* ─── Shadows ─── */
+      html.dark .shadow-sm, html.dark .shadow, html.dark .shadow-md, html.dark .shadow-lg, html.dark .shadow-xl, html.dark .shadow-2xl {
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5), 0 2px 4px -1px rgba(0,0,0,0.3) !important;
+      }
+
+      /* ─── Input / Form Controls ─── */
+      html.dark .form-control,
+      html.dark .form-control-custom,
+      html.dark input[type="text"],
+      html.dark input[type="email"],
+      html.dark input[type="password"],
+      html.dark input[type="number"],
+      html.dark input[type="date"],
+      html.dark input[type="search"],
+      html.dark textarea,
+      html.dark select {
+        background-color: #1e293b !important;
+        border-color: #475569 !important;
+        color: #e2e8f0 !important;
+      }
+      html.dark .form-control:focus,
+      html.dark .form-control-custom:focus,
+      html.dark input:focus,
+      html.dark textarea:focus,
+      html.dark select:focus {
+        background-color: #0f172a !important;
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.2) !important;
+      }
+      html.dark ::placeholder { color: #64748b !important; }
+
+      /* ─── Cards (general) ─── */
+      html.dark .bg-light { background-color: #1e293b !important; color: #94a3b8 !important; }
+
+      /* ─── Bootstrap Alerts ─── */
+      html.dark .alert-success { background-color: rgba(20,83,45,0.3) !important; color: #86efac !important; border-color: #166534 !important; }
+      html.dark .alert-danger  { background-color: rgba(127,29,29,0.3) !important; color: #fca5a5 !important; border-color: #991b1b !important; }
+      html.dark .alert-warning { background-color: rgba(120,53,15,0.3) !important; color: #fde68a !important; border-color: #92400e !important; }
+
+      /* ─── Desktop Navbar ─── */
+      html.dark .desktop-navbar { background-color: #1e293b !important; border-color: #334155 !important; }
+
+      /* ─── Navbar dropdown / sub-menu ─── */
+      html.dark .sub-menu          { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark .sub-menu-link     { color: #cbd5e1 !important; }
+      html.dark .sub-menu-link:hover { color: #818cf8 !important; }
+      html.dark .sub-menu hr       { background: #334155 !important; }
+      html.dark .user-info h3 a    { color: #f1f5f9 !important; }
+      html.dark .user-info p       { color: #94a3b8 !important; }
+      html.dark .user-info:hover   { background: #6366f1 !important; }
+      html.dark .user-info:hover h3 a,
+      html.dark .user-info:hover p { color: #fff !important; }
+
+      /* ─── Notification bell & dropdown ─── */
+      html.dark .notification-btn         { background-color: #334155 !important; }
+      html.dark .notification-btn:hover    { background-color: #475569 !important; }
+      html.dark .notification-btn .bell path { fill: #cbd5e1 !important; }
+      html.dark #notification-dropdown     { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark #notification-dropdown .bg-gray-50 { background-color: #0f172a !important; }
+
+      /* ─── Settings dropdown ─── */
+      html.dark #settings-menu          { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark #settings-menu .py-2    { color: #cbd5e1 !important; }
+      html.dark #settings-menu .py-2:hover,
+      html.dark #settings-menu .hover\:bg-gray-100:hover { background: #334155 !important; }
+      html.dark #settings-menu .submenu { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark #settings-menu .submenu div { color: #cbd5e1 !important; }
+      html.dark #settings-menu .submenu div:hover { background: #334155 !important; }
+
+      /* ─── Categories mega menu ─── */
+      html.dark #categories-menu { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark #categories-menu .bg-gray-50 { background-color: #0f172a !important; }
+      html.dark #categories-menu h3 { color: #a5b4fc !important; }
+      html.dark #categories-menu ul a { color: #cbd5e1 !important; }
+      html.dark #categories-menu ul a:hover { color: #818cf8 !important; }
+
+      /* ─── Mobile Navbar ─── */
+      html.dark .mobile-navbar       { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark .mobile-hamburger span { background: #e2e8f0 !important; }
+      html.dark .mobile-sidebar      { background: #1e293b !important; }
+      html.dark .mobile-sidebar-header { border-color: #334155 !important; }
+      html.dark .mobile-sidebar-close { color: #e2e8f0 !important; }
+      html.dark .mobile-sidebar-user  { border-color: #334155 !important; }
+      html.dark .mobile-sidebar-user-name { color: #f1f5f9 !important; }
+      html.dark .mobile-sidebar-user-sub  { color: #94a3b8 !important; }
+      html.dark .mobile-sidebar-link  { color: #cbd5e1 !important; }
+      html.dark .mobile-sidebar-link:hover,
+      html.dark .mobile-sidebar-link.active { background: rgba(99,102,241,0.15) !important; color: #818cf8 !important; }
+      html.dark .mobile-sidebar-divider    { background: #334155 !important; }
+      html.dark .mobile-sidebar-section-label { color: #64748b !important; }
+      html.dark .mobile-profile-dropdown     { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark .mobile-profile-dropdown-user { border-color: #334155 !important; }
+      html.dark .mobile-profile-dropdown-user h4 { color: #f1f5f9 !important; }
+      html.dark .mobile-profile-dropdown-user p  { color: #94a3b8 !important; }
+      html.dark .mobile-profile-dropdown-links a { color: #cbd5e1 !important; }
+      html.dark .mobile-profile-dropdown-links a:hover { background: rgba(99,102,241,0.15) !important; color: #818cf8 !important; }
+      html.dark .mobile-profile-dropdown-divider { background: #334155 !important; }
+
+      /* ─── Footer ─── */
+      html.dark footer,
+      html.dark footer.bg-gray-50 { background-color: #1e293b !important; border-color: #334155 !important; }
+      html.dark footer h3         { color: #f1f5f9 !important; }
+      html.dark footer a          { color: #94a3b8 !important; }
+      html.dark footer a:hover    { color: #818cf8 !important; }
+      html.dark footer p          { color: #64748b !important; }
+      html.dark footer .border-t  { border-color: #334155 !important; }
+
+
+
+      /* ─── Profile page overrides ─── */
+      html.dark .settings-nav .nav-link       { color: #94a3b8 !important; }
+      html.dark .settings-nav .nav-link:hover  { background-color: #334155 !important; color: #818cf8 !important; }
+      html.dark .settings-nav .nav-link.active { background-color: rgba(99,102,241,0.2) !important; color: #818cf8 !important; }
+      html.dark h1.page-title                  { color: #f1f5f9 !important; }
+      html.dark h6.section-label               { color: #cbd5e1 !important; }
+      html.dark .custom-input-group label      { color: #cbd5e1 !important; }
+      html.dark .avatar-circle                 { background-color: rgba(99,102,241,0.2) !important; }
+      html.dark .border-bottom                 { border-color: #334155 !important; }
+      html.dark .text-muted                    { color: #64748b !important; }
+
+      /* ─── Post-task page ─── */
+      html.dark .pill-btn             { border-color: #818cf8 !important; color: #a5b4fc !important; }
+      html.dark .pill-btn:hover,
+      html.dark .pill-btn[data-active="true"] { background-color: #4f46e5 !important; color: #fff !important; border-color: #4f46e5 !important; }
+      html.dark .date-dropdown-btn    { background: #1e293b !important; border-color: #475569 !important; color: #cbd5e1 !important; }
+      html.dark .date-dropdown-btn:hover   { border-color: #818cf8 !important; }
+      html.dark .date-dropdown-btn.active  { background-color: #4f46e5 !important; color: #fff !important; border-color: #4f46e5 !important; }
+      html.dark .time-option          { border-color: #334155 !important; color: #cbd5e1 !important; }
+      html.dark .time-option:hover    { border-color: #6366f1 !important; background-color: rgba(99,102,241,0.1) !important; }
+      html.dark .time-option.selected { border-color: #6366f1 !important; background-color: rgba(99,102,241,0.15) !important; }
+      html.dark .time-option .icon    { color: #a5b4fc !important; }
+      html.dark .time-option span     { color: #cbd5e1 !important; }
+      html.dark .location-option      { border-color: #334155 !important; }
+      html.dark .location-option:hover { border-color: #6366f1 !important; background-color: rgba(99,102,241,0.1) !important; }
+      html.dark .location-option.selected { border-color: #6366f1 !important; background-color: rgba(99,102,241,0.15) !important; }
+      html.dark .location-option .title      { color: #f1f5f9 !important; }
+      html.dark .location-option .description { color: #94a3b8 !important; }
+      html.dark .photo-upload-plus     { border-color: #475569 !important; background-color: #1e293b !important; }
+      html.dark .photo-upload-plus:hover { border-color: #6366f1 !important; background-color: rgba(99,102,241,0.1) !important; }
+      html.dark .photo-upload-plus .text    { color: #e2e8f0 !important; }
+      html.dark .photo-upload-plus .subtext { color: #94a3b8 !important; }
+
+      /* ─── MyTasks / Dashboard ─── */
+      html.dark .main-wrapper     { color: #e2e8f0; }
+      html.dark .hero-right       { background-color: #1e293b !important; color: #e2e8f0 !important; }
+      html.dark .modern-tabs-wrapper { background: #1e293b !important; }
+      html.dark .modern-tab         { color: #94a3b8 !important; }
+      html.dark .modern-tab.active  { background: #334155 !important; color: #f1f5f9 !important; }
+      html.dark .modern-search-input { background: #0f172a !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+      html.dark .compact-task-row    { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark .task-details-panel  { background: #1e293b !important; color: #e2e8f0 !important; }
+      html.dark .task-details-backdrop { background: rgba(0,0,0,0.7) !important; }
+      html.dark .modern-empty-state  { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark .status-badge        { color: #94a3b8 !important; }
+      html.dark .task-label          { color: #64748b !important; }
+      html.dark .hero-headline       { color: #f1f5f9 !important; }
+
+      /* ─── Tasks / Browse page ─── */
+      html.dark .task-card          { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark .range-slider input[type=range]::-webkit-slider-thumb { background: #1e293b !important; border-color: #6366f1 !important; }
+
+      /* ─── Messages page ─── */
+      html.dark #message-form input  { background: #0f172a !important; }
+
+      /* ─── How It Works page ─── */
+      html.dark .bg-\[\\#f8fafc\] { background-color: #0f172a !important; }
+
+      /* ─── Hover overrides to avoid white flash ─── */
+      html.dark .hover\:bg-gray-50:hover  { background-color: #334155 !important; }
+      html.dark .hover\:bg-gray-100:hover { background-color: #334155 !important; }
+      html.dark .hover\:bg-indigo-50:hover { background-color: rgba(99,102,241,0.15) !important; }
+
+      /* ─── Bootstrap overrides (modals, etc.) ─── */
+      html.dark .modal-content    { background: #1e293b !important; color: #e2e8f0 !important; border-color: #334155 !important; }
+      html.dark .modal-header     { border-color: #334155 !important; }
+      html.dark .modal-body       { color: #e2e8f0 !important; }
+      html.dark .btn-close        { filter: invert(1) !important; }
+
+      /* ─── Scrollbar dark mode ─── */
+      html.dark ::-webkit-scrollbar-track  { background: #0f172a; }
+      html.dark ::-webkit-scrollbar-thumb  { background-color: #334155; }
+
+      /* ─── Tab pane overrides (Bootstrap) ─── */
+      html.dark .tab-content    { color: #e2e8f0; }
+      html.dark .nav-pills .nav-link.active { background-color: rgba(99,102,241,0.2) !important; color: #818cf8 !important; }
+
+      /* ─── Dropdown menus (Bootstrap) ─── */
+      html.dark .dropdown-menu { background: #1e293b !important; border-color: #334155 !important; }
+      html.dark .dropdown-item { color: #cbd5e1 !important; }
+      html.dark .dropdown-item:hover { background: #334155 !important; color: #f1f5f9 !important; }
+
+      /* ─── List group items ─── */
+      html.dark .list-group-item { background: #1e293b !important; border-color: #334155 !important; color: #cbd5e1 !important; }
+      html.dark .list-group-item:hover,
+      html.dark .list-group-item-action:hover { background: #334155 !important; color: #f1f5f9 !important; }
+    </style>
+
     <!-- Feather icons (used in navbar) -->
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -746,7 +1255,7 @@
 
   {{-- Center: Logo --}}
   <a href="{{ url('/index') }}" class="flex items-center">
-    <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" style="height: 28px; width: auto; object-fit: contain;">
+    <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" class="logo-img dark:brightness-0 dark:invert" style="height: 28px; width: auto; object-fit: contain;">
   </a>
 
   {{-- Right: Profile picture / Login --}}
@@ -828,7 +1337,7 @@
 <div class="mobile-sidebar" id="mobileSidebar" role="dialog" aria-modal="true" aria-label="Main menu sidebar">
   <div class="mobile-sidebar-header">
     <a href="{{ url('/index') }}">
-      <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="height: 26px; width: auto;">
+      <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" class="logo-img dark:brightness-0 dark:invert" style="height: 26px; width: auto;">
     </a>
     <button class="mobile-sidebar-close" id="mobileSidebarClose" aria-label="Close menu">&times;</button>
   </div>
@@ -896,7 +1405,7 @@
   @guest
     <div style="padding: 16px 20px; border-top: 1px solid #f0f0f0; margin-top: auto;">
       <a href="{{ route('login') }}" class="mobile-sidebar-cta" style="margin: 0 0 8px;">{{ __('navbar.login') }}</a>
-      <a href="{{ route('register') }}" class="mobile-sidebar-cta" style="margin: 0; background: transparent; color: #6366f1; border: 1.5px solid #6366f1;">{{ __('navbar.sign_up') }}</a>
+      <a href="{{ route('register') }}" class="mobile-sidebar-cta" style="margin: 0; background: transparent; color: #6366f1; border: 1.5px solid #334155 !important;">{{ __('navbar.sign_up') }}</a>
     </div>
   @endguest
 </div>
@@ -907,7 +1416,7 @@
     <!-- LEFT: Logo (aligned with Sidebar location) -->
     <div class="flex items-center md:w-1/5">
       <a href="{{ url('/index') }}" class="flex items-center">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="h-8 w-auto mix-blend-multiply">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="logo-img h-8 w-auto dark:brightness-0 dark:invert">
       </a>
     </div>
  
@@ -1038,7 +1547,7 @@
     <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white">
       {{ __('navbar.login') }}
     </a>
-    <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white">
+    <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg border text-primary-500 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 no-underline transition-colors" style="border: 1.5px solid #334155 !important;">
       {{ __('navbar.sign_up') }}
     </a>
   @endguest
@@ -1205,8 +1714,9 @@
             {{ __('navbar.extras') }}
           </div>
           <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.help_faq') }}</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer">{{ __('navbar.contact_support') }}</div>
+            <a href="{{ route('help-faq') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 no-underline">{{ __('navbar.help_faq') ?? 'Help / FAQ' }}</a>
+            <a href="{{ route('contact-support') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 no-underline">{{ __('navbar.contact_support') ?? 'Contact / Support' }}</a>
+          </div>
           </div>
         </div>
       </div>
@@ -1233,7 +1743,7 @@
                 <!-- Column 1: Brand -->
                 <div class="space-y-4">
                     <a href="{{ url('/index') }}" class="flex items-center">
-                        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="h-8 w-auto mix-blend-multiply">
+                        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" class="logo-img h-8 w-auto dark:brightness-0 dark:invert mix-blend-multiply dark:mix-blend-normal">
                     </a>
                     <p class="text-sm text-gray-500 leading-relaxed">
                         {{ __('footer.brand_description') }}
@@ -1307,9 +1817,13 @@
             localStorage.setItem('theme','system');
             var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             root.classList.toggle('dark', prefersDark);
+            if (prefersDark) {
+               applyAcc('high-contrast', false);
+            }
           } else if(mode === 'dark'){
             root.classList.add('dark');
             localStorage.setItem('theme','dark');
+            applyAcc('high-contrast', false);
           } else {
             root.classList.remove('dark');
             localStorage.setItem('theme','light');
@@ -1331,7 +1845,26 @@
         }
         window.toggleAccessibilitySetting = function(type) {
             const current = localStorage.getItem(type) === 'true';
-            applyAcc(type, !current);
+            const newVal = !current;
+            
+            if (type === 'high-contrast') {
+                if (newVal) {
+                    // Entering High Contrast: Save current theme and force light
+                    const currentTheme = localStorage.getItem('theme') || 'system';
+                    localStorage.setItem('theme-before-hc', currentTheme);
+                    applyTheme('light');
+                    const themeSelect = document.getElementById('theme-select');
+                    if (themeSelect) themeSelect.value = 'light';
+                } else {
+                    // Exiting High Contrast: Restore previous theme
+                    const oldTheme = localStorage.getItem('theme-before-hc') || 'system';
+                    applyTheme(oldTheme);
+                    const themeSelect = document.getElementById('theme-select');
+                    if (themeSelect) themeSelect.value = oldTheme;
+                }
+            }
+            
+            applyAcc(type, newVal);
         }
         // Init theme and accessibility on load
         try {
@@ -1445,8 +1978,21 @@
         }
         
         // Avatar submenu toggle helper
-        window.toggleMenu = function(){
+       window.toggleMenu = function(){
           if (!subMenu) return;
+         
+          // Close notifications if open
+          const notificationDropdown = document.getElementById('notification-dropdown');
+          if (notificationDropdown && !notificationDropdown.classList.contains('hidden')) {
+              notificationDropdown.classList.remove('opacity-100', 'scale-100');
+              notificationDropdown.classList.add('opacity-0', 'scale-95');
+              const btn = document.getElementById('notifications-menu-button');
+              if (btn) btn.setAttribute('aria-expanded', 'false');
+              setTimeout(() => {
+                  notificationDropdown.classList.add('hidden');
+              }, 200);
+          }
+ 
           const isOpen = subMenu.classList.toggle('open-menu');
           const btn = document.getElementById('user-menu-button');
           if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -1567,6 +2113,16 @@
       function toggleNotifications() {
           const dropdown = document.getElementById('notification-dropdown');
           const btn = document.getElementById('notifications-menu-button');
+          if (!dropdown) return;
+ 
+          // Close subMenu (avatar) if open
+          const subMenu = document.getElementById('subMenu');
+          if (subMenu && subMenu.classList.contains('open-menu')) {
+              subMenu.classList.remove('open-menu');
+              const userBtn = document.getElementById('user-menu-button');
+              if (userBtn) userBtn.setAttribute('aria-expanded', 'false');
+          }
+ 
           if (dropdown.classList.contains('hidden')) {
               dropdown.classList.remove('hidden');
               btn.setAttribute('aria-expanded', 'true');
@@ -1583,7 +2139,6 @@
               }, 200);
           }
       }
-
       // Close notifications on click outside
       document.addEventListener('click', function(e) {
           const dropdown = document.getElementById('notification-dropdown');
@@ -1640,223 +2195,7 @@
         return true;
       }
     </script>
-    {{-- =========================================
-         FLOATING SUPPORT CHATBOT
-         ========================================= --}}
-   Floating Button 
-    <button id="chatbot-toggle" onclick="toggleChatbot()" class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-indigo-300 hover:bg-indigo-700 hover:-translate-y-1 transition-all z-[100] focus:outline-none">
-        <i data-feather="message-circle" class="w-6 h-6"></i>
-    </button>
 
-    <!-- Chatbot Window -->
-    <div id="chatbot-window" class="fixed bottom-24 right-6 w-[90vw] max-w-[380px] bg-white border border-gray-200 rounded-2xl shadow-2xl z-[100] flex flex-col transition-all duration-300 transform opacity-0 translate-y-4 pointer-events-none" style="height: 500px; max-height: 70vh;">
-        <!-- Header -->
-        <div class="bg-indigo-600 text-white p-4 flex justify-between items-center rounded-t-2xl">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-                    <i data-feather="help-circle" class="w-4 h-4 text-white"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-sm m-0 leading-tight">MiniJobz Assistant</h3>
-                    <p class="text-indigo-200 text-xs m-0">Online - How can we help?</p>
-                </div>
-            </div>
-            <button onclick="toggleChatbot()" class="text-white hover:text-indigo-200 transition focus:outline-none rounded p-1">
-                <i data-feather="x" class="w-5 h-5"></i>
-            </button>
-        </div> 
-
-        <!-- Chat Area -->
-        <div id="chatbot-messages" class="flex-1 p-4 bg-gray-50 overflow-y-auto flex flex-col gap-4 custom-scrollbar">
-            <!-- Initial Greeting -->
-            <div class="flex items-start gap-2">
-                <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
-                    <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
-                </div>
-                <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm text-sm text-gray-700 inline-block max-w-[85%]">
-                    Hi there! 👋 I'm your MiniJobz virtual assistant. Please select one of the common questions below to learn more.
-                </div>
-            </div>
-
-            <!-- FAQ Buttons Container -->
-            <div id="chatbot-faq-options" class="flex flex-col gap-2 pl-8">
-                <button onclick="handleFaqClick('how-to-post')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
-                    How do I post a task?
-                </button>
-                <button onclick="handleFaqClick('how-to-apply')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
-                    How do I apply for a task?
-                </button>
-                <button onclick="handleFaqClick('payment')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
-                    How does payment work?
-                </button>
-                <button onclick="handleFaqClick('fees')" class="text-left bg-white border border-indigo-100 hover:border-indigo-300 hover:bg-indigo-50 text-indigo-700 text-sm px-4 py-2 rounded-xl transition-colors shadow-sm w-fit">
-                    Are there any fees?
-                </button>
-            </div>
-        </div>
-
-        <!-- Input Area (Enabled for FAQ bot) -->
-        <form id="chatbot-form" onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t border-gray-100 flex items-center gap-2 rounded-b-2xl">
-            <input type="text" id="chatbot-input" placeholder="Ask me something..." class="flex-1 bg-gray-50 border border-gray-100 rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all text-gray-700">
-            <button type="submit" class="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 transition shadow-sm">
-                <i data-feather="send" class="w-4 h-4 ml-0.5 mt-0.5"></i>
-            </button>
-        </form>
-    </div>
-
-    <script>
-        // Dictionary of FAQ Answers
-        const chatbotFaqs = {
-            'how-to-post': "To post a task, make sure you are logged in. Click the <strong>'Post a Task'</strong> button in the top navigation bar. Fill out details like the title, category, location, and your budget, then click <strong>'Publish'</strong>. Your task will instantly be visible to all Taskers!",
-            'how-to-apply': "To apply for a task, go to the <strong>'Browse Tasks'</strong> page and click on a task you're interested in. You will see a <strong>'Make an offer'</strong> section where you can propose your price and send a message to the employer.",
-            'payment': "Currently, MiniJobz connects people who need help with those who can provide it. Payment terms should be discussed directly between the Employer and the Tasker via our built-in <strong>Messages</strong> system before work begins.",
-            'fees': "MiniJobz is currently <strong>100% free</strong> to use! There are no fees for posting tasks, making offers, or communicating. You keep everything you earn.",
-            'profile': "You can manage your profile by clicking on your avatar in the navbar and selecting <strong>'Profile'</strong>. There you can update your bio, skills, and contact information.",
-            'notifications': "Notifications alert you to new messages, offers on your tasks, or when your offer is accepted. You can view them by clicking the <strong>Bell icon</strong> in the navbar.",
-            'security': "To update your password or manage account security, go to <strong>'Profile'</strong> and then select the <strong>'Security'</strong> tab.",
-            'direct-quotes': "If you see a professional you like, you can send them a **Direct Quote** request from their profile. This lets you negotiate specifically with one person.",
-            'dashboard': "Your <strong>Dashboard</strong> (My Tasks) is where you track all tasks you've posted or applied for. It helps you stay organized with your active jobs."
-        };
-
-        function toggleChatbot() {
-            const wind = document.getElementById('chatbot-window');
-            const btn = document.getElementById('chatbot-toggle');
-            if (wind.classList.contains('opacity-0')) {
-                // Open
-                wind.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
-                wind.classList.add('opacity-100', 'translate-y-0');
-                btn.setAttribute('aria-expanded', 'true');
-            } else {
-                // Close
-                wind.classList.remove('opacity-100', 'translate-y-0');
-                wind.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
-                btn.setAttribute('aria-expanded', 'false');
-            }
-        }
-
-        function handleFaqClick(faqKey) {
-            const questionText = chatbotFaqs[faqKey].question || event.currentTarget.innerText;
-            processUserMessage(questionText, faqKey);
-        }
-
-        function handleChatSubmit(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatbot-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            input.value = '';
-            processUserMessage(text);
-        }
-
-        function processUserMessage(text, forcedKey = null) {
-            const messagesContainer = document.getElementById('chatbot-messages');
-            const optionsContainer = document.getElementById('chatbot-faq-options');
-            
-            // Hide options
-            optionsContainer.style.display = 'none';
-
-            // Add user bubble
-            const userMsgHtml = `
-                <div class="flex items-end justify-end mt-2 animate-fade-in-up">
-                    <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-sm shadow-sm text-sm inline-block max-w-[85%]">
-                        ${text}
-                    </div>
-                </div>
-            `;
-            messagesContainer.insertAdjacentHTML('beforeend', userMsgHtml);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-            // Intent Matching Logic if no forced key
-            let matchKey = forcedKey;
-            if (!matchKey) {
-                const lowerText = text.toLowerCase();
-                
-                // Keyword mapping
-                const keywords = {
-                    'how-to-post': ['post', 'create', 'publish', 'add task', 'list task', 'new task', 'upload task'],
-                    'how-to-apply': ['apply', 'make offer', 'bid', 'work', 'get hired', 'send offer', 'start working'],
-                    'payment': ['pay', 'money', 'get paid', 'transaction', 'payout', 'bank', 'transfer', 'cash', 'earn'],
-                    'fees': ['commission', 'fee', 'free', 'cost', 'charge', 'price', 'expensive', 'cheap'],
-                    'profile': ['profile', 'avatar', 'bio', 'description', 'my info', 'skills'],
-                    'notifications': ['notification', 'bell', 'alert', 'notice', 'unread'],
-                    'security': ['password', 'security', 'login', 'access', 'privacy', 'private'],
-                    'direct-quotes': ['direct', 'quote', 'specific', 'professional', 'hire now'],
-                    'dashboard': ['dashboard', 'my tasks', 'history', 'tracking', 'manage jobs'],
-                    'greeting': ['hi', 'hello', 'hey', 'greetings', 'sup', 'yo', 'morning', 'evening']
-                };
-
-                for (const [key, words] of Object.entries(keywords)) {
-                    if (words.some(word => lowerText.includes(word))) {
-                        matchKey = key;
-                        break;
-                    }
-                }
-            }
-
-            // Show typing
-            const typingId = 'bot-typing-' + Date.now();
-            const typingHtml = `
-                <div id="${typingId}" class="flex items-start gap-2 mt-4 animate-fade-in-up">
-                    <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
-                        <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
-                    </div>
-                    <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm flex gap-1 items-center h-[42px] max-w-[85%]">
-                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: -0.3s"></div>
-                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style="animation-delay: -0.15s"></div>
-                        <div class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></div>
-                    </div>
-                </div>
-            `;
-            messagesContainer.insertAdjacentHTML('beforeend', typingHtml);
-            if (window.feather) window.feather.replace();
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-            setTimeout(() => {
-                document.getElementById(typingId)?.remove();
-
-                let answer;
-                if (matchKey === 'greeting') {
-                    answer = "Hello! 👋 I'm here to help you navigate MiniJobz. You can ask me about posting tasks, applying for jobs, or how payments work.";
-                } else if (matchKey) {
-                    answer = chatbotFaqs[matchKey];
-                } else {
-                    answer = "I'm not exactly sure about that yet. 🤖 My knowledge is currently limited to the basics of MiniJobz. You can try selecting one of the common questions below, or contact support!";
-                }
-
-                const botResponseHtml = `
-                    <div class="flex items-start gap-2 mt-2 animate-fade-in-up">
-                        <div class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
-                            <i data-feather="cpu" class="w-3 h-3 text-indigo-600"></i>
-                        </div>
-                        <div class="bg-white border border-gray-100 p-3 rounded-2xl rounded-tl-sm shadow-sm text-sm text-gray-700 leading-relaxed inline-block max-w-[85%]">
-                            ${answer}
-                        </div>
-                    </div>
-                `;
-                messagesContainer.insertAdjacentHTML('beforeend', botResponseHtml);
-                
-                setTimeout(() => {
-                     optionsContainer.style.display = 'flex';
-                     messagesContainer.appendChild(optionsContainer);
-                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }, 800);
-
-                if (window.feather) window.feather.replace();
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }, 1000);
-        }
-    </script>
-    
-    <style>
-        .animate-fade-in-up {
-            animation: fadeInUp 0.3s ease-out forwards;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
 
 </body>
 </html>

@@ -133,6 +133,117 @@
         color: #777;
         z-index: 10;
     }
+ 
+    /* High Contrast Mode for Profile Page */
+    .high-contrast .btn-primary-custom {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+ 
+    .high-contrast .btn-primary-custom:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+ 
+    .high-contrast .settings-nav .nav-link.active {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+ 
+    .high-contrast .settings-nav .nav-link.active i,
+    .high-contrast .settings-nav .nav-link.active svg {
+        color: #ffffff !important;
+    }
+ 
+    .high-contrast .settings-nav .nav-link:hover:not(.active) {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+ 
+    .high-contrast .settings-nav .nav-link:hover:not(.active) i,
+    .high-contrast .settings-nav .nav-link:hover:not(.active) svg {
+        color: #ffffff !important;
+    }
+ 
+    .high-contrast .page-title,
+    .high-contrast .section-label,
+    .high-contrast .custom-input-group label,
+    .high-contrast .verification-bar {
+        color: #000000 !important;
+    }
+ 
+    .high-contrast .form-control-custom {
+        background-color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+ 
+    .high-contrast .bg-red-50 {
+        background-color: #ffffff !important;
+        border: 4px solid #000000 !important;
+        color: #000000 !important;
+    }
+ 
+    .high-contrast .bg-red-50 *,
+    .high-contrast .text-red-700,
+    .high-contrast .text-red-600 {
+        color: #000000 !important;
+        opacity: 1 !important;
+    }
+ 
+    .high-contrast .btn-danger {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        opacity: 1 !important;
+    }
+   
+    .high-contrast input[type="checkbox"] {
+        border: 3px solid #000000 !important;
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+    }
+
+    /* Account Settings Dark Mode Fixes */
+    html.dark body { background-color: #0f172a !important; color: #f1f5f9 !important; }
+    html.dark h1.page-title, 
+    html.dark h6.section-label,
+    html.dark .custom-input-group label { color: #f8fafc !important; }
+    
+    html.dark .settings-nav .nav-link { color: #94a3b8 !important; }
+    html.dark .settings-nav .nav-link:hover { background-color: #1e293b !important; color: #60a5fa !important; }
+    html.dark .settings-nav .nav-link.active { background-color: #1e3a8a !important; color: #60a5fa !important; }
+    
+    html.dark .form-control-custom { background-color: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
+    html.dark .form-control-custom:focus { background-color: #0f172a !important; border-color: #2563eb !important; }
+    
+    html.dark .btn-primary-custom { background-color: #2563eb !important; border: none !important; }
+    html.dark .btn-light-custom { background-color: #1e293b !important; color: #60a5fa !important; }
+    
+    html.dark .border-t, 
+    html.dark .border-b, 
+    html.dark .border-bottom { border-color: #334155 !important; }
+    
+    html.dark .bg-red-50 { background-color: rgba(127, 29, 29, 0.2) !important; color: #fecaca !important; border-color: #7f1d1d !important; }
+    html.dark .text-red-700, 
+    html.dark .text-red-600 { color: #f87171 !important; }
+    html.dark .btn-danger { background-color: #dc2626 !important; border-color: #b91c1c !important; color: white !important; }
+    
+    html.dark .text-muted, 
+    html.dark .text-gray-500 { color: #94a3b8 !important; }
+    html.dark .bg-blue-50\/30 { background-color: rgba(30, 41, 59, 0.5) !important; border-color: #334155 !important; }
+    html.dark .hover\:bg-white:hover { background-color: #1e293b !important; }
+    html.dark .border-blue-100 { border-color: #1e3a8a !important; }
+    html.dark .text-blue-900 { color: #60a5fa !important; }
+    html.dark .bg-gray-50 { background-color: #0f172a !important; }
+    html.dark .text-gray-600 { color: #cbd5e1 !important; }
+    html.dark .text-gray-800 { color: #f1f5f9 !important; }
+    html.dark .avatar-circle { background-color: #1e3a8a !important; color: #60a5fa !important; }
+    
+    html.dark .list-group-item { background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; }
+    html.dark .list-group-item:hover { background-color: #334155 !important; }
 </style>
  
 <div class="max-w-7xl mx-auto px-6 py-10">
@@ -294,7 +405,7 @@
                                 <option value="system">{{ __('navbar.system_default') }}</option>
                             </select>
                         </div>
-
+ 
                         <div class="mb-5 custom-input-group">
                             <h6 class="section-label">Accessibility</h6>
                             <div class="space-y-4 pt-2">
@@ -305,7 +416,7 @@
                                         <span class="text-xs text-gray-500">Show accessibility options (reduced motion, high contrast) in menus.</span>
                                     </div>
                                 </label>
-
+ 
                                 <div id="access-sub-options" class="hidden pl-8 space-y-4 pt-2 border-l-2 border-blue-50 ml-2">
                                     <label class="flex items-center gap-3 cursor-pointer group">
                                         <input type="checkbox" id="reduced-motion-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
@@ -314,7 +425,7 @@
                                             <span class="text-xs text-gray-500">Minimize animations and transitions.</span>
                                         </div>
                                     </label>
-                                    
+                                   
                                     <label class="flex items-center gap-3 cursor-pointer group">
                                         <input type="checkbox" id="high-contrast-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                         <div class="flex flex-col">
@@ -408,7 +519,7 @@
                                         <span class="text-sm text-gray-600">Email me when I receive an offer on my task or when my offer is accepted</span>
                                     </div>
                                 </label>
-
+ 
                                 <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                     <input type="checkbox" name="email_direct_quotes" value="1" {{ $user->email_direct_quotes ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <div>
@@ -554,9 +665,25 @@
                     localStorage.setItem('theme', 'system');
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     root.classList.toggle('dark', prefersDark);
+                    if (prefersDark) {
+                        applyAccessibility({
+                            master: localStorage.getItem('accessibility-mode') === 'true',
+                            reducedMotion: localStorage.getItem('reduced-motion') === 'true',
+                            highContrast: false 
+                        });
+                        const hcToggle = document.getElementById('high-contrast-toggle');
+                        if (hcToggle) hcToggle.checked = false;
+                    }
                 } else if (mode === 'dark') {
                     root.classList.add('dark');
                     localStorage.setItem('theme', 'dark');
+                    applyAccessibility({
+                        master: localStorage.getItem('accessibility-mode') === 'true',
+                        reducedMotion: localStorage.getItem('reduced-motion') === 'true',
+                        highContrast: false 
+                    });
+                    const hcToggle = document.getElementById('high-contrast-toggle');
+                    if (hcToggle) hcToggle.checked = false;
                 } else {
                     root.classList.remove('dark');
                     localStorage.setItem('theme', 'light');
@@ -570,6 +697,11 @@
                 localStorage.setItem('high-contrast', prefs.highContrast);
                 localStorage.setItem('accessibility-mode', prefs.master);
                 
+                if (prefs.highContrast) {
+                    // Turn off dark mode if HC was on elsewhere
+                    // We don't call applyTheme here to avoid recursion, but we setup the UI
+                }
+
                 // Refresh visibility
                 if (window.applyAccMode) window.applyAccMode(prefs.master);
             }
@@ -595,12 +727,12 @@
             // Init states
             const savedTheme = localStorage.getItem('theme') || 'system';
             if (themeSelect) themeSelect.value = savedTheme;
-
+ 
             const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
             const highContrastToggle = document.getElementById('high-contrast-toggle');
             const masterAccToggle = document.getElementById('accessibility-master-toggle');
             const subOptions = document.getElementById('access-sub-options');
-            
+           
             if (masterAccToggle) {
                 masterAccToggle.checked = localStorage.getItem('accessibility-mode') === 'true';
                 if (masterAccToggle.checked) subOptions?.classList.remove('hidden');
@@ -613,6 +745,19 @@
             }
             if (highContrastToggle) {
                 highContrastToggle.checked = localStorage.getItem('high-contrast') === 'true';
+                highContrastToggle.addEventListener('change', function() {
+                    if (this.checked && themeSelect) {
+                        themeSelect.value = 'light'; // Force light theme UI
+                    }
+                });
+            }
+
+            if (themeSelect) {
+                themeSelect.addEventListener('change', function() {
+                    if (this.value === 'dark' && highContrastToggle) {
+                        highContrastToggle.checked = false; // Force HC off UI
+                    }
+                });
             }
  
             if (applyBtn) {
@@ -624,7 +769,7 @@
                         applyTheme(themeSelect.value);
                         console.log('Theme applied:', themeSelect.value);
                     }
-
+ 
                     // 2. Apply Accessibility
                     if (masterAccToggle) {
                         applyAccessibility({

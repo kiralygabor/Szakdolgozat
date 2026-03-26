@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('user_reports', function (Blueprint $table) {
@@ -19,22 +16,19 @@ return new class extends Migration
             $table->foreign('reporter_account_id')
                 ->references('account_id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->string('reported_account_id');
             $table->foreign('reported_account_id')
                 ->references('account_id')
                 ->on('users')
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
 
             $table->enum('status', ['open', 'closed'])->default('open');
             $table->timestamp('created_at')->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('user_reports');

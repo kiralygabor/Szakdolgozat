@@ -1,16 +1,81 @@
 @extends('layout')
  
 @section('content')
+<style>
+    /* Dark Mode Overrides */
+    html.dark body { background-color: #0f172a !important; }
+    html.dark div.bg-white, 
+    html.dark section.bg-white { background-color: #0f172a !important; color: #f8fafc !important; }
+    
+    html.dark #howitworks-hero,
+    html.dark .bg-slate-50,
+    html.dark section[class*="bg-[#f8fafc]"],
+    html.dark section[class*="bg-slate-50"] { background-color: #1e293b !important; }
+
+    html.dark .text-slate-900,
+    html.dark h1, html.dark h2, html.dark h3 { color: #f1f5f9 !important; }
+    html.dark .text-slate-600 { color: #cbd5e1 !important; }
+    html.dark .text-slate-700 { color: #e2e8f0 !important; }
+    html.dark .text-slate-500 { color: #94a3b8 !important; }
+    
+    /* Target the very dark blue text */
+    html.dark .text-\[\#000033\],
+    html.dark [class*="text-[#000033]"] { color: #f1f5f9 !important; }
+
+    /* Indigo Text Contrast */
+    html.dark .text-indigo-600 { color: #818cf8 !important; }
+    html.dark .text-indigo-100 { color: #e0e7ff !important; }
+
+    html.dark .border-slate-100,
+    html.dark .border-white { border-color: #334155 !important; }
+    
+    /* Decorative Elements */
+    html.dark .howitworks-circle { background-color: rgba(99, 102, 241, 0.15) !important; mix-blend-mode: normal !important; }
+    html.dark .bg-indigo-50\/40 { background-color: rgba(99, 102, 241, 0.1) !important; }
+    html.dark .bg-white\\/90 { background-color: rgba(30, 41, 59, 0.9) !important; color: #f8fafc !important; }
+
+    /* Fix image backgrounds and borders */
+    html.dark .bg-slate-200 { background-color: #334155 !important; }
+    html.dark .ring-white { --tw-ring-color: #334155 !important; }
+
+    /* High Contrast Rules for How It Works */
+    .high-contrast #howitworks-hero {
+        background-color: #ffffff !important;
+    }
+    .high-contrast #howitworks-title,
+    .high-contrast #howitworks-title span {
+        color: #000000 !important;
+    }
+    .high-contrast .howitworks-circle {
+        background-color: #000000 !important;
+        mix-blend-mode: normal !important;
+        opacity: 1 !important;
+    }
+    .high-contrast .get-started-btn {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+
+    /* Exceptions for Mobile App Mockups */
+    html.dark .qr-code-wrapper { background-color: #ffffff !important; }
+    html.dark .qr-code-wrapper img { mix-blend-mode: normal !important; opacity: 1 !important; }
+    html.dark .mockup-notification text,
+    html.dark .mockup-notification p,
+    html.dark .mockup-notification span { color: #0f172a !important; }
+    html.dark .mockup-notification .text-gray-900 { color: #0f172a !important; }
+    html.dark .mockup-notification .text-gray-500 { color: #64748b !important; }
+</style>
 <div class="bg-white text-slate-900 font-sans antialiased">
    
     <!-- Hero Section (Text Left, Image Right) -->
-    <section class="relative bg-[#f8fafc] py-20 md:py-28 overflow-hidden border-b border-slate-100">
+    <section id="howitworks-hero" class="relative bg-[#f8fafc] py-20 md:py-28 overflow-hidden border-b border-slate-100">
         <div class="absolute top-0 right-0 w-1/3 h-full bg-indigo-50/40 hidden lg:block -skew-x-12 translate-x-24"></div>
         <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <!-- Text -->
                 <div class="max-w-xl">
-                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
+                    <h1 id="howitworks-title" class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
                         Post your first task <br>
                         <span class="text-indigo-600">in minutes</span>
                     </h1>
@@ -28,7 +93,7 @@
                     <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
                         <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1000&q=80" alt="Professional tasker" class="w-full h-auto object-contain">
                     </div>
-                    <div class="absolute -top-6 -right-6 w-32 h-32 bg-indigo-100 rounded-full mix-blend-multiply opacity-60"></div>
+                    <div class="howitworks-circle absolute -top-6 -right-6 w-32 h-32 bg-indigo-100 rounded-full mix-blend-multiply opacity-60"></div>
                 </div>
             </div>
         </div>
@@ -43,7 +108,7 @@
                     <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
                         <img src="{{ asset('assets/img/Basics.jpg') }}" alt="Describe what you need" class="w-full h-auto object-contain">
                     </div>
-                    <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-50 rounded-full"></div>
+                    <div class="howitworks-circle absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-50 rounded-full"></div>
                 </div>
                 <!-- Text SECOND (Right) -->
                 <div class="lg:order-2">
@@ -86,7 +151,7 @@
                     <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
                         <img src="{{ asset('assets/img/Budget.jpg') }}" alt="Set your budget" class="w-full h-auto object-contain">
                     </div>
-                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
+                    <div class="howitworks-circle absolute -top-6 -right-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
                 </div>
             </div>
         </div>
@@ -101,7 +166,7 @@
                     <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
                         <img src="{{ asset('assets/img/Offer.jpg') }}" alt="Review & Choose" class="w-full h-auto object-contain">
                     </div>
-                    <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
+                    <div class="howitworks-circle absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
                 </div>
                 <!-- Text SECOND (Right) -->
                 <div class="lg:order-2">
@@ -154,7 +219,7 @@
                     <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
                         <img src="{{ asset('assets/img/Task_Complete.jpg') }}" alt="Get it done" class="w-full h-auto object-contain">
                     </div>
-                    <div class="absolute -top-6 -right-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
+                    <div class="howitworks-circle absolute -top-6 -right-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
                 </div>
             </div>
         </div>
@@ -211,7 +276,7 @@
                     </div>
  
                     <!-- Decorative Circle -->
-                    <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
+                    <div class="howitworks-circle absolute -bottom-6 -left-6 w-40 h-40 bg-indigo-100/50 rounded-full"></div>
                 </div>
  
                 <!-- Right: Text Content -->
@@ -222,7 +287,7 @@
                     <p class="text-lg md:text-xl text-[#000033] leading-relaxed mb-10">
                         Review Tasker's portfolios, skills, badges on their profile, and see their transaction verified ratings, reviews & completion rating (to see their reliability) on tasks they’ve previously completed on Minijobz. This empowers you to make sure you’re choosing the right person for your task.
                     </p>
-                    <a href="{{ route('post-task') }}" class="inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
+                    <a href="{{ route('post-task') }}" class="get-started-btn inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
                         Get started for free
                     </a>
                 </div>
@@ -239,7 +304,7 @@
                     <div class="relative z-10 overflow-hidden rounded-3xl shadow-2xl border-4 border-white bg-slate-200">
                         <img src="{{ asset('assets/img/Messages.jpg') }}" alt="Communication" class="w-full h-auto object-contain">
                     </div>
-                    <div class="absolute -bottom-6 -right-6 w-40 h-40 bg-indigo-50 rounded-full -z-0"></div>
+                    <div class="howitworks-circle absolute -bottom-6 -right-6 w-40 h-40 bg-indigo-50 rounded-full -z-0"></div>
                 </div>
  
                 <!-- Right: Text Content -->
@@ -250,7 +315,7 @@
                     <p class="text-lg md:text-xl text-[#000033] leading-relaxed mb-10">
                         Use Minijobz to stay in contact from the moment your task is posted until it’s completed. Accept an offer and you can privately message the Tasker to discuss final details, and get your task completed.
                     </p>
-                    <a href="{{ route('post-task') }}" class="inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
+                    <a href="{{ route('post-task') }}" class="get-started-btn inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
                         Get started for free
                     </a>
                 </div>
@@ -304,7 +369,7 @@
  
               <!-- QR Code Block -->
               <div class="hidden sm:flex flex-col items-center gap-3">
-                <div class="p-2 bg-white rounded-xl shadow-inner">
+                <div class="qr-code-wrapper p-2 bg-white rounded-xl shadow-inner">
                   <!-- Placeholder QR Code -->
                   <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=MinijobzAppDownload" alt="Scan to download" class="w-24 h-24 mix-blend-multiply opacity-90">
                 </div>
@@ -330,7 +395,7 @@
               >
              
               <!-- Floating Elements (Decoration) -->
-              <div class="absolute -left-8 top-1/4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 3s;">
+              <div class="mockup-notification absolute -left-8 top-1/4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 3s;">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
                     <i data-feather="check" class="w-4 h-4"></i>
@@ -343,7 +408,7 @@
               </div>
  
               <!-- Notification Card -->
-              <div class="absolute -right-4 bottom-8 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
+              <div class="mockup-notification absolute -right-4 bottom-8 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
                  <div class="flex items-center gap-3">
                   <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
                   <div>
@@ -366,4 +431,3 @@
     feather.replace();
 </script>
 @endsection
- 

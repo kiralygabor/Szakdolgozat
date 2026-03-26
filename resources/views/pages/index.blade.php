@@ -59,6 +59,23 @@
   
   /* Specific Section Fixes */
   .dark .group:hover .bg-white { background-color: #1e293b !important; }
+  .dark .bg-white\/90 { background-color: rgba(30, 41, 59, 0.9) !important; color: #f8fafc !important; }
+  .dark .bg-blue-100 { background-color: rgba(30,58,138,0.5) !important; color: #93c5fd !important; }
+  .dark .bg-green-100 { background-color: rgba(20,83,45,0.5) !important; color: #86efac !important; }
+  .dark .bg-purple-100 { background-color: rgba(88,28,135,0.5) !important; color: #d8b4fe !important; }
+  .dark .bg-orange-100 { background-color: rgba(154,52,18,0.5) !important; color: #fdba74 !important; }
+  .dark .bg-red-100 { background-color: rgba(127,29,29,0.5) !important; color: #fca5a5 !important; }
+  .dark .bg-teal-100 { background-color: rgba(19,78,74,0.5) !important; color: #5eead4 !important; }
+  .dark .text-blue-700 { color: #93c5fd !important; }
+  .dark .text-green-700 { color: #86efac !important; }
+  .dark .text-purple-700 { color: #d8b4fe !important; }
+  .dark .text-orange-700 { color: #fdba74 !important; }
+  .dark .text-red-700 { color: #fca5a5 !important; }
+  .dark .text-teal-700 { color: #5eead4 !important; }
+
+  /* Exceptions for Mobile App Mockups */
+  .dark .qr-code-wrapper { background-color: #ffffff !important; }
+  .dark .qr-code-wrapper img { mix-blend-mode: normal !important; opacity: 1 !important; }
 
   /* --- TESTIMONIAL SLIDER STYLES --- */
   .perspective-container {
@@ -162,6 +179,20 @@
   }
   /* Remove color bars from cards in High Contrast */
   .high-contrast .group .absolute.top-0.left-0.w-full.h-1 { display: none !important; }
+  
+  /* Fix Trusted by real neighbors heading - Remove absolute black box */
+  .high-contrast h2 .bg-clip-text,
+  .high-contrast h2 [class*="bg-gradient-to-"] {
+      background: none !important;
+      background-color: transparent !important;
+      background-clip: unset !important;
+      -webkit-background-clip: unset !important;
+      color: #000000 !important;
+      -webkit-text-fill-color: #000000 !important;
+      display: inline !important;
+      box-shadow: none !important;
+      border: none !important;
+  }
 </style>
 
 <!-- Hero Section -->
@@ -758,8 +789,7 @@
 </section>
  
 <!-- Take Minijobz Anywhere - Modern App Card -->
-<!-- Take Minijobz Anywhere - Modern App Card -->
-<section class="py-24 px-4 md:px-6 bg-white dark:bg-slate-900 transition-colors duration-300">
+<section class="py-24 px-4 md:px-6 bg-white transition-colors duration-300">
   
   <!-- Main Gradient Card -->
   <div class="max-w-7xl mx-auto bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[2.5rem] shadow-2xl overflow-hidden relative">
@@ -804,7 +834,7 @@
 
           <!-- QR Code Block -->
           <div class="hidden sm:flex flex-col items-center gap-3">
-            <div class="p-2 bg-white rounded-xl shadow-inner">
+            <div class="qr-code-wrapper p-2 bg-white rounded-xl shadow-inner">
               <!-- Placeholder QR Code -->
               <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=MinijobzAppDownload" alt="Scan to download" class="w-24 h-24 mix-blend-multiply opacity-90">
             </div>
@@ -830,7 +860,7 @@
           >
           
           <!-- Floating Elements (Decoration) -->
-          <div class="absolute -left-8 top-1/4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 3s;">
+          <div class="mockup-notification absolute -left-8 top-1/4 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 3s;">
             <div class="flex items-center gap-3">
               <div class="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center">
                 <i data-feather="check" class="w-4 h-4"></i>
@@ -842,8 +872,8 @@
             </div>
           </div>
 
-          <!-- Notification Card (Lowered to bottom-8) -->
-          <div class="absolute -right-4 bottom-8 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
+          <!-- Notification Card -->
+          <div class="mockup-notification absolute -right-4 bottom-8 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
              <div class="flex items-center gap-3">
               <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
               <div>

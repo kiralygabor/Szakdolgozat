@@ -6,38 +6,32 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('city_id')->nullable()->constrained('cities')->nullOnDelete();
 
-    $table->id();
-    $table->unsignedBigInteger('city_id')->nullable();
-
-    $table->string('account_id', 15)->unique();
-    $table->string('first_name', 50)->nullable();
-    $table->string('last_name', 50)->nullable();
-    $table->string('birthdate', 50)->nullable();  
-    $table->string('phone_number', 50)->nullable();
-    $table->string('email', 150);
-    $table->string('password', 255);
-    $table->timestamps();
-    $table->boolean('verified')->default(false);
-
-    $table->foreign('city_id')->references('id')->on('cities')->onDelete('set null');
-});
-
+            $table->string('account_id', 15)->unique();
+            $table->string('first_name', 50)->nullable();
+            $table->string('last_name', 50)->nullable();
+            $table->string('birthdate', 50)->nullable();
+            $table->string('phone_number', 50)->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('email', 150);
+            $table->string('password', 255);
+            $table->string('google_id')->nullable();
+            $table->rememberToken();
+            $table->boolean('verified')->default(false);
+            $table->boolean('email_notifications')->default(true);
+            $table->boolean('email_task_digest')->default(false);
+            $table->boolean('email_direct_quotes')->default(true);
+            $table->timestamps();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
     }
 };

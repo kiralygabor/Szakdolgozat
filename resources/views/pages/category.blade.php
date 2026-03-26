@@ -17,6 +17,21 @@
             50% { transform: translateX(5px); opacity: 1; }
         }
     }
+    /* Dark Mode Overrides */
+    html.dark section.bg-white { background-color: #0f172a !important; }
+    html.dark .text-blue-900 { color: #93c5fd !important; }
+    html.dark .bg-blue-50 { background-color: rgba(30,58,138,0.2) !important; color: #93c5fd !important;}
+    html.dark .text-gray-600 { color: #94a3b8 !important; }
+    html.dark .hover\:bg-gray-50:hover { background-color: #1e293b !important; }
+    html.dark .hover\:text-blue-600:hover { color: #60a5fa !important; }
+    html.dark .bg-gray-100 { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .text-gray-900 { color: #f8fafc !important; }
+    html.dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+    html.dark .category-services-wrapper.bg-white { background-color: transparent !important; }
+    html.dark .border-gray-200 { border-color: #334155 !important; }
+    html.dark .text-gray-700 { color: #cbd5e1 !important; }
+    html.dark .text-gray-500 { color: #64748b !important; }
+    html.dark #mobile-scroll-fade { background-image: linear-gradient(to left, #0f172a, transparent) !important; }
 </style>
 <section class="bg-white pt-8 pb-12">
     <div class="max-w-7xl mx-auto px-6">
@@ -93,7 +108,7 @@
                 </div>
 
                 <!-- INTERACTIVE SERVICES SECTION -->
-                <div class="bg-white rounded-xl">
+                <div class="bg-white rounded-xl category-services-wrapper">
 
                     <!-- 1. The Toggle (Finder vs Tasker) -->
                     <div class="flex flex-col items-center justify-center mb-4 md:mb-8">

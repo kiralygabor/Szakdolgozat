@@ -47,8 +47,8 @@
       #settings-menu.show { opacity: 1 !important; transform: translateY(0) !important; }
 
       .user-pic { width: 40px; border-radius: 50%; cursor: pointer; }
-      .sub-menu-wrap { position: absolute; top: 60px; right: 0; width: 280px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; z-index: 50; }
-      .sub-menu-wrap.open-menu { max-height: 500px; }
+.sub-menu-wrap { position: absolute; top: 60px; right: 0; width: 280px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, visibility 0.3s ease; z-index: 50; visibility: hidden; }
+      .sub-menu-wrap.open-menu { max-height: 500px; visibility: visible; }
       .sub-menu { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #d1d5db; }
       .user-info { margin-bottom: 15px; padding: 10px 12px; border-radius: 8px; transition: background 0.2s ease, color 0.2s ease; cursor: pointer; }
       .user-info:hover { background: #007bff; }
@@ -746,14 +746,17 @@
         height: 100vh;
         background: #fff;
         z-index: 200;
-        transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s step-start;
         overflow-y: auto;
         box-shadow: 4px 0 25px rgba(0,0,0,0.15);
         padding-bottom: 80px; /* Extra space for system nav bars */
         overscroll-behavior: contain;
+        visibility: hidden;
       }
       .mobile-sidebar.active {
         left: 0;
+        visibility: visible;
+        transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s step-end;
       }
 
       /* Sidebar header */
@@ -1103,9 +1106,9 @@
       /* ─── Categories mega menu ─── */
       html.dark #categories-menu { background: #1e293b !important; border-color: #334155 !important; }
       html.dark #categories-menu .bg-gray-50 { background-color: #0f172a !important; }
-      html.dark #categories-menu h3 { color: #a5b4fc !important; }
-      html.dark #categories-menu ul a { color: #cbd5e1 !important; }
-      html.dark #categories-menu ul a:hover { color: #818cf8 !important; }
+             html.dark #categories-menu h3,
+       html.dark #categories-menu a.font-semibold { color: #a5b4fc !important; }
+       html.dark #categories-menu ul { color: #94a3b8 !important; }
 
       /* ─── Mobile Navbar ─── */
       html.dark .mobile-navbar       { background: #1e293b !important; border-color: #334155 !important; }
@@ -1233,10 +1236,6 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen">
-    <!-- Skip to Main Content Link -->
-    <a href="#main-content" id="skip-link" class="focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg sr-only">
-        Skip to main content
-    </a>
 
 
     <!-- 🔹 NAVBAR (overrideable) -->
@@ -1448,81 +1447,75 @@
     <!-- Right Section -->
     <div class="w-2/3 grid grid-cols-2 gap-6 p-6">
 
-      <!-- Home Services -->
-      <div>
-        <h3 class="font-semibold text-indigo-600 mb-2">Home Services</h3>
-        <ul class="space-y-1 text-gray-700 text-sm">
-          <li><a href="/categories/handyman" class="hover:text-indigo-600">Handyman</a></li>
-          <li><a href="/categories/plumbing" class="hover:text-indigo-600">Plumbing</a></li>
-          <li><a href="/categories/electrical" class="hover:text-indigo-600">Electrical Repairs</a></li>
-          <li><a href="/categories/carpentry" class="hover:text-indigo-600">Carpentry</a></li>
-          <li><a href="/categories/painting" class="hover:text-indigo-600">Painting</a></li>
-          <li><a href="/categories/roofing" class="hover:text-indigo-600">Roofing</a></li>
+ <div>
+        <a href="{{ url('category') }}?category_id=2" class="font-semibold text-indigo-600 mb-2 hover:underline block">Home Services</a>
+        <ul class="space-y-1 text-gray-500 text-sm">
+          <li>Handyman</li>
+          <li>Plumbing</li>
+          <li>Electrical Repairs</li>
+          <li>Carpentry</li>
+          <li>Painting</li>
+          <li>Roofing</li>
         </ul>
       </div>
 
-      <!-- Cleaning & Maintenance -->
       <div>
-        <h3 class="font-semibold text-indigo-600 mb-2">Cleaning & Maintenance</h3>
-        <ul class="space-y-1 text-gray-700 text-sm">
-          <li><a href="/categories/house-cleaning" class="hover:text-indigo-600">House Cleaning</a></li>
-          <li><a href="/categories/carpet-cleaning" class="hover:text-indigo-600">Carpet Cleaning</a></li>
-          <li><a href="/categories/window-cleaning" class="hover:text-indigo-600">Window Cleaning</a></li>
-          <li><a href="/categories/laundry" class="hover:text-indigo-600">Laundry</a></li>
-          <li><a href="/categories/rubbish-removal" class="hover:text-indigo-600">Rubbish Removal</a></li>
-          <li><a href="/categories/gardening" class="hover:text-indigo-600">Gardening</a></li>
+        <a href="{{ url('category') }}?category_id=3" class="font-semibold text-indigo-600 mb-2 hover:underline block">Cleaning & Maintenance</a>
+        <ul class="space-y-1 text-gray-500 text-sm">
+          <li>House Cleaning</li>
+          <li>Carpet Cleaning</li>
+          <li>Window Cleaning</li>
+          <li>Laundry</li>
+          <li>Rubbish Removal</li>
+          <li>Gardening</li>
         </ul>
       </div>
 
-      <!-- Moving & Delivery -->
       <div>
-        <h3 class="font-semibold text-indigo-600 mb-2">Moving & Delivery</h3>
-        <ul class="space-y-1 text-gray-700 text-sm">
-          <li><a href="/categories/removals" class="hover:text-indigo-600">Removals</a></li>
-          <li><a href="/categories/courier-services" class="hover:text-indigo-600">Courier Services</a></li>
-          <li><a href="/categories/delivery" class="hover:text-indigo-600">Delivery</a></li>
-          <li><a href="/categories/food-delivery" class="hover:text-indigo-600">Food Delivery</a></li>
-          <li><a href="/categories/grocery-delivery" class="hover:text-indigo-600">Grocery Delivery</a></li>
-          <li><a href="/categories/vehicle-transport" class="hover:text-indigo-600">Vehicle Transport</a></li>
+        <a href="{{ url('category') }}?category_id=4" class="font-semibold text-indigo-600 mb-2 hover:underline block">Moving & Delivery</a>
+        <ul class="space-y-1 text-gray-500 text-sm">
+          <li>Removals</li>
+          <li>Courier Services</li>
+          <li>Delivery</li>
+          <li>Food Delivery</li>
+          <li>Grocery Delivery</li>
+          <li>Vehicle Transport</li>
         </ul>
       </div>
 
-      <!-- Personal Care & Wellness -->
       <div>
-        <h3 class="font-semibold text-indigo-600 mb-2">Personal Care & Wellness</h3>
-        <ul class="space-y-1 text-gray-700 text-sm">
-          <li><a href="/categories/hairdressers" class="hover:text-indigo-600">Hairdressers</a></li>
-          <li><a href="/categories/beauticians" class="hover:text-indigo-600">Beauticians</a></li>
-          <li><a href="/categories/makeup-artists" class="hover:text-indigo-600">Makeup Artists</a></li>
-          <li><a href="/categories/barbers" class="hover:text-indigo-600">Barbers</a></li>
-          <li><a href="/categories/fitness" class="hover:text-indigo-600">Fitness</a></li>
-          <li><a href="/categories/health-and-wellness" class="hover:text-indigo-600">Health & Wellness</a></li>
+        <a href="{{ url('category') }}?category_id=5" class="font-semibold text-indigo-600 mb-2 hover:underline block">Personal Care & Wellness</a>
+        <ul class="space-y-1 text-gray-500 text-sm">
+          <li>Hairdressers</li>
+          <li>Beauticians</li>
+          <li>Makeup Artists</li>
+          <li>Barbers</li>
+          <li>Fitness</li>
+          <li>Health & Wellness</li>
         </ul>
       </div>
 
-      <!-- Business & Tech -->
       <div>
-        <h3 class="font-semibold text-indigo-600 mb-2">Business & Tech</h3>
-        <ul class="space-y-1 text-gray-700 text-sm">
-          <li><a href="/categories/accounting" class="hover:text-indigo-600">Accounting</a></li>
-          <li><a href="/categories/admin" class="hover:text-indigo-600">Admin</a></li>
-          <li><a href="/categories/marketing" class="hover:text-indigo-600">Marketing</a></li>
-          <li><a href="/categories/design" class="hover:text-indigo-600">Design</a></li>
-          <li><a href="/categories/web" class="hover:text-indigo-600">Web</a></li>
-          <li><a href="/categories/writing" class="hover:text-indigo-600">Writing</a></li>
+        <a href="{{ url('category') }}?category_id=2" class="font-semibold text-indigo-600 mb-2 hover:underline block">Business & Tech</a>
+        <ul class="space-y-1 text-gray-500 text-sm">
+          <li>Accounting</li>
+          <li>Admin</li>
+          <li>Marketing</li>
+          <li>Design</li>
+          <li>Web</li>
+          <li>Writing</li>
         </ul>
       </div>
 
-      <!-- Automotive -->
       <div>
-        <h3 class="font-semibold text-indigo-600 mb-2">Automotive</h3>
-        <ul class="space-y-1 text-gray-700 text-sm">
-          <li><a href="/categories/car-wash" class="hover:text-indigo-600">Car Wash</a></li>
-          <li><a href="/categories/car-detailing" class="hover:text-indigo-600">Car Detailing</a></li>
-          <li><a href="/categories/car-service" class="hover:text-indigo-600">Car Service</a></li>
-          <li><a href="/categories/car-repair" class="hover:text-indigo-600">Car Repair</a></li>
-          <li><a href="/categories/mechanic" class="hover:text-indigo-600">Mechanic</a></li>
-          <li><a href="/categories/motorcycle-mechanic" class="hover:text-indigo-600">Motorcycle Mechanic</a></li>
+        <a href="{{ url('category') }}?category_id=6" class="font-semibold text-indigo-600 mb-2 hover:underline block">Automotive</a>
+        <ul class="space-y-1 text-gray-500 text-sm">
+          <li>Car Wash</li>
+          <li>Car Detailing</li>
+          <li>Car Service</li>
+          <li>Car Repair</li>
+          <li>Mechanic</li>
+          <li>Motorcycle Mechanic</li>
         </ul>
       </div>
 
@@ -1660,47 +1653,50 @@
     </div>
   @endauth
  
-  <!-- Settings dropdown -->
+   <!-- Settings dropdown -->
   <div class="relative">
     <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
       <i data-feather="settings"></i>
     </button>
     <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
-      <div class="flex flex-col">
-        <div class="group relative">
-          <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-            <i data-feather="chevron-left" class="w-4 h-4"></i>
+      <div class="flex flex-col" role="none">
+        <!-- Theme -->
+        <div class="group relative" role="none">
+          <button type="button" class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
+            <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
             {{ __('navbar.theme') }}
-          </div>
-          <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="light">{{ __('navbar.light') }}</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="dark">{{ __('navbar.dark') }}</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="system">{{ __('navbar.system_default') }}</div>
+          </button>
+          <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto" role="menu">
+            <button type="button" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors" data-theme="light" role="menuitem">{{ __('navbar.light') }}</button>
+            <button type="button" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors" data-theme="dark" role="menuitem">{{ __('navbar.dark') }}</button>
+            <button type="button" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors" data-theme="system" role="menuitem">{{ __('navbar.system_default') }}</button>
           </div>
         </div>
-        <div class="group relative">
-          <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-            <i data-feather="chevron-left" class="w-4 h-4"></i>
+        <!-- Language -->
+        <div class="group relative" role="none">
+          <button type="button" class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
+            <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
             {{ __('navbar.language') }}
-          </div>
-          <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">{{ __('navbar.english') }}</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">{{ __('navbar.hungarian') }}</div>
+          </button>
+          <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto" role="menu">
+            <button type="button" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors" data-lang="en" role="menuitem">{{ __('navbar.english') }}</button>
+            <button type="button" class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors" data-lang="hu" role="menuitem">{{ __('navbar.hungarian') }}</button>
           </div>
         </div>
-        <div class="group relative" id="nav-accessibility-section">
-          <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+        <!-- Accessibility -->
+        <div class="group relative" id="nav-accessibility-section" role="none">
+          <button type="button" class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
             <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
             {{ __('navbar.accessibility') }}
-          </div>
-          <div class="submenu absolute top-0 right-full w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto p-1">
-             <button type="button" onclick="toggleAccessibilitySetting('reduced-motion')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
+          </button>
+          <div class="submenu absolute top-0 right-full w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto p-1" role="menu">
+             <button type="button" onclick="toggleAccessibilitySetting('reduced-motion')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm transition-colors" role="menuitem">
                 <span>{{ __('navbar.reduced_motion') }}</span>
                 <div id="nav-reduced-motion-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
                     <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
                 </div>
              </button>
-             <button type="button" onclick="toggleAccessibilitySetting('high-contrast')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
+             <button type="button" onclick="toggleAccessibilitySetting('high-contrast')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm transition-colors" role="menuitem">
                 <span>{{ __('navbar.high_contrast') }}</span>
                 <div id="nav-high-contrast-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
                     <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
@@ -1708,14 +1704,17 @@
              </button>
           </div>
         </div>
-        <div class="group relative">
-          <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-            <i data-feather="chevron-left" class="w-4 h-4"></i>
+        <!-- Extras -->
+        <div class="group relative" role="none">
+          <button type="button" class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
+            <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
             {{ __('navbar.extras') }}
+          </button>
+          <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto" role="menu">
+            <a href="{{ route('help-faq') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 transition-colors text-gray-700 no-underline" role="menuitem">{{ __('navbar.help_faq') ?? 'Help / FAQ' }}</a>
+            <a href="{{ route('contact-support') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 transition-colors text-gray-700 no-underline" role="menuitem">{{ __('navbar.contact_support') ?? 'Contact / Support' }}</a>
           </div>
-          <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <a href="{{ route('help-faq') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 no-underline">{{ __('navbar.help_faq') ?? 'Help / FAQ' }}</a>
-            <a href="{{ route('contact-support') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 no-underline">{{ __('navbar.contact_support') ?? 'Contact / Support' }}</a>
+
           </div>
           </div>
         </div>
@@ -1889,11 +1888,21 @@
         
         // Settings dropdown handler
         if (btn && menu) {
-          btn.addEventListener('mousedown', function(e){
+          btn.addEventListener('click', function(e){
             e.stopPropagation();
             var isHidden = menu.classList.contains('hidden');
             if (isHidden) {
-              // Open
+              // Close avatar menu if open
+              if (subMenu && subMenu.classList.contains('open-menu')) {
+                  window.toggleMenu();
+              }
+              // Close notifications if open
+              const notificationDropdown = document.getElementById('notification-dropdown');
+              if (notificationDropdown && !notificationDropdown.classList.contains('hidden')) {
+                  if (typeof toggleNotifications === 'function') toggleNotifications();
+              }
+              
+              // Open settings
               menu.classList.remove('hidden','opacity-0','translate-y-2');
               menu.classList.add('show','opacity-100');
               suppressUntil = Date.now() + 150; // ignore immediate outside click
@@ -1927,7 +1936,7 @@
           // Ensure nested submenus open on hover
           var submenuGroups = menu.querySelectorAll('.group.relative');
           submenuGroups.forEach(function(g){
-            var trigger = g.querySelector(':scope > div.py-2, :scope > .py-2');
+             var trigger = g.querySelector(':scope > button, :scope > div.py-2, :scope > .py-2');
             var submenu = g.querySelector(':scope .submenu');
             if (!submenu) return;
             g.addEventListener('mouseenter', function(){
@@ -1984,13 +1993,23 @@
           // Close notifications if open
           const notificationDropdown = document.getElementById('notification-dropdown');
           if (notificationDropdown && !notificationDropdown.classList.contains('hidden')) {
-              notificationDropdown.classList.remove('opacity-100', 'scale-100');
-              notificationDropdown.classList.add('opacity-0', 'scale-95');
-              const btn = document.getElementById('notifications-menu-button');
-              if (btn) btn.setAttribute('aria-expanded', 'false');
-              setTimeout(() => {
-                  notificationDropdown.classList.add('hidden');
-              }, 200);
+              if (typeof toggleNotifications === 'function') {
+                  toggleNotifications();
+              } else {
+                  notificationDropdown.classList.remove('opacity-100', 'scale-100');
+                  notificationDropdown.classList.add('opacity-0', 'scale-95');
+                  const nbtn = document.getElementById('notifications-menu-button');
+                  if (nbtn) nbtn.setAttribute('aria-expanded', 'false');
+                  setTimeout(() => { notificationDropdown.classList.add('hidden'); }, 200);
+              }
+          }
+
+          // Close settings if open
+          const settingsMenu = document.getElementById('settings-menu');
+          if (settingsMenu && !settingsMenu.classList.contains('hidden')) {
+              settingsMenu.classList.remove('show','opacity-100');
+              settingsMenu.classList.add('opacity-0','translate-y-2');
+              setTimeout(function(){ settingsMenu.classList.add('hidden'); }, 150);
           }
  
           const isOpen = subMenu.classList.toggle('open-menu');
@@ -2121,6 +2140,14 @@
               subMenu.classList.remove('open-menu');
               const userBtn = document.getElementById('user-menu-button');
               if (userBtn) userBtn.setAttribute('aria-expanded', 'false');
+          }
+
+          // Close settings if open
+          const settingsMenu = document.getElementById('settings-menu');
+          if (settingsMenu && !settingsMenu.classList.contains('hidden')) {
+              settingsMenu.classList.remove('show','opacity-100');
+              settingsMenu.classList.add('opacity-0','translate-y-2');
+              setTimeout(function(){ settingsMenu.classList.add('hidden'); }, 150);
           }
  
           if (dropdown.classList.contains('hidden')) {

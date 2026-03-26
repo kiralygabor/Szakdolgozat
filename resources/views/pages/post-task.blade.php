@@ -45,12 +45,19 @@
     top: 100%;
     left: 0;
     margin-top: 0.5rem;
-    z-index: 10;
+    z-index: 50;
     opacity: 0;
     pointer-events: none;
     width: 0;
     height: 0;
     overflow: hidden;
+    transition: opacity 0.2s;
+  }
+  .date-dropdown-calendar.show {
+    opacity: 1;
+    pointer-events: auto;
+    width: 100%;
+    height: auto;
   }
   .time-option {
     border: 2px solid #e5e7eb;
@@ -101,6 +108,14 @@
     border-color: #1e3a8a;
     background-color: #dbeafe;
   }
+  .location-option:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.4);
+    border-color: #1e3a8a;
+  }
+  html.dark .location-option:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
+  }
   .location-option .icon {
     width: 3rem;
     height: 3rem;
@@ -132,6 +147,14 @@
   .photo-upload-plus:hover {
     border-color: #1e3a8a;
     background-color: #eff6ff;
+  }
+  .photo-upload-plus:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.4);
+    border-color: #1e3a8a;
+  }
+  html.dark .photo-upload-plus:focus {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
   }
   .photo-upload-plus .plus-icon {
     width: 4rem;
@@ -184,6 +207,12 @@
     cursor: pointer;
     font-size: 0.875rem;
     border: 2px solid white;
+    transition: transform 0.2s ease;
+  }
+  .remove-photo:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.5);
+    transform: scale(1.1);
   }
   .is-invalid {
     border-color: #dc3545 !important;
@@ -203,7 +232,7 @@
   margin-left: 4px;
   font-weight: 500;
 }
-
+ 
   /* Dark Mode Overrides */
   html.dark .step-pane h1,
   html.dark aside h2,
@@ -212,7 +241,7 @@
   html.dark .text-lg.font-medium.text-gray-800,
   html.dark .text-gray-600,
   html.dark p.text-lg.font-medium { color: #f8fafc !important; }
-  
+ 
   html.dark .date-dropdown-btn { background: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
   html.dark .date-dropdown-btn.active { background-color: #6366f1 !important; border-color: #6366f1 !important; }
   html.dark .time-option { border-color: #334155 !important; background-color: #1e293b !important; }
@@ -228,7 +257,7 @@
   html.dark .photo-upload-plus .plus-icon { color: #94a3b8 !important; }
   html.dark .photo-upload-plus .text { color: #f8fafc !important; }
   html.dark .photo-upload-plus .subtext { color: #64748b !important; }
-
+ 
   /* Form Fields Dark Mode */
   html.dark #taskDescription,
   html.dark #categorySelect,
@@ -241,10 +270,10 @@
     color: #f8fafc !important;
   }
   html.dark #budgetWrapper { border-color: #475569 !important; background-color: #1e293b !important; }
-  html.dark #budgetWrapper span { 
-    background-color: #1e293b !important; 
-    border-color: #475569 !important; 
-    color: #94a3b8 !important; 
+  html.dark #budgetWrapper span {
+    background-color: #1e293b !important;
+    border-color: #475569 !important;
+    color: #94a3b8 !important;
   }
   html.dark #taskDetails::placeholder,
   html.dark #taskDescription::placeholder,
@@ -254,7 +283,7 @@
   html.dark #backBtn { background-color: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; }
   html.dark .time-option .font-semibold.text-gray-800 { color: #f8fafc !important; }
   html.dark .photo-upload-plus .subtext { color: #64748b !important; }
-
+ 
  
 /* High Contrast mode overrides for Post a Task */
 .high-contrast .step-pane h1,
@@ -442,8 +471,8 @@
 </div>
 <div>
 <label for="jobSelect" class="block text-lg font-medium text-gray-800 mb-2">{{ __('post-task.step1.service_label') }}</label>
-<select id="jobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition" disabled>
-<option value="">{{ __('post-task.step1.service_placeholder_initial') }}</option>
+<select id="jobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition">
+<option value="">{{ __('post-task.step1.service_placeholder_select') }}</option>
 </select>
                   @error('jobs_id')
 <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
@@ -466,7 +495,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
 </button>
 <div class="date-dropdown-calendar" id="beforeDateCalendar">
-<input type="date" name="required_before_date" class="w-full border-0 rounded-lg p-2" id="beforeDateValue" value="{{ old('required_before_date') }}" />
+<input type="date" name="required_before_date" class="w-full border-0 rounded-lg p-2" id="beforeDateValue" value="{{ old('required_before_date') }}" tabindex="-1" />
 </div>
 </div>
 <div class="date-dropdown flex-1 min-w-[200px]">
@@ -475,16 +504,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
 </button>
 <div class="date-dropdown-calendar" id="onDateCalendar">
-<input type="date" name="required_date" class="w-full border-0 rounded-lg p-2" id="onDateValue" value="{{ old('required_date') }}" />
+<input type="date" name="required_date" class="w-full border-0 rounded-lg p-2" id="onDateValue" value="{{ old('required_date') }}" tabindex="-1" />
 </div>
 </div>
 <button type="button" class="pill-btn" data-option="flexible">{{ __('post-task.step1.flexible') }}</button>
 </div>
+            <p id="clientDateError" class="text-sm text-red-600 mt-2 hidden"></p>
             @error('required_date')
-<p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+<p class="text-sm text-red-600 mt-2 server-date-error">{{ $message }}</p>
             @enderror
             @error('required_before_date')
-<p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+<p class="text-sm text-red-600 mt-2 server-date-error">{{ $message }}</p>
             @enderror
 </div>
 <div class="mt-8">
@@ -494,25 +524,25 @@
 </label>
 <!-- Note: name="preferred_time[]" allows multiple values to be sent as an array -->
 <div id="timeOfDayOptions" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
-<label class="time-option" data-time="morning">
+<label class="time-option" data-time="morning" tabindex="0">
 <input type="checkbox" name="preferred_time[]" value="morning" class="hidden">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="2" x2="12" y2="9"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="8 6 12 2 16 6"></polyline></svg>
 <span class="font-semibold text-gray-800">{{ __('post-task.step1.morning') }}</span>
 <span class="text-sm text-gray-600">{{ __('post-task.step1.morning_range') }}</span>
 </label>
-<label class="time-option" data-time="midday">
+<label class="time-option" data-time="midday" tabindex="0">
 <input type="checkbox" name="preferred_time[]" value="midday" class="hidden">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
 <span class="font-semibold text-gray-800">{{ __('post-task.step1.midday') }}</span>
 <span class="text-sm text-gray-600">{{ __('post-task.step1.midday_range') }}</span>
 </label>
-<label class="time-option" data-time="afternoon">
+<label class="time-option" data-time="afternoon" tabindex="0">
 <input type="checkbox" name="preferred_time[]" value="afternoon" class="hidden">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="16 5 12 9 8 5"></polyline></svg>
 <span class="font-semibold text-gray-800">{{ __('post-task.step1.afternoon') }}</span>
 <span class="text-sm text-gray-600">{{ __('post-task.step1.afternoon_range') }}</span>
 </label>
-<label class="time-option" data-time="evening">
+<label class="time-option" data-time="evening" tabindex="0">
 <input type="checkbox" name="preferred_time[]" value="evening" class="hidden">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
 <span class="font-semibold text-gray-800">{{ __('post-task.step1.evening') }}</span>
@@ -528,7 +558,7 @@
 <div>
 <p class="text-lg font-medium text-gray-800 mb-6">{{ __('post-task.step2.question') }}</p>
 <div class="flex flex-col sm:flex-row gap-4">
-<div class="location-option selected" id="inPersonOption">
+<div class="location-option selected" id="inPersonOption" tabindex="0" role="radio" aria-checked="true">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
 <circle cx="12" cy="10" r="3"></circle>
@@ -536,7 +566,7 @@
 <div class="title">{{ __('post-task.step2.in_person') }}</div>
 <div class="description">{{ __('post-task.step2.in_person_desc') }}</div>
 </div>
-<div class="location-option" id="onlineOption">
+<div class="location-option" id="onlineOption" tabindex="0" role="radio" aria-checked="false">
 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
 <line x1="8" y1="21" x2="16" y2="21"></line>
@@ -574,7 +604,7 @@
 </div>
 <div>
 <label class="block text-sm font-semibold text-gray-900 mb-2">{{ __('post-task.step3.photos_label') }} <span class="text-gray-500">{{ __('post-task.step3.photos_optional') }}</span></label>
-<div class="photo-upload-plus" id="photoUploadPlus">
+<div class="photo-upload-plus" id="photoUploadPlus" tabindex="0" role="button" aria-label="{{ __('post-task.step3.add_photos') }}">
 <svg xmlns="http://www.w3.org/2000/svg" class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 <line x1="12" y1="5" x2="12" y2="19"></line>
 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -594,7 +624,7 @@
 <p class="text-lg font-medium text-gray-800">{{ __('post-task.step4.budget_question') }}</p>
 <p class="text-gray-600 mb-4">{{ __('post-task.step4.negotiable') }}</p>
 <div class="flex items-stretch rounded-lg overflow-hidden border @error('price') is-invalid @enderror" id="budgetWrapper">
-<span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">€</span>
+<span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">$</span>
 <input id="budgetInput" name="price" type="number" min="10" max="9999" class="flex-1 p-3 outline-none" placeholder="{{ __('post-task.step4.budget_placeholder') }}" value="{{ old('price') }}">
 </div>
 <div id="budgetError" class="invalid-feedback-custom hidden">
@@ -634,6 +664,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const nextBtn = document.getElementById('nextBtn');
   const submitBtn = document.getElementById('submitBtn');
   let stepIndex = 0;
+  let isLocationSelected = false;
   // Inputs
   const categorySelect = document.getElementById('categorySelect');
   const jobSelect = document.getElementById('jobSelect');
@@ -686,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
       ok = titleOk && categoryOk && jobOk && dateOk;
     } else if (stepIndex === 1) {
       const isInPerson = inPersonOption.classList.contains('selected');
-      ok = !isInPerson || (isInPerson && pickupSuburb.value.trim().length > 0);
+      ok = !isInPerson || (isInPerson && isLocationSelected);
     } else if (stepIndex === 2) {
       ok = document.getElementById('taskDetails').value.trim().length > 0;
     } else if (stepIndex === 3) {
@@ -737,19 +768,53 @@ document.addEventListener('DOMContentLoaded', function() {
   taskInput.addEventListener('input', validateCurrent);
   categorySelect.addEventListener('change', validateCurrent);
   jobSelect.addEventListener('change', validateCurrent);
-  pickupSuburb && pickupSuburb.addEventListener('input', validateCurrent);
+  pickupSuburb && pickupSuburb.addEventListener('input', () => {
+    isLocationSelected = false;
+    validateCurrent();
+  });
   document.getElementById('taskDetails')?.addEventListener('input', validateCurrent);
   budgetInput && budgetInput.addEventListener('input', validateCurrent);
   backBtn.addEventListener('click', function(){
     if (stepIndex > 0) { stepIndex -= 1; showStep(stepIndex); }
   });
-  nextBtn.addEventListener('click', function(){
+  function hideDateError() {
+    const err = document.getElementById('clientDateError');
+    if (err) err.classList.add('hidden');
+    document.querySelectorAll('.server-date-error').forEach(e => e.classList.add('hidden'));
+  }
+  function showDateError(msg) {
+    const err = document.getElementById('clientDateError');
+    if (err) {
+      err.textContent = msg;
+      err.classList.remove('hidden');
+    }
+  }
+
+  nextBtn.addEventListener('click', function(e){
+    if (stepIndex === 0) {
+      const onDate = onDateValue.value;
+      const beforeDate = beforeDateValue.value;
+      const isFlexible = flexibleBtn && flexibleBtn.getAttribute('data-active') === 'true';
+
+      if (!isFlexible) {
+        const dStr = onDate || beforeDate;
+        if (dStr) {
+          const d = new Date(dStr + 'T00:00:00');
+          const today = new Date();
+          today.setHours(0,0,0,0);
+          if (d < today) {
+            showDateError("{{ __('validation.after_or_equal', ['attribute' => 'date', 'date' => 'today']) }}");
+            return;
+          }
+        }
+      }
+      hideDateError();
+    }
     if (stepIndex < panes.length - 1) { stepIndex += 1; showStep(stepIndex); }
   });
   // --- JOB POPULATION LOGIC ---
   function populateJobs(catId, selectedJobId = null) {
       jobSelect.innerHTML = '<option value="">{{ __('post-task.step1.service_placeholder_select') }}</option>';
-      jobSelect.disabled = true;
       if (!catId) return;
       const category = categoriesData.find(c => c.id == catId);
       const uniqueJobs = new Map(); // Using Map to track unique jobs by ID
@@ -770,7 +835,6 @@ document.addEventListener('DOMContentLoaded', function() {
               }
               jobSelect.appendChild(option);
           });
-          jobSelect.disabled = false;
       }
       validateCurrent();
   }
@@ -847,6 +911,7 @@ document.addEventListener('DOMContentLoaded', function() {
     beforeDateValue.value = '';
     onDateLabel.textContent = "{{ __('post-task.step1.on_date') }}";
     beforeDateLabel.textContent = "{{ __('post-task.step1.before_date') }}";
+    hideDateError();
     validateCurrent();
   }
   onDateBtn.addEventListener('click', function(e) {
@@ -890,7 +955,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const needTimeCheckbox = document.getElementById('needTimeCheckbox');
   const timeOfDayOptions = document.getElementById('timeOfDayOptions');
   const timeOptions = document.querySelectorAll('.time-option');
-  needTimeCheckbox.addEventListener('change', function() {
+  needTimeCheckbox.addEventListener('click', function() {
     timeOfDayOptions.classList.toggle('hidden', !this.checked);
     if (!this.checked) {
         // Uncheck all hidden checkboxes and remove visual selection
@@ -898,13 +963,35 @@ document.addEventListener('DOMContentLoaded', function() {
         timeOptions.forEach(opt => opt.classList.remove('selected'));
     }
   });
+ 
+  // Enable Enter key for toggling the checkbox (standard is Space)
+  needTimeCheckbox.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Stop form submission
+      this.click();       // Trigger the toggle logic
+    }
+  });
   // Multiple time selections
   timeOptions.forEach(option => {
-    option.addEventListener('click', function(e) {
-      const checkbox = this.querySelector('input[type="checkbox"]');
-      checkbox.checked = !checkbox.checked;
-      this.classList.toggle('selected', checkbox.checked);
+    const checkbox = option.querySelector('input[type="checkbox"]');
+   
+    // Listen for change on the input itself (better for accessibility)
+    checkbox.addEventListener('change', function() {
+      option.classList.toggle('selected', this.checked);
     });
+ 
+    // Toggle on Enter/Space if focused
+    option.addEventListener('keydown', function(e) {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+      }
+    });
+ 
+    // Clicking the label already triggers the checkbox, so we just let it happen naturally
+    // BUT we need to make sure we don't have a manual toggle here that doubles it up.
+    // The previous code had a manual toggle on the 'option' (label) click.
   });
   // Suburb / city autocomplete (uses /api/cities like tasks search)
   let suburbSearchTimeout;
@@ -932,6 +1019,7 @@ document.addEventListener('DOMContentLoaded', function() {
             div.textContent = c.name;
             div.onclick = () => {
               pickupSuburb.value = c.name;
+              isLocationSelected = true;
               pickupSuburbDropdown.classList.add('hidden');
               pickupSuburbDropdown.innerHTML = '';
               validateCurrent();
@@ -955,17 +1043,31 @@ document.addEventListener('DOMContentLoaded', function() {
   function toggleWorkType(){
     const isOnline = onlineOption.classList.contains('selected');
     document.getElementById('locationInputs').classList.toggle('hidden', isOnline);
+    
+    // Update ARIA
+    inPersonOption.setAttribute('aria-checked', !isOnline);
+    onlineOption.setAttribute('aria-checked', isOnline);
+    
     validateCurrent();
   }
-  inPersonOption.addEventListener('click', function(){
-    setActive(inPersonOption, true);
-    setActive(onlineOption, false);
+  
+  function handleLocationSelect(isOnline) {
+    setActive(inPersonOption, !isOnline);
+    setActive(onlineOption, isOnline);
     toggleWorkType();
-  });
-  onlineOption.addEventListener('click', function(){
-    setActive(inPersonOption, false);
-    setActive(onlineOption, true);
-    toggleWorkType();
+  }
+
+  inPersonOption.addEventListener('click', () => handleLocationSelect(false));
+  onlineOption.addEventListener('click', () => handleLocationSelect(true));
+
+  // Keydown handlers
+  [inPersonOption, onlineOption].forEach(el => {
+    el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleLocationSelect(el.id === 'onlineOption');
+        }
+    });
   });
   // Photo upload functionality - FIXED
   const photoSelectorInput = document.getElementById('photoSelectorInput');
@@ -988,15 +1090,23 @@ document.addEventListener('DOMContentLoaded', function() {
           div.className = 'photo-preview';
           div.innerHTML = `
 <img src="${item.url}" alt="Preview">
-<div class="remove-photo">×</div>
+<div class="remove-photo" tabindex="0" role="button" aria-label="Remove photo">×</div>
           `;
-          div.querySelector('.remove-photo').addEventListener('click', (e) => {
+          const remover = div.querySelector('.remove-photo');
+          const removeAction = (e) => {
               e.stopPropagation();
               // Remove item
               allPhotos.splice(index, 1);
               // Update state
               updateSubmissionFiles();
               renderPreviews();
+          };
+          remover.addEventListener('click', removeAction);
+          remover.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  removeAction(e);
+              }
           });
           photoPreviewContainer.appendChild(div);
       });
@@ -1024,6 +1134,12 @@ document.addEventListener('DOMContentLoaded', function() {
         photoSelectorInput.click();
       }
   });
+  photoUploadPlus.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+      }
+  });
   // Initialize initial state from old() values
   (function initializeFromOldValues(){
     const initialTaskType = document.getElementById('input_task_type').value;
@@ -1035,6 +1151,9 @@ document.addEventListener('DOMContentLoaded', function() {
       setActive(onlineOption, false);
     }
     toggleWorkType();
+    if (pickupSuburb && pickupSuburb.value.trim() !== '') {
+        isLocationSelected = true;
+    }
     const oldCat = "{{ old('categories_id') }}";
     const oldJob = "{{ old('jobs_id') }}";
     if (oldCat) {

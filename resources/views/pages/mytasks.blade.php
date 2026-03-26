@@ -500,6 +500,28 @@
         color: #000000 !important;
     }
 
+    /* Accessibility & Focus States */
+    :focus-visible {
+        outline: 3px solid #2563EB !important;
+        outline-offset: 2px !important;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2) !important;
+    }
+
+    .high-contrast :focus-visible {
+        outline: 4px solid #000000 !important;
+        outline-offset: 4px !important;
+        box-shadow: 0 0 0 6px #ffffff, 0 0 0 10px #000000 !important;
+    }
+
+    .task-details-modal {
+        visibility: hidden;
+        transition: opacity 0.2s, visibility 0.2s;
+    }
+
+    .task-details-modal.show {
+        visibility: visible;
+    }
+
     /* ========== DARK MODE OVERRIDES ========== */
     html.dark body { background-color: #0f172a !important; }
 
@@ -875,7 +897,7 @@
                                             time: '{{ $offer->created_at?->diffForHumans(null, true, true) }}',
                                             price: '{{ number_format($offer->price, 0) }}',
                                             message: `{{ addslashes($offer->message) }}`
-                                        })" class="group w-full p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer relative overflow-hidden">
+                                        })" role="button" tabindex="0" aria-label="{{ __('Review offer from :name', ['name' => $offer->user->first_name ?? 'Tasker']) }}" class="group w-full p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer relative overflow-hidden">
                                             <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                             <div class="flex items-start gap-3">
                                                 <img src="{{ $offer->user->avatar_url }}" alt="Avatar" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0">
@@ -907,13 +929,6 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                </div>
-                            @elseif(!$showOffers && $hasTasks)
-                                <div class="text-center py-6">
-                                    <div class="bg-gray-100 p-2 rounded-full inline-block mb-2">
-                                        <i data-feather="check" class="text-gray-400 w-5 h-5"></i>
-                                    </div>
-                                    <p class="text-sm text-gray-500">{{ __('mytasks.offers.hidden', ['status' => $activeTask->status]) }}</p>
                                 </div>
                             @endif
                         </div>
@@ -1044,7 +1059,7 @@
                     <div id="complete-task-modal" class="task-details-modal">
                         <div class="task-details-backdrop" onclick="closeCompleteTaskModal()"></div>
                         <div class="task-details-panel" style="max-width: 450px;">
-                            <button type="button" class="task-details-close" onclick="closeCompleteTaskModal()">
+                            <button type="button" class="task-details-close" onclick="closeCompleteTaskModal()" aria-label="{{ __('Close modal') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('mytasks.status.task_completed') }}</h3>
@@ -1067,7 +1082,7 @@
                                         <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Rating') }}</label>
                                         <div class="flex gap-2 text-2xl" id="star-rating-input">
                                             @for($i=1; $i<=5; $i++)
-                                                <i data-feather="star" class="cursor-pointer text-gray-300 hover:text-yellow-400" onclick="setRating({{ $i }})" id="star-{{ $i }}"></i>
+                                                <i role="button" tabindex="0" aria-label="{{ __('Rate :count stars', ['count' => $i]) }}" data-feather="star" class="cursor-pointer text-gray-300 hover:text-yellow-400" onclick="setRating({{ $i }})" id="star-{{ $i }}"></i>
                                             @endfor
                                         </div>
                                         <input type="hidden" name="stars" id="rating-value" required>
@@ -1088,7 +1103,7 @@
                     <div id="offer-details-modal" class="task-details-modal" style="z-index: 60;">
                         <div class="task-details-backdrop" onclick="closeOfferModal()"></div>
                         <div class="task-details-panel" style="max-width: 500px;">
-                            <button type="button" class="task-details-close" onclick="closeOfferModal()">
+                            <button type="button" class="task-details-close" onclick="closeOfferModal()" aria-label="{{ __('Close modal') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -1138,7 +1153,7 @@
                     <div id="direct-quote-modal" class="task-details-modal" style="z-index: 65;">
                         <div class="task-details-backdrop" onclick="closeDirectQuoteModal()"></div>
                         <div class="task-details-panel" style="max-width: 500px;">
-                            <button type="button" class="task-details-close" onclick="closeDirectQuoteModal()">
+                            <button type="button" class="task-details-close" onclick="closeDirectQuoteModal()" aria-label="{{ __('Close modal') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
 
@@ -1197,7 +1212,7 @@
                     <div id="edit-task-modal" class="task-details-modal" style="z-index: 100;">
                         <div class="task-details-backdrop" onclick="closeEditTaskModal()"></div>
                         <div class="task-details-panel" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
-                            <button type="button" class="task-details-close" onclick="closeEditTaskModal()">
+                            <button type="button" class="task-details-close" onclick="closeEditTaskModal()" aria-label="{{ __('Close modal') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
                             <h3 class="text-2xl font-bold text-gray-900 mb-6">{{ __('Edit Task') }}</h3>
@@ -1384,6 +1399,19 @@
                                             editJobSelect.appendChild(option);
                                         });
                                     }
+
+                                    // Global Keyboard Support for for [role="button"] and [tabindex="0"]
+                                    document.addEventListener('keydown', function(e) {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            const target = e.target;
+                                            if (target.getAttribute('role') === 'button' || target.getAttribute('tabindex') === '0') {
+                                                if (target.tagName !== 'BUTTON' && target.tagName !== 'A' && target.tagName !== 'INPUT') {
+                                                    e.preventDefault();
+                                                    target.click();
+                                                }
+                                            }
+                                        }
+                                    });
                                 });
                             }
                             

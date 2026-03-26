@@ -55,6 +55,10 @@ Route::post('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'hu'])) {
         session(['locale' => $locale]);
         app()->setLocale($locale);
+        
+        if (auth()->check()) {
+            auth()->user()->update(['locale' => $locale]);
+        }
     }
     return back();
 })->name('language.switch');

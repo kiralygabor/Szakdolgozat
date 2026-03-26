@@ -1,0 +1,55 @@
+<?php
+
+return [
+    'new_offer' => [
+        'subject' => 'Új ajánlat a(z) ":task" feladatra',
+        'greeting' => 'Szia :name!',
+        'line1' => ':user **€:price** ajánlatot tett a(z) **":task"** feladatodra.',
+        'line2' => '**Message from :user:**',
+        'action' => 'Ajánlat Megtekintése',
+        'line3' => 'Jelentkezz be az ajánlat felülvizsgálatához, elfogadásához vagy elutasításához.',
+        'database_title' => ':user ajánlatot küldött',
+        'database_message' => ':user €:price ajánlatot tett a következőre: ":task"',
+    ],
+    'offer_cancelled' => [
+        'subject' => 'Visszavont ajánlat: :task',
+        'greeting' => 'Szia :name,',
+        'line1' => ':user visszavonta a(z) €:price ajánlatát a(z) ":task" feladatodra.',
+        'line2' => 'További teendő nem szükséges.',
+        'database_title' => 'Ajánlat visszavonva',
+        'database_message' => ':user visszavonta a(z) €:price ajánlatát a következőre: ":task"',
+    ],
+    'offer_accepted' => [
+        'subject' => 'Az ajánlatod elfogadásra került!',
+        'greeting' => 'Nagyszerű hír, :name!',
+        'line1' => ':user **elfogadta** az ajánlatodat a(z) **":task"** feladatra.',
+        'line2' => 'Most már elkezdhetsz dolgozni a feladaton, és az üzenetküldő rendszeren keresztül tarthatod a kapcsolatot a közzétevővel.',
+        'action' => 'Feladat Megtekintése',
+        'line3' => 'Sok sikert a feladathoz!',
+        'database_title' => ':user elfogadta az ajánlatodat',
+        'database_message' => ':user elfogadta az ajánlatodat a következőre: ":task"',
+    ],
+    'direct_quote' => [
+        'subject' => 'Új árajánlat kérés tőle: :user',
+        'greeting' => 'Szia :name,',
+        'line1' => ':user árajánlatot kért tőled a(z) ":task" feladatára.',
+        'line2' => 'Költségvetés: €:price',
+        'action' => 'Feladat megtekintése és ajánlat küldése',
+        'line3' => 'Küldj nekik ajánlatot a kezdéshez!',
+        'database_title' => 'Új árajánlat kérés',
+        'database_message' => ':user árajánlatot kért tőled a következőre: ":task".',
+    ],
+    'direct_quote_cancelled' => [
+        'subject' => 'Árajánlat kérés visszavonva tőle: :user',
+        'greeting' => 'Szia :name,',
+        'line1' => ':user visszavonta az árajánlat kérését a(z) ":task" feladatra.',
+        'line2' => 'Ehhez a kéréshez további teendő nem szükséges.',
+        'database_title' => 'Árajánlat kérés visszavonva',
+        'database_message' => ':user visszavonta az árajánlat kérését a következőre: ":task".',
+    ],
+    'new_message' => [
+        'database_title' => ':user üzenetet küldött',
+        'sent_image' => 'Képet küldött: :body',
+        'sent_attachment' => 'Csatolmányt küldött: :body',
+    ],
+];

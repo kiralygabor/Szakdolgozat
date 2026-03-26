@@ -43,12 +43,12 @@ class DirectQuoteReceivedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('New Quote Request from ' . $this->employer->first_name)
-            ->greeting('Hello ' . $notifiable->first_name . ',')
-            ->line($this->employer->first_name . ' has requested a quote from you for their task: "' . $this->task->title . '".')
-            ->line('Budget: $' . $this->task->price)
-            ->action('View Task & Send Offer', route('my-tasks', ['view' => 'applied', 'task_id' => $this->task->id]))
-            ->line('Send them an offer to get started!');
+            ->subject(__('notifications.direct_quote.subject', ['user' => $this->employer->first_name]))
+            ->greeting(__('notifications.direct_quote.greeting', ['name' => $notifiable->first_name]))
+            ->line(__('notifications.direct_quote.line1', ['user' => $this->employer->first_name, 'task' => $this->task->title]))
+            ->line(__('notifications.direct_quote.line2', ['price' => $this->task->price]))
+            ->action(__('notifications.direct_quote.action'), route('my-tasks', ['view' => 'applied', 'task_id' => $this->task->id]))
+            ->line(__('notifications.direct_quote.line3'));
     }
 
     /**
@@ -60,8 +60,8 @@ class DirectQuoteReceivedNotification extends Notification
     {
         return [
             'type' => 'new_quote_request',
-            'title' => 'New Quote Request',
-            'message' => $this->employer->first_name . ' has requested a quote from you for: "' . $this->task->title . '".',
+            'title' => __('notifications.direct_quote.database_title'),
+            'message' => __('notifications.direct_quote.database_message', ['user' => $this->employer->first_name, 'task' => $this->task->title]),
             'link' => route('my-tasks', ['view' => 'applied', 'task_id' => $this->task->id]),
             'task_id' => $this->task->id,
             'requester_id' => $this->employer->id,

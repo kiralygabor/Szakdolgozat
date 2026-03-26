@@ -37,8 +37,12 @@ class OfferCancelledNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => $this->user->first_name . ' has cancelled their offer',
-            'message' => $this->user->first_name . ' cancelled their £' . $this->amount . ' offer for "' . $this->task->title . '"',
+            'title' => __('notifications.offer_cancelled.database_title'),
+            'message' => __('notifications.offer_cancelled.database_message', [
+                'user' => $this->user->first_name, 
+                'task' => $this->task->title,
+                'price' => $this->amount
+            ]),
             'link' => route('my-tasks', ['task_id' => $this->task->id]),
             'task_id' => $this->task->id,
             'type' => 'warning'

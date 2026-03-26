@@ -244,6 +244,96 @@
     
     html.dark .list-group-item { background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; }
     html.dark .list-group-item:hover { background-color: #334155 !important; }
+
+    /* Phone Country Selector Styles */
+    .phone-selector-container {
+        display: flex;
+        align-items: center;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+    }
+    .phone-dropdown-btn {
+        display: inline-flex;
+        align-items: center;
+        background-color: #f1f3f6;
+        border: 1px solid #dee2e6;
+        border-radius: 8px 0 0 8px;
+        padding: 10px 15px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #292b32;
+        transition: all 0.2s;
+        border-right: none;
+    }
+    .phone-dropdown-btn:hover {
+        background-color: #e9ecef;
+    }
+    .phone-dropdown-menu {
+        position: absolute;
+        z-index: 1050;
+        display: none;
+        min-width: 220px;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        margin-top: 5px;
+    }
+    .phone-dropdown-menu.show {
+        display: block;
+    }
+    .phone-dropdown-item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.875rem;
+        color: #292b32;
+        border-radius: 6px;
+        transition: background 0.2s;
+        cursor: pointer;
+        border: none;
+        background: none;
+        text-align: left;
+    }
+    .phone-dropdown-item:hover {
+        background-color: #f3f4f6;
+        color: #0065ff;
+    }
+    .phone-input-field {
+        flex: 1;
+        background-color: #f1f3f6;
+        border: 1px solid #dee2e6;
+        border-radius: 0 8px 8px 0;
+        padding: 10px 15px;
+        font-size: 0.875rem;
+        color: #292b32;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .phone-input-field:focus {
+        border-color: #0065ff;
+        background-color: #fff;
+    }
+
+    html.dark .phone-dropdown-btn,
+    html.dark .phone-input-field {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+    html.dark .phone-dropdown-menu {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+    }
+    html.dark .phone-dropdown-item {
+        color: #cbd5e1 !important;
+    }
+    html.dark .phone-dropdown-item:hover {
+        background-color: #334155 !important;
+        color: #60a5fa !important;
+    }
 </style>
  
 <div class="max-w-7xl mx-auto px-6 py-10">
@@ -253,7 +343,7 @@
         <div class="md:w-1/5 mb-8 md:mb-0">
             <!-- Optional: User Brief Info -->
             <div class="text-center mb-4 pb-3 border-bottom d-md-none">
-                <h5>My Settings</h5>
+                <h5>{{ __('profile_page.sidebar.settings') }}</h5>
             </div>
  
             <nav class="nav flex-column nav-pills settings-nav" id="settingsTab" role="tablist" aria-orientation="vertical">
@@ -369,12 +459,71 @@
  
                         <div class="mb-4 custom-input-group">
                             <label for="phone" class="form-label">{{ __('profile_page.profile.phone') }}</label>
-                            <input
-                                type="text"
-                                class="form-control form-control-custom"
-                                id="phone"
-                                name="phone_number"
-                                value="{{ old('phone_number', $user->phone_number ?? '') }}">
+                            
+                            <div class="relative">
+                                <div class="phone-selector-container">
+                                    <button id="dropdown-phone-button" type="button" class="phone-dropdown-btn">
+                                        <div id="selected-flag" class="flex items-center">
+                                            <!-- Default: Hungary Flag -->
+                                            <svg class="w-4 h-4 me-2 rounded-full" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="5.33" fill="#CE2939"/><rect y="5.33" width="16" height="5.34" fill="#FFFFFF"/><rect y="10.67" width="16" height="5.33" fill="#477050"/></svg>
+                                            <span id="selected-prefix">+36</span>
+                                        </div>
+                                        <svg class="w-4 h-4 ms-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>
+                                    </button>
+                                    
+                                    <input type="tel" id="phone" name="phone_number" class="phone-input-field" 
+                                           value="{{ old('phone_number', $user->phone_number ?? '') }}" 
+                                           placeholder="30 123 4567">
+                                </div>
+
+                                <div id="dropdown-phone" class="phone-dropdown-menu">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <button type="button" class="phone-dropdown-item country-option" data-prefix="+36" data-flag="hu">
+                                                <svg class="w-4 h-4 me-3 rounded-full" viewBox="0 0 16 16"><rect width="16" height="5.33" fill="#CE2939"/><rect y="5.33" width="16" height="5.34" fill="#FFFFFF"/><rect y="10.67" width="16" height="5.33" fill="#477050"/></svg>
+                                                {{ __('profile_page.countries.hu') }} (+36)
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="phone-dropdown-item country-option" data-prefix="+43" data-flag="at">
+                                                <svg class="w-4 h-4 me-3 rounded-full" viewBox="0 0 16 16"><rect width="16" height="5.33" fill="#ED2939"/><rect y="5.33" width="16" height="5.34" fill="#FFFFFF"/><rect y="10.67" width="16" height="5.33" fill="#ED2939"/></svg>
+                                                {{ __('profile_page.countries.at') }} (+43)
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="phone-dropdown-item country-option" data-prefix="+421" data-flag="sk">
+                                                <svg class="w-4 h-4 me-3 rounded-full" viewBox="0 0 16 16"><rect width="16" height="5.33" fill="#FFFFFF"/><rect y="5.33" width="16" height="5.34" fill="#0B4592"/><rect y="10.67" width="16" height="5.33" fill="#EE1C25"/></svg>
+                                                {{ __('profile_page.countries.sk') }} (+421)
+                                            </button>
+                                        </li>
+ 
+                                        <li>
+                                            <button type="button" class="phone-dropdown-item country-option" data-prefix="+385" data-flag="hr">
+                                                <svg class="w-4 h-4 me-3 rounded-full" viewBox="0 0 16 16"><rect width="16" height="5.33" fill="#FF0000"/><rect y="5.33" width="16" height="5.34" fill="#FFFFFF"/><rect y="10.67" width="16" height="5.33" fill="#171796"/></svg>
+                                                {{ __('profile_page.countries.hr') }} (+385)
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="phone-dropdown-item country-option" data-prefix="+381" data-flag="rs">
+                                                <svg class="w-4 h-4 me-3 rounded-full" viewBox="0 0 16 16"><rect width="16" height="5.33" fill="#C6363C"/><rect y="5.33" width="16" height="5.34" fill="#0C4076"/><rect y="10.67" width="16" height="5.33" fill="#FFFFFF"/></svg>
+                                                {{ __('profile_page.countries.rs') }} (+381)
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="phone-dropdown-item country-option" data-prefix="+386" data-flag="si">
+                                                <svg class="w-4 h-4 me-3 rounded-full" viewBox="0 0 16 16"><rect width="16" height="5.33" fill="#FFFFFF"/><rect y="5.33" width="16" height="5.34" fill="#0000FF"/><rect y="10.67" width="16" height="5.33" fill="#FF0000"/></svg>
+                                                {{ __('profile_page.countries.si') }} (+386)
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button type="button" class="phone-dropdown-item country-option" data-prefix="+380" data-flag="ua">
+                                                <svg class="w-4 h-4 me-3 rounded-full" viewBox="0 0 16 16"><rect width="16" height="8" fill="#0057B7"/><rect y="8" width="16" height="8" fill="#FFD700"/></svg>
+                                                {{ __('profile_page.countries.ua') }} (+380)
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
  
                         <div class="mt-4">
@@ -392,8 +541,8 @@
                         <div class="mb-5 custom-input-group">
                             <h6 class="section-label">{{ __('navbar.language') }}</h6>
                             <select id="lang-select" class="form-control form-control-custom w-full md:w-2/3">
-                                <option value="en" @selected(app()->getLocale() == 'en')>English</option>
-                                <option value="hu" @selected(app()->getLocale() == 'hu')>Hungarian</option>
+                                <option value="en" @selected(app()->getLocale() == 'en')>{{ __('navbar.english') }}</option>
+                                <option value="hu" @selected(app()->getLocale() == 'hu')>{{ __('navbar.hungarian') }}</option>
                             </select>
                         </div>
  
@@ -407,13 +556,13 @@
                         </div>
  
                         <div class="mb-5 custom-input-group">
-                            <h6 class="section-label">Accessibility</h6>
+                            <h6 class="section-label">{{ __('profile_page.account.accessibility') }}</h6>
                             <div class="space-y-4 pt-2">
                                 <label class="flex items-center gap-3 cursor-pointer group">
                                     <input type="checkbox" id="accessibility-master-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <div class="flex flex-col">
-                                        <span class="text-sm font-semibold text-gray-800">Enable accessibility features</span>
-                                        <span class="text-xs text-gray-500">Show accessibility options (reduced motion, high contrast) in menus.</span>
+                                        <span class="text-sm font-semibold text-gray-800">{{ __('profile_page.account.enable_acc') }}</span>
+                                        <span class="text-xs text-gray-500">{{ __('profile_page.account.show_acc_desc') }}</span>
                                     </div>
                                 </label>
  
@@ -421,16 +570,16 @@
                                     <label class="flex items-center gap-3 cursor-pointer group">
                                         <input type="checkbox" id="reduced-motion-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                         <div class="flex flex-col">
-                                            <span class="text-sm font-semibold text-gray-800">Reduced Motion</span>
-                                            <span class="text-xs text-gray-500">Minimize animations and transitions.</span>
+                                            <span class="text-sm font-semibold text-gray-800">{{ __('profile_page.account.reduced_motion') }}</span>
+                                            <span class="text-xs text-gray-500">{{ __('profile_page.account.reduced_motion_desc') }}</span>
                                         </div>
                                     </label>
                                    
                                     <label class="flex items-center gap-3 cursor-pointer group">
                                         <input type="checkbox" id="high-contrast-toggle" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                         <div class="flex flex-col">
-                                            <span class="text-sm font-semibold text-gray-800">High Contrast</span>
-                                            <span class="text-xs text-gray-500">Increase color contrast for better readability.</span>
+                                            <span class="text-sm font-semibold text-gray-800">{{ __('profile_page.account.high_contrast') }}</span>
+                                            <span class="text-xs text-gray-500">{{ __('profile_page.account.high_contrast_desc') }}</span>
                                         </div>
                                     </label>
                                 </div>
@@ -439,7 +588,7 @@
  
                         <div class="mb-5">
                             <button type="button" id="apply-settings-btn" class="btn btn-primary btn-primary-custom px-8">
-                                {{ __('Apply') }}
+                                {{ __('profile_page.account.apply') }}
                             </button>
                         </div>
  
@@ -509,37 +658,37 @@
                         <input type="hidden" name="city_id" value="{{ $user->city_id }}">
  
                         <div class="mb-5">
-                            <h6 class="section-label">Email Preferences</h6>
+                            <h6 class="section-label">{{ __('profile_page.notifications.email_prefs') }}</h6>
                            
                             <div class="space-y-4">
                                 <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                     <input type="checkbox" name="email_notifications" value="1" {{ $user->email_notifications ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <div>
-                                        <span class="block font-bold text-blue-900">Offer Updates</span>
-                                        <span class="text-sm text-gray-600">Email me when I receive an offer on my task or when my offer is accepted</span>
+                                        <span class="block font-bold text-blue-900">{{ __('profile_page.notifications.offer_updates') }}</span>
+                                        <span class="text-sm text-gray-600">{{ __('profile_page.notifications.offer_updates_desc') }}</span>
                                     </div>
                                 </label>
  
                                 <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                     <input type="checkbox" name="email_direct_quotes" value="1" {{ $user->email_direct_quotes ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <div>
-                                        <span class="block font-bold text-blue-900">Direct Quotes</span>
-                                        <span class="text-sm text-gray-600">Email me when someone requests a quote specifically from me</span>
+                                        <span class="block font-bold text-blue-900">{{ __('profile_page.notifications.direct_quotes') }}</span>
+                                        <span class="text-sm text-gray-600">{{ __('profile_page.notifications.direct_quotes_desc') }}</span>
                                     </div>
                                 </label>
  
                                 <label class="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
                                     <input type="checkbox" name="email_task_digest" value="1" id="digest_toggle_profile" {{ $user->email_task_digest ? 'checked' : '' }} class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <div>
-                                        <span class="block font-bold text-blue-900">Task Digest</span>
-                                        <span class="text-sm text-gray-600">Send me a daily summary of new tasks posted in categories I follow</span>
+                                        <span class="block font-bold text-blue-900">{{ __('profile_page.notifications.task_digest') }}</span>
+                                        <span class="text-sm text-gray-600">{{ __('profile_page.notifications.task_digest_desc') }}</span>
                                     </div>
                                 </label>
                             </div>
  
                             <!-- category selection (shown only if digest is enabled) -->
                             <div id="category_selection_profile" class="{{ $user->email_task_digest ? '' : 'hidden' }} pl-11 mt-4">
-                                <p class="text-xs font-bold text-blue-900 mb-3 uppercase tracking-wide">Tracked Categories:</p>
+                                <p class="text-xs font-bold text-blue-900 mb-3 uppercase tracking-wide">{{ __('profile_page.notifications.tracked_categories') }}</p>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-4 border border-blue-100 rounded-xl bg-blue-50/30 max-h-64 overflow-y-auto">
                                     @foreach($categories as $cat)
                                     <label class="flex items-center gap-2 cursor-pointer hover:bg-white p-2 rounded-lg transition-colors border border-transparent hover:border-blue-100">
@@ -836,7 +985,63 @@
                 });
             });
         })();
+
+        // --- Phone Country Selector Logic ---
+        (function handlePhoneSelector() {
+            const dropdownBtn = document.getElementById('dropdown-phone-button');
+            const dropdownMenu = document.getElementById('dropdown-phone');
+            const countryOptions = document.querySelectorAll('.country-option');
+            const selectedFlag = document.getElementById('selected-flag');
+            const selectedPrefix = document.getElementById('selected-prefix');
+            const phoneInput = document.getElementById('phone');
+
+            if (!dropdownBtn || !dropdownMenu) return;
+
+            dropdownBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+
+            countryOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const prefix = this.getAttribute('data-prefix');
+                    const flagSvg = this.querySelector('svg').cloneNode(true);
+                    flagSvg.classList.remove('me-3');
+                    flagSvg.classList.add('me-2');
+
+                    selectedFlag.innerHTML = '';
+                    selectedFlag.appendChild(flagSvg);
+                    selectedFlag.appendChild(document.createTextNode(prefix));
+                    
+                    dropdownMenu.classList.remove('show');
+                    
+                    // Focus input after selection
+                    phoneInput.focus();
+                });
+            });
+
+            // Optional: Auto-detect prefix from existing value
+            const currentVal = phoneInput.value.trim();
+            if (currentVal.startsWith('+')) {
+                countryOptions.forEach(option => {
+                    const prefix = option.getAttribute('data-prefix');
+                    if (currentVal.startsWith(prefix)) {
+                        option.click();
+                        // Remove prefix from input display if you want separate storage
+                        // But usually we keep it or just visual. 
+                        // For now let's just match the UI to the data.
+                    }
+                });
+            }
+        })();
     });
 </script>
  
 @endsection
+```

@@ -412,7 +412,7 @@
                  <div class="flex items-center gap-3">
                   <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
                   <div>
-                    <p class="text-xs font-bold text-gray-900">New Offer: $45</p>
+                    <p class="text-xs font-bold text-gray-900">New Offer: €45</p>
                     <p class="text-[10px] text-gray-500">James W. is interested</p>
                   </div>
                 </div>

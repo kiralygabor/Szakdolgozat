@@ -40,10 +40,10 @@ class DirectQuoteCancelledNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Quote Request Cancelled by ' . $this->employer->first_name)
-            ->greeting('Hello ' . $notifiable->first_name . ',')
-            ->line($this->employer->first_name . ' has cancelled their quote request for the task: "' . $this->task->title . '".')
-            ->line('No further action is required for this request.');
+            ->subject(__('notifications.direct_quote_cancelled.subject', ['user' => $this->employer->first_name]))
+            ->greeting(__('notifications.direct_quote_cancelled.greeting', ['name' => $notifiable->first_name]))
+            ->line(__('notifications.direct_quote_cancelled.line1', ['user' => $this->employer->first_name, 'task' => $this->task->title]))
+            ->line(__('notifications.direct_quote_cancelled.line2'));
     }
 
     /**
@@ -53,8 +53,8 @@ class DirectQuoteCancelledNotification extends Notification
     {
         return [
             'type' => 'quote_request_cancelled',
-            'title' => 'Quote Request Cancelled',
-            'message' => $this->employer->first_name . ' has cancelled their quote request for: "' . $this->task->title . '".',
+            'title' => __('notifications.direct_quote_cancelled.database_title'),
+            'message' => __('notifications.direct_quote_cancelled.database_message', ['user' => $this->employer->first_name, 'task' => $this->task->title]),
             'link' => route('index'),
             'task_id' => $this->task->id,
             'requester_id' => $this->employer->id,

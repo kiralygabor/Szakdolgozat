@@ -28,4 +28,13 @@ return [
     'system_default' => 'Rendszer alapértelmezett',
     'help_faq' => 'Súgó / GYIK',
     'contact_support' => 'Kapcsolat / Támogatás',
+    'english' => 'Angol',
+    'hungarian' => 'Magyar',
+    'accessibility' => 'Akadálymentesítés',
+    'reduced_motion' => 'Csökkentett mozgás',
+    'high_contrast' => 'Magas kontraszt',
+    'mark_all_read' => 'Összes olvasottként',
+    'no_notifications' => 'Még nincs értesítés',
+    'view_all_notifications' => 'Összes értesítés megtekintése',
+    'manage_account' => 'Fiók kezelése',
 ];

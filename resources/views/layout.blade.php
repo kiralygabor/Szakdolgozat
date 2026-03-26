@@ -1617,9 +1617,9 @@
              role="menu" aria-labelledby="notifications-menu-button"
              class="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden hidden transform origin-top-right transition-all duration-200 z-50">
             <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h3 class="font-bold text-gray-800">Notifications</h3>
+                <h3 class="font-bold text-gray-800">{{ __('navbar.notifications') }}</h3>
                 @if($unreadCount > 0)
-                    <span onclick="markNotificationsRead()" class="text-xs text-blue-600 font-semibold cursor-pointer hover:underline">Mark all read</span>
+                    <span onclick="markNotificationsRead()" class="text-xs text-blue-600 font-semibold cursor-pointer hover:underline">{{ __('navbar.mark_all_read') }}</span>
                 @endif
             </div>
             
@@ -1648,13 +1648,13 @@
                 @empty
                     <div class="p-8 text-center text-gray-500">
                         <i data-feather="bell-off" class="mx-auto mb-2 opacity-50"></i>
-                        <p class="text-sm">No notifications yet</p>
+                        <p class="text-sm">{{ __('navbar.no_notifications') }}</p>
                     </div>
                 @endforelse
             </div>
             
             <div class="p-3 bg-gray-50 text-center border-t border-gray-100">
-                <a href="{{ route('notifications') }}" class="text-sm font-bold text-blue-600 hover:text-blue-700">View all notifications</a>
+                <a href="{{ route('notifications') }}" class="text-sm font-bold text-blue-600 hover:text-blue-700">{{ __('navbar.view_all_notifications') }}</a>
             </div>
         </div>
     </div>
@@ -1684,24 +1684,24 @@
             {{ __('navbar.language') }}
           </div>
           <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">English</div>
-            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">Hungarian</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">{{ __('navbar.english') }}</div>
+            <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">{{ __('navbar.hungarian') }}</div>
           </div>
         </div>
         <div class="group relative" id="nav-accessibility-section">
           <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
             <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
-            Accessibility
+            {{ __('navbar.accessibility') }}
           </div>
           <div class="submenu absolute top-0 right-full w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto p-1">
              <button type="button" onclick="toggleAccessibilitySetting('reduced-motion')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
-                <span>Reduced Motion</span>
+                <span>{{ __('navbar.reduced_motion') }}</span>
                 <div id="nav-reduced-motion-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
                     <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
                 </div>
              </button>
              <button type="button" onclick="toggleAccessibilitySetting('high-contrast')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
-                <span>High Contrast</span>
+                <span>{{ __('navbar.high_contrast') }}</span>
                 <div id="nav-high-contrast-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
                     <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
                 </div>
@@ -2177,7 +2177,7 @@
                       listContainer.innerHTML = `
                         <div class="p-8 text-center text-gray-500">
                             <i data-feather="bell-off" class="mx-auto mb-2 opacity-50" style="width: 24px; height: 24px;"></i>
-                            <p class="text-sm">No new notifications</p>
+                            <p class="text-sm">{{ __('navbar.no_notifications') }}</p>
                         </div>
                       `;
                       if (window.feather) window.feather.replace();

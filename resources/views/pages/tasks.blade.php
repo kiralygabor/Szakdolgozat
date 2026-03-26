@@ -567,7 +567,7 @@
               </div>
           </div>
 
-          <!-- Sort -->
+           <!-- Sort -->
           <div>
               <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Sort by</label>
               <div class="relative">

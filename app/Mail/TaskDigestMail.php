@@ -29,7 +29,7 @@ class TaskDigestMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Daily Task Summary - MiniJobz')
+        return $this->subject(__('emails.task_digest.subject'))
             ->view('emails.task-digest');
     }
 }

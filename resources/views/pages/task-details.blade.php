@@ -134,7 +134,7 @@
                         <div>
                             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('task_details.budget.label') }}</p>
                             <div class="flex items-baseline gap-1">
-                                <span class="text-4xl font-black text-slate-800 tracking-tight">£{{ number_format($task->price, 0) }}</span>
+                                <span class="text-4xl font-black text-slate-800 tracking-tight">€{{ number_format($task->price, 0) }}</span>
                                 <span class="text-sm font-medium text-gray-400">{{ __('task_details.budget.currency') }}</span>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                                 </label>
                                 <div class="relative">
                                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <span class="text-gray-500 font-bold sm:text-sm">£</span>
+                                        <span class="text-gray-500 font-bold sm:text-sm">€</span>
                                     </div>
                                     <input type="number" name="offer_price" value="{{ $task->price }}"
                                         class="w-full pl-7 pr-3 py-2.5 bg-gray-50 border border-transparent text-gray-900 text-sm rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-transparent transition-all font-semibold"

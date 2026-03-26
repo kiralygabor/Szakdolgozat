@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('email_notifications')->default(true);
             $table->boolean('email_task_digest')->default(false);
             $table->boolean('email_direct_quotes')->default(true);
+            $table->string('locale', 5)->default('en');
             $table->timestamps();
         });
     }

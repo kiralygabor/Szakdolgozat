@@ -1,0 +1,270 @@
+MINIJOBZ — FREQUENTLY ASKED QUESTIONS (FAQ)
+=============================================
+
+
+GENERAL
+-------
+
+Q: What is Minijobz?
+A: Minijobz is a community-powered task marketplace that connects people who need everyday tasks done with verified local Taskers. You can post tasks like cleaning, handyman work, deliveries, tutoring, gardening, pet care, and much more — and receive offers from available Taskers within minutes. It's free to post a task.
+
+Q: How does Minijobz work?
+A: It works in 3 simple steps: (1) Post a task describing what you need done, set a budget, and choose a date. (2) Receive offers from local Taskers — review their profiles, ratings, and reviews to pick the best one. (3) Get the job done and release the secure escrow payment when you're satisfied.
+
+Q: Is Minijobz free to use?
+A: Yes! It's completely free to sign up and post a task. You only pay the agreed price when a Tasker completes your task to your satisfaction.
+
+Q: What currency does Minijobz use?
+A: All prices on Minijobz are in Euros (€).
+
+Q: What languages does Minijobz support?
+A: Minijobz currently supports English and Hungarian. You can switch languages anytime from the navigation bar.
+
+Q: Is there a Minijobz mobile app?
+A: Yes! The Minijobz app is available for download on both the Apple App Store (iOS) and Google Play Store (Android). You can post tasks, message Taskers, make payments, and track job status on the go.
+
+Q: Who created Minijobz?
+A: Minijobz was created by Király Gábor, Praszna Koppány, and Nagy Gergely.
+
+
+ACCOUNT & REGISTRATION
+-----------------------
+
+Q: How do I create an account?
+A: Go to the Sign Up page, enter your email, create a password, and click "Sign up." You can also register using your Google or Facebook account for faster setup. After registration, you'll need to verify your email address.
+
+Q: Can I sign up with Google or Facebook?
+A: Yes! You can use "Continue with Google" or "Continue with Facebook" on both the Login and Sign Up pages.
+
+Q: I forgot my password. What do I do?
+A: On the Login page, click "Forgot password?" and enter your email. You'll receive a password reset link via email. Click the link and set a new password.
+
+Q: How do I change my password?
+A: Go to your Profile, then click on the "Security" section. Enter your old password, then your new password, confirm it, and save.
+
+Q: How do I update my profile information?
+A: Go to your Profile settings. You can update your avatar (PNG or JPG, max 5 MB), first name, last name, birthday, location, email, and phone number. Click "Save Profile" when done.
+
+Q: Can I delete my account?
+A: Yes. Go to Profile > Account Settings > Delete Account. Please note that this action is permanent and cannot be undone. All your data, tasks, and history will be removed.
+
+Q: Do I need to verify my email?
+A: Yes. After registration, you'll receive a verification email. Click the link to verify your account. You may also receive a verification code that you need to enter on the verification page.
+
+Q: What do the verification badges on profiles mean?
+A: Profiles can show "Email Verified" and "Phone Verified" badges. These confirm that the user has verified their email address and phone number, adding an extra layer of trust.
+
+
+POSTING A TASK
+--------------
+
+Q: How do I post a task?
+A: Click "Post a Task" from the navigation bar. You'll go through 4 simple steps: (1) Choose a category, service, title, and date. (2) Select if it's in-person or online, and enter the location. (3) Add details and optional photos. (4) Set your budget. Then click "Get quotes" to publish.
+
+Q: Is it free to post a task?
+A: Yes, posting a task is completely free. You only pay when a Tasker completes the job.
+
+Q: What categories are available?
+A: Minijobz has 13 categories: Home Services, Cleaning & Maintenance, Moving & Delivery, Personal Care & Wellness, Automotive, Trades & Construction, Food & Catering, Events & Entertainment, Lessons & Education, Pet Services, Gardening & Outdoor, Home Lifestyle, and Miscellaneous. Each category has many specific services within it.
+
+Q: Can I post a remote/online task?
+A: Yes! When posting a task, choose "Online" as the task type. This means the Tasker can complete the work remotely without coming to your location. Examples include web design, tutoring, translation, and writing.
+
+Q: What's the minimum and maximum budget for a task?
+A: You can set a budget between €10 and €9,999 per task.
+
+Q: Can I add photos to my task?
+A: Yes! In Step 3 of posting a task, you can upload photos to help Taskers better understand what needs to be done. This is optional but recommended.
+
+Q: Can I edit my task after posting?
+A: Yes. Go to your My Tasks dashboard, find the task, and click "Edit task" to make changes. You can edit the task as long as it hasn't been completed.
+
+Q: Can I cancel a task?
+A: Yes. Go to your My Tasks dashboard and click "Cancel task." You can cancel a task as long as it's not yet completed.
+
+Q: What if I don't receive any offers?
+A: If you don't receive offers, try: (1) Adjusting your budget — ensure it's competitive. (2) Adding more details to your task description. (3) Adding photos. (4) Being flexible with dates and times.
+
+
+FINDING & BROWSING TASKS
+--------------------------
+
+Q: How do I browse available tasks?
+A: Click "Browse Tasks" in the navigation bar. You'll see a list of all available tasks with an interactive map for in-person tasks.
+
+Q: What filters are available when browsing?
+A: You can filter by: keyword/task name, category, specific service/job, work type (in-person, remote, or all), city/suburb location, and price range (€1,000–€20,000). You can also sort by most recent, closest to you, due soon, or price (low-to-high or high-to-low).
+
+Q: What does the map show?
+A: The map shows the locations of in-person tasks. Remote/online tasks don't appear on the map, but they're still visible in the task list. A cloud icon on the map indicates how many remote tasks are available.
+
+Q: Can I search for tasks in a specific city?
+A: Yes! Use the location/city filter on the Browse Tasks page. Type a city or suburb name and select from the suggestions.
+
+
+OFFERS & HIRING
+----------------
+
+Q: How do I make an offer on a task?
+A: On a task's detail page, enter your offer price (in €) and a message explaining why you're a good fit. Click "Make an Offer" to submit. Before making your first offer, you may need to complete your profile details.
+
+Q: Can I cancel my offer?
+A: Yes. Go to the Browse Tasks page, find the task you offered on, and click "Cancel offer."
+
+Q: How do I accept an offer?
+A: Go to your My Tasks dashboard. When you have offers, click on the task to see all offers. Review each Tasker's profile, rating, and message, then click to accept the best one.
+
+Q: What is a direct quote request?
+A: You can request a specific Tasker to give you a quote by visiting their public profile and clicking "Request a quote." This sends the task directly to that Tasker, who can then accept your budget or send a counter offer.
+
+Q: Can I negotiate the price?
+A: Yes! Prices are always negotiable. A Tasker can make a counter offer, and you can discuss the final price through the secure messaging system before accepting.
+
+Q: What happens after I accept an offer?
+A: The task status changes to "In Progress." You can message the assigned Tasker to discuss details. Once the work is done to your satisfaction, you mark the task as completed and the payment is released.
+
+
+PAYMENTS
+--------
+
+Q: How does payment work on Minijobz?
+A: Minijobz uses an escrow payment system. When you accept an offer, the payment is held securely by Minijobz Pay. The money is only released to the Tasker when you mark the task as completed and confirm you're satisfied.
+
+Q: Is my payment secure?
+A: Yes. All payments are held in secure escrow through Minijobz Pay. Your money is protected and only released when the task is done to your satisfaction.
+
+Q: When does the Tasker get paid?
+A: The Tasker receives payment when you (the task poster) mark the task as completed. The funds are then released from escrow.
+
+Q: What payment methods are accepted?
+A: You can manage your payment methods in Profile > Billing > Add Payment Method.
+
+Q: Where can I see my billing history?
+A: Go to Profile > Billing to view your payment history and manage payment methods.
+
+
+MESSAGING & COMMUNICATION
+---------------------------
+
+Q: How do I message a Tasker?
+A: Once an offer is accepted, you can message the Tasker through the built-in secure messaging system. Access it via the "Messages" link in the navigation bar.
+
+Q: Can I message someone before hiring them?
+A: The messaging system is available once you're connected through the offer/task process. Use the task details and offer system to communicate initially.
+
+Q: Can I delete messages?
+A: Yes. You can delete individual messages within a conversation.
+
+Q: Can I report a user in the messaging system?
+A: Yes. Each conversation has a "Report User" option if you encounter inappropriate behavior.
+
+Q: How do I know if I have new messages?
+A: Check the "Messages" link in the navigation bar. You'll also receive notifications for new messages based on your notification preferences.
+
+
+REVIEWS & TRUST
+----------------
+
+Q: How do I leave a review?
+A: Visit the user's public profile after completing a task together. Select a star rating and write a comment about your experience. Click "Post Review" to submit.
+
+Q: Can I leave a review for anyone?
+A: No. You can only leave a review for someone you've actually completed a task with. This ensures all reviews are genuine and trustworthy.
+
+Q: Can I see reviews before hiring someone?
+A: Yes! Every user's public profile shows their average rating, total review count, and individual reviews. Use this to make informed decisions.
+
+Q: What do reviews show?
+A: Reviews show the reviewer's name, star rating, written comment, and are verified to be from actual completed tasks. Each profile also displays the user's overall average rating.
+
+Q: How do I check if a Tasker is reliable?
+A: Check their public profile for: (1) Star rating and reviews from past tasks. (2) Verification badges (email, phone). (3) How long they've been on the platform (join date). (4) Their bio and experience description.
+
+
+SAFETY & SECURITY
+-------------------
+
+Q: Is Minijobz safe to use?
+A: Yes! Safety is our top priority. We offer: secure escrow payments (money held until job is done), ID verification for users, public liability insurance for Taskers, a transparent review/rating system, and the ability to report suspicious tasks or users.
+
+Q: Are Taskers insured?
+A: Yes. Minijobz Insurance covers accidental injury to the customer or property damage whilst performing certain task activities. Our insurance is provided by world-class partners.
+
+Q: How do I report a task or user?
+A: On any task detail page, click the flag icon to report the task. On a user's public profile, click "Report" to report the user. Our team reviews all reports.
+
+Q: What should I do if something goes wrong?
+A: (1) Contact the Tasker through secure messaging to try to resolve the issue. (2) If the task isn't completed satisfactorily, don't release the escrow payment. (3) Report the situation using the report feature. (4) Contact our support team via the Contact/Support option in the navigation menu.
+
+Q: Is my personal information safe?
+A: Yes. Minijobz takes privacy seriously. All communication happens within the platform, so you don't need to share personal contact details. Review our Privacy Policy for full details.
+
+
+NOTIFICATIONS
+--------------
+
+Q: What notifications will I receive?
+A: You'll receive notifications for: new offers on your tasks, accepted offers, task completions, new messages, direct quote requests, and other task activity updates.
+
+Q: Can I customize my notification preferences?
+A: Yes! Go to Profile > Settings > Notifications. You can toggle: email for each notification received, email digest summaries, and email alerts for direct quote requests.
+
+Q: How do I turn off email notifications?
+A: Go to Profile > Notifications and uncheck the email notification options you want to disable.
+
+Q: How do I clear my notifications?
+A: Click the "Mark all as read" button on your Notifications page to clear all notification badges.
+
+
+ACCESSIBILITY & SETTINGS
+--------------------------
+
+Q: Does Minijobz have accessibility features?
+A: Yes! Minijobz supports: High Contrast mode for improved readability (WCAG compliant), and Reduced Motion mode that disables animations for users sensitive to motion. These can be enabled from the Settings menu.
+
+Q: How do I enable High Contrast mode?
+A: Go to your Settings menu and toggle the High Contrast option. This increases visual contrast across the entire platform for better readability.
+
+Q: How do I switch between light and dark mode?
+A: Go to Settings > Preferences > Theme. Choose from Light or Dark.
+
+Q: How do I change the language?
+A: Use the Language option in the navigation bar or Settings menu to switch between English and Hungarian.
+
+
+EARNING MONEY
+--------------
+
+Q: How do I start earning money on Minijobz?
+A: (1) Sign up for a free account. (2) Complete your profile with your skills. (3) Browse available tasks. (4) Make offers on tasks that match your skills. (5) Complete tasks professionally. (6) Get paid when the task poster releases the payment. (7) Build your reputation with great reviews!
+
+Q: Do I need any qualifications to be a Tasker?
+A: There are no specific qualifications required to sign up. However, certain tasks may require specialized skills. Always be honest about your experience when making offers.
+
+Q: Can I choose which tasks I want to do?
+A: Absolutely! You have complete freedom to browse available tasks and only make offers on the ones that interest you and fit your schedule.
+
+Q: How much can I earn?
+A: Earnings depend on the tasks you complete. Task budgets range from €10 to €9,999. You can set your own rates when making offers.
+
+Q: Can I work remotely?
+A: Yes! Many tasks are posted as "Online/Remote," meaning you can complete them from anywhere. Filter for remote tasks on the Browse Tasks page.
+
+
+TROUBLESHOOTING
+----------------
+
+Q: I can't log in. What should I do?
+A: (1) Make sure you're using the correct email and password. (2) Try the "Forgot password?" link to reset your password. (3) If you signed up with Google, use the "Login with Google" button. (4) Clear your browser cache and try again. (5) If the issue persists, contact support.
+
+Q: My task isn't showing up in browse. Why?
+A: Make sure your task was published successfully. Check your My Tasks dashboard to see the task's status. If it shows as "Posted," it should appear in browse results. Note that filters may hide your task — try clearing all filters.
+
+Q: I'm not receiving email notifications. What's wrong?
+A: (1) Check your spam/junk folder. (2) Verify your notification preferences in Profile > Notifications. (3) Make sure your email address is correct in your profile settings.
+
+Q: The website looks different or broken. What can I do?
+A: (1) Try refreshing the page. (2) Clear your browser cache. (3) Check if you have High Contrast or Reduced Motion modes enabled in settings. (4) Try a different browser. (5) If the issue persists, contact support.
+
+Q: How do I contact Minijobz support?
+A: Use the "Contact / Support" option in the navigation menu or check the footer for contact information.

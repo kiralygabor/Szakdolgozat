@@ -43,12 +43,12 @@ class OfferAcceptedNotification extends Notification
         $url = route('tasks.show', ['task' => $this->task->id]);
 
         return (new MailMessage)
-            ->subject('Your Offer Was Accepted!')
-            ->greeting('Great news, ' . $notifiable->first_name . '!')
-            ->line($this->employer->first_name . ' has **accepted** your offer for the task **"' . $this->task->title . '"**.')
-            ->line('You can now start working on this task and communicate with the employer through the messaging system.')
-            ->action('View Task', $url)
-            ->line('Good luck with the task!');
+            ->subject(__('notifications.offer_accepted.subject'))
+            ->greeting(__('notifications.offer_accepted.greeting', ['name' => $notifiable->first_name]))
+            ->line(__('notifications.offer_accepted.line1', ['user' => $this->employer->first_name, 'task' => $this->task->title]))
+            ->line(__('notifications.offer_accepted.line2'))
+            ->action(__('notifications.offer_accepted.action'), $url)
+            ->line(__('notifications.offer_accepted.line3'));
     }
 
     /**
@@ -57,8 +57,8 @@ class OfferAcceptedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => $this->employer->first_name . ' has accepted your offer',
-            'message' => $this->employer->first_name . ' accepted your offer for "' . $this->task->title . '"',
+            'title' => __('notifications.offer_accepted.database_title', ['user' => $this->employer->first_name]),
+            'message' => __('notifications.offer_accepted.database_message', ['user' => $this->employer->first_name, 'task' => $this->task->title]),
             'link' => route('tasks.show', ['task' => $this->task->id]),
             'task_id' => $this->task->id,
             'type' => 'success'

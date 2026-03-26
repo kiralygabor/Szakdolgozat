@@ -137,8 +137,8 @@ class AuthController extends Controller
         $validated = $request->validate([
             'first_name'    => 'required|string|max:100',
             'last_name'     => 'required|string|max:100',
-            'birthdate'     => 'required|date',
-            'phone_number'  => 'required|string|max:20',
+            'birthdate'     => 'nullable|date',
+            'phone_number'  => 'nullable|string|max:20',
             'county_id'     => 'required|integer|exists:counties,id',
             'city_id'       => 'required|integer|exists:cities,id',
         ]);
@@ -164,12 +164,13 @@ class AuthController extends Controller
             'account_id'      => $accountId,
             'first_name'      => $validated['first_name'],
             'last_name'       => $validated['last_name'],
-            'birthdate'       => $validated['birthdate'],
-            'phone_number'    => $validated['phone_number'],
+            'birthdate'       => $validated['birthdate'] ?? null,
+            'phone_number'    => $validated['phone_number'] ?? null,
             'city_id'         => (int) $validated['city_id'],
             'avatar'          => 'assets/img/default.jpg',
             'email_notifications' => $request->has('email_notifications'),
             'email_task_digest' => $request->has('email_task_digest'),
+            'locale'          => session('locale', config('app.locale', 'en')),
         ]);
 
         // Sync tracked categories if opted in
@@ -184,7 +185,7 @@ class AuthController extends Controller
         ]);
 
         // Send verification email
-        Mail::to($user->email)->send(new VerifyMail($user, $verifyUser->token));
+        Mail::to($user->email)->locale($user->preferredLocale())->send(new VerifyMail($user, $verifyUser->token));
 
         // Clear registration data from session
         session()->forget('registration_form');
@@ -267,7 +268,7 @@ class AuthController extends Controller
             ['token' => rand(100000, 999999)]
         );
 
-        Mail::to($user->email)->send(new VerifyMail($user, $verifyUser->token));
+        Mail::to($user->email)->locale($user->preferredLocale())->send(new VerifyMail($user, $verifyUser->token));
 
         return back()->with('status', 'A new verification code has been sent.');
     }

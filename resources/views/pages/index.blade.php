@@ -586,7 +586,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span>
-              <span class="font-bold text-gray-900 text-lg">$85</span>
+              <span class="font-bold text-gray-900 text-lg">€85</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3>
           </div>
@@ -602,7 +602,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span>
-              <span class="font-bold text-gray-900 text-lg">$450</span>
+              <span class="font-bold text-gray-900 text-lg">€450</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3>
           </div>
@@ -618,7 +618,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span>
-              <span class="font-bold text-gray-900 text-lg">$120</span>
+              <span class="font-bold text-gray-900 text-lg">€120</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3>
           </div>
@@ -634,7 +634,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span>
-              <span class="font-bold text-gray-900 text-lg">$95</span>
+              <span class="font-bold text-gray-900 text-lg">€95</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3>
           </div>
@@ -648,36 +648,36 @@
         </div>
       <!-- CARD SET 2 (Duplicate) -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">$85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">€85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">$450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">€450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">$120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">€120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">$95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">€95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 reviews</span></div></div>
         </div>
       <!-- CARD SET 3 (Third Duplicate for seamless loop) -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">$85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">€85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">$450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">€450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">$120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">€120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">$95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">€95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 reviews</span></div></div>
         </div>
     </div>
@@ -689,7 +689,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span>
-              <span class="font-bold text-gray-900 text-lg">$60</span>
+              <span class="font-bold text-gray-900 text-lg">€60</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3>
           </div>
@@ -705,7 +705,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span>
-              <span class="font-bold text-gray-900 text-lg">$506</span>
+              <span class="font-bold text-gray-900 text-lg">€506</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3>
           </div>
@@ -721,7 +721,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span>
-              <span class="font-bold text-gray-900 text-lg">$75</span>
+              <span class="font-bold text-gray-900 text-lg">€75</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3>
           </div>
@@ -737,7 +737,7 @@
           <div>
             <div class="flex justify-between items-center mb-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span>
-              <span class="font-bold text-gray-900 text-lg">$150</span>
+              <span class="font-bold text-gray-900 text-lg">€150</span>
             </div>
             <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3>
           </div>
@@ -751,36 +751,36 @@
         </div>
       <!-- CARD SET 2 (THIS WAS MISSING: Duplicate for Loop) -->
          <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">$75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">€75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">$150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">€150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 reviews</span></div></div>
         </div>
       <!-- CARD SET 3 (Third Duplicate for seamless loop) -->
          <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">$506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">$75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">€75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 reviews</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">$150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">€150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 reviews</span></div></div>
         </div>
     </div>
@@ -877,7 +877,7 @@
              <div class="flex items-center gap-3">
               <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
               <div>
-                <p class="text-xs font-bold text-gray-900">New Offer: $45</p>
+                <p class="text-xs font-bold text-gray-900">New Offer: €45</p>
                 <p class="text-[10px] text-gray-500">James W. is interested</p>
               </div>
             </div>

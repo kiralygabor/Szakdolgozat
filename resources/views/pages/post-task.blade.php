@@ -594,7 +594,7 @@
 <p class="text-lg font-medium text-gray-800">{{ __('post-task.step4.budget_question') }}</p>
 <p class="text-gray-600 mb-4">{{ __('post-task.step4.negotiable') }}</p>
 <div class="flex items-stretch rounded-lg overflow-hidden border @error('price') is-invalid @enderror" id="budgetWrapper">
-<span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">$</span>
+<span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">€</span>
 <input id="budgetInput" name="price" type="number" min="10" max="9999" class="flex-1 p-3 outline-none" placeholder="{{ __('post-task.step4.budget_placeholder') }}" value="{{ old('price') }}">
 </div>
 <div id="budgetError" class="invalid-feedback-custom hidden">

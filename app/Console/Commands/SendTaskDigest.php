@@ -58,7 +58,7 @@ class SendTaskDigest extends Command
             });
 
             try {
-                Mail::to($user->email)->send(new TaskDigestMail($user, $tasksByCategory));
+                Mail::to($user->email)->locale($user->preferredLocale())->send(new TaskDigestMail($user, $tasksByCategory));
                 $sentCount++;
 
                 // Update last_digest_sent_at for each tracked category

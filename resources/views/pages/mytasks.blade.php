@@ -734,7 +734,7 @@
                                 </div>
                                 <h1 class="hero-headline">{{ __('mytasks.status.waiting_response') }}</h1>
                                 <p class="hero-subtext">
-                                    {{ __('mytasks.status.you_offered') }} <strong>£{{ number_format($myOffer->price ?? 0, 0) }}</strong>.
+                                    {{ __('mytasks.status.you_offered') }} <strong>€{{ number_format($myOffer->price ?? 0, 0) }}</strong>.
                                     {{ __('mytasks.status.notify_offers') }}
                                 </p>
                                 <div class="bg-blue-50 border border-blue-100 p-4 rounded-xl mt-6">
@@ -896,7 +896,7 @@
                                                         </div>
                                                         <div class="text-right">
                                                             <div class="text-base font-bold text-blue-600 leading-tight">
-                                                                £{{ number_format($offer->price, 0) }}
+                                                                €{{ number_format($offer->price, 0) }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1155,7 +1155,7 @@
                             <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-6">
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-medium text-indigo-700">{{ __('Their budget') }}</span>
-                                    <span class="text-lg font-bold text-indigo-800">£{{ number_format($activeTask->price ?? 0, 0) }}</span>
+                                    <span class="text-lg font-bold text-indigo-800">€{{ number_format($activeTask->price ?? 0, 0) }}</span>
                                 </div>
                             </div>
 
@@ -1163,7 +1163,7 @@
                             <form action="{{ route('tasks.accept-direct', $activeTask->id) }}" method="POST" class="mb-4">
                                 @csrf
                                 <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-green-600 text-white font-bold hover:bg-green-700 transition shadow-lg shadow-green-200 cursor-pointer">
-                                    <i data-feather="check" class="w-4 h-4"></i> {{ __('Accept at budget') }} (£{{ number_format($activeTask->price ?? 0, 0) }})
+                                    <i data-feather="check" class="w-4 h-4"></i> {{ __('Accept at budget') }} (€{{ number_format($activeTask->price ?? 0, 0) }})
                                 </button>
                             </form>
 
@@ -1177,7 +1177,7 @@
                             <form action="{{ route('tasks.offers.store', $activeTask->id) }}" method="POST">
                                 @csrf
                                 <div class="mb-4">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Your price (£)') }}</label>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Your price (€)') }}</label>
                                     <input type="number" name="offer_price" id="direct-quote-price" min="1" class="w-full border border-gray-300 rounded-xl p-3 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="Enter your price">
                                 </div>
                                 <div class="mb-6">
@@ -1661,7 +1661,7 @@
             document.getElementById('modal-offer-name').innerText = data.name;
             document.getElementById('modal-offer-rating').innerText = data.rating;
             document.getElementById('modal-offer-time').innerText = data.time + ' {{ __("mytasks.stats.ago") }}';
-            document.getElementById('modal-offer-price').innerText = '£' + data.price;
+            document.getElementById('modal-offer-price').innerText = '€' + data.price;
             document.getElementById('modal-offer-message').innerText = data.message;
 
             const profileLink = document.getElementById('modal-profile-link');

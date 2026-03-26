@@ -38,14 +38,14 @@ class NewMessageNotification extends Notification
         
         if ($this->message->attachment) {
             if ($this->message->attachment_type === 'image') {
-                $displayMessage = 'Sent an image' . ($this->message->body ? ': ' . $this->message->body : '');
+                $displayMessage = __('notifications.new_message.sent_image', ['body' => $this->message->body]);
             } else {
-                $displayMessage = 'Sent an attachment' . ($this->message->body ? ': ' . $this->message->body : '');
+                $displayMessage = __('notifications.new_message.sent_attachment', ['body' => $this->message->body]);
             }
         }
 
         return [
-            'title' => $this->sender->first_name . ' has sent a message',
+            'title' => __('notifications.new_message.database_title', ['user' => $this->sender->first_name]),
             'message' => $displayMessage,
             'link' => route('messages', ['user_id' => $this->sender->id]),
             'sender_id' => $this->sender->id,

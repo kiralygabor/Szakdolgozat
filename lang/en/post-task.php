@@ -57,7 +57,7 @@ return [
         'budget_question' => 'What is your budget?',
         'negotiable' => 'You can always negotiate the final price.',
         'budget_placeholder' => 'Enter budget',
-        'budget_error' => 'The price must be between $10 and $9999',
+        'budget_error' => 'The price must be between €10 and €9999',
     ],
     'nav' => [
         'back' => 'Back',

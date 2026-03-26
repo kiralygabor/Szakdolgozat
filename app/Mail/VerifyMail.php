@@ -28,7 +28,7 @@ class VerifyMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Verify your account')
+        return $this->subject(__('emails.verify_code.subject'))
             ->view('emails.verify-code')
             ->with([
                 'user' => $this->user,

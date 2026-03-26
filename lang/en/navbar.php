@@ -28,4 +28,13 @@ return [
     'system_default' => 'System Default',
     'help_faq' => 'Help / FAQ',
     'contact_support' => 'Contact / Support',
+    'english' => 'English',
+    'hungarian' => 'Hungarian',
+    'accessibility' => 'Accessibility',
+    'reduced_motion' => 'Reduced Motion',
+    'high_contrast' => 'High Contrast',
+    'mark_all_read' => 'Mark all read',
+    'no_notifications' => 'No notifications yet',
+    'view_all_notifications' => 'View all notifications',
+    'manage_account' => 'Manage your account',
 ];

@@ -7,11 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Utils\GeneratesAccountId;
+use Illuminate\Contracts\Translation\HasLocalePreference;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasLocalePreference
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Get the user's preferred locale.
+     */
+    public function preferredLocale(): string
+    {
+        return $this->locale ?? config('app.locale');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -33,6 +42,7 @@ class User extends Authenticatable
          'email_notifications',
          'email_task_digest',
          'email_direct_quotes',
+         'locale',
     ];
 
     /**

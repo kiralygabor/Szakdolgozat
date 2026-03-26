@@ -45,13 +45,13 @@ class NewOfferNotification extends Notification
         $url = route('my-tasks', ['task_id' => $this->task->id]);
 
         return (new MailMessage)
-            ->subject('New Offer on "' . $this->task->title . '"')
-            ->greeting('Hello ' . $notifiable->first_name . '!')
-            ->line($this->user->first_name . ' has made a **£' . $this->offer->price . '** offer on your task **"' . $this->task->title . '"**.')
-            ->line('**Message from ' . $this->user->first_name . ':**')
+            ->subject(__('notifications.new_offer.subject', ['task' => $this->task->title]))
+            ->greeting(__('notifications.new_offer.greeting', ['name' => $notifiable->first_name]))
+            ->line(__('notifications.new_offer.line1', ['user' => $this->user->first_name, 'price' => $this->offer->price, 'task' => $this->task->title]))
+            ->line(__('notifications.new_offer.line2', ['user' => $this->user->first_name]))
             ->line('"' . $this->offer->message . '"')
-            ->action('View Offers', $url)
-            ->line('Log in to review and accept or decline this offer.');
+            ->action(__('notifications.new_offer.action'), $url)
+            ->line(__('notifications.new_offer.line3'));
     }
 
     /**
@@ -60,8 +60,8 @@ class NewOfferNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => $this->user->first_name . ' has sent an offer',
-            'message' => $this->user->first_name . ' made a £' . $this->offer->price . ' offer for "' . $this->task->title . '"',
+            'title' => __('notifications.new_offer.database_title', ['user' => $this->user->first_name]),
+            'message' => __('notifications.new_offer.database_message', ['user' => $this->user->first_name, 'price' => $this->offer->price, 'task' => $this->task->title]),
             'link' => route('my-tasks', ['task_id' => $this->task->id]),
             'offer_id' => $this->offer->id,
             'task_id' => $this->task->id,

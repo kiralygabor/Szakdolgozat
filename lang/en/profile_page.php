@@ -60,6 +60,11 @@ return [
         'task_digest_desc' => 'Send me a daily summary of new tasks in categories I follow.',
         'tracked_categories' => 'Tracked Categories:',
         'save' => 'Save Preferences',
+        'manual_digest' => 'Send Manual Digest',
+        'manual_digest_desc' => 'Send an email with the latest tasks from your tracked categories right now!',
+        'digest_sent' => 'Your task digest has been sent to your email!',
+        'no_new_tasks' => 'No new tasks in your tracked categories in the last 24 hours.',
+        'no_tracked_categories' => 'You need to track at least one category to receive a digest.',
     ],
     'billing' => [
         'title' => 'Billing',

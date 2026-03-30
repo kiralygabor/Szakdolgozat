@@ -1,9 +1,9 @@
 <!-- resources/views/auth/forgot-password.blade.php -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
-    <title>Forgot Password</title>
+    <title>{{ __('auth_pages.forgot_password.title') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -11,7 +11,7 @@
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card shadow-sm p-4">
-                <h3 class="mb-4 text-center">Forgot Password</h3>
+                <h3 class="mb-4 text-center">{{ __('auth_pages.forgot_password.title') }}</h3>
 
                 @if (session('status'))
                     <div class="alert alert-success">{{ session('status') }}</div>
@@ -30,14 +30,14 @@
                 <form method="POST" action="{{ route('password.email') }}">
                     @csrf
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
+                        <label for="email" class="form-label">{{ __('auth_pages.forgot_password.email_label') }}</label>
                         <input type="email" name="email" id="email" class="form-control" required autofocus>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                        <button type="submit" class="btn btn-primary">{{ __('auth_pages.forgot_password.send_link_btn') }}</button>
                     </div>
                     <div class="mt-3 text-center">
-                        <a href="{{ route('login') }}">Back to Login</a>
+                        <a href="{{ route('login') }}">{{ __('auth_pages.forgot_password.back_to_login') }}</a>
                     </div>
                 </form>
             </div>

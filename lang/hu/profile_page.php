@@ -58,8 +58,13 @@ return [
         'direct_quotes_desc' => 'E-mail küldése, ha valaki kifejezetten tőlem kér ajánlatot',
         'task_digest' => 'Feladat összefoglaló',
         'task_digest_desc' => 'Napi összefoglaló az új feladatokról a követett kategóriákban.',
-        'tracked_categories' => 'Követett kategóriák:',
+        'tracked_categories' => 'Követett kategóriák',
         'save' => 'Beállítások mentése',
+        'manual_digest' => 'Azonnali összefoglaló kérése',
+        'manual_digest_desc' => 'Küldjünk egy e-mailt a kategóriáidba illő legfrissebb feladatokról!',
+        'digest_sent' => 'Az összefoglaló e-mailt elküldtük!',
+        'no_new_tasks' => 'Nincs új feladat a kategóriáidban az elmúlt 24 órában.',
+        'no_tracked_categories' => 'Legalább egy kategóriát ki kell választanod az e-mail kéréséhez.',
     ],
     'billing' => [
         'title' => 'Számlázás',
@@ -84,7 +89,7 @@ return [
         'invalid_suburb' => 'Kérjük, válasszon egy érvényes várost a listából.',
         'agree_terms' => 'Elfogadom az <a href=":terms_url" target="_blank" class="text-blue-600 hover:underline">Általános Szerződési Feltételeket</a>, a <a href=":guidelines_url" target="_blank" class="text-blue-600 hover:underline">Közösségi Irányelveket</a> és az <a href=":privacy_url" target="_blank" class="text-blue-600 hover:underline">Adatvédelmi Nyilatkozatot</a> *',
         'email_updates' => 'Kérek e-mail értesítést, ha ajánlat érkezik a feladatomra, vagy ha az ajánlatomat elfogadják',
-        'select_categories' => 'Követni kívánt kategóriák kiválasztása:',
+        'select_categories' => 'Követett kategóriák',
         'complete_account' => 'Fiók létrehozása',
     ],
 ];

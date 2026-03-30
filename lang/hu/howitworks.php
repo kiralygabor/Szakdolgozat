@@ -1,57 +1,46 @@
 <?php
 
 return [
-    'hero_title' => 'Add fel az első feladatodat <br class="hidden md:block"> percek alatt',
-    'hero_desc' => 'Akár otthoni segítségre van szükséged, akár szakemberre, a Minijobz a legegyszerűbb módja a feladatok elvégzésének.',
-    'hero_btn' => 'Indítsd el az első feladatod',
-    'step1' => [
-        'badge' => '1. lépés',
-        'title' => 'Írd le, mit szeretnél elvégeztetni',
-        'desc' => 'Írd le pár mondatban az elvégzendő feladatot. Fogalmazz egyszerűen és világosan, hogy a legjobb szakembereket vonzd be.',
-    ],
-    'step2' => [
-        'badge' => '2. lépés',
-        'title' => 'Állítsd be a költségvetésed',
-        'desc' => 'Ne aggódj, a költségvetésen később is módosíthatsz, és egyeztethetsz a lehetséges szakemberekkel, ha szükséges.',
-    ],
-    'step3' => [
-        'badge' => '3. lépés',
-        'title' => 'Kapj ajánlatokat. Válaszd ki a legalkalmasabb szakembert.',
-        'desc' => 'Tekintsd meg a profilokat, értékeléseket és véleményeket, hogy kiválaszd azt a szakembert, akivel dolgozni szeretnél.',
-    ],
-    'step4' => [
-        'badge' => '4. lépés',
-        'title' => 'Biztonságos üzenetküldés',
-        'desc' => 'Miután kiosztottad a feladatot, tartsátok a kapcsolatot biztonságos csevegőnkön a részletek véglegesítéséhez.',
-    ],
-    'step5' => [
-        'badge' => '5. lépés',
-        'title' => 'Végezd el a munkát',
-        'desc' => 'Dőlj hátra és lazíts, amíg a szakember biztonságosan és szakszerűen elvégzi a munkát.',
-    ],
-    'step6' => [
-        'badge' => '6. lépés',
-        'title' => 'Hagyj véleményt',
-        'desc' => 'Ha a feladat elkészült, köszönd meg a munkát a kifizetés jóváhagyásával és egy vélemény írásával.',
-    ],
-    'btn_text' => 'Hirdesd meg feladatod ingyen',
-    'safety' => [
-        'title' => 'A biztonság az elsődleges',
-        'desc' => 'Eszközöket építettünk ki, hogy nyugodt lehess.',
-        'insurance_title' => 'Biztosítási fedezet',
-        'insurance_desc' => 'A szakembereket speciális biztosításunk védi a nyugalom érdekében.',
-        'payments_title' => 'Biztonságos kifizetések',
-        'payments_desc' => 'A kifizetést biztonságosan letétben tartjuk a munka befejezéséig.',
-        'reviews_title' => 'Ellenőrzött vélemények',
-        'reviews_desc' => 'Fogadj fel szakembert bizalommal átlátható értékelési rendszerünkkel.',
-    ],
-    'earn' => [
-        'title' => 'Pénzt szeretnél keresni?',
-        'desc' => 'Csatlakozz szakembereink közösségéhez. Találj munkát, amely megfelel a képességeidnek és beosztásodnak.',
-        'btn' => 'Legyél szakember',
-    ],
-    'app' => [
-        'title' => 'A Minijobz Alkalmazás',
-        'desc' => 'Értesítések, üzenetküldés és feladatkezelés – minden a zsebedben.',
-    ],
+    'hero_title' => 'Tedd közzé az első feladatod <br> <span class="text-indigo-600">percek alatt</span>',
+    'hero_subtitle' => 'Akár otthoni segítségre, akár szakemberre van szükséged, a Minijobz a legegyszerűbb módja a dolgok elvégzésének.',
+    'post_task' => 'Feladat közzététele',
+    
+    'step_1_title' => 'Írd le, mire van szükséged',
+    'step_1_desc' => 'A közzététel ingyenes. Csak mondd el, mit, mikor és hol kell megcsinálni. Akár fotókat is feltölthetsz, hogy a szakemberek jobban megértsék a feladatot.',
+    'step_1_li_1' => 'Állíts be egy reális költségkeretet',
+    'step_1_li_2' => 'Válassz dátumot és időpontot',
+    
+    'step_2_title' => 'Állítsd be a költségkereted',
+    'step_2_desc' => "Te határozod meg a költségkereted. Állítsd be az árat, amit hajlandó vagy kifizetni, vagy hagyd, hogy a szakemberek tegyenek ajánlatot. Hasonlítsd össze az ajánlatokat, és válaszd ki azt, amelyik leginkább megfelel az igényeidnek és a pénztárcádnak.",
+    'step_2_li_1' => 'Állítsd be saját áradat vagy kérj árajánlatokat',
+    'step_2_li_2' => 'Hasonlítsd össze több szakember ajánlatát',
+    
+    'step_3_title' => 'Visszajelzések és választás',
+    'step_3_desc' => 'Kérj árajánlatokat az elérhető szakemberektől. Nézd meg a profiljukat, az értékeléseiket és a teljesítési arányukat, hogy megtaláld a feladathoz legalkalmasabb személyt.',
+    'step_3_li_1' => 'Tekintsd meg a szakemberek profilját és értékeléseit',
+    'step_3_li_2' => 'Csevegj közvetlenül a szakemberekkel',
+    
+    'step_4_title' => 'Kész is van',
+    'step_4_desc' => "Amikor a feladat elkészült, egyszerűen hagyd jóvá a fizetést. Ilyen egyszerű! A kifizetésedet a Minijobz Pay biztonságban tartja, amíg a munka be nem fejeződik.",
+    'happy_users' => 'Több mint 20 000 elégedett felhasználó',
+    
+    'safety_title' => "Mindenre gondoltunk",
+    'safety_subtitle' => 'Legyen szó feladat közzétételéről vagy elvégzéséről, mindkettőt nyugodt szívvel teheted, mert a Minijobz támogatást nyújt.',
+    'insurance_1_title' => 'Felelősségbiztosítás',
+    'insurance_1_desc' => 'A Minijobz biztosítás fedezi a megrendelőnek okozott véletlen sérüléseket vagy az anyagi károkat bizonyos feladatok elvégzése során.',
+    'insurance_2_title' => 'Kiváló minősítésű biztosítás',
+    'insurance_2_desc' => 'A Minijobz biztosítást világszínvonalú partnerek nyújtják, így a világ egyik legelismertebb, legstabilabb és leginnovatívabb biztosítási hátterét élvezheted.',
+    
+    'reviews_title' => 'Értékelések és vélemények',
+    'reviews_desc' => "Tekintsd meg a szakemberek portfólióját, készségeit és jelvényeit a profiljukon, valamint nézd meg a hitelesített értékeléseiket és teljesítési arányukat korábbi feladataik alapján. Ez segít abban, hogy biztosan a megfelelő embert válaszd a feladathoz.",
+    
+    'communication_title' => 'Kommunikáció',
+    'communication_desc' => 'Használd a Minijobz-ot a kapcsolattartásra a feladat közzétételétől egészen a befejezésig. Az ajánlat elfogadása után privát üzenetben egyeztetheted az utolsó részleteket.',
+    
+    'get_started' => 'Kezdd el ingyen',
+    
+    'mockup_completed' => 'Feladat befejezve!',
+    'mockup_released' => 'Kifizetés elküldve',
+    'mockup_new_offer' => 'Új ajánlat: €45',
+    'mockup_interested' => ':name érdeklődik',
 ];

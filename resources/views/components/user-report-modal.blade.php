@@ -19,9 +19,9 @@
 
             <!-- Header -->
             <div class="text-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">Report User</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('report_modal.report_user_title') }}</h2>
                 <p class="text-gray-500 text-sm leading-relaxed">
-                    Help us keep Minijobz safe by reporting suspicious or inappropriate behavior.
+                    {{ __('report_modal.user_desc') }}
                 </p>
             </div>
 
@@ -33,19 +33,19 @@
                 <!-- Description Textarea -->
                 <div class="mb-6">
                     <label for="user-report-description" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Reason for reporting <span class="text-red-500">*</span>
+                        {{ __('report_modal.reason_label') }} <span class="text-red-500">*</span>
                     </label>
                     <textarea 
-                        name="description" 
-                        id="user-report-description" 
-                        rows="5" 
-                        required
-                        minlength="10"
-                        maxlength="1000"
-                        placeholder="Please provide details about why you're reporting this user..."
-                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none resize-none text-sm"
+                         name="description" 
+                         id="user-report-description" 
+                         rows="5" 
+                         required
+                         minlength="10"
+                         maxlength="1000"
+                         placeholder="{{ __('report_modal.user_placeholder') }}"
+                         class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-100 outline-none resize-none text-sm"
                     ></textarea>
-                    <p class="text-xs text-gray-500 mt-1">Minimum 10 characters</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ __('report_modal.min_chars') }}</p>
                 </div>
 
                 <!-- Action Buttons -->
@@ -55,13 +55,13 @@
                         onclick="closeUserReportModal()"
                         class="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors"
                     >
-                        Cancel
+                        {{ __('report_modal.cancel') }}
                     </button>
                     <button 
                         type="submit"
                         class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
                     >
-                        Submit Report
+                        {{ __('report_modal.submit') }}
                     </button>
                 </div>
             </form>

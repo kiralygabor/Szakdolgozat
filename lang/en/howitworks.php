@@ -1,57 +1,46 @@
 <?php
 
 return [
-    'hero_title' => 'Post your first task <br class="hidden md:block"> in minutes',
-    'hero_desc' => 'Whether you need a hand around the house or a specialized professional, Minijobz is the easiest way to get things done.',
-    'hero_btn' => 'Start your first task',
-    'step1' => [
-        'badge' => 'Step 1',
-        'title' => 'Describe what you need done',
-        'desc' => 'Describe what you need done in a few sentences. Keep it simple and clear to attract the best Taskers.',
-    ],
-    'step2' => [
-        'badge' => 'Step 2',
-        'title' => 'Set your budget',
-        'desc' => 'Don’t worry, you can adjust your budget later and discuss it with potential Taskers if needed.',
-    ],
-    'step3' => [
-        'badge' => 'Step 3',
-        'title' => 'Receive quotes. Pick the most suitable Tasker.',
-        'desc' => 'Take a look at profiles, ratings, completion rate and reviews to pick the Tasker you’d like to work with.',
-    ],
-    'step4' => [
-        'badge' => 'Step 4',
-        'title' => 'Secure messaging',
-        'desc' => 'Once you’ve assigned your task, stay in contact with our secure chat to finalize details.',
-    ],
-    'step5' => [
-        'badge' => 'Step 5',
-        'title' => 'Get it done',
-        'desc' => 'Sit back and relax while your Tasker completes the job safely and professionally.',
-    ],
-    'step6' => [
-        'badge' => 'Step 6',
-        'title' => 'Leave a review',
-        'desc' => 'When the task is done, say thanks by releasing payment and writing a review so everyone can know what a great job they’ve done.',
-    ],
-    'btn_text' => 'Post your task for free',
-    'safety' => [
-        'title' => 'Safety is our priority',
-        'desc' => 'We’ve built tools to ensure you have peace of mind.',
-        'insurance_title' => 'Insurance Coverage',
-        'insurance_desc' => 'Taskers are covered by our specialized insurance for peace of mind.',
-        'payments_title' => 'Secure Payments',
-        'payments_desc' => 'Payment is held securely in escrow until the job is complete.',
-        'reviews_title' => 'Verified Reviews',
-        'reviews_desc' => 'Hire with confidence using our transparent rating system.',
-    ],
-    'earn' => [
-        'title' => 'Want to earn money?',
-        'desc' => 'Join our community of Taskers. Find work that fits your skills and your schedule. You choose the tasks you want to do.',
-        'btn' => 'Become a Tasker',
-    ],
-    'app' => [
-        'title' => 'The Minijobz App',
-        'desc' => 'Get notifications, message taskers, and manage your tasks on the go.',
-    ],
+    'hero_title' => 'Post your first task <br> <span class="text-indigo-600">in minutes</span>',
+    'hero_subtitle' => 'Whether you need a hand around the house or a specialized professional, Minijobz is the easiest way to get things done.',
+    'post_task' => 'Post a task',
+    
+    'step_1_title' => 'Describe what you need',
+    'step_1_desc' => 'It’s free to post. Simply tell us what you need done, when and where you need it. You can even upload photos to help Taskers understand the job.',
+    'step_1_li_1' => 'Set a realistic budget',
+    'step_1_li_2' => 'Choose a date and time',
+    
+    'step_2_title' => 'Set your budget',
+    'step_2_desc' => "You're in control of your budget. Set the price you're willing to pay, or let Taskers suggest their own rates. Compare offers and choose the one that fits your needs and budget best.",
+    'step_2_li_1' => 'Set your own price or receive quotes',
+    'step_2_li_2' => 'Compare offers from multiple Taskers',
+    
+    'step_3_title' => 'Review & Choose',
+    'step_3_desc' => 'Receive quotes from available Taskers. Review their profiles, ratings, and completion rates to find the perfect match for your task.',
+    'step_3_li_1' => 'View Tasker profiles and reviews',
+    'step_3_li_2' => 'Chat directly with Taskers',
+    
+    'step_4_title' => 'Get it done',
+    'step_4_desc' => "When the task is complete, simply release the payment. It's that easy! Your payment is held securely by Minijobz Pay until the job is finished.",
+    'happy_users' => '20,000+ happy users',
+    
+    'safety_title' => "We've got you covered",
+    'safety_subtitle' => 'Whether you’re a posting a task or completing a task, you can do both with the peace of mind that Minijobz is there to support.',
+    'insurance_1_title' => 'Public liability insurance',
+    'insurance_1_desc' => 'Minijobz Insurance covers you for any accidental injury to the customer or property damage whilst performing certain task activities.',
+    'insurance_2_title' => 'Top rated insurance',
+    'insurance_2_desc' => 'Minijobz Insurance is provided by world-class partners, ensuring some of the world’s most reputable, stable and innovative insurance support.',
+    
+    'reviews_title' => 'Ratings & reviews',
+    'reviews_desc' => "Review Tasker's portfolios, skills, badges on their profile, and see their transaction verified ratings, reviews & completion rating (to see their reliability) on tasks they’ve previously completed on Minijobz. This empowers you to make sure you’re choosing the right person for your task.",
+    
+    'communication_title' => 'Communication',
+    'communication_desc' => 'Use Minijobz to stay in contact from the moment your task is posted until it’s completed. Accept an offer and you can privately message the Tasker to discuss final details, and get your task completed.',
+    
+    'get_started' => 'Get started for free',
+    
+    'mockup_completed' => 'Task Completed!',
+    'mockup_released' => 'Payment Released',
+    'mockup_new_offer' => 'New Offer: €45',
+    'mockup_interested' => ':name is interested',
 ];

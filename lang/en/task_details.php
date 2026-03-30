@@ -8,8 +8,11 @@ return [
     ],
     'return' => 'Return to map',
     'posted_by' => 'Posted by',
+    'unknown' => 'Unknown',
     'location' => 'Location',
-    'to_be_done' => 'To be done on',
+    'remote' => 'Remote',
+    'to_be_done' => 'To be done',
+    'on' => 'on',
     'anytime' => 'Anytime',
     'applications' => [
         'label' => 'Applications',
@@ -19,7 +22,7 @@ return [
     ],
     'budget' => [
         'label' => 'Task Budget',
-        'currency' => 'GBP',
+        'currency' => '€',
     ],
     'status' => [
         'open' => 'Open for offers',

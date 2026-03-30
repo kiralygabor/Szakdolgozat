@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Email Verification</title>
+  <title>{{ __('auth_pages.verify_code.title') }}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -103,27 +103,71 @@
       border-color: #007AFF;
       box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
     }
+    
+    /* Accessibility Modes */
+    .high-contrast body, .high-contrast .auth-wrapper {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .high-contrast p, .high-contrast span, .high-contrast label, .high-contrast .auth-subtitle, .high-contrast .step-header {
+      color: #000000 !important;
+      font-weight: 800 !important;
+    }
+    .high-contrast .auth-box {
+      border: 3px solid #000000 !important;
+    }
+    .high-contrast .form-control {
+      border: 3px solid #000000 !important;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .high-contrast .btn-primary {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 3px solid #000000 !important;
+      font-weight: 900 !important;
+    }
+    .high-contrast a:hover:not(.logo-link) {
+      text-decoration: underline !important;
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+    .high-contrast a.logo-link:hover {
+      background-color: transparent !important;
+    }
   </style>
+  
+  <script>
+    (function(){
+      var root = document.documentElement;
+      if(localStorage.getItem('high-contrast') === 'true') root.classList.add('high-contrast');
+      if(localStorage.getItem('reduced-motion') === 'true') root.classList.add('reduced-motion');
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark');
+      }
+    })();
+  </script>
 </head>
 <body>
  
 <div class="auth-wrapper">
  
   <!-- Title + Subtitle -->
-  <a href="{{ route('index') }}">
+  <a href="{{ route('index') }}" class="logo-link">
     <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" style="height: 60px; width: auto; margin: 0 auto 15px;">
   </a>
   <p class="auth-subtitle">
-    You are signed in as <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>.  
-    For added security,<br> you’ll need to verify your identity in a quick steps.
+    {{ __('auth_pages.verify_code.signed_in_as') }} <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>.  
+    {{ __('auth_pages.verify_code.security_intro') }}
   </p>
  
   <!-- Verification Box -->
   <div class="auth-box">
-    <div class="step-header">Step 1: Verify email address</div>
+    <div class="step-header">{{ __('auth_pages.verify_code.step1') }}</div>
     <div class="step-body">
  
-      <p>We’ve sent a verification code to
+      <p>{{ __('auth_pages.verify_code.sent_to') }}
         <strong>{{ Str::maskEmail($user->email) }}</strong>
       </p>
  
@@ -152,11 +196,11 @@
         </div>
  
         <div class="d-grid mb-3">
-          <button type="submit" class="btn btn-primary">Verify email address</button>
+          <button type="submit" class="btn btn-primary">{{ __('auth_pages.verify_code.verify_btn') }}</button>
         </div>
  
         <div class="small-text text-center mt-3">
-          Having trouble? <a href="{{ route('resend.code') }}">Send a new code</a> or <a href="{{ route('contact-support') }}" target="_blank">contact support</a>.
+          {{ __('auth_pages.verify_code.trouble') }} <a href="{{ route('resend.code') }}">{{ __('auth_pages.verify_code.resend_link') }}</a> {{ __('navbar.or') ?? 'or' }} <a href="{{ route('contact-support') }}" target="_blank">{{ __('auth_pages.verify_code.contact_support') }}</a>.
         </div>
       </form>
     </div>

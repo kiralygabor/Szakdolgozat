@@ -70,9 +70,10 @@
                                                {{ $loop->first ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600' }}"
                                         data-id="{{ $category->id }}"
                                         data-name="{{ $category->name }}"
-                                        data-desc="{{ $category->description ?? '' }}"
+                                        data-name-translated="{{ __('categories.' . $category->name) }}"
+                                        data-desc-translated="{{ __('categories.' . $category->name . '_desc') }}"
                                         data-image="{{ $category->image_url ?? $fallbackImage }}">
-                                        {{ $category->name }}
+                                        {{ __('categories.' . $category->name) }}
                                     </button>
                                 </li>
                             @endforeach
@@ -92,7 +93,7 @@
                 <!-- Title & Image Section -->
                 <div class="text-center mb-6 md:mb-8">
                     <h1 id="cat-title" class="text-2xl sm:text-4xl font-bold text-gray-900 mb-4 md:mb-10">
-                        {{ $firstCategory->name ?? __('category_page.fallback_title') }}
+                        {{ $firstCategory ? __('categories.' . $firstCategory->name) : __('category_page.fallback_title') }}
                     </h1>
  
                     <!-- Increased height by 30px -->
@@ -101,7 +102,7 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 text-white text-center">
                             <p id="cat-desc" class="text-sm sm:text-lg font-medium leading-relaxed max-w-3xl mx-auto drop-shadow-lg px-2">
-                                {{ $firstCategory->description ?? __('category_page.fallback_desc') }}
+                                {{ $firstCategory ? __('categories.' . $firstCategory->name . '_desc') : __('category_page.fallback_desc') }}
                             </p>
                         </div>
                     </div>
@@ -269,8 +270,8 @@
             "w-max md:w-full text-left text-sm sm:text-base px-4 md:px-3 py-2 rounded-lg transition-colors duration-200 bg-blue-50 text-blue-700 font-semibold whitespace-nowrap";
  
         state.categoryId = btn.getAttribute('data-id');
-        elements.title.textContent = btn.getAttribute('data-name');
-        elements.desc.textContent = btn.getAttribute('data-desc');
+        elements.title.textContent = btn.getAttribute('data-name-translated');
+        elements.desc.textContent = btn.getAttribute('data-desc-translated');
         elements.img.src = btn.getAttribute('data-image');
  
         renderJobs(state.categoryId);

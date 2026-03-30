@@ -12,4 +12,12 @@ return [
     'pages' => 'Oldalak',
     'all_rights_reserved' => 'Minden jog fenntartva.',
     'copyright_authors' => 'Király Gábor - Praszna Koppány - Nagy Gergely',
+    'handyman' => 'Ezermester',
+    'cleaning' => 'Takarítás',
+    'delivery' => 'Szállítás',
+    'gardening' => 'Kertészkedés',
+    'removals' => 'Költöztetés',
+    'moving' => 'Költöztetés',
+    'assembly' => 'Összeszerelés',
+    'tech' => 'Technológia',
 ];

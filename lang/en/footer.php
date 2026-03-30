@@ -12,4 +12,12 @@ return [
     'pages' => 'Pages',
     'all_rights_reserved' => 'All rights reserved.',
     'copyright_authors' => 'Király Gábor - Praszna Koppány - Nagy Gergely',
+    'handyman' => 'Handyman',
+    'cleaning' => 'Cleaning',
+    'delivery' => 'Delivery',
+    'gardening' => 'Gardening',
+    'removals' => 'Removals',
+    'moving' => 'Moving',
+    'assembly' => 'Assembly',
+    'tech' => 'Tech',
 ];

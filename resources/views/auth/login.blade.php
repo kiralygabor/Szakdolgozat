@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login - Minijobz</title>
+  <title>{{ __('auth_pages.login.title') }} - Minijobz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -135,10 +135,13 @@
       background-color: #ffffff !important;
       font-weight: 900 !important;
     }
-    .high-contrast a:hover {
+    .high-contrast a:hover:not(.logo-link) {
       text-decoration: underline !important;
       background-color: #000000 !important;
       color: #ffffff !important;
+    }
+    .high-contrast a.logo-link:hover {
+      background-color: transparent !important;
     }
   </style>
  
@@ -159,11 +162,11 @@
 <div class="auth-wrapper">
   <div class="auth-box">
     <div style="margin-bottom: 24px;">
-      <a href="{{ url('/') }}">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" style="height: 48px; width: auto;">
+      <a href="{{ route('index') }}" class="logo-link">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" style="height: 48px; width: auto;" class="logo-img">
       </a>
     </div>
-    <h2 class="auth-title">Login to your account</h2>
+    <h2 class="auth-title">{{ __('auth_pages.login.title') }}</h2>
  
     <!-- Success / Warning / Errors -->
     @if (session('status'))
@@ -185,7 +188,7 @@
       <!-- Email -->
       <div class="mb-3">
         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-               placeholder="Email" required>
+               placeholder="{{ __('auth_pages.login.email_placeholder') }}" required>
         @error('email')
           <span class="text-danger small">{{ $message }}</span>
         @enderror
@@ -195,7 +198,7 @@
       <div class="mb-3">
         <div class="position-relative">
           <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror"
-                 placeholder="Password" required>
+                 placeholder="{{ __('auth_pages.login.password_placeholder') }}" required>
           <i class="fa fa-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 password-toggle" id="togglePassword"></i>
         </div>
         @error('password')
@@ -207,30 +210,30 @@
       <div class="remember-forgot">
         <div class="form-check">
           <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe">
-          <label class="form-check-label text-secondary" for="rememberMe">Remember me</label>
+          <label class="form-check-label text-secondary" for="rememberMe">{{ __('auth_pages.login.remember_me') }}</label>
         </div>
         <!-- Trigger Modal -->
         <a href="#" class="auth-links" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
-          {{ __('Forgot password?') }}
+          {{ __('auth_pages.login.forgot_password') }}
         </a>
       </div>
  
       <!-- Login Button -->
       <div class="d-grid mb-3">
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary">{{ __('auth_pages.login.login_btn') }}</button>
       </div>
  
       <div class="auth-links mb-3">
-        <p class="mb-1">Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>
+        <p class="mb-1">{{ __('auth_pages.login.no_account') }} <a href="{{ route('register') }}">{{ __('auth_pages.login.signup_link') }}</a></p>
       </div>
  
-      <div class="divider">OR</div>
+      <div class="divider">{{ __('auth_pages.login.or') }}</div>
  
       <!-- Google Continue -->
       <div class="d-grid mb-2">
         <a href="{{ route('login.google') }}" class="btn btn-outline">
           <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" width="20" class="me-2">
-          Login with Google
+          {{ __('auth_pages.login.login_google') }}
         </a>
       </div>
  
@@ -238,7 +241,7 @@
       <div class="d-grid">
         <button type="button" class="btn btn-outline">
           <img src="https://www.svgrepo.com/show/349574/facebook.svg" alt="Facebook" width="20" class="me-2">
-          Login with Facebook
+          {{ __('auth_pages.login.login_facebook') }}
         </button>
       </div>
     </form>
@@ -250,7 +253,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4" style="border-radius: 16px;">
       <div class="modal-header border-0">
-        <h5 class="modal-title auth-title" id="forgotPasswordModalLabel">Reset your password</h5>
+        <h5 class="modal-title auth-title" id="forgotPasswordModalLabel">{{ __('auth_pages.forgot_password.reset_title') }}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
  
@@ -258,10 +261,10 @@
         <form method="POST" action="{{ route('password.email') }}">
           @csrf
           <div class="mb-3">
-            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+            <input type="email" name="email" class="form-control" placeholder="{{ __('auth_pages.forgot_password.email_placeholder') }}" required>
           </div>
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Send Reset Link</button>
+            <button type="submit" class="btn btn-primary">{{ __('auth_pages.forgot_password.send_link_btn') }}</button>
           </div>
         </form>
       </div>

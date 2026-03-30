@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign Up - Minijobz</title>
+  <title>{{ __('auth_pages.register.title') }} - Minijobz</title>
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -214,10 +214,13 @@
       background-color: #ffffff !important;
       font-weight: 900 !important;
     }
-    .high-contrast a:hover {
+    .high-contrast a:hover:not(.logo-link) {
       text-decoration: underline !important;
       background-color: #000000 !important;
       color: #ffffff !important;
+    }
+    .high-contrast a.logo-link:hover {
+      background-color: transparent !important;
     }
   </style>
  
@@ -238,11 +241,11 @@
 <div class="auth-wrapper">
   <div class="auth-box">
     <div style="margin-bottom: 24px;">
-      <a href="{{ url('/') }}">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" style="height: 48px; width: auto;">
+      <a href="{{ route('index') }}" class="logo-link">
+        <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz" style="height: 48px; width: auto;" class="logo-img">
       </a>
     </div>
-    <h2 class="auth-title">Sign up to your account</h2>
+    <h2 class="auth-title">{{ __('auth_pages.register.title') }}</h2>
  
     <!-- Generic Status Messages (Success/Warnings) -->
     @if (session('status'))
@@ -260,7 +263,7 @@
       <div class="mb-3">
         <input type="email" name="email"
                class="form-control @error('email') is-invalid @enderror"
-               placeholder="Email"
+               placeholder="{{ __('auth_pages.register.email_placeholder') }}"
                value="{{ $prefill['email'] ?? old('email') }}" required>
         @error('email')
           <span class="invalid-feedback-custom">{{ $message }}</span>
@@ -272,7 +275,7 @@
         <div class="position-relative">
           <input type="password" name="password" id="password"
                  class="form-control @error('password') is-invalid @enderror"
-                 placeholder="Password" required>
+                 placeholder="{{ __('auth_pages.register.password_placeholder') }}" required>
           <i class="fa fa-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 password-toggle" data-target="password"></i>
         </div>
         @error('password')
@@ -285,7 +288,7 @@
         <div class="position-relative">
           <input type="password" name="password_confirmation" id="password_confirmation"
                  class="form-control @error('password_confirmation') is-invalid @enderror"
-                 placeholder="Confirm Password" required>
+                 placeholder="{{ __('auth_pages.register.confirm_password_placeholder') }}" required>
           <i class="fa fa-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 password-toggle" data-target="password_confirmation"></i>
         </div>
         @error('password_confirmation')
@@ -295,25 +298,25 @@
  
       <!-- Register Button -->
       <div class="d-grid mb-4">
-        <button type="submit" class="btn btn-primary">Sign up</button>
+        <button type="submit" class="btn btn-primary">{{ __('auth_pages.register.signup_btn') }}</button>
       </div>
  
       <div class="auth-links mb-4">
-        <p class="mb-0">Already have an account? <a href="{{ route('login') }}">Login</a></p>
+        <p class="mb-0">{{ __('auth_pages.register.have_account') }} <a href="{{ route('login') }}">{{ __('auth_pages.register.login_link') }}</a></p>
       </div>
  
-      <div class="divider">OR</div>
+      <div class="divider">{{ __('auth_pages.register.or') }}</div>
  
       <!-- Social Logins -->
       <div class="d-grid gap-2">
         <a href="{{ route('login.google') }}" class="btn btn-outline">
           <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google">
-          Continue with Google
+          {{ __('auth_pages.register.continue_google') }}
         </a>
  
         <button type="button" class="btn btn-outline">
           <img src="https://www.svgrepo.com/show/349574/facebook.svg" alt="Facebook">
-          Continue with Facebook
+          {{ __('auth_pages.register.continue_facebook') }}
         </button>
       </div>
     </form>

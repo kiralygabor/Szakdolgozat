@@ -17,4 +17,8 @@ return [
     'select_chat_title' => 'Az Ön üzenetei',
     'select_chat_desc' => 'Válasszon egy beszélgetést az oldalsávból az üzenetküldés megkezdéséhez, vagy böngésszen a feladatok között, hogy új lehetőségeket találjon.',
     'no_active_chats' => 'Még nincsenek aktív üzenetei.',
+    'attachment' => 'Melléklet',
+    'sent_image' => 'Képet küldött',
+    'sent_file' => 'Fájlt küldött',
+    'failed_load' => 'Nem sikerült az üzenetek betöltése.',
 ];

@@ -158,7 +158,7 @@
                         @foreach($categories as $cat)
                         <label class="flex items-center gap-2 cursor-pointer hover:bg-white p-1 rounded transition-colors">
                             <input type="checkbox" name="tracked_categories[]" value="{{ $cat->id }}" class="w-4 h-4 text-blue-600 border-gray-300 rounded">
-                            <span class="text-sm text-gray-600">{{ $cat->name }}</span>
+                            <span class="text-sm text-gray-600">{{ __('categories.' . $cat->name) }}</span>
                         </label>
                         @endforeach
                     </div>

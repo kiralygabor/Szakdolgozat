@@ -19,4 +19,14 @@ return [
         'no_tasks' => 'Ma nincsenek új feladatok a követett kategóriáidban.',
         'manage_settings' => 'Értesítési beállítások kezelése',
     ],
+    'reset_password' => [
+        'subject' => '[Minijobz] Jelszó visszaállítása',
+        'title' => 'Jelszó visszaállítása',
+        'hi' => 'Szia :name!',
+        'intro' => 'Azt az értesítést azért kaptad, mert jelszó-visszaállítási kérelem érkezett a fiókodhoz.',
+        'action' => 'Jelszó visszaállítása',
+        'expiry' => 'Ez a jelszó-visszaállítási link :count perc után lejár.',
+        'footer_note' => 'Ha nem te kérted a jelszó visszaállítását, akkor nincs további teendőd.',
+        'rights' => 'Minden jog fenntartva.',
+    ],
 ];

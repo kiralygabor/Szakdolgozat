@@ -42,13 +42,18 @@ class DirectQuoteReceivedNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $url = route('my-tasks', ['view' => 'applied', 'task_id' => $this->task->id]);
+        $locale = $notifiable->locale ?? app()->getLocale();
+
         return (new MailMessage)
-            ->subject(__('notifications.direct_quote.subject', ['user' => $this->employer->first_name]))
-            ->greeting(__('notifications.direct_quote.greeting', ['name' => $notifiable->first_name]))
-            ->line(__('notifications.direct_quote.line1', ['user' => $this->employer->first_name, 'task' => $this->task->title]))
-            ->line(__('notifications.direct_quote.line2', ['price' => $this->task->price]))
-            ->action(__('notifications.direct_quote.action'), route('my-tasks', ['view' => 'applied', 'task_id' => $this->task->id]))
-            ->line(__('notifications.direct_quote.line3'));
+            ->subject(__('notifications.direct_quote.subject', ['user' => $this->employer->first_name], $locale))
+            ->view('emails.direct-quote', [
+                'notifiable' => $notifiable,
+                'task' => $this->task,
+                'employer' => $this->employer,
+                'url' => $url,
+                'locale' => $locale
+            ]);
     }
 
     /**

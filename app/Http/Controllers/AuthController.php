@@ -67,20 +67,20 @@ class AuthController extends Controller
                 session(['pending_user_id' => $user->id]);
 
                 return redirect()->route('verify.code.form')
-                    ->with('status', 'Enter the verification code we sent to your email.');
+                    ->with('status', __('auth_pages.status.verify_code_sent'));
             }
 
             // Check for returnUrl in the request
             $returnUrl = $request->input('returnUrl');
             if ($returnUrl) {
-                return redirect($returnUrl)->withSuccess('You have successfully logged in.');
+                return redirect($returnUrl)->withSuccess(__('auth_pages.status.login_success'));
             }
 
             return redirect()->intended(route('tasks'))
-                ->withSuccess('You have successfully logged in.');
+                ->withSuccess(__('auth_pages.status.login_success'));
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials.']);
+        return back()->withErrors(['email' => __('auth_pages.errors.invalid_credentials')]);
     }
 
     /**
@@ -102,14 +102,14 @@ class AuthController extends Controller
                     Auth::logout();
                     session(['pending_user_id' => $user->id]);
                     return redirect()->route('verify.code.form')
-                        ->with('status', 'This email is already registered. Enter the verification code we sent to your email.');
+                        ->with('status', __('auth_pages.status.email_already_registered'));
                 }
 
                 return redirect()->intended(route('tasks'))
-                    ->withSuccess('This email is already in use. You have been successfully logged in.');
+                    ->withSuccess(__('auth_pages.status.email_in_use_logged_in'));
             }
 
-            return back()->withInput()->withErrors(['email' => 'This email is already in use. Please check your password or use another email.']);
+            return back()->withInput()->withErrors(['email' => __('auth_pages.errors.email_in_use')]);
         }
 
         session(['registration_form' => [
@@ -145,12 +145,12 @@ class AuthController extends Controller
         $registration = session('registration_form');
 
         if (!$registration || empty($registration['email']) || empty($registration['password'])) {
-            return redirect('registration')->with('error', 'You must complete the first step of registration.');
+            return redirect('registration')->with('error', __('auth_pages.errors.complete_step_1'));
         }
 
         // Ensure email is still unique in case something changed meanwhile
         if (User::where('email', $registration['email'])->exists()) {
-            return redirect('registration')->withErrors(['email' => 'This email is already taken. Please use another email.']);
+            return redirect('registration')->withErrors(['email' => __('auth_pages.errors.email_taken')]);
         }
 
         // Generate a unique account ID (AC prefix + random digits)
@@ -193,7 +193,7 @@ class AuthController extends Controller
         session(['pending_user_id' => $user->id]);
 
         return redirect()->route('verify.code.form')
-            ->with('status', 'We sent you a verification code. Check your email.');
+            ->with('status', __('auth_pages.status.verification_sent'));
     }
 
     /**
@@ -204,14 +204,14 @@ class AuthController extends Controller
     
     if (!session('pending_user_id')) {
         return redirect()->route('login')
-            ->withErrors(['email' => 'Session expired. Please login again.']);
+            ->withErrors(['email' => __('auth_pages.errors.session_expired')]);
     }
 
     $user = User::find(session('pending_user_id'));
 
     if (!$user) {
         return redirect()->route('login')
-            ->withErrors(['email' => 'User not found.']);
+            ->withErrors(['email' => __('auth_pages.errors.user_not_found')]);
     }
 
     return view('auth.verify-code', compact('user'));
@@ -228,7 +228,7 @@ class AuthController extends Controller
 
         $userId = session('pending_user_id');
         if (!$userId) {
-            return back()->withErrors(['code' => 'Session expired. Please login again.']);
+            return back()->withErrors(['code' => __('auth_pages.errors.session_expired')]);
         }
 
         $verifyUser = VerifyUser::where('user_id', $userId)
@@ -236,7 +236,7 @@ class AuthController extends Controller
             ->first();
 
         if (!$verifyUser) {
-            return back()->withErrors(['code' => 'Invalid verification code.']);
+            return back()->withErrors(['code' => __('auth_pages.errors.invalid_code')]);
         }
 
         $user = $verifyUser->user;
@@ -245,7 +245,7 @@ class AuthController extends Controller
 
         session()->forget('pending_user_id');
 
-        return redirect('/login')->with('status', 'Your account has been verified. Please login now.');
+        return redirect('/login')->with('status', __('auth_pages.status.account_verified'));
     }
 
     /**
@@ -270,7 +270,7 @@ class AuthController extends Controller
 
         Mail::to($user->email)->locale($user->preferredLocale())->send(new VerifyMail($user, $verifyUser->token));
 
-        return back()->with('status', 'A new verification code has been sent.');
+        return back()->with('status', __('auth_pages.status.new_code_sent'));
     }
 
     /**

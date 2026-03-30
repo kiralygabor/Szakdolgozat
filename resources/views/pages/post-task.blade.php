@@ -462,7 +462,7 @@
 <select id="categorySelect" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-600 outline-none transition">
 <option value="">{{ __('post-task.step1.category_placeholder') }}</option>
                       @foreach($categories as $category)
-<option value="{{ $category->id }}">{{ $category->name }}</option>
+<option value="{{ $category->id }}">{{ __('categories.' . $category->name) }}</option>
                       @endforeach
 </select>
                   @error('categories_id')
@@ -624,8 +624,8 @@
 <p class="text-lg font-medium text-gray-800">{{ __('post-task.step4.budget_question') }}</p>
 <p class="text-gray-600 mb-4">{{ __('post-task.step4.negotiable') }}</p>
 <div class="flex items-stretch rounded-lg overflow-hidden border @error('price') is-invalid @enderror" id="budgetWrapper">
-<span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">$</span>
-<input id="budgetInput" name="price" type="number" min="10" max="9999" class="flex-1 p-3 outline-none" placeholder="{{ __('post-task.step4.budget_placeholder') }}" value="{{ old('price') }}">
+<span class="px-4 flex items-center bg-gray-50 border-r text-gray-600">€</span>
+<input id="budgetInput" name="price" type="number" min="5" max="5000" class="flex-1 p-3 outline-none" placeholder="{{ __('post-task.step4.budget_placeholder') }}" value="{{ old('price') }}">
 </div>
 <div id="budgetError" class="invalid-feedback-custom hidden">
         {{ __('post-task.step4.budget_error') }}
@@ -651,8 +651,16 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Categories Data
-  const categoriesData = @json($categories);
- 
+  const categoriesData = @json($categories->map(function($cat) {
+      $cat->name = __('categories.' . $cat->name);
+      if ($cat->jobs) {
+          $cat->jobs = $cat->jobs->map(function($job) {
+              $job->name = __('jobs.' . $job->name);
+              return $job;
+          });
+      }
+      return $cat;
+  })); 
   // Step handling
   const panes = [
     document.getElementById('step-1'),

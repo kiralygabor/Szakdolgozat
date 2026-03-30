@@ -19,4 +19,14 @@ return [
         'no_tasks' => 'No new tasks in your followed categories today.',
         'manage_settings' => 'Manage notification settings',
     ],
+    'reset_password' => [
+        'subject' => '[Minijobz] Reset Password Notification',
+        'title' => 'Reset your password',
+        'hi' => 'Hi :name,',
+        'intro' => 'You are receiving this email because we received a password reset request for your account.',
+        'action' => 'Reset Password',
+        'expiry' => 'This password reset link will expire in :count minutes.',
+        'footer_note' => 'If you did not request a password reset, no further action is required.',
+        'rights' => 'All rights reserved.',
+    ],
 ];

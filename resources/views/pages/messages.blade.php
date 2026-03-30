@@ -248,7 +248,7 @@
                         <a href="{{ route('public-profile', $chatUser->id) }}" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-b border-gray-50 no-underline">
                             <i data-feather="user" class="w-4 h-4"></i> {{ __('messages_page.view_profile') }}
                         </a>
-                        <button class="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-0 bg-transparent text-left">
+                        <button onclick="openUserReportModal({{ $chatUser->id }})" class="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-0 bg-transparent text-left">
                             <i data-feather="flag" class="w-4 h-4"></i> {{ __('messages_page.report_user') }}
                         </button>
                     </div>
@@ -286,11 +286,11 @@
                 <div class="w-24 h-24 bg-blue-50/50 rounded-full flex items-center justify-center mb-6 shadow-sm ring-8 ring-white">
                     <i data-feather="message-circle" class="w-12 h-12 text-blue-500"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ __('messages_page.select_chat_title') ?? 'Your Messages' }}</h2>
-                <p class="text-center max-w-md text-gray-500 leading-relaxed">{{ __('messages_page.select_chat_desc') ?? 'Choose a conversation from the sidebar to start messaging, or browse tasks to find new opportunities.' }}</p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ __('messages_page.select_chat_title') }}</h2>
+                <p class="text-center max-w-md text-gray-500 leading-relaxed">{{ __('messages_page.select_chat_desc') }}</p>
                 @if($conversations->isEmpty())
                     <div class="mt-8 flex flex-col items-center">
-                        <p class="text-sm text-gray-400 mb-4">{{ __('messages_page.no_active_chats') ?? 'You don\'t have any active messages yet.' }}</p>
+                        <p class="text-sm text-gray-400 mb-4">{{ __('messages_page.no_active_chats') }}</p>
                         <a href="{{ route('tasks') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200 no-underline">
                             <i data-feather="search" class="w-4 h-4"></i>
                             {{ __('navbar.browse_tasks') }}
@@ -468,7 +468,7 @@
                 })
                 .catch(err => {
                     console.error("Failed to load messages:", err);
-                    messagesContainer.innerHTML = '<div class="p-8 text-center text-red-500">Failed to load messages.</div>';
+                    messagesContainer.innerHTML = '<div class="p-8 text-center text-red-500">{{ __('messages_page.failed_load') }}</div>';
                 });
         }
  
@@ -504,7 +504,7 @@
                 contentHtml = `
                     <p class="text-sm italic text-gray-400 flex items-center gap-1">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                        Message deleted
+                        {{ __('messages_page.deleted') }}
                     </p>`;
             } else {
                 if (msg.attachment) {
@@ -514,7 +514,7 @@
                     } else {
                         contentHtml += `
                             <a href="${attachmentUrl}" target="_blank" class="flex items-center gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200 mb-2 hover:bg-gray-100 transition text-gray-700 no-underline">
-                                <span class="text-sm font-medium truncate max-w-[150px]">Attachment</span>
+                                <span class="text-sm font-medium truncate max-w-[150px]">{{ __('messages_page.attachment') }}</span>
                             </a>`;
                     }
                 }
@@ -535,7 +535,7 @@
                                 <polyline points="3 6 5 6 21 6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                             </svg>
-                            <span>Delete</span>
+                            <span>{{ __('messages_page.delete') }}</span>
                         </button>
                     </div>
                 `;
@@ -559,7 +559,7 @@
 
             // Update sidebar info
             if (msg.body || msg.attachment) {
-                const body = msg.body ? msg.body : (msg.attachment_type === 'image' ? 'Sent an image' : 'Sent a file');
+                const body = msg.body ? msg.body : (msg.attachment_type === 'image' ? "{{ __('messages_page.sent_image') }}" : "{{ __('messages_page.sent_file') }}");
                 updateSidebar(conversationId, body, isMe);
             }
         }
@@ -586,7 +586,7 @@
                             contentBox.innerHTML = `
                                 <p class="text-sm italic text-gray-500 flex items-center gap-1">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                                    Message deleted
+                                    {{ __('messages_page.deleted') }}
                                 </p>
                                 <span class="text-[10px] text-gray-400 block text-right mt-1 opacity-70">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                             `;
@@ -640,4 +640,7 @@
         }
     });
 </script>
+ 
+@include('components.user-report-modal')
+ 
 @endsection

@@ -41,14 +41,17 @@ class OfferAcceptedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $url = route('tasks.show', ['task' => $this->task->id]);
+        $locale = $notifiable->locale ?? app()->getLocale();
 
         return (new MailMessage)
-            ->subject(__('notifications.offer_accepted.subject'))
-            ->greeting(__('notifications.offer_accepted.greeting', ['name' => $notifiable->first_name]))
-            ->line(__('notifications.offer_accepted.line1', ['user' => $this->employer->first_name, 'task' => $this->task->title]))
-            ->line(__('notifications.offer_accepted.line2'))
-            ->action(__('notifications.offer_accepted.action'), $url)
-            ->line(__('notifications.offer_accepted.line3'));
+            ->subject(__('notifications.offer_accepted.subject', [], $locale))
+            ->view('emails.offer-accepted', [
+                'notifiable' => $notifiable,
+                'task' => $this->task,
+                'employer' => $this->employer,
+                'url' => $url,
+                'locale' => $locale
+            ]);
     }
 
     /**

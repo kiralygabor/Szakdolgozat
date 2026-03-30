@@ -37,7 +37,7 @@ class Advertisement extends Model
         'required_before_date' => 'date',
         'price' => 'integer',
         'is_date_flexible' => 'boolean',
-        'photos',
+        'photos' => 'array',
         'preferred_time' => 'array',
         'is_direct' => 'boolean'
     ];

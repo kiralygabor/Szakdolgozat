@@ -43,15 +43,18 @@ class NewOfferNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $url = route('my-tasks', ['task_id' => $this->task->id]);
+        $locale = $notifiable->locale ?? app()->getLocale();
 
         return (new MailMessage)
-            ->subject(__('notifications.new_offer.subject', ['task' => $this->task->title]))
-            ->greeting(__('notifications.new_offer.greeting', ['name' => $notifiable->first_name]))
-            ->line(__('notifications.new_offer.line1', ['user' => $this->user->first_name, 'price' => $this->offer->price, 'task' => $this->task->title]))
-            ->line(__('notifications.new_offer.line2', ['user' => $this->user->first_name]))
-            ->line('"' . $this->offer->message . '"')
-            ->action(__('notifications.new_offer.action'), $url)
-            ->line(__('notifications.new_offer.line3'));
+            ->subject(__('notifications.new_offer.subject', ['task' => $this->task->title], $locale))
+            ->view('emails.new-offer', [
+                'notifiable' => $notifiable,
+                'offer' => $this->offer,
+                'task' => $this->task,
+                'sender' => $this->user,
+                'url' => $url,
+                'locale' => $locale
+            ]);
     }
 
     /**

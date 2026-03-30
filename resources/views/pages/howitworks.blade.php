@@ -76,15 +76,14 @@
                 <!-- Text -->
                 <div class="max-w-xl">
                     <h1 id="howitworks-title" class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
-                        Post your first task <br>
-                        <span class="text-indigo-600">in minutes</span>
+                        {!! __('howitworks.hero_title') !!}
                     </h1>
                     <p class="mt-6 text-lg md:text-xl text-slate-600 leading-relaxed">
-                        Whether you need a hand around the house or a specialized professional, Minijobz is the easiest way to get things done.
+                        {{ __('howitworks.hero_subtitle') }}
                     </p>
                     <div class="mt-10">
                         <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
-                            Post a task
+                            {{ __('howitworks.post_task') }}
                         </a>
                     </div>
                 </div>
@@ -112,16 +111,16 @@
                 </div>
                 <!-- Text SECOND (Right) -->
                 <div class="lg:order-2">
-                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Describe what you need</h2>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">{{ __('howitworks.step_1_title') }}</h2>
                     <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
-                        It’s free to post. Simply tell us what you need done, when and where you need it. You can even upload photos to help Taskers understand the job.
+                        {{ __('howitworks.step_1_desc') }}
                     </p>
                     <ul class="space-y-4 mb-10">
-                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Set a realistic budget</li>
-                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Choose a date and time</li>
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> {{ __('howitworks.step_1_li_1') }}</li>
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> {{ __('howitworks.step_1_li_2') }}</li>
                     </ul>
                     <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
-                        Post a task
+                        {{ __('howitworks.post_task') }}
                     </a>
                 </div>
             </div>
@@ -134,16 +133,16 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <!-- Text FIRST (Left) -->
                 <div>
-                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Set your budget</h2>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">{{ __('howitworks.step_2_title') }}</h2>
                     <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
-                        You're in control of your budget. Set the price you're willing to pay, or let Taskers suggest their own rates. Compare offers and choose the one that fits your needs and budget best.
+                        {{ __('howitworks.step_2_desc') }}
                     </p>
                     <ul class="space-y-4 mb-10">
-                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Set your own price or receive quotes</li>
-                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> Compare offers from multiple Taskers</li>
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> {{ __('howitworks.step_2_li_1') }}</li>
+                        <li class="flex items-center gap-3 text-slate-700 text-lg font-medium"><i data-feather="check" class="text-emerald-500 w-6 h-6"></i> {{ __('howitworks.step_2_li_2') }}</li>
                     </ul>
                     <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
-                        Post a task
+                        {{ __('howitworks.post_task') }}
                     </a>
                 </div>
                 <!-- Image SECOND (Right) -->
@@ -170,22 +169,22 @@
                 </div>
                 <!-- Text SECOND (Right) -->
                 <div class="lg:order-2">
-                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Review & Choose</h2>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">{{ __('howitworks.step_3_title') }}</h2>
                     <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
-                        Receive quotes from available Taskers. Review their profiles, ratings, and completion rates to find the perfect match for your task.
+                        {{ __('howitworks.step_3_desc') }}
                     </p>
                     <ul class="space-y-4 mb-10">
                         <li class="flex items-center gap-3 text-slate-700 text-lg font-medium">
                             <i data-feather="user-check" class="text-emerald-500 w-6 h-6"></i>
-                            View Tasker profiles and reviews
+                            {{ __('howitworks.step_3_li_1') }}
                         </li>
                         <li class="flex items-center gap-3 text-slate-700 text-lg font-medium">
                             <i data-feather="message-square" class="text-emerald-500 w-6 h-6"></i>
-                            Chat directly with Taskers
+                            {{ __('howitworks.step_3_li_2') }}
                         </li>
                     </ul>
                     <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
-                        Post a task
+                        {{ __('howitworks.post_task') }}
                     </a>
                 </div>
             </div>
@@ -198,9 +197,9 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <!-- Text FIRST (Left) -->
                 <div>
-                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">Get it done</h2>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6">{{ __('howitworks.step_4_title') }}</h2>
                     <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8">
-                        When the task is complete, simply release the payment. It's that easy! Your payment is held securely by Minijobz Pay until the job is finished.
+                        {{ __('howitworks.step_4_desc') }}
                     </p>
                     <div class="flex items-center gap-6 mb-10">
                         <div class="flex -space-x-4">
@@ -208,10 +207,10 @@
                             <img class="h-14 w-14 rounded-full ring-4 ring-white" src="https://i.pravatar.cc/100?u=12" alt="">
                             <img class="h-14 w-14 rounded-full ring-4 ring-white" src="https://i.pravatar.cc/100?u=13" alt="">
                         </div>
-                        <p class="text-lg font-bold text-slate-500">20,000+ happy users</p>
+                        <p class="text-lg font-bold text-slate-500">{{ __('howitworks.happy_users') }}</p>
                     </div>
                     <a href="{{ route('post-task') }}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-10 rounded-full transition-all shadow-lg">
-                        Post a task
+                        {{ __('howitworks.post_task') }}
                     </a>
                 </div>
                 <!-- Image SECOND (Right) -->
@@ -232,10 +231,10 @@
                 <!-- Left: Main Heading -->
                 <div>
                     <h2 class="text-5xl md:text-6xl font-black text-[#000033] tracking-tighter leading-none mb-8">
-                        We've got you covered
+                        {{ __('howitworks.safety_title') }}
                     </h2>
                     <p class="text-xl md:text-2xl text-[#000033] leading-snug mb-10 max-w-md">
-                        Whether you’re a posting a task or completing a task, you can do both with the peace of mind that Minijobz is there to support.
+                        {{ __('howitworks.safety_subtitle') }}
                     </p>
                 </div>
  
@@ -245,18 +244,18 @@
                         <div class="text-[#000033] mb-4">
                             <i data-feather="user" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-[#000033] mb-4">Public liability insurance</h3>
+                        <h3 class="text-xl font-bold text-[#000033] mb-4">{{ __('howitworks.insurance_1_title') }}</h3>
                         <p class="text-slate-600 leading-relaxed">
-                            Minijobz Insurance covers you for any accidental injury to the customer or property damage whilst performing certain task activities.
+                            {{ __('howitworks.insurance_1_desc') }}
                         </p>
                     </div>
                     <div>
                         <div class="text-[#000033] mb-4">
                             <i data-feather="star" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-[#000033] mb-4">Top rated insurance</h3>
+                        <h3 class="text-xl font-bold text-[#000033] mb-4">{{ __('howitworks.insurance_2_title') }}</h3>
                         <p class="text-slate-600 leading-relaxed">
-                            Minijobz Insurance is provided by world-class partners, ensuring some of the world’s most reputable, stable and innovative insurance support.
+                            {{ __('howitworks.insurance_2_desc') }}
                         </p>
                     </div>
                 </div>
@@ -282,13 +281,13 @@
                 <!-- Right: Text Content -->
                 <div class="lg:pl-12">
                     <h2 class="text-5xl md:text-6xl font-black text-[#000033] tracking-tighter leading-none mb-8">
-                        Ratings & reviews
+                        {{ __('howitworks.reviews_title') }}
                     </h2>
                     <p class="text-lg md:text-xl text-[#000033] leading-relaxed mb-10">
-                        Review Tasker's portfolios, skills, badges on their profile, and see their transaction verified ratings, reviews & completion rating (to see their reliability) on tasks they’ve previously completed on Minijobz. This empowers you to make sure you’re choosing the right person for your task.
+                        {{ __('howitworks.reviews_desc') }}
                     </p>
                     <a href="{{ route('post-task') }}" class="get-started-btn inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
-                        Get started for free
+                        {{ __('howitworks.get_started') }}
                     </a>
                 </div>
             </div>
@@ -310,13 +309,13 @@
                 <!-- Right: Text Content -->
                 <div class="lg:pl-12">
                     <h2 class="text-5xl md:text-6xl font-black text-[#000033] tracking-tighter leading-none mb-8">
-                        Communication
+                        {{ __('howitworks.communication_title') }}
                     </h2>
                     <p class="text-lg md:text-xl text-[#000033] leading-relaxed mb-10">
-                        Use Minijobz to stay in contact from the moment your task is posted until it’s completed. Accept an offer and you can privately message the Tasker to discuss final details, and get your task completed.
+                        {{ __('howitworks.communication_desc') }}
                     </p>
                     <a href="{{ route('post-task') }}" class="get-started-btn inline-block bg-blue-50 text-blue-600 font-bold py-4 px-10 rounded-full hover:bg-blue-100 transition-colors">
-                        Get started for free
+                        {{ __('howitworks.get_started') }}
                     </a>
                 </div>
             </div>
@@ -401,8 +400,8 @@
                     <i data-feather="check" class="w-4 h-4"></i>
                   </div>
                   <div>
-                    <p class="text-xs font-bold text-gray-900">Task Completed!</p>
-                    <p class="text-[10px] text-gray-500">Payment Released</p>
+                    <p class="text-xs font-bold text-gray-900">{{ __('howitworks.mockup_completed') }}</p>
+                    <p class="text-[10px] text-gray-500">{{ __('howitworks.mockup_released') }}</p>
                   </div>
                 </div>
               </div>
@@ -410,10 +409,10 @@
               <!-- Notification Card -->
               <div class="mockup-notification absolute -right-4 bottom-8 z-20 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl animate-bounce" style="animation-duration: 4s; animation-delay: 1s;">
                  <div class="flex items-center gap-3">
-                  <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
+                  <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200" alt="">
                   <div>
-                    <p class="text-xs font-bold text-gray-900">New Offer: €45</p>
-                    <p class="text-[10px] text-gray-500">James W. is interested</p>
+                    <p class="text-xs font-bold text-gray-900">{{ __('howitworks.mockup_new_offer') }}</p>
+                    <p class="text-[10px] text-gray-500">{{ __('howitworks.mockup_interested', ['name' => 'James W.']) }}</p>
                   </div>
                 </div>
               </div>

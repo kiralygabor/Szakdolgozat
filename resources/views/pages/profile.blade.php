@@ -387,6 +387,7 @@
                     <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" onsubmit="return confirm('{{ __('profile_page.profile.confirm_update') }}');">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="form_type" value="profile">
                         <!-- Avatar Section -->
                         <div class="mb-5">
                             <h6 class="section-label">{{ __('profile_page.profile.upload_avatar') }}</h6>
@@ -644,19 +645,32 @@
                 @auth
                 <div class="tab-pane fade" id="notification" role="tabpanel">
                     <h1 class="page-title">{{ __('profile_page.notifications.title') }}</h1>
-                   
+
+                    @if(session('success'))
+                    <div class="rounded-xl border border-green-200 bg-green-50 p-4 mb-6 flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span class="text-green-800 font-medium text-sm">{{ session('success') }}</span>
+                    </div>
+                    @endif
+
+                    @if(session('info'))
+                    <div class="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-6 flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        <span class="text-blue-800 font-medium text-sm">{{ session('info') }}</span>
+                    </div>
+                    @endif
+
+                    @if(session('error'))
+                    <div class="rounded-xl border border-red-200 bg-red-50 p-4 mb-6 flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        <span class="text-red-800 font-medium text-sm">{{ session('error') }}</span>
+                    </div>
+                    @endif
                     <form method="POST" action="{{ route('profile.update') }}">
                         @csrf
                         @method('PUT')
-                       
-                        <!-- Hidden profile fields to avoid overwriting them with empty if not in this tab -->
-                        <input type="hidden" name="first_name" value="{{ $user->first_name }}">
-                        <input type="hidden" name="last_name" value="{{ $user->last_name }}">
-                        <input type="hidden" name="email" value="{{ $user->email }}">
-                        <input type="hidden" name="phone_number" value="{{ $user->phone_number }}">
-                        <input type="hidden" name="birthdate" value="{{ $user->birthdate ? $user->birthdate->format('Y-m-d') : '' }}">
-                        <input type="hidden" name="city_id" value="{{ $user->city_id }}">
- 
+                        <input type="hidden" name="form_type" value="notifications">
+
                         <div class="mb-5">
                             <h6 class="section-label">{{ __('profile_page.notifications.email_prefs') }}</h6>
                            
@@ -688,14 +702,17 @@
  
                             <!-- category selection (shown only if digest is enabled) -->
                             <div id="category_selection_profile" class="{{ $user->email_task_digest ? '' : 'hidden' }} pl-11 mt-4">
-                                <p class="text-xs font-bold text-blue-900 mb-3 uppercase tracking-wide">{{ __('profile_page.notifications.tracked_categories') }}</p>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-4 border border-blue-100 rounded-xl bg-blue-50/30 max-h-64 overflow-y-auto">
+                                <button type="button" id="toggle_categories_btn" class="flex items-center gap-2 text-xs font-bold text-blue-900 mb-3 uppercase tracking-wide hover:text-blue-700 transition-colors cursor-pointer">
+                                    <span>{{ __('profile_page.notifications.tracked_categories') }}</span>
+                                    <svg id="toggle_categories_chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.2s;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </button>
+                                <div id="categories_grid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-4 border border-blue-100 rounded-xl bg-blue-50/30 max-h-64 overflow-y-auto">
                                     @foreach($categories as $cat)
                                     <label class="flex items-center gap-2 cursor-pointer hover:bg-white p-2 rounded-lg transition-colors border border-transparent hover:border-blue-100">
                                         <input type="checkbox" name="tracked_categories[]" value="{{ $cat->id }}"
                                             {{ $user->trackedCategories->contains($cat->id) ? 'checked' : '' }}
                                             class="w-4 h-4 text-blue-600 border-gray-300 rounded">
-                                        <span class="text-sm text-gray-700 font-medium">{{ $cat->name }}</span>
+                                        <span class="text-sm text-gray-700 font-medium">{{ __('categories.' . $cat->name) }}</span>
                                     </label>
                                     @endforeach
                                 </div>
@@ -708,6 +725,19 @@
                             </button>
                         </div>
                     </form>
+
+                    @if($user->email_task_digest)
+                    <div class="mt-8 pt-8 border-t border-gray-100">
+                        <h6 class="section-label">{{ __('profile_page.notifications.manual_digest') ?? 'Send Manual Digest' }}</h6>
+                        <p class="text-sm text-gray-600 mb-4">{{ __('profile_page.notifications.manual_digest_desc') ?? 'Send an email with the latest tasks from your tracked categories right now!' }}</p>
+                        <form action="{{ route('profile.send-digest') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-light-custom">
+                                <i class="fas fa-envelope fa-fw"></i> {{ __('profile_page.notifications.manual_digest') ?? 'Send Manual Digest' }}
+                            </button>
+                        </form>
+                    </div>
+                    @endif
                 </div>
                 @endauth
  
@@ -958,6 +988,9 @@
         (function handleNotificationToggles() {
             const digestToggle = document.getElementById('digest_toggle_profile');
             const categorySelection = document.getElementById('category_selection_profile');
+            const toggleBtn = document.getElementById('toggle_categories_btn');
+            const categoriesGrid = document.getElementById('categories_grid');
+            const chevron = document.getElementById('toggle_categories_chevron');
             if (!digestToggle || !categorySelection) return;
  
             digestToggle.addEventListener('change', function() {
@@ -965,8 +998,20 @@
                     categorySelection.classList.remove('hidden');
                 } else {
                     categorySelection.classList.add('hidden');
+                    if (categoriesGrid) categoriesGrid.classList.add('hidden');
+                    if (chevron) chevron.style.transform = '';
                 }
             });
+
+            // Toggle categories grid expand/collapse
+            if (toggleBtn && categoriesGrid) {
+                toggleBtn.addEventListener('click', function() {
+                    const isHidden = categoriesGrid.classList.toggle('hidden');
+                    if (chevron) {
+                        chevron.style.transform = isHidden ? '' : 'rotate(180deg)';
+                    }
+                });
+            }
         })();
  
         // --- Password Toggle Logic ---

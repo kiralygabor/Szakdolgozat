@@ -332,8 +332,8 @@
                 <img src="assets/img/handyman.jpg" alt="Handyman" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Handyman</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Repairs & Installs</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.handyman') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.handyman_desc') }}</p>
                 </div>
               </div>
               
@@ -342,8 +342,8 @@
                 <img src="assets/img/plumbing.jpg" alt="Plumbing" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Plumbing</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Leaks & Drains</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.plumbing') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.plumbing_desc') }}</p>
                 </div>
               </div>
 
@@ -352,8 +352,8 @@
                 <img src="assets/img/delivery.jpg" alt="Delivery" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Delivery</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Parcels & Food</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.delivery') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.delivery_desc') }}</p>
                 </div>
               </div>
 
@@ -362,8 +362,8 @@
                 <img src="assets/img/gardening.jpg" alt="Gardening" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Gardening</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Mowing & Planting</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.gardening') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.gardening_desc') }}</p>
                 </div>
               </div>
             </template>
@@ -378,18 +378,18 @@
                 <img src="assets/img/house_cleaning.jpg" alt="Cleaning" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Cleaning</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Home & Office</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.cleaning') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.cleaning_desc') }}</p>
                 </div>
               </div>
 
-              <!-- Card: Moving -->
+              <!-- Card: Beauty & Barber -->
               <div class="relative aspect-[4/5] rounded-[1.25rem] overflow-hidden group border border-white dark:border-slate-700 shadow-sm">
-                <img src="assets/img/barbers.jpg" alt="Moving" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                <img src="assets/img/barbers.jpg" alt="Beauty" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Moving Help</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Heavy Lifting</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.beauty') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.beauty_desc') }}</p>
                 </div>
               </div>
 
@@ -398,18 +398,18 @@
                 <img src="assets/img/car_wash.jpg" alt="Car Wash" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">Car Wash</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Mobile Detailing</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.car_wash') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.car_wash_desc') }}</p>
                 </div>
               </div>
 
-              <!-- Card: IT Support -->
+              <!-- Card: Mechanic -->
               <div class="relative aspect-[4/5] rounded-[1.25rem] overflow-hidden group border border-white dark:border-slate-700 shadow-sm">
-                <img src="assets/img/mechanic.jpg" alt="IT Support" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
+                <img src="assets/img/mechanic.jpg" alt="Mechanic" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-5 left-5 text-white">
-                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">IT Support</h4>
-                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">Tech & Setup</p>
+                  <h4 class="font-bold text-lg leading-none mb-1 how-it-works-text">{{ __('index.trending_categories.mechanic') }}</h4>
+                  <p class="text-xs text-gray-300 font-medium how-it-works-text-p">{{ __('index.trending_categories.mechanic_desc') }}</p>
                 </div>
               </div>
             </template>
@@ -571,9 +571,9 @@
 <section class="py-24 bg-gray-50 transition-colors duration-300 overflow-hidden relative">
 <div class="max-w-7xl mx-auto px-6 mb-12 text-center">
 <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
-      See what others are getting done
+      {{ __('index.popular_tasks_title') }}
 </h2>
-<p class="mt-4 text-lg text-gray-600">Real tasks, real prices, completed recently.</p>
+<p class="mt-4 text-lg text-gray-600">{{ __('index.popular_tasks_subtitle') }}</p>
 </div>
  
   <!-- Container with Edge Fade Mask -->
@@ -585,100 +585,100 @@
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">{{ __('footer.delivery') }}</span>
               <span class="font-bold text-gray-900 text-lg">€85</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_1_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=11" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">12 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">12 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">{{ __('footer.cleaning') }}</span>
               <span class="font-bold text-gray-900 text-lg">€450</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_2_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=5" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">48 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">48 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">{{ __('footer.assembly') }}</span>
               <span class="font-bold text-gray-900 text-lg">€120</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_3_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=3" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">32 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">32 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">{{ __('footer.moving') }}</span>
               <span class="font-bold text-gray-900 text-lg">€95</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_4_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=59" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">8 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">8 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
       <!-- CARD SET 2 (Duplicate) -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">€85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">{{ __('footer.delivery') }}</span><span class="font-bold text-gray-900 text-lg">€85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_1_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">€450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">{{ __('footer.cleaning') }}</span><span class="font-bold text-gray-900 text-lg">€450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_2_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">€120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">{{ __('footer.assembly') }}</span><span class="font-bold text-gray-900 text-lg">€120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_3_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">€95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">{{ __('footer.moving') }}</span><span class="font-bold text-gray-900 text-lg">€95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_4_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
       <!-- CARD SET 3 (Third Duplicate for seamless loop) -->
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">Delivery</span><span class="font-bold text-gray-900 text-lg">€85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">King mattress pick up & delivery</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-blue-100 text-blue-700">{{ __('footer.delivery') }}</span><span class="font-bold text-gray-900 text-lg">€85</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_1_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=11" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">12 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">Cleaning</span><span class="font-bold text-gray-900 text-lg">€450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">End of lease clean (3 Bedroom)</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-green-100 text-green-700">{{ __('footer.cleaning') }}</span><span class="font-bold text-gray-900 text-lg">€450</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_2_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=5" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">48 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">Assembly</span><span class="font-bold text-gray-900 text-lg">€120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">IKEA Wardrobe Assembly</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-purple-100 text-purple-700">{{ __('footer.assembly') }}</span><span class="font-bold text-gray-900 text-lg">€120</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_3_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=3" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">32 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">Moving</span><span class="font-bold text-gray-900 text-lg">€95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Sofa Delivery to 2nd Floor</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-orange-100 text-orange-700">{{ __('footer.moving') }}</span><span class="font-bold text-gray-900 text-lg">€95</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_4_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=59" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">8 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
     </div>
  
@@ -688,100 +688,100 @@
          <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">{{ __('footer.removals') }}</span>
               <span class="font-bold text-gray-900 text-lg">€60</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_5_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=12" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">22 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">22 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">{{ __('footer.removals') }}</span>
               <span class="font-bold text-gray-900 text-lg">€506</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_6_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=60" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">145 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">145 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">{{ __('footer.gardening') }}</span>
               <span class="font-bold text-gray-900 text-lg">€75</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_7_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=68" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">9 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">9 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
           <div>
             <div class="flex justify-between items-center mb-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">{{ __('footer.tech') }}</span>
               <span class="font-bold text-gray-900 text-lg">€150</span>
             </div>
-            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3>
+            <h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_8_title') }}</h3>
           </div>
           <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
             <img src="https://i.pravatar.cc/150?img=33" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200">
             <div class="flex flex-col justify-center">
               <div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div>
-              <span class="text-[11px] text-gray-500 font-medium">41 reviews</span>
+              <span class="text-[11px] text-gray-500 font-medium">41 {{ __('index.popular_tasks.reviews') }}</span>
             </div>
           </div>
         </div>
       <!-- CARD SET 2 (THIS WAS MISSING: Duplicate for Loop) -->
          <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">{{ __('footer.removals') }}</span><span class="font-bold text-gray-900 text-lg">€60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_5_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">{{ __('footer.removals') }}</span><span class="font-bold text-gray-900 text-lg">€506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_6_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">€75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">{{ __('footer.gardening') }}</span><span class="font-bold text-gray-900 text-lg">€75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_7_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">€150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">{{ __('footer.tech') }}</span><span class="font-bold text-gray-900 text-lg">€150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_8_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
       <!-- CARD SET 3 (Third Duplicate for seamless loop) -->
          <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Couch moved 1km down the road</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">{{ __('footer.removals') }}</span><span class="font-bold text-gray-900 text-lg">€60</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_5_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=12" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">22 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">Removals</span><span class="font-bold text-gray-900 text-lg">€506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Removalist TODAY (Urgent)</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700">{{ __('footer.removals') }}</span><span class="font-bold text-gray-900 text-lg">€506</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_6_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=60" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">145 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">Gardening</span><span class="font-bold text-gray-900 text-lg">€75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Lawn Mowing & Weeding</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-teal-100 text-teal-700">{{ __('footer.gardening') }}</span><span class="font-bold text-gray-900 text-lg">€75</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_7_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=68" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 text-gray-300"></i></div><span class="text-[11px] text-gray-500 font-medium">9 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
         <div class="w-[280px] bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
-          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">Tech</span><span class="font-bold text-gray-900 text-lg">€150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">Home Office Network Setup</h3></div>
-          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 reviews</span></div></div>
+          <div><div class="flex justify-between items-center mb-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide bg-indigo-100 text-indigo-700">{{ __('footer.tech') }}</span><span class="font-bold text-gray-900 text-lg">€150</span></div><h3 class="text-gray-900 font-semibold text-sm leading-snug mb-4">{{ __('index.popular_tasks.task_8_title') }}</h3></div>
+          <div class="flex items-center gap-3 pt-3 border-t border-gray-100"><img src="https://i.pravatar.cc/150?img=33" alt="User" class="w-9 h-9 rounded-full object-cover border border-gray-200"><div class="flex flex-col justify-center"><div class="flex text-amber-400 mb-0.5"><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i><i data-feather="star" class="w-3 h-3 fill-current"></i></div><span class="text-[11px] text-gray-500 font-medium">41 {{ __('index.popular_tasks.reviews') }}</span></div></div>
         </div>
     </div>
  
@@ -866,8 +866,8 @@
                 <i data-feather="check" class="w-4 h-4"></i>
               </div>
               <div>
-                <p class="text-xs font-bold text-gray-900">Task Completed!</p>
-                <p class="text-[10px] text-gray-500">Payment Released</p>
+                <p class="text-xs font-bold text-gray-900">{{ __('index.mockup.task_completed') }}</p>
+                <p class="text-[10px] text-gray-500">{{ __('index.mockup.payment_released') }}</p>
               </div>
             </div>
           </div>
@@ -877,8 +877,8 @@
              <div class="flex items-center gap-3">
               <img src="https://i.pravatar.cc/150?img=12" class="w-8 h-8 rounded-full border border-gray-200">
               <div>
-                <p class="text-xs font-bold text-gray-900">New Offer: €45</p>
-                <p class="text-[10px] text-gray-500">James W. is interested</p>
+                <p class="text-xs font-bold text-gray-900">{{ __('index.mockup.new_offer') }}</p>
+                <p class="text-[10px] text-gray-500">James W. {{ __('index.mockup.interested') }}</p>
               </div>
             </div>
           </div>

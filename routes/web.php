@@ -18,9 +18,10 @@ Route::get('/', function () {
 });
  
 Route::get('index', [PagesController::class, 'index'])->name('index');
-Route::get('profile', [PagesController::class, 'profile'])->name('profile');
+Route::get('profile', [PagesController::class, 'profile'])->name('profile')->middleware('auth');
 Route::put('profile', [PagesController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
 Route::delete('profile', [PagesController::class, 'deleteProfile'])->name('profile.delete')->middleware('auth');
+Route::post('profile/send-digest', [PagesController::class, 'sendManualDigest'])->name('profile.send-digest')->middleware('auth');
 Route::get('profile/{id}', [PagesController::class, 'publicProfile'])->name('public-profile');
 Route::post('profile/{id}/review', [PagesController::class, 'storeReview'])->name('public-profile.review')->middleware('auth');
 Route::get('category', [PagesController::class, 'category'])->name('category');
@@ -31,8 +32,8 @@ Route::get('/guidelines', function () {return view('pages.community-guidelines')
 Route::get('/privacy', function () {return view('pages.privacy-policy');})->name('privacy');
 Route::get('/help-faq', function () {return view('pages.help-faq');})->name('help-faq');
 Route::get('/contact-support', function () {return view('pages.contact-support');})->name('contact-support');
-Route::get('my-tasks', [PagesController::class, 'myTasks'])->name('my-tasks');
-Route::get('notifications', [PagesController::class, 'notifications'])->name('notifications');
+Route::get('my-tasks', [PagesController::class, 'myTasks'])->name('my-tasks')->middleware('auth');
+Route::get('notifications', [PagesController::class, 'notifications'])->name('notifications')->middleware('auth');
 Route::post('notifications/mark-read', [PagesController::class, 'markAllRead'])->name('notifications.mark-read')->middleware('auth');
 Route::get('messages', [MessageController::class, 'index'])->name('messages')->middleware('auth');
 Route::get('conversations/{conversation}', [MessageController::class, 'show'])->name('conversations.show')->middleware('auth');
@@ -40,7 +41,7 @@ Route::post('conversations/{conversation}/messages', [MessageController::class, 
 Route::delete('conversations/{conversation}/messages/{message}', [MessageController::class, 'destroy'])->name('conversations.messages.destroy')->middleware('auth');
 Route::get('conversations/{conversation}/check', [MessageController::class, 'checkNewMessages'])->name('conversations.messages.check')->middleware('auth');
 Route::get('post-task', [PagesController::class, 'postTask'])->name('post-task')->middleware('auth');
-Route::post('post-task', [PagesController::class, 'storeTask'])->name('post-task.store');
+Route::post('post-task', [PagesController::class, 'storeTask'])->name('post-task.store')->middleware('auth');
 Route::get('tasks/{task}', [PagesController::class, 'showTask'])->name('tasks.show');
 Route::post('tasks/{task}/offers', [OfferController::class, 'store'])->name('tasks.offers.store')->middleware('auth');
 Route::delete('tasks/{task}/offers', [OfferController::class, 'destroy'])->name('tasks.offers.destroy')->middleware('auth');

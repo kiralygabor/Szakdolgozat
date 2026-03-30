@@ -17,4 +17,8 @@ return [
     'select_chat_title' => 'Your Messages',
     'select_chat_desc' => 'Choose a conversation from the sidebar to start messaging, or browse tasks to find new opportunities.',
     'no_active_chats' => 'You don\'t have any active messages yet.',
+    'attachment' => 'Attachment',
+    'sent_image' => 'Sent an image',
+    'sent_file' => 'Sent a file',
+    'failed_load' => 'Failed to load messages.',
 ];

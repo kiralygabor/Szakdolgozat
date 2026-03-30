@@ -296,8 +296,8 @@
               name="q"
               value="{{ $filters['q'] ?? '' }}"
               type="text"
-              placeholder="Search for a task name..."
-              aria-label="Search for a task name"
+              placeholder="{{ __('tasks_page.search_placeholder') }}"
+              aria-label="{{ __('tasks_page.search_placeholder') }}"
               class="w-full pl-10 pr-12 py-2 rounded-full bg-gray-100 border-transparent focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-sm transition-all outline-none"
               autocomplete="off"
             >
@@ -315,7 +315,7 @@
                 <select name="category" id="category-filter"
                         aria-label="Select Category"
                         class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
-                  <option value="">All Categories</option>
+                  <option value="">{{ __('tasks_page.all_categories') }}</option>
                   @foreach($categories ?? [] as $category)
                     <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
                       {{ $category->name }}
@@ -332,12 +332,14 @@
                 <select name="job" id="job-filter"
                         aria-label="Select Service"
                         class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
-                  <option value="">All Services</option>
+                  <option value="">{{ __('tasks_page.all_services') }}</option>
                   @if($filters['category'] ?? '')
                     @foreach($selectedCategoryJobs ?? [] as $job)
-                        <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
-                            {{ $job->name }}
-                        </option>
+                        @if(is_object($job))
+                            <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
+                                {{ $job->name }}
+                            </option>
+                        @endif
                     @endforeach
                   @endif
                 </select>
@@ -352,36 +354,36 @@
                       aria-haspopup="true" aria-expanded="false" aria-controls="type-menu"
                       class="min-w-[120px] justify-between px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
                 <i data-feather="briefcase" class="w-3.5 h-3.5 text-gray-500" aria-hidden="true"></i>
-                <span id="type-text">Type</span>
+                <span id="type-text">{{ __('tasks_page.type_btn') }}</span>
                 <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400" aria-hidden="true"></i>
               </button>
 
               <div id="type-menu" class="absolute mt-3 right-0 bg-white border border-gray-100 rounded-xl shadow-xl p-4 w-64 hidden z-50">
                  <div class="mb-3">
-                   <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Location</label>
-                   <input id="type-city-search" type="text" placeholder="Search city..."
+                   <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">{{ __('tasks_page.location_label') }}</label>
+                   <input id="type-city-search" type="text" placeholder="{{ __('tasks_page.search_city_placeholder') }}"
                        class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm focus:border-blue-500 outline-none">
                    <div id="type-city-dropdown" class="mt-1 max-h-40 overflow-y-auto hidden border rounded-lg shadow-inner bg-white"></div>
                  </div>
-                 <div class="mb-3">
-                    <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">Mode</label>
+                  <div class="mb-3">
+                    <label class="text-xs font-bold text-gray-500 uppercase mb-1 block">{{ __('tasks_page.mode_label') }}</label>
                     <div class="space-y-1">
                       <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
                         <input type="radio" name="type" value="all" class="text-blue-600" @checked(($filters['type'] ?? 'all') === 'all')>
-                        <span class="text-sm ml-2 text-gray-700">Any</span>
+                        <span class="text-sm ml-2 text-gray-700">{{ __('tasks_page.mode_any') }}</span>
                       </label>
                       <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
                         <input type="radio" name="type" value="in_person" class="text-blue-600" @checked(($filters['type'] ?? '') === 'in_person')>
-                        <span class="text-sm ml-2 text-gray-700">In-Person</span>
+                        <span class="text-sm ml-2 text-gray-700">{{ __('tasks_page.mode_in_person') }}</span>
                       </label>
                       <label class="flex items-center p-1.5 rounded hover:bg-gray-50 cursor-pointer">
                         <input type="radio" name="type" value="remote" class="text-blue-600" @checked(($filters['type'] ?? '') === 'remote')>
-                        <span class="text-sm ml-2 text-gray-700">Remote</span>
+                        <span class="text-sm ml-2 text-gray-700">{{ __('tasks_page.mode_remote') }}</span>
                       </label>
                     </div>
-                 </div>
+                  </div>
                  <div class="flex justify-end gap-2 pt-2 border-t">
-                   <button type="button" id="type-apply" class="w-full py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Apply Filter</button>
+                   <button type="button" id="type-apply" class="w-full py-1.5 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">{{ __('tasks_page.apply_filter') }}</button>
                  </div>
               </div>
             </div>
@@ -390,13 +392,13 @@
             <div class="relative">
               <button type="button" id="price-btn"
                       aria-haspopup="true" aria-expanded="false" aria-controls="price-menu"
-                      class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
+                      class="min-w-[120px] justify-between px-3 py-2 rounded-lg border {{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 5 || $filters['max_price'] != 5000)) ? 'border-blue-400' : 'border-gray-300' }} bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-600 flex items-center gap-2 transition-all">
                 <i data-feather="dollar-sign" class="w-3.5 h-3.5 text-gray-500" aria-hidden="true"></i>
-                <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000)) ? 'text-blue-700' : '' }}">
-                  @if(isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 1000 || $filters['max_price'] != 20000))
-                    €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
+                <span id="price-text" class="{{ (isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 5 || $filters['max_price'] != 5000)) ? 'text-blue-700' : '' }}">
+                  @if(isset($filters['min_price']) || isset($filters['max_price']) && ($filters['min_price'] != 5 || $filters['max_price'] != 5000))
+                    €{{ number_format((int)($filters['min_price'] ?? 5), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 5000), 0, '.', ',') }}
                   @else
-                    Price
+                    {{ __('tasks_page.price_btn') }}
                   @endif
                 </span>
                 <i data-feather="chevron-down" class="w-3.5 h-3.5 ml-1 text-gray-400" aria-hidden="true"></i>
@@ -404,12 +406,12 @@
 
               <div id="price-menu" class="absolute mt-2 right-0 bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50" style="width: 340px; padding: 16px 20px 12px;">
                 {{-- Header --}}
-                <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2" style="letter-spacing:.05em;">Task Price</label>
+                <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2" style="letter-spacing:.05em;">{{ __('tasks_page.budget_range') }}</label>
 
                 {{-- Price display box --}}
                 <div class="border border-gray-300 rounded-md px-3 py-2 mb-5 text-center">
                   <span id="price-display" class="text-[15px] font-semibold text-gray-800">
-                    €{{ number_format((int)($filters['min_price'] ?? 1000), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 20000), 0, '.', ',') }}
+                    €{{ number_format((int)($filters['min_price'] ?? 5), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 5000), 0, '.', ',') }}
                   </span>
                 </div>
 
@@ -417,16 +419,16 @@
                 <div class="range-slider" style="margin-bottom: 20px;">
                    <div class="track-bg"></div>
                    <div id="price-track" class="track-fill"></div>
-                   <input id="price-min" name="min_price" type="range" min="1000" max="20000" step="50"
-                          value="{{ max(1000, (int)($filters['min_price'] ?? 1000)) }}">
-                   <input id="price-max" name="max_price" type="range" min="1000" max="20000" step="50"
-                          value="{{ min(20000, (int)($filters['max_price'] ?? 20000)) }}">
+                   <input id="price-min" name="min_price" type="range" min="5" max="5000" step="5"
+                          value="{{ max(5, (int)($filters['min_price'] ?? 5)) }}">
+                   <input id="price-max" name="max_price" type="range" min="5" max="5000" step="5"
+                          value="{{ min(5000, (int)($filters['max_price'] ?? 5000)) }}">
                 </div>
 
                 {{-- Buttons --}}
                 <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
-                  <button type="button" id="price-cancel" class="flex-1 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors">Cancel</button>
-                  <button type="button" id="price-apply" class="flex-1 py-2 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">Apply</button>
+                  <button type="button" id="price-cancel" class="flex-1 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors">{{ __('tasks_page.cancel') }}</button>
+                  <button type="button" id="price-apply" class="flex-1 py-2 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">{{ __('tasks_page.apply_price') }}</button>
                 </div>
               </div>
             </div>
@@ -434,11 +436,11 @@
             <!-- Sort -->
             <div class="hidden lg:block h-8 w-px bg-gray-300 mx-4" aria-hidden="true"></div>
             <select name="sort" id="sort-filter" aria-label="Sort tasks by" class="bg-transparent py-2 text-sm font-medium text-gray-700 hover:text-gray-900 cursor-pointer outline-none">
-                <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>Sort: Recent</option>
-                <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>Sort: Closest</option>
-                <option value="due" @selected(($filters['sort'] ?? '')==='due')>Sort: Due Soon</option>
-                <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>Price: Low to High</option>
-                <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>Price: High to Low</option>
+                <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>{{ __('tasks_page.sort_recent') }}</option>
+                <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>{{ __('tasks_page.sort_closest') }}</option>
+                <option value="due" @selected(($filters['sort'] ?? '')==='due')>{{ __('tasks_page.sort_due') }}</option>
+                <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>{{ __('tasks_page.sort_price_asc') }}</option>
+                <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>{{ __('tasks_page.sort_price_desc') }}</option>
             </select>
           </div>
         </form>
@@ -455,20 +457,20 @@
                              @if($filters['q'] ?? '') 
                                 "{{ $filters['q'] }}" 
                             @else 
-                                Browse everything
+                                {{ __('tasks_page.browse_everything') }}
                             @endif
                         </span>
                         <span class="text-[11px] text-gray-500 leading-tight">
                             @if($filters['type'] ?? '')
-                                {{ $filters['type'] === 'remote' ? 'Remote' : 'In-person' }}
+                                {{ $filters['type'] === 'remote' ? __('tasks_page.mode_remote') : __('tasks_page.mode_in_person') }}
                             @else
-                                Any mode
+                                {{ __('tasks_page.any_mode') }}
                             @endif
                             ·
                             @if($filters['category'] ?? '')
-                                {{ $categories->firstWhere('id', $filters['category'])->name ?? 'All' }}
+                                {{ $categories->firstWhere('id', $filters['category'])->name ?? __('tasks_page.all_categories') }}
                             @else
-                                All categories
+                                {{ __('tasks_page.all_categories') }}
                             @endif
                         </span>
                     </div>
@@ -486,7 +488,7 @@
   <div id="mobile-filters-modal" class="fixed inset-0 z-[100] bg-white hidden flex-col">
       <!-- Modal Header -->
       <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 class="text-base font-bold text-gray-800">Filters</h2>
+          <h2 class="text-base font-bold text-gray-800">{{ __('tasks_page.filters') }}</h2>
           <button type="button" id="close-mobile-filters" class="p-2 -mr-2 bg-gray-50 rounded-full text-gray-400">
               <i data-feather="x" class="w-5 h-5"></i>
           </button>
@@ -497,9 +499,9 @@
           
           <!-- Task Name Search -->
           <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Task Name</label>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.task_name') }}</label>
               <div class="relative">
-                  <input type="text" name="q" placeholder="Search for task name..." value="{{ $filters['q'] ?? '' }}" 
+                  <input type="text" name="q" placeholder="{{ __('tasks_page.search_placeholder') }}" value="{{ $filters['q'] ?? '' }}" 
                          class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
                   <div class="absolute right-5 top-1/2 -translate-y-1/2">
                       <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
@@ -509,13 +511,13 @@
           
           <!-- Category -->
           <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Category</label>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.category') }}</label>
               <div class="relative">
                   <select name="category" id="mobile-category" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
-                      <option value="">All Categories</option>
+                      <option value="">{{ __('tasks_page.all_categories') }}</option>
                       @foreach($categories ?? [] as $category)
                           <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
-                              {{ $category->name }}
+                              {{ __('categories.' . $category->name) }}
                           </option>
                       @endforeach
                   </select>
@@ -527,20 +529,20 @@
 
           <!-- To be done -->
           <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">To be done</label>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.to_be_done') }}</label>
               <div class="flex p-1.5 bg-gray-100 rounded-2xl border border-gray-200">
-                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'in_person' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="in_person">In-person</button>
-                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'remote' ? 'bg-blue-900 text-white shadow-md' : 'text-gray-500' }}" data-value="remote">Remotely</button>
-                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'all' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="all">All</button>
+                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'in_person' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="in_person">{{ __('tasks_page.mode_in_person') }}</button>
+                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'remote' ? 'bg-blue-900 text-white shadow-md' : 'text-gray-500' }}" data-value="remote">{{ __('tasks_page.mode_remote') }}</button>
+                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'all' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="all">{{ __('tasks_page.mode_any') }}</button>
               </div>
               <input type="hidden" name="type" id="mobile-type-hidden" value="{{ $filters['type'] ?? 'all' }}">
           </div>
 
           <!-- Suburb -->
           <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Suburb</label>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.suburb') }}</label>
               <div class="relative">
-                  <input type="text" id="mobile-city-search-input" placeholder="Search city or suburb..." value="{{ $filters['city_search'] ?? '' }}" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
+                  <input type="text" id="mobile-city-search-input" placeholder="{{ __('tasks_page.search_city_placeholder') }}" value="{{ $filters['city_search'] ?? '' }}" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
                   <div class="absolute right-5 top-1/2 -translate-y-1/2">
                       <i data-feather="map-pin" class="w-4 h-4 text-gray-400"></i>
                   </div>
@@ -551,7 +553,7 @@
 
           <!-- Task Price -->
           <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">Task Price</label>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">{{ __('tasks_page.price_label') }}</label>
               <div class="text-center mb-8">
                   <span id="mobile-price-text" class="text-[15px] font-extrabold text-blue-600 bg-blue-50 px-5 py-2.5 rounded-full border border-blue-200">
                       €{{ number_format($filters['min_price'] ?? 1000) }} - €{{ number_format($filters['max_price'] ?? 20000) }}
@@ -561,22 +563,22 @@
                   <div class="range-slider">
                       <div class="track-bg h-2"></div>
                       <div id="mobile-price-track" class="track-fill h-2"></div>
-                      <input id="mobile-price-min" name="min_price" type="range" min="1000" max="20000" step="100" value="{{ $filters['min_price'] ?? 1000 }}">
-                      <input id="mobile-price-max" name="max_price" type="range" min="1000" max="20000" step="100" value="{{ $filters['max_price'] ?? 20000 }}">
+                      <input id="mobile-price-min" name="min_price" type="range" min="5" max="5000" step="5" value="{{ $filters['min_price'] ?? 5 }}">
+                      <input id="mobile-price-max" name="max_price" type="range" min="5" max="5000" step="5" value="{{ $filters['max_price'] ?? 5000 }}">
                   </div>
               </div>
           </div>
 
            <!-- Sort -->
           <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Sort by</label>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.sort_by') }}</label>
               <div class="relative">
                   <select name="sort" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 outline-none">
-                      <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>Most Recent</option>
-                      <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>Closest to me</option>
-                      <option value="due" @selected(($filters['sort'] ?? '')==='due')>Due Soon</option>
-                      <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>Price: Low to High</option>
-                      <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>Price: High to Low</option>
+                      <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>{{ __('tasks_page.sort_recent') }}</option>
+                      <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>{{ __('tasks_page.sort_closest') }}</option>
+                      <option value="due" @selected(($filters['sort'] ?? '')==='due')>{{ __('tasks_page.sort_due') }}</option>
+                      <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>{{ __('tasks_page.sort_price_asc') }}</option>
+                      <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>{{ __('tasks_page.sort_price_desc') }}</option>
                   </select>
                   <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none">
                       <i data-feather="chevron-down" class="w-5 h-5 text-gray-400"></i>
@@ -587,8 +589,8 @@
 
       <!-- Modal Footer -->
       <div class="p-6 border-t border-gray-100 flex gap-4 bg-white">
-          <button type="button" id="clear-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all">Cancel</button>
-          <button type="button" id="apply-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg shadow-blue-100 transition-all">Apply</button>
+          <button type="button" id="clear-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all">{{ __('tasks_page.cancel') }}</button>
+          <button type="button" id="apply-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg shadow-blue-100 transition-all">{{ __('tasks_page.apply_filter') }}</button>
       </div>
   </div>
  
@@ -617,8 +619,8 @@
               @if($isMyTask || $hasOffer)
                 <div class="flex flex-wrap items-center gap-2 mb-1.5">
                     @if($isMyTask)
-                        <span class="inline-flex items-center justify-center bg-violet-100 text-violet-700 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider" title="Your own task">
-                            My Task
+                        <span class="inline-flex items-center justify-center bg-violet-100 text-violet-700 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider" title="{{ __('tasks_page.my_task') }}">
+                            {{ __('tasks_page.my_task') }}
                         </span>
                     @endif
                     @if($hasOffer)
@@ -643,14 +645,14 @@
                   {{ $task->description }}
               </p>
  
-              <div class="flex flex-wrap gap-1.5 mb-3">
-                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-semibold uppercase tracking-wide">
-                    {{ optional($task->category)->name ?? 'General' }}
-                 </span>
-                 <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-medium">
-                    📍 {{ $task->location ?? 'Remote' }}
-                 </span>
-              </div>
+               <div class="flex flex-wrap gap-1.5 mb-3">
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-semibold uppercase tracking-wide">
+                     {{ $task->category ? __('categories.' . $task->category->name) : __('tasks_page.general') }}
+                  </span>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-medium">
+                     📍 {{ $task->location === 'Remote' ? __('tasks_page.remote') : $task->location }}
+                  </span>
+               </div>
  
               <div class="pt-2 border-t border-gray-50 flex justify-between items-center">
                  <div class="flex items-center gap-2">
@@ -658,7 +660,7 @@
                          <img src="{{ $task->employer->avatar_url ?? '' }}" alt="{{ $task->employer->first_name ?? 'User' }}" class="w-7 h-7 rounded-full object-cover border-2 border-gray-100 shadow-sm group-hover/avatar:border-blue-400 group-hover/avatar:shadow-md transition-all duration-200">
                      </a>
                      <span class="text-[10px] text-gray-400">
-                        {{ $task->created_at?->diffForHumans(null, true, true) }} ago
+                        {{ $task->created_at?->diffForHumans() }}
                      </span>
                  </div>
                   <div class="flex items-center gap-2">
@@ -671,30 +673,30 @@
                       @endauth
                       @guest
                           <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:underline">
-                             Sign in to make an offer
+                             {{ __('tasks_page.signin_to_offer') }}
                           </a>
                       @else
                           @if($isMyTask)
                               <a href="{{ route('my-tasks') }}#task-{{ $task->id }}" class="text-xs font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                                  <i data-feather="eye" class="w-3 h-3"></i> View Details
+                                  <i data-feather="eye" class="w-3 h-3"></i> {{ __('tasks_page.view_details') }}
                               </a>
                           @elseif($hasOffer)
                              <form method="POST" action="{{ route('tasks.offers.destroy', $task->id) }}" class="inline m-0 p-0">
                                  @csrf
                                  @method('DELETE')
                                  <button type="submit" class="text-xs font-semibold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap inline-flex items-center gap-1">
-                                     <i data-feather="x" class="w-3 h-3"></i> Cancel offer
+                                     <i data-feather="x" class="w-3 h-3"></i> {{ __('tasks_page.cancel_offer') }}
                                  </button>
                              </form>
                           @else
                               <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
                               @if(count($missingSteps) > 0)
                                  <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                     Make an offer
+                                     {{ __('tasks_page.make_offer') }}
                                  </button>
                               @else
                                  <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                     Make an offer
+                                     {{ __('tasks_page.make_offer') }}
                                  </a>
                               @endif
                           @endif
@@ -708,14 +710,14 @@
                  <i data-feather="search" class="w-10 h-10 text-blue-300"></i>
               </div>
               <div class="space-y-2">
-                <h3 class="text-xl font-bold text-slate-800">No tasks found</h3>
+                <h3 class="text-xl font-bold text-slate-800">{{ __('tasks_page.no_tasks_found') }}</h3>
                 <p class="text-base text-slate-500 leading-relaxed max-w-[280px] mx-auto">
-                  We couldn't find any tasks matching your criteria. Try adjusting your filters or search terms.
+                  {{ __('tasks_page.no_tasks_desc') }}
                 </p>
               </div>
               <a href="{{ route('tasks') }}" class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-100 bg-blue-50/50 px-8 py-3 rounded-full transition-all mt-4 shadow-sm hover:shadow-md">
                 <i data-feather="refresh-cw" class="w-4 h-4"></i>
-                Clear all filters
+                {{ __('tasks_page.clear_filters') }}
               </a>
             </div>
           @endforelse
@@ -752,10 +754,10 @@
                         <div class="bg-white/95 backdrop-blur-sm border border-blue-50 text-gray-800 rounded-2xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] p-4 min-w-[200px] border-t-4 border-t-blue-500">
                            <div class="flex items-center gap-2 mb-2">
                                <i data-feather="info" class="w-3.5 h-3.5 text-blue-500"></i>
-                               <div class="text-[10px] font-black text-blue-500 uppercase tracking-[0.15em]">Digital Opportunities</div>
+                               <div class="text-[10px] font-black text-blue-500 uppercase tracking-[0.15em]">{{ __('tasks_page.digital_opps') }}</div>
                            </div>
                            <p class="text-[12px] font-medium leading-relaxed text-slate-600">
-                               There are <span class="text-blue-600 font-bold">{{ $remoteCount }}</span> tasks with no physical location. We've hidden them from the map to keep your view clear—you can find them in the list on the left.
+                               {!! __('tasks_page.remote_tasks_info', ['count' => '<span class="text-blue-600 font-bold">' . $remoteCount . '</span>']) !!}
                            </p>
                         </div>
                     </div>
@@ -825,46 +827,25 @@
               </div>
               <!-- Header Text -->
               <div class="text-center mb-6">
-                  <h2 class="text-2xl font-bold text-gray-900 mb-2">Before you make an offer</h2>
+                  <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('tasks_page.before_offer_title') }}</h2>
                   <p class="text-gray-500 text-[15px] leading-relaxed">
-                      Help us keep Minijobz safe and fun, and fill in a few details.
+                      {{ __('tasks_page.before_offer_desc') }}
                   </p>
               </div>
 
               <!-- Steps List -->
               <div class="space-y-2 mb-8">
                   @foreach($missingSteps as $step)
-                      @php
-                          // Map text to Feather Icon names
-                          $iconName = 'check-circle'; // Fallback
-                          $lower = strtolower($step);
-                          
-                          if(str_contains($lower, 'picture') || str_contains($lower, 'photo')) {
-                              $iconName = 'user';
-                          }
-                          elseif(str_contains($lower, 'birth') || str_contains($lower, 'date')) {
-                              $iconName = 'calendar';
-                          }
-                          elseif(str_contains($lower, 'mobile') || str_contains($lower, 'phone')) {
-                              $iconName = 'smartphone';
-                          }
-                          elseif(str_contains($lower, 'bank') || str_contains($lower, 'payment')) {
-                              $iconName = 'credit-card';
-                          }
-                          elseif(str_contains($lower, 'address') || str_contains($lower, 'location')) {
-                              $iconName = 'map-pin';
-                          }
-                      @endphp
 
                       <!-- Single List Item -->
                       <a href="{{ route('profile') }}" class="flex items-center justify-between py-2 group cursor-pointer hover:bg-gray-50 rounded-xl px-2 transition-colors no-underline">
                           <div class="flex items-center gap-4">
                               <!-- Left Icon Circle -->
                               <div class="step-icon-circle">
-                                  <i data-feather="{{ $iconName }}" class="w-5 h-5"></i>
+                                  <i data-feather="{{ $step['icon'] }}" class="w-5 h-5"></i>
                               </div>
                               <!-- Text -->
-                              <span class="text-gray-700 font-medium text-[15px]">{{ $step }}</span>
+                              <span class="text-gray-700 font-medium text-[15px]">{{ $step['text'] }}</span>
                           </div>
                           
                           <!-- Right Plus Button -->
@@ -878,7 +859,7 @@
               <!-- Footer Button -->
               <div class="mt-2">
                 <a href="{{ route('profile') }}" class="block w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-center rounded-full transition-colors text-sm">
-                    Continue
+                    {{ __('tasks_page.continue') }}
                 </a>
               </div>
           </div>
@@ -988,11 +969,11 @@
             <div class="p-3 min-w-[180px]">
                 <div class="flex items-center justify-between gap-2 mb-1">
                     <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">${t.location}</div>
-                    ${t.is_my_task ? '<span class="px-1.5 py-0.5 bg-violet-100 text-violet-700 text-[9px] font-bold uppercase rounded-md">My Task</span>' : ''}
+                    ${t.is_my_task ? '<span class="px-1.5 py-0.5 bg-violet-100 text-violet-700 text-[9px] font-bold uppercase rounded-md">{{ __('tasks_page.my_task') }}</span>' : ''}
                 </div>
                 <div class="font-bold text-sm text-gray-900 mb-1 leading-tight">${t.title}</div>
                 <div class="text-blue-600 font-extrabold text-sm mb-3">€${t.price.toLocaleString()}</div>
-                <a href="${finalUrl}" class="block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">View Details</a>
+                <a href="${finalUrl}" class="block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">{{ __('tasks_page.view_details') }}</a>
             </div>
         `;
 
@@ -1095,9 +1076,9 @@
         const priceMenu = document.getElementById('price-menu');
         if (!minEl || !maxEl) return;
 
-        const RANGE_MIN = 1000;
-        const RANGE_MAX = 20000;
-        const GAP = 100;
+        const RANGE_MIN = 5;
+        const RANGE_MAX = 5000;
+        const GAP = 10;
 
         function update(source) {
             let minVal = parseInt(minEl.value);

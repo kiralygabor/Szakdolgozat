@@ -24,6 +24,18 @@ class OfferController extends Controller
                 ->with('error', 'You cannot make an offer on your own task.');
         }
 
+        // Profile completion check
+        $missingSteps = array_filter([
+            empty($user->avatar) ? 'Upload a profile picture' : null,
+            empty($user->birthdate) ? 'Add your date of birth' : null,
+            empty($user->phone_number) ? 'Verify your mobile' : null,
+            empty($user->city_id) ? 'Add your location' : null,
+        ]);
+
+        if (count($missingSteps) > 0) {
+            return redirect()->route('profile')->with('info', 'Please complete your profile before making an offer.');
+        }
+
         // Prevent offers if task is not open
         if ($task->status !== 'open') {
             return redirect()->route('tasks.show', $task->id)

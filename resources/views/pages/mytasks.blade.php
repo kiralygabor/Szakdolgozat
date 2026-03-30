@@ -639,7 +639,7 @@
                 $otherTasks = $tasksCollection->where('id', '!=', $activeTask->id)->values();
                 $offerCount = $activeTask->offers_count ?? 0; 
                 $hasOffers = $offerCount > 0;
-                $viewCount = $activeTask->views ?? 0;
+                $viewCount = $activeTask->distinct_views_count ?? $activeTask->views ?? 0;
                 $showOffers = $activeTask->status === 'open' && in_array(($viewMode ?? 'posted'), ['posted', 'direct']);
             }
         @endphp
@@ -667,7 +667,7 @@
                 </a>
                 <a href="{{ route('my-tasks', ['view' => 'direct']) }}" 
                    class="modern-tab {{ ($viewMode ?? 'posted') === 'direct' ? 'active' : '' }}">
-                   {{ __('Direct Requests') }}
+                   {{ __('mytasks.tabs.direct') }}
                 </a>
                 <a href="{{ route('my-tasks', ['view' => 'applied']) }}" 
                    class="modern-tab {{ ($viewMode ?? 'posted') === 'applied' ? 'active' : '' }}">
@@ -750,7 +750,7 @@
                                     @if($activeTask->employee_id == auth()->id())
                                     <div class="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2 py-1 rounded-full border border-blue-100 h-fit">
                                         <i data-feather="user-check" class="w-3.5 h-3.5"></i>
-                                        <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('Directly requested from you') }}</span>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('mytasks.status.directly_requested') }}</span>
                                     </div>
                                     @endif
                                 </div>
@@ -765,7 +765,7 @@
                                 </div>
                             @elseif($activeTask->employee_id == auth()->id())
                                 <div class="status-badge" style="color:#6366f1;">
-                                    <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('New Quote Request') }}
+                                    <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('mytasks.status.new_quote_request') }}
                                 </div>
                                 <h1 class="hero-headline">{{ __('mytasks.status.direct_request_headline') }}</h1>
                                 <p class="hero-subtext">{{ __('mytasks.status.direct_request_subtext') }}</p>
@@ -774,7 +774,7 @@
                                         {{ __('mytasks.status.accept_or_counter') }} <i data-feather="arrow-right" class="w-5 h-5"></i>
                                     </button>
                                     <a href="{{ route('messages', ['user_id' => $activeTask->employer_id]) }}" class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-3.5 px-8 rounded-full transition-all flex items-center gap-2 no-underline">
-                                        <i data-feather="message-circle" class="w-5 h-5"></i> {{ __('Message Employer') }}
+                                        <i data-feather="message-circle" class="w-5 h-5"></i> {{ __('mytasks.status.message_employer') }}
                                     </a>
                                 </div>
                             @endif
@@ -787,8 +787,8 @@
                         
                         @if($activeTask->employer_id == auth()->id())
                             @if($activeTask->is_direct)
-                                <h1 class="hero-headline">{{ __('Your request has been accepted!') }}</h1>
-                                <p class="hero-subtext">{{ __('The tasker has accepted your direct request. You can now coordinate details and mark the task as completed once done.') }}</p>
+                                <h1 class="hero-headline">{{ __('mytasks.status.request_accepted') }}</h1>
+                                <p class="hero-subtext">{{ __('mytasks.status.request_accepted_desc') }}</p>
                             @else
                                 <h1 class="hero-headline">{{ __('mytasks.status.task_underway') }}</h1>
                                 <p class="hero-subtext">{{ __('mytasks.status.underway_desc') }}</p>
@@ -823,10 +823,10 @@
                     @elseif($hasOffers)
                         @if(($viewMode ?? 'posted') === 'direct')
                             <div class="status-badge active" style="color:#6366f1;">
-                                <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('Quote Received') }}
+                                <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('mytasks.status.quote_received') }}
                             </div>
-                            <h1 class="hero-headline">{{ __('New response!') }}</h1>
-                            <p class="hero-subtext">{{ __('The expert has sent you a price quote for your request. Review it below to proceed.') }}</p>
+                            <h1 class="hero-headline">{{ __('mytasks.status.new_response') }}</h1>
+                            <p class="hero-subtext">{{ __('mytasks.status.new_response_desc') }}</p>
                         @else
                             <div class="status-badge active">
                                 <span class="status-dot"></span> {{ __('mytasks.status.new_activity') }}
@@ -837,10 +837,10 @@
                     @else
                         @if(($viewMode ?? 'posted') === 'direct')
                             <div class="status-badge" style="color:#6B7280;">
-                                <span class="status-dot"></span> {{ __('Request Sent') }}
+                                <span class="status-dot"></span> {{ __('mytasks.status.request_sent') }}
                             </div>
-                            <h1 class="hero-headline">{{ __('Waiting for response') }}</h1>
-                            <p class="hero-subtext">{{ __('You have requested a quote from :name. We will notify you as soon as they respond with their price.', ['name' => $activeTask->employee->first_name ?? 'the expert']) }}</p>
+                            <h1 class="hero-headline">{{ __('mytasks.status.waiting_for_response') }}</h1>
+                            <p class="hero-subtext">{{ __('mytasks.status.waiting_for_response_desc', ['name' => $activeTask->employee->first_name ?? 'the expert']) }}</p>
                         @else
                             <div class="status-badge">
                                 <span class="status-dot"></span> {{ __('mytasks.status.task_posted') }}
@@ -859,11 +859,11 @@
                                     </div>
                                 </div>
                                 @if($hasOffers)
-                                    <h3 class="text-lg font-bold text-gray-800">{{ __('Review Quote') }}</h3>
-                                    <p class="questions-copy mt-2">{{ __('The requested expert has replied with their proposed price and details.') }}</p>
+                                    <h3 class="text-lg font-bold text-gray-800">{{ __('mytasks.status.review_quote') }}</h3>
+                                    <p class="questions-copy mt-2">{{ __('mytasks.status.review_quote_desc') }}</p>
                                 @else
-                                    <h3 class="text-lg font-bold text-gray-800">{{ __('Awaiting Response') }}</h3>
-                                    <p class="questions-copy mt-2">{{ __('The expert hasn\'t responded to your request yet. We\'ll let you know when they do.') }}</p>
+                                    <h3 class="text-lg font-bold text-gray-800">{{ __('mytasks.status.awaiting_response') }}</h3>
+                                    <p class="questions-copy mt-2">{{ __('mytasks.status.awaiting_response_desc') }}</p>
                                 @endif
                             </div>
                         @elseif(($viewMode ?? 'posted') === 'posted' && $activeTask->status === 'open')
@@ -945,11 +945,11 @@
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
-                                <span class="task-label">{{ __('mytasks.details.status_label', ['status' => ucfirst($activeTask->status)]) }}</span>
+                                <span class="task-label">{{ __('mytasks.details.status_label', ['status' => __('mytasks.status_names.' . $activeTask->status)]) }}</span>
                                 @if(($viewMode ?? 'posted') === 'posted' && $activeTask->employee_id)
                                 <div class="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100">
                                     <i data-feather="user" class="w-3 h-3"></i>
-                                    <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('Sent a quote to') }} {{ $activeTask->employee->first_name }}</span>
+                                    <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('mytasks.modals.sent_to', ['name' => $activeTask->employee->first_name]) }}</span>
                                 </div>
                                 @endif
                             </div>
@@ -958,14 +958,14 @@
                             <div class="management-pills">
                                 <button type="button" class="pill-action" onclick="openEditTaskModal()">
                                     <i data-feather="edit-2" style="width:12px; height:12px;"></i>
-                                    {{ __('Edit') }}
+                                    {{ __('mytasks.actions.edit_short') }}
                                 </button>
-                                <form action="{{ route('advertisements.destroy', $activeTask->id) }}" method="POST" class="m-0 p-0" onsubmit="return confirm('{{ __('Are you sure you want to cancel this task? This cannot be undone.') }}');">
+                                <form action="{{ route('advertisements.destroy', $activeTask->id) }}" method="POST" class="m-0 p-0" onsubmit="return confirm('{{ __('mytasks.modals.confirm_cancel') }}');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="pill-action danger">
                                         <i data-feather="trash-2" style="width:12px; height:12px;"></i>
-                                        {{ __('Cancel') }}
+                                        {{ __('mytasks.actions.cancel_short') }}
                                     </button>
                                 </form>
                             </div>
@@ -1012,7 +1012,7 @@
                                     @elseif($activeTask->required_date)
                                         {{ \Carbon\Carbon::parse($activeTask->required_date)->format('M d, Y') }}
                                     @elseif($activeTask->required_before_date)
-                                      Before {{ \Carbon\Carbon::parse($activeTask->required_before_date)->format('M d, Y') }}
+                                      {{ __('mytasks.status.bc_before') }} {{ \Carbon\Carbon::parse($activeTask->required_before_date)->format('M d, Y') }}
                                     @else
                                         {{ __('mytasks.details.flexible') }}
                                     @endif
@@ -1030,14 +1030,14 @@
                             <div class="data-icon"><i data-feather="tag"></i></div>
                             <div class="data-text">
                                 <h4>{{ __('mytasks.details.category') }}</h4>
-                                <p>{{ optional($activeTask->category)->name ?? 'General' }}</p>
+                                <p>{{ __('categories.' . (optional(optional($activeTask->job)->category)->name ?? 'General')) }}</p>
                             </div>
                         </div>
                         <div class="data-row">
                             <div class="data-icon"><i data-feather="file-text"></i></div>
                             <div class="data-text">
                                 <h4>{{ __('mytasks.details.job') }}</h4>
-                                <p>{{ optional($activeTask->job)->name ?? ('Job #'.$activeTask->job_id) }}</p>
+                                <p>{{ __('jobs.' . (optional($activeTask->job)->name ?? ('Job #'.$activeTask->jobs_id))) }}</p>
                             </div>
                         </div>
                     </div>
@@ -1046,7 +1046,7 @@
                     <div id="task-details-modal" class="task-details-modal">
                         <div id="task-details-backdrop" class="task-details-backdrop" onclick="closeTaskDetailsModal()"></div>
                         <div class="task-details-panel">
-                            <button type="button" class="task-details-close" onclick="closeTaskDetailsModal()" aria-label="Close modal">
+                            <button type="button" class="task-details-close" onclick="closeTaskDetailsModal()" aria-label="{{ __('mytasks.modals.close') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
                             @if(!empty($activeTask->description))
@@ -1063,15 +1063,15 @@
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
                             <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ __('mytasks.status.task_completed') }}</h3>
-                            <p class="text-gray-500 mb-6">{{ __('Would you like to leave a review for the Tasker?') }}</p>
+                            <p class="text-gray-500 mb-6">{{ __('mytasks.modals.leave_review_q') }}</p>
                             <div id="complete-choice-buttons" class="grid grid-cols-1 gap-3">
                                 <button onclick="showReviewForm()" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
-                                    <i data-feather="star" class="w-4 h-4"></i> {{ __('Yes, leave a review') }}
+                                    <i data-feather="star" class="w-4 h-4"></i> {{ __('mytasks.modals.leave_review_btn') }}
                                 </button>
                                 <form action="{{ route('advertisements.complete', $activeTask->id) }}" method="POST">
                                     @csrf
                                     <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 transition">
-                                        {{ __('No, just complete task') }}
+                                        {{ __('mytasks.modals.just_complete_btn') }}
                                     </button>
                                 </form>
                             </div>
@@ -1079,20 +1079,20 @@
                                 <form action="{{ route('advertisements.complete', $activeTask->id) }}" method="POST">
                                     @csrf
                                     <div class="mb-4">
-                                        <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Rating') }}</label>
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('mytasks.modals.rating') }}</label>
                                         <div class="flex gap-2 text-2xl" id="star-rating-input">
                                             @for($i=1; $i<=5; $i++)
-                                                <i role="button" tabindex="0" aria-label="{{ __('Rate :count stars', ['count' => $i]) }}" data-feather="star" class="cursor-pointer text-gray-300 hover:text-yellow-400" onclick="setRating({{ $i }})" id="star-{{ $i }}"></i>
+                                                <i role="button" tabindex="0" aria-label="{{ __('mytasks.modals.rate_stars', ['count' => $i]) }}" data-feather="star" class="cursor-pointer text-gray-300 hover:text-yellow-400" onclick="setRating({{ $i }})" id="star-{{ $i }}"></i>
                                             @endfor
                                         </div>
                                         <input type="hidden" name="stars" id="rating-value" required>
                                     </div>
                                     <div class="mb-6">
-                                        <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Comment') }}</label>
-                                        <textarea name="comment" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="{{ __('Write a short review...') }}"></textarea>
+                                        <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('mytasks.modals.comment') }}</label>
+                                        <textarea name="comment" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="{{ __('mytasks.modals.write_review_placeholder') }}"></textarea>
                                     </div>
                                     <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-                                        {{ __('Complete & Review') }}
+                                        {{ __('mytasks.modals.complete_review_btn') }}
                                     </button>
                                 </form>
                             </div>
@@ -1103,7 +1103,7 @@
                     <div id="offer-details-modal" class="task-details-modal" style="z-index: 60;">
                         <div class="task-details-backdrop" onclick="closeOfferModal()"></div>
                         <div class="task-details-panel" style="max-width: 500px;">
-                            <button type="button" class="task-details-close" onclick="closeOfferModal()" aria-label="{{ __('Close modal') }}">
+                            <button type="button" class="task-details-close" onclick="closeOfferModal()" aria-label="{{ __('mytasks.modals.close_modal') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
                             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
@@ -1121,22 +1121,22 @@
                                 </a>
                                 <div class="w-full sm:w-auto flex sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 pt-4 sm:pt-0 border-gray-100">
                                     <div id="modal-offer-price" class="text-2xl font-bold text-blue-600 order-2 sm:order-1"></div>
-                                    <div class="text-[10px] text-gray-400 uppercase font-bold sm:mt-1 order-1 sm:order-2">{{ __('Offer Price') }}</div>
+                                    <div class="text-[10px] text-gray-400 uppercase font-bold sm:mt-1 order-1 sm:order-2">{{ __('mytasks.modals.offer_price') }}</div>
                                 </div>
                             </div>
                             <div class="bg-gray-50 rounded-2xl p-4 sm:p-5 mb-6 border border-gray-100">
-                                <h4 class="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ __('Message from Tasker') }}</h4>
+                                <h4 class="text-[10px] sm:text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">{{ __('mytasks.modals.message_from_tasker') }}</h4>
                                 <p id="modal-offer-message" class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap break-words" style="overflow-wrap: break-word; word-break: break-word;"></p>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <a id="message-tasker-btn" href="#" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-white border border-gray-200 text-gray-700 font-bold hover:bg-gray-50 transition text-center no-underline">
-                                    <i data-feather="message-circle" class="w-4 h-4"></i> {{ __('Message') }}
+                                    <i data-feather="message-circle" class="w-4 h-4"></i> {{ __('mytasks.modals.message') }}
                                 </a>
                                 <form id="accept-offer-form" method="POST" action="" class="h-14">
                                     @csrf
                                     @if($activeTask->status === 'open')
                                         <button type="submit" class="h-full w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 border border-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-                                            <i data-feather="check" class="w-4 h-4"></i> {{ __('Accept Offer') }}
+                                            <i data-feather="check" class="w-4 h-4"></i> {{ __('mytasks.modals.accept_offer') }}
                                         </button>
                                     @else
                                         <button type="button" disabled class="h-full w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-gray-200 border border-gray-200 text-gray-400 font-bold cursor-not-allowed">
@@ -1153,7 +1153,7 @@
                     <div id="direct-quote-modal" class="task-details-modal" style="z-index: 65;">
                         <div class="task-details-backdrop" onclick="closeDirectQuoteModal()"></div>
                         <div class="task-details-panel" style="max-width: 500px;">
-                            <button type="button" class="task-details-close" onclick="closeDirectQuoteModal()" aria-label="{{ __('Close modal') }}">
+                            <button type="button" class="task-details-close" onclick="closeDirectQuoteModal()" aria-label="{{ __('mytasks.modals.close_modal') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
 
@@ -1162,14 +1162,14 @@
                                     <i data-feather="send" class="w-5 h-5 text-indigo-600"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl font-bold text-gray-900">{{ __('Respond to Quote Request') }}</h3>
+                                    <h3 class="text-xl font-bold text-gray-900">{{ __('mytasks.modals.respond_quote') }}</h3>
                                     <p class="text-sm text-gray-500">{{ $activeTask->employer->first_name ?? '' }} · {{ $activeTask->title }}</p>
                                 </div>
                             </div>
 
                             <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 mb-6">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-medium text-indigo-700">{{ __('Their budget') }}</span>
+                                    <span class="text-sm font-medium text-indigo-700">{{ __('mytasks.modals.their_budget') }}</span>
                                     <span class="text-lg font-bold text-indigo-800">€{{ number_format($activeTask->price ?? 0, 0) }}</span>
                                 </div>
                             </div>
@@ -1178,13 +1178,13 @@
                             <form action="{{ route('tasks.accept-direct', $activeTask->id) }}" method="POST" class="mb-4">
                                 @csrf
                                 <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-green-600 text-white font-bold hover:bg-green-700 transition shadow-lg shadow-green-200 cursor-pointer">
-                                    <i data-feather="check" class="w-4 h-4"></i> {{ __('Accept at budget') }} (€{{ number_format($activeTask->price ?? 0, 0) }})
+                                    <i data-feather="check" class="w-4 h-4"></i> {{ __('mytasks.modals.accept_budget') }} (€{{ number_format($activeTask->price ?? 0, 0) }})
                                 </button>
                             </form>
 
                             <div class="relative flex items-center my-5">
                                 <div class="flex-grow border-t border-gray-200"></div>
-                                <span class="mx-4 text-xs font-bold text-gray-400 uppercase">{{ __('or counter offer') }}</span>
+                                <span class="mx-4 text-xs font-bold text-gray-400 uppercase">{{ __('mytasks.modals.or_counter') }}</span>
                                 <div class="flex-grow border-t border-gray-200"></div>
                             </div>
 
@@ -1192,15 +1192,15 @@
                             <form action="{{ route('tasks.offers.store', $activeTask->id) }}" method="POST">
                                 @csrf
                                 <div class="mb-4">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Your price (€)') }}</label>
-                                    <input type="number" name="offer_price" id="direct-quote-price" min="1" class="w-full border border-gray-300 rounded-xl p-3 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="Enter your price">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('mytasks.modals.your_price_label') }}</label>
+                                    <input type="number" name="offer_price" id="direct-quote-price" min="1" class="w-full border border-gray-300 rounded-xl p-3 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="{{ __('mytasks.modals.your_price') }}">
                                 </div>
                                 <div class="mb-6">
-                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('Message') }}</label>
-                                    <textarea name="message" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="{{ __('Describe your experience and how you can help...') }}"></textarea>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('mytasks.modals.message_label') }}</label>
+                                    <textarea name="message" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="{{ __('mytasks.modals.describe_help') }}"></textarea>
                                 </div>
                                 <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 cursor-pointer">
-                                    <i data-feather="send" class="w-4 h-4"></i> {{ __('Send counter offer') }}
+                                    <i data-feather="send" class="w-4 h-4"></i> {{ __('mytasks.modals.send_counter') }}
                                 </button>
                             </form>
                         </div>
@@ -1215,11 +1215,9 @@
                             <button type="button" class="task-details-close" onclick="closeEditTaskModal()" aria-label="{{ __('Close modal') }}">
                                 <i data-feather="x" style="width:16px; height:16px;"></i>
                             </button>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-6">{{ __('Edit Task') }}</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">{{ __('mytasks.modals.edit_task') }}</h3>
                             
-                            @php
-                                $allCategories = \App\Models\Category::with('jobs')->orderBy('name')->get();
-                            @endphp
+
 
                             <form action="{{ route('advertisements.update', $activeTask->id) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -1228,53 +1226,53 @@
                                 <div class="grid grid-cols-1 gap-4">
                                     {{-- Title --}}
                                     <div>
-                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Task Title') }}</label>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.task_title') }}</label>
                                         <input type="text" name="title" value="{{ old('title', $activeTask->title) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
                                     </div>
                                     
                                     {{-- Category & Job --}}
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Category') }}</label>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.category') }}</label>
                                             <select id="editCategorySelect" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
-                                                <option value="">{{ __('Select Category') }}</option>
+                                                <option value="">{{ __('mytasks.modals.select_category') }}</option>
                                                 @foreach($allCategories as $cat)
                                                     <option value="{{ $cat->id }}" {{ ($activeTask->job->categories_id ?? null) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Service') }}</label>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.service') }}</label>
                                             <select id="editJobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
-                                                <option value="{{ $activeTask->jobs_id }}" selected>{{ $activeTask->job->name ?? 'Select Service' }}</option>
+                                                <option value="{{ $activeTask->jobs_id }}" selected>{{ $activeTask->job->name ?? __('mytasks.modals.select_service') }}</option>
                                             </select>
                                         </div>
                                     </div>
 
                                     {{-- Description --}}
                                     <div>
-                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Details') }}</label>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.details') }}</label>
                                         <textarea name="description" rows="4" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>{{ old('description', $activeTask->description) }}</textarea>
                                     </div>
 
                                     {{-- Type & Location --}}
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Task Type') }}</label>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.task_type') }}</label>
                                             <select id="editTypeSelect" name="task_type" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
-                                                <option value="in-person" {{ $activeTask->task_type === 'in-person' ? 'selected' : '' }}>{{ __('In Person') }}</option>
-                                                <option value="online" {{ $activeTask->task_type === 'online' ? 'selected' : '' }}>{{ __('Online') }}</option>
+                                                <option value="in-person" {{ $activeTask->task_type === 'in-person' ? 'selected' : '' }}>{{ __('mytasks.modals.in_person') }}</option>
+                                                <option value="online" {{ $activeTask->task_type === 'online' ? 'selected' : '' }}>{{ __('mytasks.modals.online') }}</option>
                                             </select>
                                         </div>
                                         <div id="editLocationContainer" class="{{ $activeTask->task_type === 'online' ? 'hidden' : '' }}">
-                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Location') }}</label>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.location') }}</label>
                                             <input type="text" name="location" id="editLocationInput" value="{{ old('location', $activeTask->location) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition">
                                         </div>
                                     </div>
                                     
                                     {{-- Budget --}}
                                     <div>
-                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Budget') }} (€)</label>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.budget') }} (€)</label>
                                         <input type="number" name="price" min="10" max="9999" value="{{ old('price', $activeTask->price) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
                                     </div>
                                     
@@ -1359,14 +1357,14 @@
 
                                     {{-- Photos --}}
                                     <div class="mt-2">
-                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Update Photos') }}</label>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.update_photos') }}</label>
                                         <input type="file" name="photos[]" multiple accept="image/*" class="w-full border border-gray-300 rounded-lg p-3 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition">
-                                        <p class="text-xs text-gray-500 mt-2 font-medium">{{ __('Uploading new photos will add to existing photos. (Max 5MB each)') }}</p>
+                                        <p class="text-xs text-gray-500 mt-2 font-medium">{{ __('mytasks.modals.photos_help') }}</p>
                                     </div>
 
                                     <button type="submit" class="w-full h-14 mt-6 bg-blue-600 text-white font-bold text-lg rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 flex items-center justify-center gap-2">
                                         <i data-feather="save" class="w-5 h-5"></i>
-                                        {{ __('Save Changes') }}
+                                        {{ __('mytasks.modals.save_changes') }}
                                     </button>
                                 </div>
                             </form>
@@ -1383,9 +1381,11 @@
                             const editLocationInput = document.getElementById('editLocationInput');
 
                             if (editCategorySelect && editJobSelect) {
+                                const jobTranslations = @json(__('jobs'));
+                                
                                 editCategorySelect.addEventListener('change', function() {
                                     const catId = this.value;
-                                    editJobSelect.innerHTML = '<option value="">{{ __('Select Service') }}</option>';
+                                    editJobSelect.innerHTML = '<option value="">{{ __('mytasks.modals.select_service') }}</option>';
                                     if (!catId) return;
                                     
                                     const category = allCategories.find(c => c.id == catId);
@@ -1395,25 +1395,25 @@
                                         uniqueJobs.forEach(job => {
                                             const option = document.createElement('option');
                                             option.value = job.id;
-                                            option.textContent = job.name;
+                                            option.textContent = jobTranslations[job.name] || job.name;
                                             editJobSelect.appendChild(option);
                                         });
                                     }
-
-                                    // Global Keyboard Support for for [role="button"] and [tabindex="0"]
-                                    document.addEventListener('keydown', function(e) {
-                                        if (e.key === 'Enter' || e.key === ' ') {
-                                            const target = e.target;
-                                            if (target.getAttribute('role') === 'button' || target.getAttribute('tabindex') === '0') {
-                                                if (target.tagName !== 'BUTTON' && target.tagName !== 'A' && target.tagName !== 'INPUT') {
-                                                    e.preventDefault();
-                                                    target.click();
-                                                }
-                                            }
-                                        }
-                                    });
                                 });
                             }
+                            
+                            // Global Keyboard Support for [role="button"] and [tabindex="0"]
+                            document.addEventListener('keydown', function(e) {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    const target = e.target;
+                                    if (target.getAttribute('role') === 'button' || target.getAttribute('tabindex') === '0') {
+                                        if (target.tagName !== 'BUTTON' && target.tagName !== 'A' && target.tagName !== 'INPUT') {
+                                            e.preventDefault();
+                                            target.click();
+                                        }
+                                    }
+                                }
+                            });
                             
                             if (editTypeSelect && editLocationContainer) {
                                         editTypeSelect.addEventListener('change', function() {
@@ -1570,7 +1570,7 @@
             {{-- OTHER TASKS LIST --}}
             @if($otherTasks->count() > 0)
                 <div class="other-tasks-container">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 px-2">{{ __('Other Tasks') }}</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 px-2">{{ __('mytasks.modals.other_tasks') }}</h3>
                     @foreach($otherTasks as $task)
                         <a href="{{ request()->fullUrlWithQuery(['task_id' => $task->id]) }}" class="compact-task-row">
                             <div class="flex items-center gap-4">
@@ -1581,7 +1581,7 @@
                                     <div class="text-xs text-gray-400 font-bold uppercase flex items-center gap-2">
                                         {{ $task->status ?? 'Posted' }}
                                         @if((($viewMode ?? 'posted') === 'posted' || ($viewMode ?? 'posted') === 'direct') && $task->employee_id)
-                                            <div class="flex items-center gap-1 bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full border border-blue-100" title="{{ __('Sent to') }} {{ $task->employee->first_name }}">
+                                            <div class="flex items-center gap-1 bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full border border-blue-100" title="{{ __('mytasks.modals.sent_to', ['name' => $task->employee->first_name]) }}">
                                                 <i data-feather="user" style="width:10px; height:10px;"></i>
                                                 <span class="text-[8px] tracking-tighter">{{ $task->employee->first_name }}</span>
                                             </div>
@@ -1604,39 +1604,39 @@
                 </div>
                 <h3 class="empty-title">
                     @if(($filters['status'] ?? 'posted') === 'posted' && empty($filters['q']) && ($viewMode ?? 'posted') === 'posted')
-                        {{ __('No tasks yet') }}
+                        {{ __('mytasks.empty.no_tasks') }}
                     @elseif(($viewMode ?? 'posted') === 'applied')
-                        {{ __('No applications found') }}
+                        {{ __('mytasks.empty.no_applications') }}
                     @elseif(($viewMode ?? 'posted') === 'direct')
-                        {{ __('No direct requests yet') }}
+                        {{ __('mytasks.empty.no_direct_requests') }}
                     @else
-                        {{ __('No tasks found') }}
+                        {{ __('mytasks.empty.no_tasks_found') }}
                     @endif
                 </h3>
                 <p class="empty-desc">
                     @if(($viewMode ?? 'posted') === 'applied')
-                        {{ __("You haven't applied to any tasks in this category yet. Browse available tasks to get started.") }}
+                        {{ __('mytasks.empty.no_applications_desc') }}
                     @elseif(($viewMode ?? 'posted') === 'direct')
-                        {{ __("You haven't sent any direct quote requests to specific experts yet.") }}
+                        {{ __('mytasks.empty.no_direct_requests_desc') }}
                     @else
                         @if(($filters['status'] ?? 'posted') === 'posted')
                             @if(!empty($filters['q']))
-                                {{ __("We couldn't find any tasks matching your search.") }}
+                                {{ __('mytasks.empty.no_tasks_search') }}
                             @else
-                                {{ __("Put your task in front of thousands of people and get it done quickly.") }}
+                                {{ __('mytasks.empty.no_tasks_posted_desc') }}
                             @endif
                         @else
-                            {{ __("No tasks found with this status.") }}
+                            {{ __('mytasks.empty.no_tasks_status') }}
                         @endif
                     @endif
                 </p>
                 @if(($viewMode ?? 'posted') === 'applied')
                     <a href="{{ route('tasks') }}" class="cta-button">
-                        <i data-feather="search" style="width:18px;"></i> {{ __('Browse Tasks') }}
+                        <i data-feather="search" style="width:18px;"></i> {{ __('mytasks.empty.browse_tasks_btn') }}
                     </a>
                 @else
                     <a href="{{ route('post-task') }}" class="cta-button">
-                        <i data-feather="plus" style="width:18px;"></i> {{ __('Post a New Task') }}
+                        <i data-feather="plus" style="width:18px;"></i> {{ __('mytasks.empty.post_task_btn') }}
                     </a>
                 @endif
             </div>

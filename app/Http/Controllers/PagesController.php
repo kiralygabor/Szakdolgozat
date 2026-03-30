@@ -8,6 +8,8 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Job;
 use App\Models\AdvertisementView;
+use App\Models\User;
+use App\Models\Review;
 use App\Http\Requests\StoreTaskRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -20,19 +22,21 @@ use Illuminate\Support\Facades\Storage;
 
 class PagesController extends Controller
 {
-    public function index() : View
+    public function index(): View
     {
         // Get categories excluding specific ones
         $excludedCategories = ['Renovations & Construction', 'Events', 'Renovation & Construction', 'Events & Creative'];
-        
+
         // Use eager loading to avoid N+1 queries
         $categories = Category::whereNotIn('name', $excludedCategories)
-            ->with(['advertisements' => function($query) {
-                $query->where('status', 'open')
-                      ->whereNull('employee_id')
-                      ->with(['employer.city'])
-                      ->orderByDesc('created_at');
-            }])
+            ->with([
+                'advertisements' => function ($query) {
+                    $query->where('status', 'open')
+                        ->whereNull('employee_id')
+                        ->with(['employer.city'])
+                        ->orderByDesc('created_at');
+                }
+            ])
             ->orderBy('name')
             ->get()
             ->filter(function ($category) {
@@ -71,20 +75,20 @@ class PagesController extends Controller
         if ($request->filled('category')) {
             $categoryId = (int) $request->input('category');
             if ($categoryId > 0) {
-                $query->whereHas('job', function($q) use ($categoryId) {
+                $query->whereHas('job', function ($q) use ($categoryId) {
                     $q->where('categories_id', $categoryId);
                 });
             }
         }
 
-        $minPrice = (int) $request->input('min_price', 1000);
-        $maxPrice = (int) $request->input('max_price', 20000);
-        $minPrice = max(1000, $minPrice);
-        $maxPrice = min(20000, $maxPrice);
+        $minPrice = (int) $request->input('min_price', 5);
+        $maxPrice = (int) $request->input('max_price', 5000);
+        $minPrice = max(5, $minPrice);
+        $maxPrice = min(5000, $maxPrice);
         if ($minPrice > $maxPrice) {
             [$minPrice, $maxPrice] = [$maxPrice, $minPrice];
         }
-        if ($minPrice !== 1000 || $maxPrice !== 20000) {
+        if ($minPrice !== 5 || $maxPrice !== 5000) {
             $query->whereBetween('price', [$minPrice, $maxPrice]);
         }
 
@@ -94,8 +98,8 @@ class PagesController extends Controller
         } elseif ($type === 'in_person') {
             $query->where(function ($q) {
                 $q->whereNull('location')
-                  ->orWhere('location', '=','')
-                  ->orWhere('location', 'not like', '%remote%');
+                    ->orWhere('location', '=', '')
+                    ->orWhere('location', 'not like', '%remote%');
             });
         }
 
@@ -137,7 +141,7 @@ class PagesController extends Controller
             ],
         ]);
     }
-     public function profile(): View
+    public function profile(): View
     {
         $user = Auth::user();
         $categories = Category::orderBy('name')->get();
@@ -156,51 +160,52 @@ class PagesController extends Controller
             abort(403);
         }
 
-        $request->validate([
-            'first_name'   => ['required', 'string', 'max:255'],
-            'last_name'    => ['required', 'string', 'max:255'],
-            'email'        => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'phone_number' => ['nullable', 'string', 'max:50'],
-            'birthdate'    => ['nullable', 'date', 'before:today'],
-            'city_id'      => ['nullable', 'integer', 'exists:cities,id'],
-            'avatar'       => ['nullable', 'image', 'max:5120'], // max 5MB
-            'email_notifications' => ['nullable', 'boolean'],
-            'email_task_digest' => ['nullable', 'boolean'],
-            'email_direct_quotes' => ['nullable', 'boolean'],
-            'tracked_categories' => ['nullable', 'array'],
-            'tracked_categories.*' => ['integer', 'exists:categories,id'],
-        ]);
+        $formType = $request->input('form_type', 'profile');
 
-        $user->first_name   = $request->first_name;
-        $user->last_name    = $request->last_name;
-        $user->email        = $request->email;
-        $user->phone_number = $request->phone_number;
-        $user->birthdate    = $request->birthdate;
-        $user->city_id      = $request->city_id;
-        $user->email_notifications = $request->has('email_notifications');
-        $user->email_task_digest = $request->has('email_task_digest');
-        $user->email_direct_quotes = $request->has('email_direct_quotes');
+        if ($formType === 'notifications') {
+            $user->email_notifications = $request->has('email_notifications');
+            $user->email_task_digest = $request->has('email_task_digest');
+            $user->email_direct_quotes = $request->has('email_direct_quotes');
 
-        // Sync categories if digest is enabled
-        if ($user->email_task_digest) {
-            $user->trackedCategories()->sync($request->input('tracked_categories', []));
-        } else {
-            $user->trackedCategories()->detach();
-        }
-
-        if ($request->hasFile('avatar')) {
-            // delete old avatar if exists and it's not the default asset or a Google URL
-            if (!empty($user->avatar) && !str_starts_with($user->avatar, 'assets/') && !str_starts_with($user->avatar, 'http')) {
-                Storage::disk('public')->delete($user->avatar);
+            if ($user->email_task_digest) {
+                $user->trackedCategories()->sync($request->input('tracked_categories', []));
+            } else {
+                $user->trackedCategories()->detach();
             }
+            $tab = 'notification';
+        } else {
+            $request->validate([
+                'first_name' => ['required', 'string', 'max:255'],
+                'last_name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+                'phone_number' => ['nullable', 'string', 'max:50'],
+                'birthdate' => ['nullable', 'date', 'before:today'],
+                'city_id' => ['nullable', 'integer', 'exists:cities,id'],
+                'avatar' => ['nullable', 'image', 'max:5120'], // max 5MB
+            ]);
 
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $path;
+            $user->first_name = $request->first_name;
+            $user->last_name = $request->last_name;
+            $user->email = $request->email;
+            $user->phone_number = $request->phone_number;
+            $user->birthdate = $request->birthdate;
+            $user->city_id = $request->city_id;
+
+            if ($request->hasFile('avatar')) {
+                // delete old avatar if exists and it's not the default asset or a Google URL
+                if (!empty($user->avatar) && !str_starts_with($user->avatar, 'assets/') && !str_starts_with($user->avatar, 'http')) {
+                    Storage::disk('public')->delete($user->avatar);
+                }
+
+                $path = $request->file('avatar')->store('avatars', 'public');
+                $user->avatar = $path;
+            }
+            $tab = 'profile';
         }
 
         $user->save();
 
-        return redirect()->route('profile')->with('success', __('profile_page.profile.update_success') ?? 'Profile updated successfully.');
+        return redirect()->route('profile', ['tab' => $tab])->with('success', __('profile_page.profile.update_success') ?? 'Profile updated successfully.');
     }
 
     public function deleteProfile(Request $request): RedirectResponse
@@ -225,6 +230,50 @@ class PagesController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('index')->with('success', 'Account deleted successfully.');
+    }
+
+    public function sendManualDigest(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403);
+        }
+
+        $trackedCategories = $user->trackedCategories;
+
+        if ($trackedCategories->isEmpty()) {
+            return redirect()->route('profile', ['tab' => 'notification'])->with('error', __('profile_page.notifications.no_tracked_categories') ?? 'You need to track at least one category to receive a digest.');
+        }
+
+        $categoryIds = $trackedCategories->pluck('id')->toArray();
+
+        // Find new tasks posted in the last 24 hours in tracked categories
+        $newTasks = Advertisement::whereHas('job', function($q) use ($categoryIds) {
+                $q->whereIn('categories_id', $categoryIds);
+            })
+            ->where('status', 'open')
+            ->where('created_at', '>=', now()->subDay())
+            ->where('employer_id', '!=', $user->id) // Don't notify about own tasks
+            ->with(['category', 'employer'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if ($newTasks->isEmpty()) {
+            return redirect()->route('profile', ['tab' => 'notification'])->with('info', __('profile_page.notifications.no_new_tasks') ?? 'No new tasks in your tracked categories in the last 24 hours.');
+        }
+
+        // Group tasks by category for a nice digest
+        $tasksByCategory = $newTasks->groupBy(function ($task) {
+            return $task->category ? $task->category->name : 'Uncategorised';
+        });
+
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->locale($user->preferredLocale())->send(new \App\Mail\TaskDigestMail($user, $tasksByCategory));
+            return redirect()->route('profile', ['tab' => 'notification'])->with('success', __('profile_page.notifications.digest_sent') ?? 'Your task digest has been sent to your email!');
+        } catch (\Exception $e) {
+            return redirect()->route('profile', ['tab' => 'notification'])->with('error', 'Failed to send digest: ' . $e->getMessage());
+        }
     }
 
     public function category(): View
@@ -263,7 +312,7 @@ class PagesController extends Controller
         if ($request->filled('category')) {
             $categoryId = (int) $request->input('category');
             if ($categoryId > 0) {
-                $query->whereHas('job', function($q) use ($categoryId) {
+                $query->whereHas('job', function ($q) use ($categoryId) {
                     $q->where('categories_id', $categoryId);
                 });
             }
@@ -277,16 +326,16 @@ class PagesController extends Controller
             }
         }
 
-        // Filter by price range (clamped to 1000–20000)
-        $minPrice = (int) $request->input('min_price', 1000);
-        $maxPrice = (int) $request->input('max_price', 20000);
-        $minPrice = max(1000, $minPrice);
-        $maxPrice = min(20000, $maxPrice);
+        // Filter by price range (clamped to 5–5000)
+        $minPrice = (int) $request->input('min_price', 5);
+        $maxPrice = (int) $request->input('max_price', 5000);
+        $minPrice = max(5, $minPrice);
+        $maxPrice = min(5000, $maxPrice);
         if ($minPrice > $maxPrice) {
             // swap if inverted
             [$minPrice, $maxPrice] = [$maxPrice, $minPrice];
         }
-        if ($minPrice !== 1000 || $maxPrice !== 20000) {
+        if ($minPrice !== 5 || $maxPrice !== 5000) {
             $query->whereBetween('price', [$minPrice, $maxPrice]);
         }
 
@@ -298,8 +347,8 @@ class PagesController extends Controller
         } elseif ($type === 'in_person') {
             $query->where(function ($q) {
                 $q->whereNull('location')
-                  ->orWhere('location', '=','')
-                  ->orWhere('location', 'not like', '%remote%');
+                    ->orWhere('location', '=', '')
+                    ->orWhere('location', 'not like', '%remote%');
             });
         }
 
@@ -337,7 +386,7 @@ class PagesController extends Controller
 
         // OPTIMIZATION: Only fetch Category names for the dropdown, not the whole job tree
         $categories = Category::orderByRaw("name = 'Other' ASC, name ASC")->get(['id', 'name']);
-        
+
         // We only need the jobs for the selected category if one is filtered
         $selectedCategoryJobs = [];
         if ($request->filled('category')) {
@@ -348,12 +397,14 @@ class PagesController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            $missingSteps = array_filter([
-                empty($user->avatar) ? 'Upload a profile picture' : null,
-                empty($user->birthdate) ? 'Add your date of birth' : null,
-                empty($user->phone_number) ? 'Verify your mobile' : null,
-                empty($user->city_id) ? 'Add your location' : null,
-            ]);
+            if (empty($user->avatar))
+                $missingSteps[] = ['text' => __('tasks_page.missing_steps.picture'), 'icon' => 'user'];
+            if (empty($user->birthdate))
+                $missingSteps[] = ['text' => __('tasks_page.missing_steps.birthdate'), 'icon' => 'calendar'];
+            if (empty($user->phone_number))
+                $missingSteps[] = ['text' => __('tasks_page.missing_steps.mobile'), 'icon' => 'smartphone'];
+            if (empty($user->city_id))
+                $missingSteps[] = ['text' => __('tasks_page.missing_steps.location'), 'icon' => 'map-pin'];
         }
 
         return view('pages.tasks', [
@@ -393,7 +444,7 @@ class PagesController extends Controller
         $cities = City::selectRaw('MIN(id) as id, name, MIN(county_id) as county_id')
             ->where(function ($query) use ($q) {
                 $query->where('name', 'like', $q . '%')
-                      ->orWhere('name', 'like', '% ' . $q . '%');
+                    ->orWhere('name', 'like', '% ' . $q . '%');
             })
             ->groupBy('name')
             ->orderByRaw('LOWER(name) = LOWER(?) DESC, name ASC', [$q])
@@ -409,14 +460,14 @@ class PagesController extends Controller
         $viewMode = $request->query('view', 'posted'); // 'posted' or 'applied'
 
         $query = Advertisement::query()
-            ->with(['category', 'employer.city', 'offers.user', 'employee'])
-            ->withCount(['offers', 'distinctViews as views']);
+            ->with(['job.category', 'employer.city', 'offers.user', 'employee'])
+            ->withCount(['offers', 'distinctViews as distinct_views_count']);
 
         // Context Switch
         if ($viewMode === 'applied') {
             // Tasks I have applied to (where I have an offer) OR where I'm the requested employee
-            $query->where(function($q) use ($userId) {
-                $q->whereHas('offers', function($sub) use ($userId) {
+            $query->where(function ($q) use ($userId) {
+                $q->whereHas('offers', function ($sub) use ($userId) {
                     $sub->where('user_id', $userId);
                 })->orWhere('employee_id', $userId);
             });
@@ -442,7 +493,7 @@ class PagesController extends Controller
                 $query->where('status', 'assigned');
                 break;
             case 'completed':
-                $query->where('status', 'completed'); 
+                $query->where('status', 'completed');
                 break;
             case 'posted':
             default:
@@ -471,17 +522,17 @@ class PagesController extends Controller
 
         // Handle single task focus from #fragment in browser-side or task_id query
         $requestedTaskId = (int) $request->query('task_id');
-        
+
         // Explicitly fetch the requested task if it's not in the regular query to ensure it exists and belongs to user
         $focusedTask = null;
         if ($requestedTaskId) {
             $focusedTaskQuery = Advertisement::with(['category', 'employer.city', 'offers.user', 'employee'])
                 ->withCount(['offers', 'distinctViews as views'])
                 ->where('id', $requestedTaskId)
-                ->where(function($q) use ($userId) {
+                ->where(function ($q) use ($userId) {
                     $q->where('employer_id', $userId)
-                      ->orWhere('employee_id', $userId)
-                      ->orWhereHas('offers', fn($off) => $off->where('user_id', $userId));
+                        ->orWhere('employee_id', $userId)
+                        ->orWhereHas('offers', fn($off) => $off->where('user_id', $userId));
                 });
 
             // Apply the same status filter so a task can't appear on the wrong tab
@@ -501,12 +552,15 @@ class PagesController extends Controller
             $focusedTask = $focusedTaskQuery->first();
         }
 
+        $allCategories = Category::with('jobs')->orderBy('name')->get();
+
         $tasks = $query->paginate(20)->withQueryString();
 
         return view('pages.mytasks', [
             'tasks' => $tasks,
             'focusedTask' => $focusedTask,
             'viewMode' => $viewMode,
+            'allCategories' => $allCategories,
             'filters' => [
                 'q' => (string) $request->query('q', ''),
                 'status' => $status,
@@ -528,16 +582,18 @@ class PagesController extends Controller
 
     public function postTask(Request $request): View
     {
-        $categories = Category::with(['jobs' => function($query) {
-            $query->orderByRaw("name = 'Other' ASC, name ASC");
-        }])->orderByRaw("name = 'Other' ASC, name ASC")->get();
+        $categories = Category::with([
+            'jobs' => function ($query) {
+                $query->orderByRaw("name = 'Other' ASC, name ASC");
+            }
+        ])->orderByRaw("name = 'Other' ASC, name ASC")->get();
 
         $otherJobId = Job::where('name', 'Other')->value('id');
-        
+
         $targetUserId = old('employee_id', $request->input('for_user'));
         $targetUser = null;
         if ($targetUserId) {
-            $targetUser = \App\Models\User::find($targetUserId);
+            $targetUser = User::find($targetUserId);
         }
 
         return view('pages.post-task', compact('categories', 'otherJobId', 'targetUser'));
@@ -574,7 +630,7 @@ class PagesController extends Controller
         $advertisement->save();
 
         if ($advertisement->employee_id) {
-            $employee = \App\Models\User::find($advertisement->employee_id);
+            $employee = User::find($advertisement->employee_id);
             if ($employee) {
                 $employee->notify(new DirectQuoteReceivedNotification($advertisement, Auth::user()));
             }
@@ -589,7 +645,7 @@ class PagesController extends Controller
             ->with('success', 'Your task has been posted successfully!');
     }
 
-    public function showTask($id): View
+    public function showTask($id): View|RedirectResponse
     {
         // Optimized loading: only category and employer, plus count of offers
         $task = Advertisement::with(['category', 'employer'])
@@ -621,6 +677,10 @@ class PagesController extends Controller
                 empty($user->phone_number) ? 'Verify your mobile' : null,
                 empty($user->city_id) ? 'Add your location' : null,
             ]);
+
+            if (count($missingSteps) > 0) {
+                return redirect()->route('profile')->with('info', 'Kérjük, töltsd ki a profilodat az ajánlattételhez!');
+            }
         }
 
         return view('pages.task-details', [
@@ -637,7 +697,7 @@ class PagesController extends Controller
 
     public function publicProfile($id): View
     {
-        $user = \App\Models\User::with(['city', 'reviewsReceived.reviewer'])->findOrFail($id);
+        $user = User::with(['city', 'reviewsReceived.reviewer'])->findOrFail($id);
 
         $canReview = false;
         if (Auth::check() && Auth::id() != $id) {
@@ -645,16 +705,16 @@ class PagesController extends Controller
             $profileId = (int) $id;
 
             // Enforce: Reviews given <= Completed tasks together
-            $completedTasksCount = \App\Models\Advertisement::whereIn('status', ['completed', 'Completed'])
-                ->where(function($q) use ($myId, $profileId) {
-                    $q->where(function($sq) use ($myId, $profileId) {
+            $completedTasksCount = Advertisement::whereIn('status', ['completed', 'Completed'])
+                ->where(function ($q) use ($myId, $profileId) {
+                    $q->where(function ($sq) use ($myId, $profileId) {
                         $sq->where('employer_id', $myId)->where('employee_id', $profileId);
-                    })->orWhere(function($sq) use ($myId, $profileId) {
+                    })->orWhere(function ($sq) use ($myId, $profileId) {
                         $sq->where('employer_id', $profileId)->where('employee_id', $myId);
                     });
                 })->count();
 
-            $givenReviewsCount = \App\Models\Review::where('reviewer_id', $myId)
+            $givenReviewsCount = Review::where('reviewer_id', $myId)
                 ->where('target_user_id', $profileId)
                 ->count();
 
@@ -662,7 +722,7 @@ class PagesController extends Controller
         }
 
         // Fetch user's open tasks for display on their profile
-        $activeTasks = \App\Models\Advertisement::where('employer_id', $user->id)
+        $activeTasks = Advertisement::where('employer_id', $user->id)
             ->where('status', 'open')
             ->latest()
             ->take(3)
@@ -690,16 +750,16 @@ class PagesController extends Controller
         $targetId = (int) $id;
 
         // Double check limit in store method
-        $completedTasksCount = \App\Models\Advertisement::whereIn('status', ['completed', 'Completed'])
-            ->where(function($q) use ($myId, $targetId) {
-                $q->where(function($sq) use ($myId, $targetId) {
+        $completedTasksCount = Advertisement::whereIn('status', ['completed', 'Completed'])
+            ->where(function ($q) use ($myId, $targetId) {
+                $q->where(function ($sq) use ($myId, $targetId) {
                     $sq->where('employer_id', $myId)->where('employee_id', $targetId);
-                })->orWhere(function($sq) use ($myId, $targetId) {
+                })->orWhere(function ($sq) use ($myId, $targetId) {
                     $sq->where('employer_id', $targetId)->where('employee_id', $myId);
                 });
             })->count();
 
-        $givenReviewsCount = \App\Models\Review::where('reviewer_id', $myId)
+        $givenReviewsCount = Review::where('reviewer_id', $myId)
             ->where('target_user_id', $targetId)
             ->count();
 
@@ -712,11 +772,11 @@ class PagesController extends Controller
             'comment' => 'required|string|max:150',
         ]);
 
-        \App\Models\Review::create([
-             'reviewer_id' => Auth::id(),
-             'target_user_id' => $id,
-             'stars' => $request->stars,
-             'comment' => $request->comment,
+        Review::create([
+            'reviewer_id' => Auth::id(),
+            'target_user_id' => $id,
+            'stars' => $request->stars,
+            'comment' => $request->comment,
         ]);
 
         return back()->with('success', 'Review posted!');

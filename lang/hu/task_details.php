@@ -6,10 +6,13 @@ return [
         'assigned' => 'Kiosztva',
         'completed' => 'Befejezve',
     ],
-    'return' => 'Vissza a térképhez',
+    'return' => 'Vissza a feladatokhoz',
     'posted_by' => 'Közzétette',
+    'unknown' => 'Ismeretlen',
     'location' => 'Helyszín',
+    'remote' => 'Távmunkában',
     'to_be_done' => 'Elvégzés ideje',
+    'on' => '',
     'anytime' => 'Bármikor',
     'applications' => [
         'label' => 'Jelentkezések',
@@ -19,7 +22,7 @@ return [
     ],
     'budget' => [
         'label' => 'Feladat költségkerete',
-        'currency' => 'HUF',
+        'currency' => '€',
     ],
     'status' => [
         'open' => 'Ajánlattételre nyitott',

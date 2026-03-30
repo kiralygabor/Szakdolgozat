@@ -57,7 +57,7 @@ return [
         'budget_question' => 'Mekkora a költségkerete?',
         'negotiable' => 'A végső ár mindig alkuképes.',
         'budget_placeholder' => 'Adja meg a költségkeretet',
-        'budget_error' => 'Az árnak 10 és 9999 között kell lennie',
+        'budget_error' => 'Az árnak 5 és 5000 között kell lennie',
     ],
     'nav' => [
         'back' => 'Vissza',

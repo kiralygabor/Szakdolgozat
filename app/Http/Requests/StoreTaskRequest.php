@@ -36,7 +36,7 @@ class StoreTaskRequest extends FormRequest
     return [
         'title' => ['required','string','max:150'],
         'description' => ['required','string'],
-        'price' => ['required','integer','min:10','max:9999'],
+        'price' => ['required','integer','min:5','max:5000'],
             // When task_type is online, prepareForValidation sets location to "Online"
             'location' => ['required_if:task_type,in-person','string','max:150'],
         'task_type' => ['required','in:in-person,online'],

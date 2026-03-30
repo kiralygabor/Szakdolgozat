@@ -127,7 +127,7 @@
                                
                                 @if(auth()->id() !== $user->id)
                                     {{-- Report Flag beside Join Date --}}
-                                    <button onclick="openReportModal()" class="flex items-center gap-1 text-gray-400 hover:text-red-500 transition-colors border-l pl-4 border-gray-200">
+                                    <button onclick="openUserReportModal({{ $user->id }})" class="flex items-center gap-1 text-gray-400 hover:text-red-500 transition-colors border-l pl-4 border-gray-200">
                                         <i data-feather="flag" class="w-3.5 h-3.5"></i>
                                         <span class="text-sm">{{ __('public_profile.report_user') }}</span>
                                     </button>
@@ -253,11 +253,6 @@
     document.addEventListener('DOMContentLoaded', function() {
         if(window.feather) feather.replace();
     });
- 
-    function openReportModal() {
-        const modal = document.getElementById('user-report-modal');
-        if(modal) modal.classList.remove('hidden');
-    }
  
     function highlightStars(count) {
         const icons = document.querySelectorAll('#star-rating i, #star-rating svg');

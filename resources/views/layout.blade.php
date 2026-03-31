@@ -599,17 +599,29 @@
     /* Hover state: Parent item or current button/div turns black */
     .high-contrast #settings-menu div:hover:not([id*="-indicator"]):not(.dot),
     .high-contrast #settings-menu button:hover:not([id*="-indicator"]):not(.dot),
-    .high-contrast #settings-menu .group:hover>div:first-child {
+    .high-contrast #settings-menu .group:hover > div:first-child {
       background-color: #000000 !important;
       color: #ffffff !important;
     }
 
-    /* Ensure text and icons inside hovered items turn white */
-    .high-contrast #settings-menu div:hover *,
-    .high-contrast #settings-menu button:hover *,
-    .high-contrast #settings-menu .group:hover>div:first-child * {
-      color: #ffffff !important;
-    }
+    /* Ensure text and icons inside hovered items turn white — but NOT inside submenus */
+      .high-contrast #settings-menu > .flex > .group:hover > button *,
+      .high-contrast #settings-menu > .flex > .group:hover > div:first-child *,
+      .high-contrast #settings-menu .submenu button:hover *,
+      .high-contrast #settings-menu .submenu a:hover * {
+          color: #ffffff !important;
+      }
+      /* Keep non-hovered submenu items visible (black text on white bg) */
+      .high-contrast #settings-menu .submenu button:not(:hover),
+      .high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
+      .high-contrast #settings-menu .submenu a:not(:hover),
+      .high-contrast #settings-menu .submenu a:not(:hover) * {
+          color: #000000 !important;
+      }
+      .high-contrast #settings-menu .submenu button:not(:hover),
+      .high-contrast #settings-menu .submenu a:not(:hover) {
+          background-color: #ffffff !important;
+      }
 
     /* Accessibility Toggles in High Contrast */
     .high-contrast [id*="-indicator"] {
@@ -662,27 +674,16 @@
       color: #ffffff !important;
     }
 
-    /* Maintain hidden state correctly */
-    .high-contrast #settings-menu.hidden {
-      display: none !important;
-    }
+   /* Maintain hidden state correctly */
+      .high-contrast #settings-menu.hidden { display: none !important; }
+      .high-contrast #settings-menu:not(.show) { opacity: 0 !important; pointer-events: none !important; }
+      .high-contrast #settings-menu.show { opacity: 1 !important; transform: none !important; }
+      .high-contrast #settings-menu .group > .submenu {
+          opacity: 0 !important;
+          pointer-events: none !important;
+      }
 
-    .high-contrast #settings-menu:not(.show) {
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-
-    .high-contrast #settings-menu.show {
-      opacity: 1 !important;
-      transform: none !important;
-    }
-
-    .high-contrast #settings-menu .group>.submenu {
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-
-    .high-contrast #settings-menu .group:hover>.submenu {
+    .high-contrast #settings-menu .group:hover > .submenu 
       opacity: 1 !important;
       pointer-events: auto !important;
       transform: none !important;
@@ -871,6 +872,15 @@
     .high-contrast .btn:hover *,
     .high-contrast a:hover * {
       color: #ffffff !important;
+    }
+        /* Override: settings submenu items must keep black text unless directly hovered */
+      .high-contrast #settings-menu .submenu button:not(:hover),
+      .high-contrast #settings-menu .submenu button:not(:hover) span,
+      .high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
+      .high-contrast #settings-menu .submenu a:not(:hover),
+      .high-contrast #settings-menu .submenu a:not(:hover) span {
+          color: #000000 !important;
+          background-color: #ffffff !important;
     }
 
     /* Hide description fade out effect in High Contrast */

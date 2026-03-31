@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
-    protected $table = 'advertisements_reports';
+    protected $table = 'advertisement_reports';
 
     // Only use created_at timestamp
     const UPDATED_AT = null;

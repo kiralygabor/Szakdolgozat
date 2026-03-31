@@ -465,15 +465,20 @@ class PagesController extends Controller
 
         // Context Switch
         if ($viewMode === 'applied') {
-            // Tasks I have applied to (where I have an offer) OR where I'm the requested employee
+            // Tasks I have applied to (where I have an offer) — exclude direct quotes where I'm the employee
             $query->where(function ($q) use ($userId) {
                 $q->whereHas('offers', function ($sub) use ($userId) {
                     $sub->where('user_id', $userId);
-                })->orWhere('employee_id', $userId);
+                })->orWhere(function ($sq) use ($userId) {
+                    $sq->where('employee_id', $userId)->where('is_direct', false);
+                });
             });
         } elseif ($viewMode === 'direct') {
-            // Direct quote requests I SENT (started as direct)
-            $query->where('employer_id', $userId)->where('is_direct', true);
+            // Direct quote requests I SENT or RECEIVED
+            $query->where('is_direct', true)->where(function ($q) use ($userId) {
+                $q->where('employer_id', $userId)
+                  ->orWhere('employee_id', $userId);
+            });
         } else {
             // General Tasks I posted (started as public)
             $query->where('employer_id', $userId)->where('is_direct', false);

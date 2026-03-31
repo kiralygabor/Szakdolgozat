@@ -50,6 +50,7 @@ class User extends Authenticatable implements HasLocalePreference
          'city_id',
          'avatar',
          'google_id',
+         'facebook_id',
          'verified',
          'email_notifications',
          'email_task_digest',

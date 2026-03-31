@@ -314,10 +314,10 @@
           {{ __('auth_pages.register.continue_google') }}
         </a>
  
-        <button type="button" class="btn btn-outline">
+        <a href="{{ route('login.facebook') }}" class="btn btn-outline">
           <img src="https://www.svgrepo.com/show/349574/facebook.svg" alt="Facebook">
           {{ __('auth_pages.register.continue_facebook') }}
-        </button>
+        </a>
       </div>
     </form>
   </div>

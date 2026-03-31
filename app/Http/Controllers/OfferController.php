@@ -27,8 +27,6 @@ class OfferController extends Controller
         // Profile completion check
         $missingSteps = array_filter([
             empty($user->avatar) ? 'Upload a profile picture' : null,
-            empty($user->birthdate) ? 'Add your date of birth' : null,
-            empty($user->phone_number) ? 'Verify your mobile' : null,
             empty($user->city_id) ? 'Add your location' : null,
         ]);
 
@@ -58,9 +56,9 @@ class OfferController extends Controller
         // Notify the employer
         $task->employer->notify(new \App\Notifications\NewOfferNotification($offer, $task, $user));
 
-        // If it's a direct task, redirect back to "My Tasks" (Applied tab) instead of browse tasks list
+        // If it's a direct task, redirect back to "My Tasks" (Direct tab) instead of browse tasks list
         if ($task->is_direct) {
-            return redirect()->route('my-tasks', ['view' => 'applied', 'task_id' => $task->id])
+            return redirect()->route('my-tasks', ['view' => 'direct', 'task_id' => $task->id])
                 ->with('success', 'Your quote has been sent successfully!');
         }
 
@@ -127,7 +125,7 @@ class OfferController extends Controller
         // Notify the employer that their direct request was accepted
         $task->employer->notify(new \App\Notifications\OfferAcceptedNotification($task, $user));
 
-        return redirect()->route('my-tasks', ['view' => 'applied', 'status' => 'pending', 'task_id' => $task->id])
+        return redirect()->route('my-tasks', ['view' => 'direct', 'status' => 'pending', 'task_id' => $task->id])
             ->with('success', 'You accepted the task! You can now message the employer.');
     }
 

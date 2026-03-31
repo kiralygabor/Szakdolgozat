@@ -158,8 +158,8 @@
     <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" style="height: 60px; width: auto; margin: 0 auto 15px;">
   </a>
   <p class="auth-subtitle">
-    {{ __('auth_pages.verify_code.signed_in_as') }} <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>.  
-    {{ __('auth_pages.verify_code.security_intro') }}
+    {{ __('auth_pages.verify_code.signed_in_as') }} <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>.<br>
+    <span style="display:inline-block; margin-top:5px;">{{ __('auth_pages.verify_code.security_intro') }}</span>
   </p>
  
   <!-- Verification Box -->
@@ -200,7 +200,7 @@
         </div>
  
         <div class="small-text text-center mt-3">
-          {{ __('auth_pages.verify_code.trouble') }} <a href="{{ route('resend.code') }}">{{ __('auth_pages.verify_code.resend_link') }}</a> {{ __('navbar.or') ?? 'or' }} <a href="{{ route('contact-support') }}" target="_blank">{{ __('auth_pages.verify_code.contact_support') }}</a>.
+          {{ __('auth_pages.verify_code.trouble') }} <a href="{{ route('resend.code') }}">{{ __('auth_pages.verify_code.resend_link') }}</a> {{ app()->getLocale() === 'hu' ? 'vagy' : 'or' }} <a href="{{ route('contact-support') }}" target="_blank">{{ __('auth_pages.verify_code.contact_support') }}</a>.
         </div>
       </form>
     </div>

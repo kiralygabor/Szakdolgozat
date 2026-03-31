@@ -65,6 +65,7 @@ return [
         'review_quote_desc' => 'A felkért szakember válaszolt a javasolt árral és részletekkel.',
         'awaiting_response' => 'Várakozás válaszra',
         'awaiting_response_desc' => 'A szakember még nem válaszolt a megkeresésedre. Értesítünk, amint megteszi.',
+        'your_offer_submitted' => 'Az ajánlatod elküldve',
     ],
     'offers' => [
         'header_count' => 'Önnek :count ajánlata van.',

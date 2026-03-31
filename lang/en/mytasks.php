@@ -65,6 +65,7 @@ return [
         'review_quote_desc' => 'The requested expert has replied with their proposed price and details.',
         'awaiting_response' => 'Awaiting Response',
         'awaiting_response_desc' => 'The expert hasn\'t responded to your request yet. We\'ll let you know when they do.',
+        'your_offer_submitted' => 'Your offer has been submitted',
     ],
     'offers' => [
         'header_count' => 'You have :count offer(s).',

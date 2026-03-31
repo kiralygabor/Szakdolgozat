@@ -637,7 +637,7 @@
             
             if ($activeTask) {
                 $otherTasks = $tasksCollection->where('id', '!=', $activeTask->id)->values();
-                $offerCount = $activeTask->offers_count ?? 0; 
+                $offerCount = $activeTask->offers->count(); 
                 $hasOffers = $offerCount > 0;
                 $viewCount = $activeTask->distinct_views_count ?? $activeTask->views ?? 0;
                 $showOffers = $activeTask->status === 'open' && in_array(($viewMode ?? 'posted'), ['posted', 'direct']);
@@ -822,11 +822,31 @@
                     
                     @elseif($hasOffers)
                         @if(($viewMode ?? 'posted') === 'direct')
-                            <div class="status-badge active" style="color:#6366f1;">
-                                <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('mytasks.status.quote_received') }}
-                            </div>
-                            <h1 class="hero-headline">{{ __('mytasks.status.new_response') }}</h1>
-                            <p class="hero-subtext">{{ __('mytasks.status.new_response_desc') }}</p>
+                            @if($activeTask->employer_id == auth()->id())
+                                <div class="status-badge active" style="color:#6366f1;">
+                                    <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('mytasks.status.quote_received') }}
+                                </div>
+                                <h1 class="hero-headline">{{ __('mytasks.status.new_response') }}</h1>
+                                <p class="hero-subtext">{{ __('mytasks.status.new_response_desc') }}</p>
+                            @else
+                                <div class="flex items-center gap-2 mb-5">
+                                    <div class="status-badge" style="color:#2563EB; margin-bottom: 0;">
+                                        <span class="status-dot" style="background-color:#3B82F6;"></span> {{ __('mytasks.status.application_sent') }}
+                                    </div>
+                                    <div class="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-2 py-1 rounded-full border border-blue-100 h-fit">
+                                        <i data-feather="user-check" class="w-3.5 h-3.5"></i>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider">{{ __('mytasks.status.directly_requested') }}</span>
+                                    </div>
+                                </div>
+                                <h1 class="hero-headline">{{ __('mytasks.status.waiting_response') }}</h1>
+                                @php
+                                    $myDirectOffer = $activeTask->offers->where('user_id', auth()->id())->first();
+                                @endphp
+                                <p class="hero-subtext">
+                                    {{ __('mytasks.status.you_offered') }} <strong>€{{ number_format($myDirectOffer->price ?? 0, 0) }}</strong>.
+                                    {{ __('mytasks.status.notify_offers') }}
+                                </p>
+                            @endif
                         @else
                             <div class="status-badge active">
                                 <span class="status-dot"></span> {{ __('mytasks.status.new_activity') }}
@@ -836,11 +856,27 @@
                         @endif
                     @else
                         @if(($viewMode ?? 'posted') === 'direct')
-                            <div class="status-badge" style="color:#6B7280;">
-                                <span class="status-dot"></span> {{ __('mytasks.status.request_sent') }}
-                            </div>
-                            <h1 class="hero-headline">{{ __('mytasks.status.waiting_for_response') }}</h1>
-                            <p class="hero-subtext">{{ __('mytasks.status.waiting_for_response_desc', ['name' => $activeTask->employee->first_name ?? 'the expert']) }}</p>
+                            @if($activeTask->employer_id == auth()->id())
+                                <div class="status-badge" style="color:#6B7280;">
+                                    <span class="status-dot"></span> {{ __('mytasks.status.request_sent') }}
+                                </div>
+                                <h1 class="hero-headline">{{ __('mytasks.status.waiting_for_response') }}</h1>
+                                <p class="hero-subtext">{{ __('mytasks.status.waiting_for_response_desc', ['name' => $activeTask->employee->first_name ?? 'the expert']) }}</p>
+                            @else
+                                <div class="status-badge" style="color:#6366f1;">
+                                    <span class="status-dot" style="background-color:#6366f1;"></span> {{ __('mytasks.status.new_quote_request') }}
+                                </div>
+                                <h1 class="hero-headline">{{ __('mytasks.status.direct_request_headline') }}</h1>
+                                <p class="hero-subtext">{{ __('mytasks.status.direct_request_subtext') }}</p>
+                                <div class="mt-8 flex flex-wrap gap-4">
+                                    <button type="button" onclick="openDirectQuoteModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-8 rounded-full shadow-lg shadow-indigo-200 transition-all flex items-center gap-2 cursor-pointer">
+                                        {{ __('mytasks.status.accept_or_counter') }} <i data-feather="arrow-right" class="w-5 h-5"></i>
+                                    </button>
+                                    <a href="{{ route('messages', ['user_id' => $activeTask->employer_id]) }}" class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-bold py-3.5 px-8 rounded-full transition-all flex items-center gap-2 no-underline">
+                                        <i data-feather="message-circle" class="w-5 h-5"></i> {{ __('mytasks.status.message_employer') }}
+                                    </a>
+                                </div>
+                            @endif
                         @else
                             <div class="status-badge">
                                 <span class="status-dot"></span> {{ __('mytasks.status.task_posted') }}
@@ -851,7 +887,7 @@
                     @endif
 
                     <div class="offers-container mt-6">
-                        @if(($viewMode ?? 'posted') === 'direct' && $activeTask->status === 'open')
+                        @if(($viewMode ?? 'posted') === 'direct' && $activeTask->status === 'open' && $activeTask->employer_id == auth()->id())
                             <div class="offers-header mb-4">
                                 <div class="illustration-box">
                                     <div class="bg-indigo-100 p-3 rounded-full inline-block">
@@ -883,53 +919,86 @@
                             </div>
                         @endif
 
+                        @if($hasOffers && $showOffers && ($viewMode ?? 'posted') === 'direct' && $activeTask->employee_id == auth()->id())
+                            {{-- Employee view: fixed summary of their submitted counteroffer --}}
+                            @php $myDirectOffer = $activeTask->offers->where('user_id', auth()->id())->first(); @endphp
+                            @if($myDirectOffer)
+                                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-bold text-indigo-900">{{ __('mytasks.status.your_offer_submitted') }}</h4>
+                                            <p class="text-xs text-indigo-600">{{ $myDirectOffer->created_at?->diffForHumans() }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between bg-white rounded-xl p-3 border border-indigo-100">
+                                        <div>
+                                            <span class="text-xs font-bold text-gray-500 uppercase">{{ __('mytasks.modals.your_price_label') }}</span>
+                                            <div class="text-xl font-bold text-indigo-600">€{{ number_format($myDirectOffer->price, 0) }}</div>
+                                        </div>
+                                        <div class="text-right flex-1 ml-4">
+                                            <span class="text-xs font-bold text-gray-500 uppercase">{{ __('mytasks.status.your_message') }}</span>
+                                            <p class="text-sm text-gray-700 italic mt-0.5">"{{ Illuminate\Support\Str::limit($myDirectOffer->message, 80, '...') }}"</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+
                         <div class="offers-list overflow-y-auto custom-scrollbar" style="max-height: 120px; padding-right: 8px;">
                             @if($hasOffers && $showOffers)
-                                <div class="space-y-3">
-                                    @foreach($activeTask->offers as $offer)
-                                        <div onclick="openOfferModal({
-                                            id: '{{ $offer->id }}',
-                                            userId: '{{ $offer->user_id }}',
-                                            initials: '{{ substr($offer->user->first_name ?? 'T', 0, 1) }}',
-                                            avatarUrl: '{{ $offer->user->avatar_url }}',
-                                            name: '{{ $offer->user->first_name ?? 'Tasker' }} {{ $offer->user->last_name ?? '' }}',
-                                            rating: '{{ $offer->user->rating }}',
-                                            time: '{{ $offer->created_at?->diffForHumans(null, true, true) }}',
-                                            price: '{{ number_format($offer->price, 0) }}',
-                                            message: `{{ addslashes($offer->message) }}`
-                                        })" role="button" tabindex="0" aria-label="{{ __('Review offer from :name', ['name' => $offer->user->first_name ?? 'Tasker']) }}" class="group w-full p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer relative overflow-hidden">
-                                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                            <div class="flex items-start gap-3">
-                                                <img src="{{ $offer->user->avatar_url }}" alt="Avatar" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0">
-                                                <div class="flex-1 min-w-0">
-                                                    <div class="flex justify-between items-start">
-                                                        <div>
-                                                            <h4 class="text-sm font-bold text-gray-900 leading-tight">
-                                                                {{ $offer->user->first_name ?? 'Tasker' }} {{ $offer->user->last_name ?? '' }}
-                                                            </h4>
-                                                            <div class="flex items-center gap-1 mt-1">
-                                                                <i data-feather="star" class="w-3 h-3 text-yellow-400 fill-current"></i>
-                                                                <span class="text-xs font-bold text-gray-800">{{ $offer->user->rating }}</span>
-                                                                <span class="text-gray-300 mx-1">•</span>
-                                                                <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wide">
-                                                                    {{ $offer->created_at?->diffForHumans(null, true, true) }} {{ __('mytasks.stats.ago') }}
-                                                                </span>
+                                @if(($viewMode ?? 'posted') === 'direct' && $activeTask->employee_id == auth()->id())
+                                    {{-- Already shown above as fixed card, skip --}}
+                                @else
+                                    {{-- Employer view: show clickable offers list --}}
+                                    <div class="space-y-3">
+                                        @foreach($activeTask->offers as $offer)
+                                            <div onclick="openOfferModal({
+                                                id: '{{ $offer->id }}',
+                                                userId: '{{ $offer->user_id }}',
+                                                initials: '{{ substr($offer->user->first_name ?? 'T', 0, 1) }}',
+                                                avatarUrl: '{{ $offer->user->avatar_url }}',
+                                                name: '{{ $offer->user->first_name ?? 'Tasker' }} {{ $offer->user->last_name ?? '' }}',
+                                                rating: '{{ $offer->user->rating }}',
+                                                time: '{{ $offer->created_at?->diffForHumans(null, true, true) }}',
+                                                price: '{{ number_format($offer->price, 0) }}',
+                                                message: `{{ addslashes($offer->message) }}`
+                                            })" role="button" tabindex="0" aria-label="{{ __('Review offer from :name', ['name' => $offer->user->first_name ?? 'Tasker']) }}" class="group w-full p-3 rounded-xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all cursor-pointer relative overflow-hidden">
+                                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                                <div class="flex items-start gap-3">
+                                                    <img src="{{ $offer->user->avatar_url }}" alt="Avatar" class="w-10 h-10 rounded-full object-cover border border-gray-200 shrink-0">
+                                                    <div class="flex-1 min-w-0">
+                                                        <div class="flex justify-between items-start">
+                                                            <div>
+                                                                <h4 class="text-sm font-bold text-gray-900 leading-tight">
+                                                                    {{ $offer->user->first_name ?? 'Tasker' }} {{ $offer->user->last_name ?? '' }}
+                                                                </h4>
+                                                                <div class="flex items-center gap-1 mt-1">
+                                                                    <i data-feather="star" class="w-3 h-3 text-yellow-400 fill-current"></i>
+                                                                    <span class="text-xs font-bold text-gray-800">{{ $offer->user->rating }}</span>
+                                                                    <span class="text-gray-300 mx-1">•</span>
+                                                                    <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wide">
+                                                                        {{ $offer->created_at?->diffForHumans(null, true, true) }} {{ __('mytasks.stats.ago') }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                <div class="text-base font-bold text-blue-600 leading-tight">
+                                                                    €{{ number_format($offer->price, 0) }}
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="text-right">
-                                                            <div class="text-base font-bold text-blue-600 leading-tight">
-                                                                €{{ number_format($offer->price, 0) }}
-                                                            </div>
-                                                        </div>
+                                                        <p class="text-xs text-gray-600 mt-2 leading-relaxed">
+                                                            {{ \Illuminate\Support\Str::limit($offer->message, 50, '...') }}
+                                                        </p>
                                                     </div>
-                                                    <p class="text-xs text-gray-600 mt-2 leading-relaxed">
-                                                        {{ \Illuminate\Support\Str::limit($offer->message, 50, '...') }}
-                                                    </p>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -1149,7 +1218,7 @@
                     </div>
 
                     {{-- MODAL: Direct Quote Response --}}
-                    @if($activeTask && $activeTask->employee_id == auth()->id() && $activeTask->status === 'open' && !$myOffer)
+                    @if($activeTask && $activeTask->employee_id == auth()->id() && $activeTask->status === 'open' && !$activeTask->offers->where('user_id', auth()->id())->first())
                     <div id="direct-quote-modal" class="task-details-modal" style="z-index: 65;">
                         <div class="task-details-backdrop" onclick="closeDirectQuoteModal()"></div>
                         <div class="task-details-panel" style="max-width: 500px;">

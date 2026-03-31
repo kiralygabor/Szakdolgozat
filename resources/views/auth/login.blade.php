@@ -239,10 +239,10 @@
  
       <!-- Facebook Continue -->
       <div class="d-grid">
-        <button type="button" class="btn btn-outline">
+        <a href="{{ route('login.facebook') }}" class="btn btn-outline">
           <img src="https://www.svgrepo.com/show/349574/facebook.svg" alt="Facebook" width="20" class="me-2">
           {{ __('auth_pages.login.login_facebook') }}
-        </button>
+        </a>
       </div>
     </form>
   </div>

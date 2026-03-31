@@ -3009,9 +3009,14 @@
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-              // Remove badge
-              const badge = document.querySelector('.notification-btn span');
-              if (badge) badge.remove();
+              // Remove badges (desktop and mobile)
+              document.querySelectorAll('.notification-btn span').forEach(el => el.remove());
+              document.querySelectorAll('.mobile-profile-btn span').forEach(el => el.remove());
+              
+              // Clear badges from sidebars/dropdowns
+              document.querySelectorAll('a[href*="notifications"] span').forEach(el => {
+                if(el.style.backgroundColor || el.innerText > 0) el.remove();
+              });
 
               // Hide "Mark all read"
               const markReadBtn = document.querySelector('#notification-dropdown span[onclick="markNotificationsRead()"]');

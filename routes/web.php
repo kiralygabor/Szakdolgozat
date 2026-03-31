@@ -5,6 +5,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\FacebookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\OfferController;
@@ -86,6 +87,9 @@ Route::match(['get', 'post'], 'logout', [AuthController::class, 'logout'])->name
  
 Route::get('login/google', [GoogleController::class, 'redirectToGoogle'])->name('login.google');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+ 
+Route::get('login/facebook', [FacebookController::class, 'redirectToFacebook'])->name('login.facebook');
+Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
  
 Route::get('/user/verify/{token}', [AuthController::class, 'verifyUser']);
 Route::get('registration_settings', [AuthController::class, 'registration_settings'])->name('registeration_settings');

@@ -20,4 +20,6 @@ return [
     'moving' => 'Moving',
     'assembly' => 'Assembly',
     'tech' => 'Tech',
+    'contact_support' => 'Contact / Support',
+    'help_faq' => 'Help / FAQ',
 ];

@@ -1,56 +1,90 @@
 <?php
- 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PagesController;
-use App\Http\Controllers\CityController;
+
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\FacebookController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdvertisementController;
-use App\Http\Controllers\OfferController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\PagesController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
- 
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserReportController;
- 
+use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
- 
-Route::get('index', [PagesController::class, 'index'])->name('index');
-Route::get('profile', [PagesController::class, 'profile'])->name('profile')->middleware('auth');
-Route::put('profile', [PagesController::class, 'updateProfile'])->name('profile.update')->middleware('auth');
-Route::delete('profile', [PagesController::class, 'deleteProfile'])->name('profile.delete')->middleware('auth');
-Route::post('profile/send-digest', [PagesController::class, 'sendManualDigest'])->name('profile.send-digest')->middleware('auth');
-Route::get('profile/{id}', [PagesController::class, 'publicProfile'])->name('public-profile');
+
+// View Routes (Static/Dashboard)
+Route::controller(PagesController::class)->group(function () {
+    Route::get('index', 'index')->name('index');
+    Route::get('category', 'category')->name('category');
+    Route::get('tasks', 'tasks')->name('tasks');
+    Route::get('tasks/{task}', 'showTask')->name('tasks.show');
+    Route::get('my-tasks', 'myTasks')->name('my-tasks')->middleware('auth');
+    Route::get('notifications', 'notifications')->name('notifications')->middleware('auth');
+    Route::get('post-task', 'postTask')->name('post-task')->middleware('auth');
+    Route::get('profile/{id}', 'publicProfile')->name('public-profile');
+    Route::get('api/cities', 'searchCities')->name('api.cities.search');
+});
+
+// Information Pages
+Route::view('/howitworks', 'pages.howitworks')->name('howitworks');
+Route::view('/terms', 'pages.terms-and-conditions')->name('terms');
+Route::view('/guidelines', 'pages.community-guidelines')->name('guidelines');
+Route::view('/privacy', 'pages.privacy-policy')->name('privacy');
+Route::view('/help-faq', 'pages.help-faq')->name('help-faq');
+Route::view('/contact-support', 'pages.contact-support')->name('contact-support');
+
+// Profile Management
+Route::middleware('auth')->prefix('profile')->controller(ProfileController::class)->group(function () {
+    Route::get('/', 'edit')->name('profile');
+    Route::put('/', 'updateProfile')->name('profile.update');
+    Route::put('/notifications', 'updateNotifications')->name('profile.notifications.update');
+    Route::delete('/', 'destroy')->name('profile.delete');
+    Route::post('/settings', 'updateSettings')->name('profile.settings.update');
+    Route::post('/send-digest', 'sendManualDigest')->name('profile.send-digest');
+});
 Route::post('profile/{id}/review', [PagesController::class, 'storeReview'])->name('public-profile.review')->middleware('auth');
-Route::get('category', [PagesController::class, 'category'])->name('category');
-Route::get('tasks', [PagesController::class, 'tasks'])->name('tasks');
-Route::get('/howitworks', function () {return view('pages.howitworks');})->name('howitworks');
-Route::get('/terms', function () {return view('pages.terms-and-conditions');})->name('terms');
-Route::get('/guidelines', function () {return view('pages.community-guidelines');})->name('guidelines');
-Route::get('/privacy', function () {return view('pages.privacy-policy');})->name('privacy');
-Route::get('/help-faq', function () {return view('pages.help-faq');})->name('help-faq');
-Route::get('/contact-support', function () {return view('pages.contact-support');})->name('contact-support');
-Route::get('my-tasks', [PagesController::class, 'myTasks'])->name('my-tasks')->middleware('auth');
-Route::get('notifications', [PagesController::class, 'notifications'])->name('notifications')->middleware('auth');
+
+// Task Lifecycle (Unified)
+Route::middleware('auth')->group(function () {
+    Route::middleware(\App\Http\Middleware\EnsureProfileComplete::class)->group(function () {
+        Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
+        Route::post('tasks/{task}/offers', [OfferController::class, 'store'])->name('tasks.offers.store');
+        Route::post('tasks/{task}/accept-direct', [OfferController::class, 'acceptDirect'])->name('tasks.accept-direct');
+    });
+
+    Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::post('tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete'); 
+    
+    // Offers
+    Route::delete('tasks/{task}/offers', [OfferController::class, 'destroy'])->name('tasks.offers.destroy');
+    Route::post('offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept');
+});
+
+// Notifications
 Route::post('notifications/mark-read', [PagesController::class, 'markAllRead'])->name('notifications.mark-read')->middleware('auth');
-Route::get('messages', [MessageController::class, 'index'])->name('messages')->middleware('auth');
-Route::get('conversations/{conversation}', [MessageController::class, 'show'])->name('conversations.show')->middleware('auth');
-Route::post('conversations/{conversation}/messages', [MessageController::class, 'store'])->name('conversations.messages.store')->middleware('auth');
-Route::delete('conversations/{conversation}/messages/{message}', [MessageController::class, 'destroy'])->name('conversations.messages.destroy')->middleware('auth');
-Route::get('conversations/{conversation}/check', [MessageController::class, 'checkNewMessages'])->name('conversations.messages.check')->middleware('auth');
-Route::get('post-task', [PagesController::class, 'postTask'])->name('post-task')->middleware('auth');
-Route::post('post-task', [PagesController::class, 'storeTask'])->name('post-task.store')->middleware('auth');
-Route::get('tasks/{task}', [PagesController::class, 'showTask'])->name('tasks.show');
-Route::post('tasks/{task}/offers', [OfferController::class, 'store'])->name('tasks.offers.store')->middleware('auth');
-Route::delete('tasks/{task}/offers', [OfferController::class, 'destroy'])->name('tasks.offers.destroy')->middleware('auth');
-Route::post('offers/{offer}/accept', [OfferController::class, 'accept'])->name('offers.accept')->middleware('auth');
-Route::post('tasks/{task}/accept-direct', [OfferController::class, 'acceptDirect'])->name('tasks.accept-direct')->middleware('auth');
+
+// Messaging
+Route::middleware('auth')->prefix('messages')->controller(MessageController::class)->group(function () {
+    Route::get('/', 'index')->name('messages');
+    Route::get('/{conversation}', 'show')->name('conversations.show');
+    Route::post('/{conversation}/messages', 'store')->name('conversations.messages.store');
+    Route::delete('/{conversation}/messages/{message}', 'destroy')->name('conversations.messages.destroy');
+    Route::get('/{conversation}/check', 'checkNewMessages')->name('conversations.messages.check');
+});
+
+// Global Reporting
 Route::post('reports', [ReportController::class, 'store'])->name('reports.store')->middleware('auth');
 Route::post('user-reports', [UserReportController::class, 'store'])->name('user-reports.store')->middleware('auth');
-Route::get('api/cities', [PagesController::class, 'searchCities'])->name('api.cities.search');
+
+// Legacy Redirections
+Route::get('advertisements', fn() => redirect()->route('tasks'));
+Route::get('post-task', [TaskController::class, 'create'])->name('post-task')->middleware('auth');
+
+// Authentication & Localization
+
  
 // Language switching
 Route::post('language/{locale}', function ($locale) {
@@ -65,18 +99,10 @@ Route::post('language/{locale}', function ($locale) {
     return back();
 })->name('language.switch');
  
-// Advertisement REST endpoints (optional API for CRUD)
-// Allow visiting /advertisements (or common misspelling) via GET by redirecting to tasks list
-Route::get('advertisements', function () {
+// Advertisement REST endpoints (legacy/misspellings)
+Route::get('advertisiments', function () { 
     return redirect()->route('tasks');
 });
-Route::get('advertisiments', function () { // legacy/misspelled path
-    return redirect()->route('tasks');
-});
-Route::post('advertisements', [AdvertisementController::class, 'store'])->name('advertisements.store')->middleware('auth');
-Route::match(['put', 'patch'], 'advertisements/{advertisement}', [AdvertisementController::class, 'update'])->name('advertisements.update')->middleware('auth');
-Route::delete('advertisements/{advertisement}', [AdvertisementController::class, 'destroy'])->name('advertisements.destroy')->middleware('auth');
-Route::post('advertisements/{advertisement}/complete', [AdvertisementController::class, 'complete'])->name('advertisements.complete')->middleware('auth');
  
 Route::get('login', [AuthController::class, 'index'])->name('login');
 Route::post('post-login', [AuthController::class, 'postLogin'])->name('login.post');

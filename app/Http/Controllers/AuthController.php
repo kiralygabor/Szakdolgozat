@@ -70,13 +70,7 @@ class AuthController extends Controller
                     ->with('status', __('auth_pages.status.verify_code_sent'));
             }
 
-            // Check for returnUrl in the request
-            $returnUrl = $request->input('returnUrl');
-            if ($returnUrl) {
-                return redirect($returnUrl)->withSuccess(__('auth_pages.status.login_success'));
-            }
-
-            return redirect()->intended(route('tasks'))
+            return redirect()->route('index')
                 ->withSuccess(__('auth_pages.status.login_success'));
         }
 
@@ -105,7 +99,7 @@ class AuthController extends Controller
                         ->with('status', __('auth_pages.status.email_already_registered'));
                 }
 
-                return redirect()->intended(route('tasks'))
+                return redirect()->route('index')
                     ->withSuccess(__('auth_pages.status.email_in_use_logged_in'));
             }
 

@@ -2,66 +2,114 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateProfileRequest;
+use App\Models\Category;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function edit(): View
     {
-        $profile = User::all();
-        return view('profile.index', compact('profile'));
+        return view('pages.profile', [
+            'user' => Auth::user(),
+            'categories' => Category::orderBy('name')->get(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateProfile(UpdateProfileRequest $request): RedirectResponse
     {
-        
+        $user = Auth::user();
+
+        $user->fill($request->safe()->except('avatar'));
+
+        if ($request->hasFile('avatar')) {
+            $this->replaceAvatar($request, $user);
+        }
+
+        $user->save();
+
+        return redirect()->route('profile', ['tab' => 'profile'])
+            ->with('success', __('profile_page.profile.update_success'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function updateNotifications(Request $request): RedirectResponse
     {
-        //
+        $user = Auth::user();
+
+        $user->email_notifications = $request->has('email_notifications');
+        $user->email_task_digest = $request->has('email_task_digest');
+        $user->email_direct_quotes = $request->has('email_direct_quotes');
+
+        if ($user->email_task_digest) {
+            $user->trackedCategories()->sync($request->input('tracked_categories', []));
+        } else {
+            $user->trackedCategories()->detach();
+        }
+
+        $user->save();
+
+        return redirect()->route('profile', ['tab' => 'notification'])
+            ->with('success', __('Settings updated.'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function updateSettings(Request $request): JsonResponse
     {
-        //
+        $validated = $request->validate([
+            'theme' => 'nullable|string|in:light,dark,system',
+            'reduced_motion' => 'nullable|boolean',
+            'high_contrast' => 'nullable|boolean',
+        ]);
+
+        Auth::user()->update($validated);
+
+        return response()->json(['success' => true]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(Request $request): RedirectResponse
     {
-        //
+        $user = Auth::user();
+
+        $this->deleteAvatarFromStorage($user);
+
+        $user->delete();
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('index')
+            ->with('success', __('Account deleted successfully.'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function sendManualDigest(): RedirectResponse
     {
-        //
+        return redirect()->route('profile', ['tab' => 'notification'])
+            ->with('info', __('Manual digest sent.'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // ── Private Helpers ──────────────────────────────────────
+
+    private function replaceAvatar(Request $request, User $user): void
     {
-        //
+        $this->deleteAvatarFromStorage($user);
+
+        $user->avatar = $request->file('avatar')->store('avatars', 'public');
+    }
+
+    private function deleteAvatarFromStorage(User $user): void
+    {
+        $isStoredFile = !empty($user->avatar)
+            && !str_starts_with($user->avatar, 'assets/')
+            && !str_starts_with($user->avatar, 'http');
+
+        if ($isStoredFile) {
+            Storage::disk('public')->delete($user->avatar);
+        }
     }
 }

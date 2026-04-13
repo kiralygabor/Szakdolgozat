@@ -190,7 +190,7 @@
         .controls-bar { padding: 12px; border-radius: 16px; margin-bottom: 24px; justify-content: center; }
     }
 
-    .modern-search-wrapper { position: relative; flex: 1; max-width: 380px; }
+    .modern-search-wrapper { position: relative; flex: 1; max-width: 380px; margin: 0; display: flex; align-items: center; }
     .modern-search-input {
         width: 100%; background: #F8FAFC; border: 1px solid #E2E8F0;
         padding: 12px 16px 12px 44px; border-radius: 12px; font-size: 14px; transition: all 0.2s;
@@ -313,7 +313,10 @@
     .high-contrast .modern-tab.active {
         background: #000000 !important;
         color: #ffffff !important;
-        border-color: #000000 !important;
+        border-color: #ffffff !important;
+    }
+    .high-contrast .modern-tab.active * {
+        color: #ffffff !important;
     }
     .high-contrast .modern-tabs-wrapper {
         background: transparent !important;
@@ -337,11 +340,27 @@
     .high-contrast .filter-btn.active {
         background: #000000 !important;
         color: #ffffff !important;
+        border: 2px solid #ffffff !important;
+    }
+    .high-contrast .filter-btn.active * {
+        color: #ffffff !important;
     }
 
     .high-contrast .task-hero {
         border: 4px solid #000000 !important;
         background-color: #ffffff !important;
+    }
+    .high-contrast .modern-search-wrapper {
+        border: 2px solid #000000 !important;
+        background-color: #ffffff !important;
+    }
+    .high-contrast .modern-search-input {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    .high-contrast .modern-search-wrapper .search-icon {
+        color: #000000 !important;
+        stroke: #000000 !important;
     }
     .high-contrast .hero-right {
         background-color: #ffffff !important;
@@ -390,7 +409,9 @@
     .high-contrast .bg-blue-100 *,
     .high-contrast .bg-indigo-100 *,
     .high-contrast .bg-blue-50 *,
-    .high-contrast .bg-indigo-50 * {
+    .high-contrast .bg-indigo-50 *,
+    .high-contrast .bg-indigo-50 span,
+    .high-contrast .bg-blue-50 span {
         color: #ffffff !important;
     }
 
@@ -405,8 +426,25 @@
     .high-contrast .text-blue-900,
     .high-contrast .text-blue-700,
     .high-contrast .status-badge,
+    .high-contrast .description-toggle *,
+    .high-contrast .text-indigo-600,
+    .high-contrast .text-indigo-900,
+    .high-contrast .text-indigo-400,
     .high-contrast #offer-details-modal * {
         color: #000000 !important;
+    }
+
+    .high-contrast .bg-indigo-50 .text-indigo-600,
+    .high-contrast .bg-indigo-50 .text-indigo-900,
+    .high-contrast .bg-indigo-50 .text-indigo-400,
+    .high-contrast .bg-blue-50 .text-blue-600 {
+        color: #ffffff !important;
+    }
+    .high-contrast .description-toggle svg,
+    .high-contrast .description-toggle i {
+        stroke: #000000 !important;
+        fill: #000000 !important;
+        opacity: 1 !important;
     }
     .high-contrast #offer-details-modal .bg-blue-600,
     .high-contrast #offer-details-modal .bg-indigo-600 {
@@ -417,9 +455,13 @@
     .high-contrast #offer-details-modal .bg-indigo-600 * {
         color: #ffffff !important;
     }
-    .high-contrast #offer-details-modal a:hover span {
-        color: #000000 !important;
-        text-decoration: underline !important;
+    .high-contrast #offer-details-modal a:hover,
+    .high-contrast #offer-details-modal a:hover *,
+    .high-contrast #offer-details-modal button:hover,
+    .high-contrast #offer-details-modal button:hover * {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+        fill: #ffffff !important;
     }
 
     .high-contrast .modern-empty-state {
@@ -444,10 +486,23 @@
         border: 2px solid #000000 !important;
         box-shadow: none !important;
     }
+    .high-contrast .cta-button *, /* Force icon and any spans to white */
+    .high-contrast .cta-button i,
+    .high-contrast .cta-button svg {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+        fill: transparent !important;
+    }
     .high-contrast .cta-button:hover {
         background: #ffffff !important;
         color: #000000 !important;
         text-decoration: underline !important;
+    }
+    .high-contrast .cta-button:hover *,
+    .high-contrast .cta-button:hover i,
+    .high-contrast .cta-button:hover svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
     }
 
     .high-contrast .bg-green-600,
@@ -923,24 +978,24 @@
                             {{-- Employee view: fixed summary of their submitted counteroffer --}}
                             @php $myDirectOffer = $activeTask->offers->where('user_id', auth()->id())->first(); @endphp
                             @if($myDirectOffer)
-                                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5">
+                                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 dark:bg-indigo-950/40 dark:border-indigo-900">
                                     <div class="flex items-center gap-3 mb-3">
-                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600"></i>
+                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center dark:bg-indigo-900/60">
+                                            <i data-feather="check-circle" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i>
                                         </div>
                                         <div>
-                                            <h4 class="text-sm font-bold text-indigo-900">{{ __('mytasks.status.your_offer_submitted') }}</h4>
-                                            <p class="text-xs text-indigo-600">{{ $myDirectOffer->created_at?->diffForHumans() }}</p>
+                                            <h4 class="text-sm font-bold text-indigo-900 dark:text-indigo-100">{{ __('mytasks.status.your_offer_submitted') }}</h4>
+                                            <p class="text-xs text-indigo-600 dark:text-indigo-400">{{ $myDirectOffer->created_at?->diffForHumans() }}</p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center justify-between bg-white rounded-xl p-3 border border-indigo-100">
+                                    <div class="flex items-center justify-between bg-white rounded-xl p-3 border border-indigo-100 dark:bg-slate-800/50 dark:border-indigo-900/50">
                                         <div>
-                                            <span class="text-xs font-bold text-gray-500 uppercase">{{ __('mytasks.modals.your_price_label') }}</span>
-                                            <div class="text-xl font-bold text-indigo-600">€{{ number_format($myDirectOffer->price, 0) }}</div>
+                                            <span class="text-xs font-bold text-gray-500 uppercase dark:text-slate-400">{{ __('mytasks.modals.your_price_label') }}</span>
+                                            <div class="text-xl font-bold text-indigo-600 dark:text-indigo-400">€{{ number_format($myDirectOffer->price, 0) }}</div>
                                         </div>
                                         <div class="text-right flex-1 ml-4">
-                                            <span class="text-xs font-bold text-gray-500 uppercase">{{ __('mytasks.status.your_message') }}</span>
-                                            <p class="text-sm text-gray-700 italic mt-0.5">"{{ Illuminate\Support\Str::limit($myDirectOffer->message, 80, '...') }}"</p>
+                                            <span class="text-xs font-bold text-gray-500 uppercase dark:text-slate-400">{{ __('mytasks.status.your_message') }}</span>
+                                            <p class="text-sm text-gray-700 italic mt-0.5 dark:text-slate-300">"{{ Illuminate\Support\Str::limit($myDirectOffer->message, 80, '...') }}"</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1125,7 +1180,7 @@
                     </div>
 
                     {{-- MODAL: Complete & Review --}}
-                    <div id="complete-task-modal" class="task-details-modal">
+                    <div id="complete-task-modal" class="task-details-modal @if($errors->has('comment') || $errors->has('stars')) show @endif">
                         <div class="task-details-backdrop" onclick="closeCompleteTaskModal()"></div>
                         <div class="task-details-panel" style="max-width: 450px;">
                             <button type="button" class="task-details-close" onclick="closeCompleteTaskModal()" aria-label="{{ __('Close modal') }}">
@@ -1158,7 +1213,10 @@
                                     </div>
                                     <div class="mb-6">
                                         <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('mytasks.modals.comment') }}</label>
-                                        <textarea name="comment" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="{{ __('mytasks.modals.write_review_placeholder') }}"></textarea>
+                                        <textarea name="comment" rows="3" class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 @error('comment') border-red-500 @enderror" placeholder="{{ __('mytasks.modals.write_review_placeholder') }}" required></textarea>
+                                        @error('comment')
+                                            <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <button type="submit" class="h-14 w-full flex items-center justify-center gap-2 px-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
                                         {{ __('mytasks.modals.complete_review_btn') }}
@@ -1306,14 +1364,14 @@
                                             <select id="editCategorySelect" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
                                                 <option value="">{{ __('mytasks.modals.select_category') }}</option>
                                                 @foreach($allCategories as $cat)
-                                                    <option value="{{ $cat->id }}" {{ ($activeTask->job->categories_id ?? null) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                                    <option value="{{ $cat->id }}" {{ ($activeTask->job->categories_id ?? null) == $cat->id ? 'selected' : '' }}>{{ __('categories.' . $cat->name) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.service') }}</label>
                                             <select id="editJobSelect" name="jobs_id" class="w-full border border-gray-300 rounded-lg p-3 bg-white outline-none focus:ring-2 focus:ring-blue-600 transition" required>
-                                                <option value="{{ $activeTask->jobs_id }}" selected>{{ $activeTask->job->name ?? __('mytasks.modals.select_service') }}</option>
+                                                <option value="{{ $activeTask->jobs_id }}" selected>{{ isset($activeTask->job->name) ? __('jobs.' . $activeTask->job->name) : __('mytasks.modals.select_service') }}</option>
                                             </select>
                                         </div>
                                     </div>

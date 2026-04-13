@@ -6,6 +6,23 @@
   <title>{{ __('auth_pages.verify_code.title') }}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    html.dark body { background: #0f172a; color: #e2e8f0; }
+    html.dark .auth-box { background: #1e293b; border-color: #334155; color: #e2e8f0; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1); }
+    html.dark .step-header { background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid #334155; color: #f1f5f9; }
+    html.dark .auth-subtitle { color: #94a3b8; }
+    html.dark .auth-subtitle strong { color: #f8fafc; }
+    html.dark .step-body p { color: #94a3b8; }
+    html.dark .step-body p strong { color: #f8fafc; }
+    html.dark .form-control { background: #0f172a; border-color: #334155; color: #f1f5f9; }
+    html.dark .form-control:focus { background: #0f172a; border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99,102,241,0.2); }
+    html.dark .otp-input { background: #0f172a; border-color: #334155; color: #ffffff; }
+    html.dark .otp-input:focus { background: #0f172a; border-color: #6366f1; }
+    html.dark .small-text { color: #64748b; }
+    html.dark .alert-success { background: rgba(5, 150, 105, 0.15); color: #6ee7b7; border-color: rgba(5, 150, 105, 0.3); }
+    html.dark .alert-danger { background: rgba(220, 38, 38, 0.15); color: #f87171; border-color: rgba(220, 38, 38, 0.3); }
+    html.dark a { color: #818cf8; }
+    html.dark a:hover { color: #a5b4fc; }
+    
     body {
       background: #f9f9fb;
       font-family: Arial, sans-serif;
@@ -135,17 +152,16 @@
     .high-contrast a.logo-link:hover {
       background-color: transparent !important;
     }
+    .high-contrast img.logo-img {
+      filter: brightness(0) !important;
+    }
   </style>
   
   <script>
     (function(){
       var root = document.documentElement;
-      if(localStorage.getItem('high-contrast') === 'true') root.classList.add('high-contrast');
-      if(localStorage.getItem('reduced-motion') === 'true') root.classList.add('reduced-motion');
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        root.classList.add('dark');
-      }
+      // Auth flow pages default to light mode
+      root.classList.remove('dark', 'high-contrast', 'reduced-motion');
     })();
   </script>
 </head>

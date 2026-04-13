@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -56,6 +56,9 @@ class User extends Authenticatable implements HasLocalePreference
          'email_task_digest',
          'email_direct_quotes',
          'locale',
+         'theme',
+         'reduced_motion',
+         'high_contrast',
     ];
 
     /**
@@ -82,19 +85,32 @@ class User extends Authenticatable implements HasLocalePreference
             'email_notifications' => 'boolean',
             'email_task_digest' => 'boolean',
             'email_direct_quotes' => 'boolean',
+            'reduced_motion' => 'boolean',
+            'high_contrast' => 'boolean',
         ];
     }
-     public function city()
+
+    // ── Domain Helpers ────────────────────────────────────────
+
+    public function hasIncompleteProfile(): bool
+    {
+        return empty($this->avatar) || empty($this->city_id);
+    }
+
+    // ── Relationships ────────────────────────────────────────
+
+    public function city()
     {
         return $this->belongsTo(City::class);
     }
 
-
-     public function verifyUser()
+    public function verifyUser()
     {
         return $this->hasOne(VerifyUser::class);
     }
-    public function category() {
+
+    public function category()
+    {
         return $this->hasOne(Category::class);
     }
     public function advertisements()

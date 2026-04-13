@@ -143,17 +143,16 @@
     .high-contrast a.logo-link:hover {
       background-color: transparent !important;
     }
+    .high-contrast img.logo-img {
+      filter: brightness(0) !important;
+    }
   </style>
  
   <script>
     (function(){
       var root = document.documentElement;
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        root.classList.add('dark');
-      }
-      if(localStorage.getItem('high-contrast') === 'true') root.classList.add('high-contrast');
-      if(localStorage.getItem('reduced-motion') === 'true') root.classList.add('reduced-motion');
+      // High contrast and dark mode on auth pages are strictly managed via layout for guests
+      // so we don't have persistence across different users on same machine.
     })();
   </script>
 </head>
@@ -240,7 +239,7 @@
       <!-- Facebook Continue -->
       <div class="d-grid">
         <a href="{{ route('login.facebook') }}" class="btn btn-outline">
-          <img src="https://www.svgrepo.com/show/349574/facebook.svg" alt="Facebook" width="20" class="me-2">
+          <i class="fa-brands fa-facebook me-2" style="color: #1877F2; font-size: 20px;"></i>
           {{ __('auth_pages.login.login_facebook') }}
         </a>
       </div>

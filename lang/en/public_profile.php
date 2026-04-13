@@ -37,4 +37,8 @@ return [
     'work_with_footer' => 'Want to work with :name?',
     'work_with_footer_action' => 'Post a task and request a quote',
     'request_quote' => 'Request a quote',
+    'error_review_self' => 'You cannot review yourself.',
+    'error_already_reviewed' => 'You have already reviewed all completed tasks with this user.',
+    'success_review_posted' => 'Review posted!',
+    'remote' => 'Remote',
 ];

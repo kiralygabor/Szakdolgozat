@@ -347,20 +347,20 @@
             </div>
  
             <nav class="nav flex-column nav-pills settings-nav" id="settingsTab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw"></i> {{ __('profile_page.sidebar.back_home') }}</a>
+                <a class="nav-link sub-menu-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw"></i> {{ __('profile_page.sidebar.back_home') }}</a>
                 <div class="my-2 border-bottom"></div>
                
                 @auth
-                <a class="nav-link" href="{{ route('my-tasks') }}"><i class="fas fa-columns fa-fw"></i> {{ __('profile_page.sidebar.dashboard') }}</a>
-                <a class="nav-link" id="notification-tab" data-bs-toggle="pill" href="#notification" role="tab">{{ __('profile_page.sidebar.notifications') }}</a>
+                <a class="nav-link sub-menu-link" href="{{ route('my-tasks') }}"><i class="fas fa-columns fa-fw"></i> {{ __('profile_page.sidebar.dashboard') }}</a>
+                <a class="nav-link sub-menu-link" id="notification-tab" data-bs-toggle="pill" href="#notification" role="tab">{{ __('profile_page.sidebar.notifications') }}</a>
                
                 <!-- Active Tab styling matches the screenshot logic -->
-                <a class="nav-link {{ auth()->check() ? 'active' : '' }}" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab">{{ __('profile_page.sidebar.profile') }}</a>
+                <a class="nav-link sub-menu-link {{ auth()->check() ? 'active' : '' }}" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab">{{ __('profile_page.sidebar.profile') }}</a>
                 @endauth
-                <a class="nav-link {{ !auth()->check() ? 'active' : '' }}" id="account-tab" data-bs-toggle="pill" href="#account" role="tab">{{ __('profile_page.sidebar.settings') }}</a>
+                <a class="nav-link sub-menu-link {{ !auth()->check() ? 'active' : '' }}" id="account-tab" data-bs-toggle="pill" href="#account" role="tab">{{ __('profile_page.sidebar.settings') }}</a>
                 @auth
-                <a class="nav-link" id="security-tab" data-bs-toggle="pill" href="#security" role="tab">{{ __('profile_page.sidebar.security') }}</a>
-                <a class="nav-link" id="billing-tab" data-bs-toggle="pill" href="#billing" role="tab">{{ __('profile_page.sidebar.billing') }}</a>
+                <a class="nav-link sub-menu-link" id="security-tab" data-bs-toggle="pill" href="#security" role="tab">{{ __('profile_page.sidebar.security') }}</a>
+                <a class="nav-link sub-menu-link" id="billing-tab" data-bs-toggle="pill" href="#billing" role="tab">{{ __('profile_page.sidebar.billing') }}</a>
                 @endauth
             </nav>
         </div>
@@ -433,7 +433,8 @@
                                 class="form-control form-control-custom"
                                 id="birthdate"
                                 name="birthdate"
-                                value="{{ $user->birthdate ? $user->birthdate->format('Y-m-d') : '' }}">
+                                max="{{ date('Y-m-d') }}"
+                                value="{{ $user->birthdate ? ($user->birthdate instanceof \Carbon\Carbon ? $user->birthdate->format('Y-m-d') : \Carbon\Carbon::parse($user->birthdate)->format('Y-m-d')) : '' }}">
                         </div>
  
                         <div class="mb-4 custom-input-group position-relative">
@@ -841,48 +842,61 @@
  
             function applyTheme(mode) {
                 if (mode === 'system') {
-                    localStorage.setItem('theme', 'system');
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     root.classList.toggle('dark', prefersDark);
-                    if (prefersDark) {
-                        applyAccessibility({
-                            master: localStorage.getItem('accessibility-mode') === 'true',
-                            reducedMotion: localStorage.getItem('reduced-motion') === 'true',
-                            highContrast: false 
-                        });
-                        const hcToggle = document.getElementById('high-contrast-toggle');
-                        if (hcToggle) hcToggle.checked = false;
-                    }
                 } else if (mode === 'dark') {
                     root.classList.add('dark');
-                    localStorage.setItem('theme', 'dark');
-                    applyAccessibility({
-                        master: localStorage.getItem('accessibility-mode') === 'true',
-                        reducedMotion: localStorage.getItem('reduced-motion') === 'true',
-                        highContrast: false 
-                    });
-                    const hcToggle = document.getElementById('high-contrast-toggle');
-                    if (hcToggle) hcToggle.checked = false;
+                    root.classList.remove('high-contrast'); // Dark mode and HC are mutually exclusive
                 } else {
                     root.classList.remove('dark');
-                    localStorage.setItem('theme', 'light');
                 }
             }
 
             function applyAccessibility(prefs) {
-                root.classList.toggle('reduced-motion', prefs.reducedMotion);
-                root.classList.toggle('high-contrast', prefs.highContrast);
-                localStorage.setItem('reduced-motion', prefs.reducedMotion);
-                localStorage.setItem('high-contrast', prefs.highContrast);
-                localStorage.setItem('accessibility-mode', prefs.master);
-                
-                if (prefs.highContrast) {
-                    // Turn off dark mode if HC was on elsewhere
-                    // We don't call applyTheme here to avoid recursion, but we setup the UI
+                if (prefs.reducedMotion) {
+                    root.classList.add('reduced-motion');
+                } else {
+                    root.classList.remove('reduced-motion');
                 }
 
-                // Refresh visibility
-                if (window.applyAccMode) window.applyAccMode(prefs.master);
+                if (prefs.highContrast) {
+                    root.classList.add('high-contrast');
+                    root.classList.remove('dark');
+                } else {
+                    root.classList.remove('high-contrast');
+                }
+            }
+
+            async function saveSettings(theme, reducedMotion, highContrast) {
+                // Persistent storage for authenticated users
+                if (window.userSettings) {
+                    try {
+                        const response = await fetch('{{ route("profile.settings.update") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                theme: theme,
+                                reduced_motion: reducedMotion,
+                                high_contrast: highContrast
+                            })
+                        });
+                        if (response.ok) {
+                            console.log('Settings synced to profile');
+                            // Update window.userSettings to reflect new state
+                            window.userSettings.theme = theme;
+                            window.userSettings.reduced_motion = reducedMotion;
+                            window.userSettings.high_contrast = highContrast;
+                        }
+                    } catch (error) {
+                        console.error('Error syncing settings:', error);
+                    }
+                } else {
+                    // Guest fallback (temporary for session, no localStorage persistence)
+                    console.log('Guest settings applied locally only');
+                }
             }
  
  
@@ -903,27 +917,30 @@
             });
         }
  
-            // Init states
-            const savedTheme = localStorage.getItem('theme') || 'system';
-            if (themeSelect) themeSelect.value = savedTheme;
- 
+            // Init states - Strictly from profile (window.userSettings)
+            const initialTheme = (window.userSettings && window.userSettings.theme) ? window.userSettings.theme : 'light';
+            if (themeSelect) themeSelect.value = initialTheme;
+
             const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
             const highContrastToggle = document.getElementById('high-contrast-toggle');
             const masterAccToggle = document.getElementById('accessibility-master-toggle');
             const subOptions = document.getElementById('access-sub-options');
            
+            const initialReducedMotion = (window.userSettings && window.userSettings.reduced_motion) || false;
+            const initialHighContrast = (window.userSettings && window.userSettings.high_contrast) || false;
+
             if (masterAccToggle) {
-                masterAccToggle.checked = localStorage.getItem('accessibility-mode') === 'true';
+                masterAccToggle.checked = (initialReducedMotion || initialHighContrast);
                 if (masterAccToggle.checked) subOptions?.classList.remove('hidden');
                 masterAccToggle.addEventListener('change', function() {
                     subOptions?.classList.toggle('hidden', !this.checked);
                 });
             }
             if (reducedMotionToggle) {
-                reducedMotionToggle.checked = localStorage.getItem('reduced-motion') === 'true';
+                reducedMotionToggle.checked = initialReducedMotion;
             }
             if (highContrastToggle) {
-                highContrastToggle.checked = localStorage.getItem('high-contrast') === 'true';
+                highContrastToggle.checked = initialHighContrast;
                 highContrastToggle.addEventListener('change', function() {
                     if (this.checked && themeSelect) {
                         themeSelect.value = 'light'; // Force light theme UI
@@ -950,13 +967,22 @@
                     }
  
                     // 2. Apply Accessibility
+                    const reducedMotion = reducedMotionToggle ? reducedMotionToggle.checked : false;
+                    const highContrast = highContrastToggle ? highContrastToggle.checked : false;
+                    const theme = themeSelect ? themeSelect.value : 'light';
+
                     if (masterAccToggle) {
                         applyAccessibility({
-                            master: masterAccToggle.checked,
-                            reducedMotion: reducedMotionToggle ? reducedMotionToggle.checked : false,
-                            highContrast: highContrastToggle ? highContrastToggle.checked : false
+                            reducedMotion: masterAccToggle.checked ? reducedMotion : false,
+                            highContrast: masterAccToggle.checked ? highContrast : false
                         });
                     }
+
+                    // 3. Save to profile
+                    saveSettings(theme, 
+                        masterAccToggle.checked ? reducedMotion : false, 
+                        masterAccToggle.checked ? highContrast : false
+                    );
  
                     // 2. Apply Language (Redirect if changed)
                     if (langSelect) {

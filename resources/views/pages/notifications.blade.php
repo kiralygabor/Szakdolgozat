@@ -4,6 +4,36 @@
 
 @section('content')
 <style>
+  /* --- High Contrast Mode --- */
+  .high-contrast section {
+    background-color: #ffffff !important;
+  }
+  .high-contrast .bg-white {
+    background-color: #ffffff !important;
+    border: 2px solid #000000 !important;
+  }
+  .high-contrast .border-gray-200,
+  .high-contrast .border-b {
+    border-color: #000000 !important;
+    border-width: 2px !important;
+  }
+  .high-contrast .text-gray-600,
+  .high-contrast .text-gray-900,
+  .high-contrast .text-gray-400 {
+    color: #000000 !important;
+    opacity: 1 !important;
+  }
+  .high-contrast #mark-all-read {
+    color: #000000 !important;
+    text-decoration: underline !important;
+    font-weight: 700 !important;
+  }
+  .high-contrast .bg-indigo-600 {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+  }
+
   html.dark .bg-white { background-color: #1e293b !important; }
   html.dark .border-gray-200 { border-color: #334155 !important; }
   html.dark .divide-gray-200 > * + * { border-color: #334155 !important; }
@@ -34,7 +64,7 @@
         @empty
           <div class="p-8 text-center">
             <p class="text-gray-600 mb-4">{{ __('notifications_page.empty_state') }}</p>
-            <a href="{{ route('tasks') }}" class="inline-flex items-center px-5 py-2.5 rounded-full bg-indigo-600 text-white hover:bg-indigo-700">{{ __('notifications_page.browse_tasks') }}</a>
+            <a href="{{ route('tasks') }}" class="btn inline-flex items-center px-5 py-2.5 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 no-underline">{{ __('notifications_page.browse_tasks') }}</a>
           </div>
         @endforelse
       </div>

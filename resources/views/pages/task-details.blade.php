@@ -123,7 +123,7 @@
         {{-- RIGHT COLUMN: Budget / Offer Box --}}
         <div class="md:col-span-7">
             {{-- h-full ensures same height as left col. Added white bg, modern shadow, and rounded-2xl --}}
-            <div class="h-full bg-white border border-gray-100 rounded-2xl p-6 shadow-xl flex flex-col justify-between relative overflow-hidden group">
+            <div class="h-full bg-white border border-gray-100 rounded-2xl p-6 shadow-xl flex flex-col justify-between relative overflow-hidden">
                
                 {{-- Decorative Top Line --}}
                 <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
@@ -198,7 +198,7 @@
                             </button>
                             
                             @auth
-                                <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="w-full py-2.5 bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-sm">
+                                <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="w-full py-2.5 bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-sm relative z-20">
                                     <i data-feather="flag" class="w-4 h-4"></i>
                                     <span>{{ __('task_details.form.report') }}</span>
                                 </button>

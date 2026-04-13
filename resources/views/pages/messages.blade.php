@@ -38,14 +38,16 @@
     .high-contrast .border,
     .high-contrast .border-r,
     .high-contrast .border-b,
-    .high-contrast .border-t {
+    .high-contrast .border-t,
+    .high-contrast [class*="md:border"] {
         border-color: #000000 !important;
-        border-width: 2px !important;
+        border-width: 3px !important;
     }
    
-    /* Avoid double borders in the middle */
-    .high-contrast aside { border-right: 2px solid #000000 !important; }
-    .high-contrast main { border-left: none !important; }
+    /* Avoid double borders in the middle and ensure outer wrapper has solid borders */
+    .high-contrast aside { border-right: 3px solid #000000 !important; }
+    .high-contrast main { border-left: none !important; border-right: 3px solid #000000 !important; }
+    .high-contrast .max-w-7xl > .bg-white { border: 3px solid #000000 !important; }
  
     .high-contrast #message-input,
     .high-contrast aside input {
@@ -110,6 +112,31 @@
     .high-contrast #chat-options-dropdown button:hover {
         background-color: #000000 !important;
         color: #ffffff !important;
+    }
+
+    /* Fix for the 'Browse Tasks' button and empty states */
+    .high-contrast .bg-blue-600.text-white,
+    .high-contrast a.bg-blue-600 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+
+    .high-contrast .text-blue-500,
+    .high-contrast .text-gray-400,
+    .high-contrast .text-gray-500 {
+        color: #000000 !important;
+        opacity: 1 !important;
+    }
+
+    .high-contrast .ring-white {
+        ring-color: #000000 !important;
+        --tw-ring-color: #000000 !important;
+    }
+
+    .high-contrast .bg-blue-50\/50 {
+        background-color: #ffffff !important;
+        border: 1px solid #000000 !important;
     }
 
     /* ========== DARK MODE OVERRIDES ========== */
@@ -291,7 +318,7 @@
                 @if($conversations->isEmpty())
                     <div class="mt-8 flex flex-col items-center">
                         <p class="text-sm text-gray-400 mb-4">{{ __('messages_page.no_active_chats') }}</p>
-                        <a href="{{ route('tasks') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200 no-underline">
+                        <a href="{{ route('tasks') }}" class="btn inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200 no-underline">
                             <i data-feather="search" class="w-4 h-4"></i>
                             {{ __('navbar.browse_tasks') }}
                         </a>

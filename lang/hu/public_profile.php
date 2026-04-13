@@ -37,4 +37,8 @@ return [
     'work_with_footer_action' => 'Tegyen közzé egy feladatot és kérjen ajánlatot',
     'request_quote' => 'Ajánlat kérése',
     'viewing_own_profile' => 'Saját profilját nézi',
+    'error_review_self' => 'Önmagát nem értékelheti.',
+    'error_already_reviewed' => 'Már minden közös munkát értékelt ezzel a felhasználóval.',
+    'success_review_posted' => 'Értékelés közzétéve!',
+    'remote' => 'Távmunka',
 ];

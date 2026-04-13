@@ -24,6 +24,16 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     window.isAuthenticated = {{ auth()->check() ? 'true' : 'false' }};
+    @auth
+      window.userSettings = {
+        theme: {!! json_encode(auth()->user()->theme) !!},
+        reduced_motion: {{ auth()->user()->reduced_motion ? 'true' : 'false' }},
+        high_contrast: {{ auth()->user()->high_contrast ? 'true' : 'false' }}
+      };
+    @else
+      window.userSettings = null;
+    @endauth
+
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -35,11 +45,29 @@
         }
       }
     }
-    // Apply theme early to prevent flash
-    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    // Apply theme early to prevent flash - Strictly linked to profile as requested
+    const savedTheme = (window.userSettings && window.userSettings.theme) ? window.userSettings.theme : 'light';
+    if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+    }
+
+    // Apply accessibility settings early - Strictly linked to profile
+    const savedReducedMotion = (window.userSettings && window.userSettings.reduced_motion) || false;
+    const savedHighContrast = (window.userSettings && window.userSettings.high_contrast) || false;
+    
+    if (savedReducedMotion) {
+        document.documentElement.classList.add('reduced-motion');
+    } else {
+        document.documentElement.classList.remove('reduced-motion');
+    }
+
+    if (savedHighContrast) {
+        document.documentElement.classList.add('high-contrast');
+        document.documentElement.classList.remove('dark'); // HC forces light mode
+    } else {
+        document.documentElement.classList.remove('high-contrast');
     }
   </script>
   <style>
@@ -239,13 +267,20 @@
     }
 
     /* Accessibility Overrides (Toggled via settings) */
-    .reduced-motion *,
-    .reduced-motion *:before,
-    .reduced-motion *:after {
+    /* Exclude MapLibre GL elements — they rely on CSS transforms for positioning */
+    .reduced-motion *:not(.maplibregl-map):not(.maplibregl-map *):not(.maplibregl-canvas-container):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-popup):not(.maplibregl-popup *):not(.maplibregl-ctrl-group):not(.maplibregl-ctrl-group *):not(.maplibregl-canvas):not(.maplibregl-control-container):not(.maplibregl-control-container *),
+    .reduced-motion *:not(.maplibregl-map):not(.maplibregl-map *):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-popup):not(.maplibregl-popup *):not(.maplibregl-ctrl-group):not(.maplibregl-ctrl-group *)::before,
+    .reduced-motion *:not(.maplibregl-map):not(.maplibregl-map *):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-popup):not(.maplibregl-popup *):not(.maplibregl-ctrl-group):not(.maplibregl-ctrl-group *)::after {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
       scroll-behavior: auto !important;
+    }
+    /* Critical UI elements that should just stop animating instead of near-zero duration */
+    .reduced-motion .animate-cloud-pulse,
+    .reduced-motion .animate-ping,
+    .reduced-motion .animate-fade-in-up {
+      animation: none !important;
     }
 
     /* Enhanced High Contrast Mode (WCAG AAA alignment) */
@@ -313,6 +348,8 @@
 
     .high-contrast p,
     .high-contrast span,
+    .high-contrast div,
+    .high-contrast label,
     .high-contrast li,
     .high-contrast h1,
     .high-contrast h2,
@@ -369,7 +406,7 @@
       border: 2px solid #000000 !important;
     }
 
-    /* Ensure text inside colored badges is white (on black background) */
+    /* High Contrast Text Colors: Default to Black for legibility on white bg */
     .high-contrast .text-blue-700,
     .high-contrast .text-green-700,
     .high-contrast .text-purple-700,
@@ -381,7 +418,7 @@
     .high-contrast .text-blue-600,
     .high-contrast .text-indigo-600,
     .high-contrast .text-violet-600 {
-      color: #ffffff !important;
+      color: #000000 !important;
       font-weight: 800 !important;
     }
 
@@ -445,6 +482,23 @@
       color: #000000 !important;
       border: 3px solid #000000 !important;
       font-weight: 800 !important;
+    }
+
+    /* Fixed Button Visibility in HC */
+    .high-contrast #submit-btn,
+    .high-contrast .btn-primary,
+    .high-contrast .btn-blue {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 4px solid #000000 !important;
+      opacity: 1 !important;
+    }
+
+    .high-contrast #submit-btn:disabled,
+    .high-contrast .btn:disabled {
+      background-color: #ffffff !important;
+      color: #555555 !important;
+      border: 4px solid #555555 !important;
     }
 
     /* === 6. FOOTER: All text to high contrast === */
@@ -561,22 +615,158 @@
       text-decoration: underline !important;
     }
 
-    /* Exclude all logo links from black background on hover */
-    .high-contrast .desktop-navbar a:hover,
-    .high-contrast .mobile-navbar a:hover,
-    .high-contrast .mobile-sidebar a:hover,
-    .high-contrast a:has(img.logo-img):hover,
-    .high-contrast a.flex.items-center:hover {
-      background-color: transparent !important;
+    /* Global Link Visibility in HC */
+    .high-contrast a:not(.btn):not(.sub-menu-link):not(.logo-link):not(.modern-tab):not(.filter-btn):not(.cta-button):not(.bg-blue-600):not(.bg-indigo-600):not(.bg-green-600) {
+      color: #000000 !important;
+      text-decoration: underline !important;
+      font-weight: 700 !important;
+    }
+    
+    .high-contrast, .high-contrast body {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+
+    .high-contrast a:not(.btn):not(.sub-menu-link):not(.logo-link):not(.modern-tab):not(.filter-btn):not(.cta-button):not(.bg-blue-600):not(.bg-indigo-600):not(.bg-green-600):hover {
+      background-color: #000000 !important;
+      color: #ffffff !important;
     }
 
     /* Navbar Settings & Links */
-    .high-contrast .desktop-navbar a {
+    .high-contrast .desktop-navbar a,
+    .high-contrast .mobile-navbar a,
+    .high-contrast .mobile-sidebar a {
       text-decoration: underline !important;
       font-weight: 700 !important;
     }
 
-    /* Navbar Settings Dropdown & Submenus */
+    /* Buttons in High Contrast - Force standard block look for clarity */
+    .high-contrast .btn,
+    .high-contrast .bg-primary-500,
+    .high-contrast .bg-primary-600,
+    .high-contrast .text-primary-500,
+    .high-contrast .text-primary-600,
+    .high-contrast .bg-secondary-500,
+    .high-contrast .bg-secondary-600,
+    .high-contrast .text-secondary-500,
+    .high-contrast .text-secondary-600,
+    .high-contrast .btn.border {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 3px solid #ffffff !important;
+      outline: 1px solid #000000 !important;
+      opacity: 1 !important;
+      text-decoration: none !important;
+    }
+
+    .high-contrast .btn:hover,
+    .high-contrast .bg-primary-500:hover,
+    .high-contrast .bg-secondary-500:hover,
+    .high-contrast .text-primary-500:hover,
+    .high-contrast .text-secondary-500:hover {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border-color: #000000 !important;
+      text-decoration: underline !important;
+      font-weight: 800 !important;
+    }
+
+    /* Standard Mode: Navbar Button Hover Fix (Blending with background) */
+    :not(.high-contrast) .desktop-navbar .btn:hover {
+      background-color: transparent !important;
+      background-image: none !important;
+      transition: all 0.3s ease;
+      border: 2px solid currentColor !important;
+    }
+
+    :not(.high-contrast) .desktop-navbar .btn.bg-primary-500:hover {
+      color: #6366f1 !important;
+      /* indigo-500 */
+      border-color: #6366f1 !important;
+    }
+
+    :not(.high-contrast) .desktop-navbar .btn.bg-secondary-500:hover {
+      color: #7c3aed !important;
+      /* violet-500 */
+      border-color: #7c3aed !important;
+    }
+
+    /* Dark Mode nuances */
+    html.dark:not(.high-contrast) .desktop-navbar .btn.bg-primary-500:hover {
+      color: #818cf8 !important;
+      /* indigo-400 */
+      border-color: #818cf8 !important;
+    }
+
+    html.dark:not(.high-contrast) .desktop-navbar .btn.bg-secondary-500:hover {
+      color: #a78bfa !important;
+      /* violet-400 */
+      border-color: #a78bfa !important;
+    }
+
+    /* High Contrast: Override the standard-mode navbar button hovers with matching specificity */
+    .high-contrast .desktop-navbar .btn:hover,
+    .high-contrast .desktop-navbar .btn.bg-primary-500:hover,
+    .high-contrast .desktop-navbar .btn.bg-secondary-500:hover,
+    html.high-contrast .desktop-navbar .btn.bg-primary-500:hover,
+    html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
+      background-color: #ffffff !important;
+      background-image: none !important;
+      color: #000000 !important;
+      border: 3px solid #000000 !important;
+      border-color: #000000 !important;
+      text-decoration: underline !important;
+      font-weight: 800 !important;
+    }
+
+    /* Corrected hover overrides: Only the logo links stay transparent */
+    .high-contrast .logo-link:hover,
+    .high-contrast a:has(img.logo-img):hover,
+    .high-contrast a.flex.items-center.logo-link:hover {
+      background-color: transparent !important;
+      color: inherit !important;
+      text-decoration: none !important;
+    }
+
+    /* Categories Dropdown & Submenus in High Contrast */
+    .high-contrast #categories-menu,
+    .high-contrast #categories-menu div,
+    .high-contrast #categories-menu p,
+    .high-contrast #categories-menu ul,
+    .high-contrast #categories-menu li,
+    .high-contrast #categories-menu h3 {
+      background-color: #ffffff !important;
+      border-color: #000000 !important;
+      color: #000000 !important;
+      opacity: 1 !important;
+    }
+
+    .high-contrast #categories-menu a {
+      color: #000000 !important;
+      text-decoration: underline !important;
+    }
+
+    .high-contrast #categories-menu a:hover,
+    .high-contrast #categories-menu a:hover * {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+
+    .high-contrast #categories-menu h3 {
+      font-weight: 900 !important;
+      border-bottom: 2px solid #000000 !important;
+    }
+
+    .high-contrast #categories-menu svg,
+    .high-contrast #categories-menu i {
+      color: #000000 !important;
+    }
+
+    .high-contrast #categories-menu a:hover svg,
+    .high-contrast #categories-menu a:hover i {
+      color: #ffffff !important;
+    }
+
     .high-contrast #settings-menu,
     .high-contrast #settings-menu .submenu {
       background-color: #ffffff !important;
@@ -599,29 +789,48 @@
     /* Hover state: Parent item or current button/div turns black */
     .high-contrast #settings-menu div:hover:not([id*="-indicator"]):not(.dot),
     .high-contrast #settings-menu button:hover:not([id*="-indicator"]):not(.dot),
-    .high-contrast #settings-menu .group:hover > div:first-child {
+    .high-contrast #settings-menu .group:hover>button,
+    .high-contrast #settings-menu .group:hover>div:first-child {
       background-color: #000000 !important;
       color: #ffffff !important;
     }
 
     /* Ensure text and icons inside hovered items turn white — but NOT inside submenus */
-      .high-contrast #settings-menu > .flex > .group:hover > button *,
-      .high-contrast #settings-menu > .flex > .group:hover > div:first-child *,
-      .high-contrast #settings-menu .submenu button:hover *,
-      .high-contrast #settings-menu .submenu a:hover * {
-          color: #ffffff !important;
-      }
-      /* Keep non-hovered submenu items visible (black text on white bg) */
-      .high-contrast #settings-menu .submenu button:not(:hover),
-      .high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
-      .high-contrast #settings-menu .submenu a:not(:hover),
-      .high-contrast #settings-menu .submenu a:not(:hover) * {
-          color: #000000 !important;
-      }
-      .high-contrast #settings-menu .submenu button:not(:hover),
-      .high-contrast #settings-menu .submenu a:not(:hover) {
-          background-color: #ffffff !important;
-      }
+    .high-contrast #settings-menu>.flex>.group:hover>button *,
+    .high-contrast #settings-menu>.flex>.group:hover>div:first-child *,
+    .high-contrast #settings-menu .submenu button:hover *,
+    .high-contrast #settings-menu .submenu a:hover * {
+      color: #ffffff !important;
+    }
+
+    /* Keep non-hovered submenu items visible (black text on white bg) */
+    .high-contrast #settings-menu .submenu button:not(:hover),
+    .high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
+    .high-contrast #settings-menu .submenu a:not(:hover),
+    .high-contrast #settings-menu .submenu a:not(:hover) * {
+      color: #000000 !important;
+    }
+
+    .high-contrast #settings-menu .submenu button:not(:hover),
+    .high-contrast #settings-menu .submenu a:not(:hover) {
+      background-color: #ffffff !important;
+    }
+
+    /* Icon / SVG Contrast Fix */
+    .high-contrast i,
+    .high-contrast svg {
+      stroke: currentColor !important;
+    }
+
+    .high-contrast .group:hover i,
+    .high-contrast .group:hover svg {
+      color: #ffffff !important;
+    }
+
+    .high-contrast .group:not(:hover) i,
+    .high-contrast .group:not(:hover) svg {
+      color: #000000 !important;
+    }
 
     /* Accessibility Toggles in High Contrast */
     .high-contrast [id*="-indicator"] {
@@ -642,14 +851,15 @@
       border: 1px solid #ffffff;
       width: 0.75rem !important;
       height: 0.75rem !important;
-      top: 1.5px !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
       left: 1.5px !important;
     }
 
     .high-contrast [id*="-indicator"].bg-blue-600 .dot {
       background-color: #ffffff !important;
       border: 1px solid #000000;
-      transform: translateX(20px) !important;
+      transform: translateX(20px) translateY(-50%) !important;
     }
 
     /* Submenu items visibility */
@@ -674,16 +884,27 @@
       color: #ffffff !important;
     }
 
-   /* Maintain hidden state correctly */
-      .high-contrast #settings-menu.hidden { display: none !important; }
-      .high-contrast #settings-menu:not(.show) { opacity: 0 !important; pointer-events: none !important; }
-      .high-contrast #settings-menu.show { opacity: 1 !important; transform: none !important; }
-      .high-contrast #settings-menu .group > .submenu {
-          opacity: 0 !important;
-          pointer-events: none !important;
-      }
+    /* Maintain hidden state correctly */
+    .high-contrast #settings-menu.hidden {
+      display: none !important;
+    }
 
-    .high-contrast #settings-menu .group:hover > .submenu 
+    .high-contrast #settings-menu:not(.show) {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .high-contrast #settings-menu.show {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .high-contrast #settings-menu .group>.submenu {
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+
+    .high-contrast #settings-menu .group:hover>.submenu {
       opacity: 1 !important;
       pointer-events: auto !important;
       transform: none !important;
@@ -701,10 +922,11 @@
     }
 
     /* Global Reduced Motion Hover Fix */
-    .reduced-motion *:hover:not(.dot):not(img),
-    .reduced-motion .group:hover *:not(.dot):not(img),
-    .reduced-motion img,
-    .reduced-motion img:hover {
+    /* Exclude MapLibre GL elements and critical UI buttons from transform overrides */
+    .reduced-motion *:hover:not(.dot):not(img):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-map):not(.maplibregl-map *):not(.maplibregl-popup):not(.maplibregl-popup *):not(.maplibregl-canvas-container):not(.maplibregl-canvas-container *):not(.maplibregl-ctrl-group):not(.maplibregl-ctrl-group *):not(.animate-cloud-pulse),
+    .reduced-motion .group:hover *:not(.dot):not(img):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-map):not(.maplibregl-map *):not(.animate-cloud-pulse),
+    .reduced-motion img:not(.maplibregl-map img),
+    .reduced-motion img:hover:not(.maplibregl-map img) {
       transform: none !important;
       -webkit-transform: none !important;
       transition: none !important;
@@ -745,15 +967,44 @@
     }
 
     .high-contrast #user-menu-button,
+    .high-contrast #settings-button,
     .high-contrast .mobile-profile-btn img,
     .high-contrast .mobile-sidebar-user img {
       border: 3px solid #000000 !important;
       ring: none !important;
       box-shadow: none !important;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+
+    .high-contrast #settings-button i {
+      color: #000000 !important;
+    }
+
+    .high-contrast #settings-button:hover {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+
+    .high-contrast #settings-button:hover i {
+      color: #ffffff !important;
     }
 
     .high-contrast .mobile-sidebar-user:hover {
       background-color: #000000 !important;
+    }
+
+    /* Categories Dropdown in Reduced Motion mode */
+    .reduced-motion #categories-menu {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .reduced-motion #categories-menu:not(.hidden) {
+      opacity: 1 !important;
+      transform: none !important;
+      pointer-events: auto !important;
+      display: flex !important;
     }
 
     .high-contrast .mobile-sidebar-user:hover * {
@@ -845,12 +1096,15 @@
       border-right: 2px solid #ffffff !important;
     }
 
-    /* Light buttons (like Report Task) */
     .high-contrast .bg-gray-100 {
       background-color: #ffffff !important;
       border: 2px solid #000000 !important;
       color: #000000 !important;
       opacity: 1 !important;
+      position: relative !important;
+      z-index: 50 !important;
+      pointer-events: auto !important;
+      cursor: pointer !important;
     }
 
     .high-contrast .bg-gray-100:hover {
@@ -867,20 +1121,26 @@
       color: #ffffff !important;
     }
 
-    /* Global Button Hover Fix (Ensure child spans turn white) */
     .high-contrast button:hover *,
     .high-contrast .btn:hover *,
     .high-contrast a:hover * {
       color: #ffffff !important;
     }
-        /* Override: settings submenu items must keep black text unless directly hovered */
-      .high-contrast #settings-menu .submenu button:not(:hover),
-      .high-contrast #settings-menu .submenu button:not(:hover) span,
-      .high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
-      .high-contrast #settings-menu .submenu a:not(:hover),
-      .high-contrast #settings-menu .submenu a:not(:hover) span {
-          color: #000000 !important;
-          background-color: #ffffff !important;
+
+    .high-contrast button,
+    .high-contrast a,
+    .high-contrast [onclick] {
+      cursor: pointer !important;
+    }
+
+    /* Override: settings submenu items must keep black text unless directly hovered */
+    .high-contrast #settings-menu .submenu button:not(:hover),
+    .high-contrast #settings-menu .submenu button:not(:hover) span,
+    .high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
+    .high-contrast #settings-menu .submenu a:not(:hover),
+    .high-contrast #settings-menu .submenu a:not(:hover) span {
+      color: #000000 !important;
+      background-color: #ffffff !important;
     }
 
     /* Hide description fade out effect in High Contrast */
@@ -917,8 +1177,10 @@
 
     /* Decorative blobs/dots should be hidden in high contrast */
     .high-contrast [style*="radial-gradient"],
-    .high-contrast [class*="blur-"] {
+    .high-contrast [class*=" blur-"],
+    .high-contrast [class^="blur-"] {
       opacity: 0 !important;
+      pointer-events: none !important;
     }
 
     .high-contrast .sr-only:not(:focus) {
@@ -930,6 +1192,19 @@
       filter: brightness(0) !important;
       mix-blend-mode: normal !important;
       opacity: 1 !important;
+    }
+
+    /* Fixed selection colors for High Contrast */
+    .high-contrast ::selection,
+    .high-contrast *::selection {
+      background-color: #2563eb !important;
+      color: #ffffff !important;
+    }
+
+    .high-contrast ::-moz-selection,
+    .high-contrast *::-moz-selection {
+      background-color: #2563eb !important;
+      color: #ffffff !important;
     }
 
     /* Dark mode accessibility toggle hover neutralization */
@@ -2000,7 +2275,7 @@
       </button>
 
       {{-- Center: Logo --}}
-      <a href="{{ route('index') }}" class="flex items-center">
+      <a href="{{ route('index') }}" class="flex items-center logo-link">
         <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz Logo" class="logo-img dark:brightness-0 dark:invert"
           style="height: 28px; width: auto; object-fit: contain;">
       </a>
@@ -2063,13 +2338,10 @@
             </div>
             <div class="mobile-profile-dropdown-divider"></div>
             <div class="mobile-profile-dropdown-links">
-              <a href="#" onclick="event.preventDefault(); document.getElementById('mobile-logout-form').submit();"
+              <a href="#" onclick="event.preventDefault(); window.logout();"
                 style="color:#dc2626;">
                 <i data-feather="log-out" style="color:#dc2626;"></i> {{ __('navbar.logout') }}
               </a>
-              <form id="mobile-logout-form" method="POST" action="{{ route('logout') }}" style="display:none;">
-                @csrf
-              </form>
             </div>
           </div>
         @endauth
@@ -2089,7 +2361,7 @@
       {{-- Mobile Sidebar --}}
       <div class="mobile-sidebar" id="mobileSidebar" role="dialog" aria-modal="true" aria-label="Main menu sidebar">
         <div class="mobile-sidebar-header">
-          <a href="{{ route('index') }}">
+          <a href="{{ route('index') }}" class="logo-link">
             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" class="logo-img dark:brightness-0 dark:invert"
               style="height: 26px; width: auto;">
           </a>
@@ -2116,7 +2388,7 @@
             <i data-feather="message-square"></i> {{ __('navbar.messages') ?? 'Messages' }}
           </a>
 
-          <a href="{{ route('post-task') }}" onclick="return checkLogin(event)" class="mobile-sidebar-cta">
+          <a href="{{ route('post-task') }}" onclick="return checkLogin(event)" class="mobile-sidebar-cta btn">
             {{ __('navbar.post_task') }}
           </a>
 
@@ -2160,20 +2432,21 @@
 
         @guest
           <div style="padding: 16px 20px; border-top: 1px solid #f0f0f0; margin-top: auto;">
-            <a href="{{ route('login') }}" class="mobile-sidebar-cta" style="margin: 0 0 8px;">{{ __('navbar.login') }}</a>
-            <a href="{{ route('register') }}" class="mobile-sidebar-cta"
+            <a href="{{ route('login') }}" class="mobile-sidebar-cta btn"
+              style="margin: 0 0 8px;">{{ __('navbar.login') }}</a>
+            <a href="{{ route('register') }}" class="mobile-sidebar-cta btn"
               style="margin: 0; background: transparent; color: #6366f1; border: 1.5px solid #334155 !important;">{{ __('navbar.sign_up') }}</a>
           </div>
         @endguest
       </div>
 
       {{-- ===== DESKTOP NAVBAR (visible >= 768px) ===== --}}
-      <nav class="desktop-navbar bg-white border-b border-gray-200 shadow-sm w-full z-50"
+      <nav class="desktop-navbar bg-white border-b border-gray-200 shadow-sm w-full z-[2000] relative"
         aria-label="Desktop main navigation">
         <div class="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
           <!-- LEFT: Logo (aligned with Sidebar location) -->
           <div class="flex items-center md:w-1/5">
-            <a href="{{ route('index') }}" class="flex items-center">
+            <a href="{{ route('index') }}" class="flex items-center logo-link">
               <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz"
                 class="logo-img h-8 w-auto dark:brightness-0 dark:invert">
             </a>
@@ -2183,7 +2456,7 @@
           <div class="flex-1 flex justify-between items-center md:pl-10">
             <div class="flex items-center space-x-5">
               <a href="{{ route('post-task') }}" onclick="return checkLogin(event)"
-                class="px-4 py-2 rounded-lg bg-secondary-500 text-white hover:bg-secondary-600 font-semibold">
+                class="px-4 py-2 rounded-lg bg-secondary-500 text-white font-semibold btn">
                 {{ __('navbar.post_task') }}
               </a>
 
@@ -2312,12 +2585,12 @@
 
               @guest
                 <!-- Show Login and Sign Up for guests -->
-                <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white">
+                <a href="{{ route('login') }}" class="px-4 py-2 rounded-lg bg-primary-500 text-white btn">
                   {{ __('navbar.login') }}
                 </a>
                 <a href="{{ route('register') }}"
-                  class="px-4 py-2 rounded-lg border text-primary-500 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 no-underline transition-colors"
-                  style="border: 1.5px solid #334155 !important;">
+                  class="px-4 py-2 rounded-lg border text-primary-500 dark:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 no-underline transition-colors btn"
+                  style="border: 1.5px solid #334155;">
                   {{ __('navbar.sign_up') }}
                 </a>
               @endguest
@@ -2337,7 +2610,8 @@
                       <a href="{{ route('public-profile', Auth::id()) }}"
                         class="user-info group block px-3 py-2 rounded-lg hover:bg-indigo-50 transition-colors no-underline">
                         <h3 class="text-base font-bold text-gray-900 group-hover:text-[#6366f1] transition-colors">
-                          {{ $fullName }}</h3>
+                          {{ $fullName }}
+                        </h3>
                         <p class="text-xs text-gray-500 mb-0">{{ __('navbar.public_profile') }}</p>
                       </a>
                       <hr>
@@ -2364,10 +2638,7 @@
                       </a>
                       <hr>
                       <a href="#" class="sub-menu-link"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('navbar.logout') }}</a>
-                      <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
-                        @csrf
-                      </form>
+                        onclick="event.preventDefault(); window.logout();">{{ __('navbar.logout') }}</a>
                     </div>
                   </div>
                 </div>
@@ -2444,18 +2715,22 @@
 
               <!-- Settings dropdown -->
               <div class="relative">
-                <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
-                  <i data-feather="settings"></i>
+                <button id="settings-button"
+                  class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-300 transition"
+                  type="button" aria-label="Toggle accessibility settings">
+                  <i data-feather="settings" class="w-5 h-5"></i>
                 </button>
                 <div id="settings-menu"
-                  class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
+                  class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-300 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
                   <div class="flex flex-col" role="none">
                     <!-- Theme -->
                     <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
-                        <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
-                        {{ __('navbar.theme') }}
+                        class="w-full text-left py-2.5 px-4 text-gray-700 font-semibold hover:bg-gray-50 flex items-center gap-3 transition-colors group/item">
+                        <i data-feather="chevron-left"
+                          class="w-4 h-4 text-gray-400 group-hover/item:-translate-x-0.5 transition-transform"></i>
+                        <i data-feather="sun" class="w-4 h-4 text-gray-500"></i>
+                        <span>{{ __('navbar.theme') }}</span>
                       </button>
                       <div
                         class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto"
@@ -2471,9 +2746,11 @@
                     <!-- Language -->
                     <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
-                        <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
-                        {{ __('navbar.language') }}
+                        class="w-full text-left py-2.5 px-4 text-gray-700 font-semibold hover:bg-gray-50 flex items-center gap-3 transition-colors group/item">
+                        <i data-feather="chevron-left"
+                          class="w-4 h-4 text-gray-400 group-hover/item:-translate-x-0.5 transition-transform"></i>
+                        <i data-feather="globe" class="w-4 h-4 text-gray-500"></i>
+                        <span>{{ __('navbar.language') }}</span>
                       </button>
                       <div
                         class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto"
@@ -2485,11 +2762,13 @@
                       </div>
                     </div>
                     <!-- Accessibility -->
-                    <div class="group relative" id="nav-accessibility-section" role="none">
+                    <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
-                        <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
-                        {{ __('navbar.accessibility') }}
+                        class="w-full text-left py-2.5 px-4 text-gray-700 font-semibold hover:bg-gray-50 flex items-center gap-3 transition-colors">
+                        <i data-feather="chevron-left"
+                          class="w-4 h-4 text-gray-400 group-hover:-translate-x-0.5 transition-transform"></i>
+                        <i data-feather="eye" class="w-4 h-4 text-gray-500"></i>
+                        <span>{{ __('navbar.accessibility') }}</span>
                       </button>
                       <div
                         class="submenu absolute top-0 right-full w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto p-1"
@@ -2500,7 +2779,7 @@
                           <span>{{ __('navbar.reduced_motion') }}</span>
                           <div id="nav-reduced-motion-indicator"
                             class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
-                            <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform">
+                            <div class="dot absolute left-0.5 w-3 h-3 bg-white rounded-full transition-transform" style="top: 50%; transform: translateY(-50%);">
                             </div>
                           </div>
                         </button>
@@ -2510,7 +2789,7 @@
                           <span>{{ __('navbar.high_contrast') }}</span>
                           <div id="nav-high-contrast-indicator"
                             class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
-                            <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform">
+                            <div class="dot absolute left-0.5 w-3 h-3 bg-white rounded-full transition-transform" style="top: 50%; transform: translateY(-50%);">
                             </div>
                           </div>
                         </button>
@@ -2519,9 +2798,11 @@
                     <!-- Extras -->
                     <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 flex items-center gap-2 transition-colors">
-                        <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
-                        {{ __('navbar.extras') }}
+                        class="w-full text-left py-2.5 px-4 text-gray-700 font-semibold hover:bg-gray-50 flex items-center gap-3 transition-colors group/item">
+                        <i data-feather="chevron-left"
+                          class="w-4 h-4 text-gray-400 group-hover/item:-translate-x-0.5 transition-transform"></i>
+                        <i data-feather="more-horizontal" class="w-4 h-4 text-gray-500"></i>
+                        <span>{{ __('navbar.extras') }}</span>
                       </button>
                       <div
                         class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto"
@@ -2560,7 +2841,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             <!-- Column 1: Brand -->
             <div class="space-y-4">
-              <a href="{{ route('index') }}" class="flex items-center">
+              <a href="{{ route('index') }}" class="flex items-center logo-link">
                 <img src="{{ asset('assets/img/logo.png') }}" alt="Minijobz"
                   class="logo-img h-8 w-auto dark:brightness-0 dark:invert mix-blend-multiply dark:mix-blend-normal">
               </a>
@@ -2573,16 +2854,17 @@
             <div>
               <h3 class="font-bold text-gray-900 mb-4">{{ __('footer.popular_categories') }}</h3>
               <ul class="space-y-3 text-sm text-gray-600">
-                <li><a href="{{ url('/categories/handyman') }}"
-                    class="hover:text-indigo-600 transition-colors">{{ __('footer.handyman') }}</a></li>
-                <li><a href="{{ url('/categories/cleaning') }}"
-                    class="hover:text-indigo-600 transition-colors">{{ __('footer.cleaning') }}</a></li>
-                <li><a href="{{ url('/categories/delivery') }}"
-                    class="hover:text-indigo-600 transition-colors">{{ __('footer.delivery') }}</a></li>
-                <li><a href="{{ url('/categories/gardening') }}"
-                    class="hover:text-indigo-600 transition-colors">{{ __('footer.gardening') }}</a></li>
-                <li><a href="{{ url('/categories/removals') }}"
-                    class="hover:text-indigo-600 transition-colors">{{ __('footer.removals') }}</a></li>
+                <li><a href="{{ url('category') }}?category_id=1"
+                    class="hover:text-indigo-600 transition-colors">{{ __('navbar.mega_menu.home_services') }}</a></li>
+                <li><a href="{{ url('category') }}?category_id=2"
+                    class="hover:text-indigo-600 transition-colors">{{ __('navbar.mega_menu.cleaning_maintenance') }}</a>
+                </li>
+                <li><a href="{{ url('category') }}?category_id=3"
+                    class="hover:text-indigo-600 transition-colors">{{ __('navbar.mega_menu.moving_delivery') }}</a></li>
+                <li><a href="{{ url('category') }}?category_id=5"
+                    class="hover:text-indigo-600 transition-colors">{{ __('navbar.mega_menu.business_tech') }}</a></li>
+                <li><a href="{{ url('category') }}?category_id=6"
+                    class="hover:text-indigo-600 transition-colors">{{ __('navbar.mega_menu.automotive') }}</a></li>
               </ul>
             </div>
 
@@ -2590,13 +2872,16 @@
             <div>
               <h3 class="font-bold text-gray-900 mb-4">{{ __('footer.company') }}</h3>
               <ul class="space-y-3 text-sm text-gray-600">
-                <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.about_us') }}</a></li>
-                <li><a href="#"
-                    class="hover:text-indigo-600 transition-colors">{{ __('footer.community_guidelines') }}</a></li>
-                <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.contact_us') }}</a></li>
-                <li><a href="#" class="hover:text-indigo-600 transition-colors">{{ __('footer.privacy_policy') }}</a></li>
-                <li><a href="#"
+                <li><a href="{{ route('terms') }}"
                     class="hover:text-indigo-600 transition-colors">{{ __('footer.terms_and_conditions') }}</a></li>
+                <li><a href="{{ route('privacy') }}"
+                    class="hover:text-indigo-600 transition-colors">{{ __('footer.privacy_policy') }}</a></li>
+                <li><a href="{{ route('help-faq') }}"
+                    class="hover:text-indigo-600 transition-colors">{{ __('footer.help_faq') }}</a></li>
+                <li><a href="{{ route('contact-support') }}"
+                    class="hover:text-indigo-600 transition-colors">{{ __('footer.contact_support') }}</a></li>
+                <li><a href="{{ route('guidelines') }}"
+                    class="hover:text-indigo-600 transition-colors">{{ __('footer.community_guidelines') }}</a></li>
               </ul>
             </div>
 
@@ -2643,77 +2928,115 @@
         var menu = document.getElementById('settings-menu');
         var subMenu = document.getElementById('subMenu');
         var root = document.documentElement;
+        function saveSettings(settings) {
+          if (!window.isAuthenticated) return;
+          fetch('{{ route("profile.settings.update") }}', {
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': '{{ csrf_token() }}',
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(settings)
+          });
+        }
+
         // Theme helpers
-        function applyTheme(mode) {
+        function applyTheme(mode, skipSave = false) {
+          if (window.isAuthenticated) {
           if (mode === 'system') {
-            localStorage.setItem('theme', 'system');
             var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            root.classList.toggle('dark', prefersDark);
+            document.documentElement.classList.toggle('dark', prefersDark);
             if (prefersDark) {
-              applyAcc('high-contrast', false);
+              applyAcc('high-contrast', false, true); 
             }
           } else if (mode === 'dark') {
-            root.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-            applyAcc('high-contrast', false);
+            document.documentElement.classList.add('dark');
+            applyAcc('high-contrast', false, true); 
           } else {
-            root.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
+            document.documentElement.classList.remove('dark');
           }
+          } else {
+             // Guest logic: current session application without browser storage persistence
+             if (mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+               document.documentElement.classList.add('dark');
+             } else {
+               document.documentElement.classList.remove('dark');
+             }
+          }
+          if (!skipSave && window.isAuthenticated) saveSettings({ theme: mode });
         }
-        function applyAcc(type, val) {
-          root.classList.toggle(type, val);
-          localStorage.setItem(type, val);
+        function applyAcc(type, val, skipSave = false) {
+          if (val) {
+            document.documentElement.classList.add(type);
+          } else {
+            document.documentElement.classList.remove(type);
+          }
+
+          if (val && type === 'high-contrast') {
+            document.documentElement.classList.remove('dark');
+          }
+
+          if (window.isAuthenticated) {
+            if (!skipSave) {
+              const settings = {};
+              settings[type.replace('-', '_')] = val;
+              saveSettings(settings);
+            }
+          }
           const indicator = document.getElementById('nav-' + type + '-indicator');
           if (indicator) {
             indicator.classList.toggle('bg-blue-600', val);
             indicator.classList.toggle('bg-gray-200', !val);
             const dot = indicator.querySelector('.dot');
-            if (dot) dot.style.transform = val ? 'translateX(16px)' : 'translateX(0)';
+            if (dot) dot.style.transform = val ? 'translateX(16px) translateY(-50%)' : 'translateX(0) translateY(-50%)';
           }
         }
         window.applyAccMode = function (enabled) {
-          localStorage.setItem('accessibility-mode', enabled);
+          // Persistence moved to profile-linked settings
         }
         window.toggleAccessibilitySetting = function (type) {
-          const current = localStorage.getItem(type) === 'true';
+          const current = (window.userSettings && type.replace('-', '_') in window.userSettings) 
+            ? window.userSettings[type.replace('-', '_')] 
+            : document.documentElement.classList.contains(type);
           const newVal = !current;
+
+          // Update window.userSettings to keep track
+          if (window.userSettings) {
+            window.userSettings[type.replace('-', '_')] = newVal;
+          }
 
           if (type === 'high-contrast') {
             if (newVal) {
-              // Entering High Contrast: Save current theme and force light
-              const currentTheme = localStorage.getItem('theme') || 'system';
-              localStorage.setItem('theme-before-hc', currentTheme);
+              // Entering High Contrast: force light
               applyTheme('light');
-              const themeSelect = document.getElementById('theme-select');
-              if (themeSelect) themeSelect.value = 'light';
             } else {
-              // Exiting High Contrast: Restore previous theme
-              const oldTheme = localStorage.getItem('theme-before-hc') || 'system';
+              // Exiting High Contrast: Restore profile theme or default
+              const oldTheme = (window.userSettings && window.userSettings.theme) ? window.userSettings.theme : 'light';
               applyTheme(oldTheme);
-              const themeSelect = document.getElementById('theme-select');
-              if (themeSelect) themeSelect.value = oldTheme;
             }
           }
 
           applyAcc(type, newVal);
         }
-        // Init theme and accessibility on load
+        // Init theme and accessibility on load - Strictly profile-linked
         try {
-          var saved = localStorage.getItem('theme') || 'system';
-          applyTheme(saved);
+          var saved = (window.userSettings && window.userSettings.theme) ? window.userSettings.theme : 'light';
+          applyTheme(saved, true);
 
-          // Always apply specific accessibility settings from localStorage on load
-          applyAcc('reduced-motion', localStorage.getItem('reduced-motion') === 'true');
-          applyAcc('high-contrast', localStorage.getItem('high-contrast') === 'true');
+          // Always apply specific accessibility settings - Strictly profile-linked
+          const rm = (window.userSettings && window.userSettings.reduced_motion) || false;
+          const hc = (window.userSettings && window.userSettings.high_contrast) || false;
+          
+          applyAcc('reduced-motion', rm, true);
+          applyAcc('high-contrast', hc, true);
 
-          const accMode = localStorage.getItem('accessibility-mode') === 'true';
-          window.applyAccMode(accMode);
           // react to system changes if system mode selected
           window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
-            if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
+            const currentTheme = (window.userSettings && window.userSettings.theme) ? window.userSettings.theme : 'light';
+            if (currentTheme === 'system') applyTheme('system', true);
           });
-        } catch (e) { }
+        } catch (e) { console.error(e); }
         var suppressUntil = 0;
         // Categories mega menu behavior (ensures visibility even if CSS hover fails)
         var catGroup = document.getElementById('categories-group');
@@ -2858,6 +3181,14 @@
             catMenu.classList.remove('hidden');
             const toggle = document.getElementById('categories-toggle');
             if (toggle) toggle.setAttribute('aria-expanded', 'true');
+
+            // Skip animation if reduced motion is enabled
+            if (document.documentElement.classList.contains('reduced-motion')) {
+              catMenu.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+              catMenu.classList.add('opacity-100');
+              return;
+            }
+
             // small delay to allow display change to register before opacity transition
             requestAnimationFrame(() => {
               catMenu.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
@@ -2872,14 +3203,17 @@
               catMenu.classList.add('opacity-0');
               const toggle = document.getElementById('categories-toggle');
               if (toggle) toggle.setAttribute('aria-expanded', 'false');
+
+              const delay = document.documentElement.classList.contains('reduced-motion') ? 0 : 150;
+
               // delay pointer-events toggle to allow transition
               setTimeout(function () {
                 if (catMenu.classList.contains('opacity-0')) {
                   catMenu.classList.add('pointer-events-none', 'translate-y-2');
                   catMenu.classList.add('hidden');
                 }
-              }, 150);
-            }, 300); // 300ms delay to bridge the gap
+              }, delay);
+            }, document.documentElement.classList.contains('reduced-motion') ? 0 : 300); // skip 300ms delay in RM
           };
 
           catGroup.addEventListener('mouseenter', showCat);
@@ -2959,6 +3293,10 @@
             window.feather.replace();
           }
         }, 100);
+
+        window.logout = function() {
+          document.getElementById('universal-logout-form').submit();
+        };
       })();
 
       // Notification Dropdown Logic
@@ -3022,10 +3360,10 @@
               // Remove badges (desktop and mobile)
               document.querySelectorAll('.notification-btn span').forEach(el => el.remove());
               document.querySelectorAll('.mobile-profile-btn span').forEach(el => el.remove());
-              
+
               // Clear badges from sidebars/dropdowns
               document.querySelectorAll('a[href*="notifications"] span').forEach(el => {
-                if(el.style.backgroundColor || el.innerText > 0) el.remove();
+                if (el.style.backgroundColor || el.innerText > 0) el.remove();
               });
 
               // Hide "Mark all read"
@@ -3062,6 +3400,11 @@
     </script>
 
 
+    @auth
+      <form id="universal-logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+        @csrf
+      </form>
+    @endauth
 </body>
 
 </html>

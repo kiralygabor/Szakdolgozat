@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('target_user_id', )->nullable()->constrained('users')->cascadeOnDelete();
             $table->foreignId('reviewer_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->integer('stars');
-            $table->string('comment', 150);
+            $table->string('comment', 500);
             $table->timestamps();
         });
     }

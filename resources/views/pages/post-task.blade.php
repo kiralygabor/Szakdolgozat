@@ -2,6 +2,16 @@
 @section('title', __('post-task.title'))
 @section('content')
 <style>
+  /* Remove number input arrows (spinners) */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  input[type=number] {
+    -moz-appearance: textfield !important;
+  }
+
   .pill-btn {
     border: 1px solid #1e3a8a;
     color: #1e3a8a;
@@ -234,6 +244,7 @@
 }
  
   /* Dark Mode Overrides */
+  html.dark .min-h-screen.bg-white { background-color: #0f172a !important; }
   html.dark .step-pane h1,
   html.dark aside h2,
   html.dark #sidebarSteps li,
@@ -282,6 +293,10 @@
   }
   html.dark #backBtn { background-color: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; }
   html.dark .time-option .font-semibold.text-gray-800 { color: #f8fafc !important; }
+  
+  html.dark #pickupSuburbDropdown { background-color: #1e293b !important; border-color: #334155 !important; }
+  html.dark #pickupSuburbDropdown > div { color: #f8fafc !important; border-color: #334155 !important; }
+  html.dark #pickupSuburbDropdown > div:hover { background-color: #334155 !important; color: #ffffff !important; }
   html.dark .photo-upload-plus .subtext { color: #64748b !important; }
  
  
@@ -408,6 +423,24 @@
 .high-contrast input[type="checkbox"] {
     accent-color: #000000 !important;
     border: 2px solid #000000 !important;
+}
+
+/* Fix information/alert boxes in High Contrast Mode */
+.high-contrast .bg-blue-50,
+.high-contrast .bg-red-50,
+.high-contrast .bg-green-50,
+.high-contrast .bg-amber-50 {
+    background-color: #000000 !important;
+    border: 4px solid #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff !important;
+    color: #ffffff !important;
+}
+
+.high-contrast .bg-blue-50 *,
+.high-contrast .bg-red-50 *,
+.high-contrast .bg-green-50 *,
+.high-contrast .bg-amber-50 * {
+    color: #ffffff !important;
 }
 </style>
  
@@ -742,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function() {
     budgetWrapper.classList.remove('is-invalid');
   } else {
     const n = Number(val);
-    const isValidRange = (n >= 10 && n <= 9999);
+    const isValidRange = (n >= 5 && n <= 5000);
     if (isValidRange) {
       // INSTANT: If valid, hide error immediately and enable button
       ok = true;
@@ -756,7 +789,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // RE-VERIFY: Check the value again AFTER the delay
         const currentVal = budgetInput.value.trim();
         const currentN = Number(currentVal);
-        const stillInvalid = currentVal !== "" && (currentN < 10 || currentN > 9999);
+        const stillInvalid = currentVal !== "" && (currentN < 5 || currentN > 5000);
         if (stillInvalid) {
           budgetError.classList.remove('hidden');
           budgetWrapper.classList.add('is-invalid');

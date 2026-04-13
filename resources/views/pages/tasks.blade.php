@@ -175,6 +175,50 @@
         background-color: #1d4ed8;
     }
 
+    /* Modal List Items High Contrast Overrides */
+    .high-contrast #profile-steps-modal a:hover {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    .high-contrast #profile-steps-modal a:hover .step-icon-circle,
+    .high-contrast #profile-steps-modal a:hover .step-add-btn {
+        background-color: #ffffff !important;
+        border-color: #ffffff !important;
+    }
+    .high-contrast #profile-steps-modal a:hover .step-icon-circle i,
+    .high-contrast #profile-steps-modal a:hover .step-icon-circle svg,
+    .high-contrast #profile-steps-modal a:hover .step-add-btn i,
+    .high-contrast #profile-steps-modal a:hover .step-add-btn svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
+    }
+    .high-contrast #profile-steps-modal a {
+        border: 2px solid transparent !important;
+    }
+    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn {
+        background-color: #000000 !important;
+        border: 2px solid #000000 !important;
+    }
+    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle i,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle svg,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn i,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn svg {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+    
+    .high-contrast #profile-steps-modal .mt-2 a {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        text-decoration: none !important;
+    }
+    .high-contrast #profile-steps-modal .mt-2 a:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
     /* Map Customizations */
     .custom-task-popup .maplibregl-popup-content {
       border-radius: 1rem;
@@ -212,9 +256,9 @@
     html.dark .range-slider { height: 30px !important; position: relative !important; background: transparent !important; }
     html.dark .range-slider .track-bg { background-color: #475569 !important; height: 6px !important; width: 100% !important; z-index: 1 !important; display: block !important; top: 50% !important; transform: translateY(-50%) !important; position: absolute !important; }
     html.dark .range-slider .track-fill { background-color: #2563eb !important; height: 6px !important; z-index: 2 !important; display: block !important; top: 50% !important; transform: translateY(-50%) !important; position: absolute !important; }
-    html.dark .range-slider input[type=range] { background: transparent !important; border: none !important; z-index: 5 !important; height: 100% !important; pointer-events: none !important; }
-    html.dark .range-slider input[type=range]::-webkit-slider-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; appearance: none; -webkit-appearance: none; width: 22px !important; height: 22px !important; border-radius: 50% !important; cursor: pointer !important; position: relative !important; z-index: 10 !important; margin-top: 0 !important; pointer-events: all !important; }
-    html.dark .range-slider input[type=range]::-moz-range-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; width: 22px !important; height: 22px !important; border-radius: 50% !important; cursor: pointer !important; z-index: 10 !important; pointer-events: all !important; }
+    html.dark .range-slider input[type=range] { background: transparent !important; border: none !important; z-index: 5 !important; height: 100% !important; pointer-events: none !important; margin: 0 !important; padding: 0 !important; position: absolute !important; top: 0 !important; }
+    html.dark .range-slider input[type=range]::-webkit-slider-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; appearance: none; -webkit-appearance: none; width: 21px !important; height: 21px !important; border-radius: 50% !important; cursor: pointer !important; position: relative !important; z-index: 10 !important; margin-top: -8px !important; pointer-events: all !important; }
+    html.dark .range-slider input[type=range]::-moz-range-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; width: 21px !important; height: 21px !important; border-radius: 50% !important; cursor: pointer !important; z-index: 10 !important; pointer-events: all !important; margin-top: -8px !important; }
     html.dark .step-icon-circle { background-color: #334155 !important; color: #cbd5e1 !important; }
     html.dark .modal-overlay .bg-white { background-color: #1e293b !important; }
     html.dark #mobile-filters-modal.bg-white { background-color: #0f172a !important; }
@@ -272,6 +316,402 @@
     html.dark .maplibregl-popup-content .text-gray-900 { color: #f8fafc !important; }
     html.dark .maplibregl-popup-content .text-blue-600 { color: #93c5fd !important; }
 
+    /* Dark Mode: No Tasks Found Button */
+    html.dark .tasks-empty-container { background-color: #0f172a !important; border-color: #1e293b !important; }
+    html.dark .tasks-empty-icon { background-color: #1e293b !important; }
+    html.dark .tasks-clear-btn {
+      background-color: #1e3a8a !important; /* Blue 900 */
+      border-color: #1e40af !important; /* Blue 800 */
+      color: #bfdbfe !important; /* Blue 200 */
+    }
+    html.dark .tasks-clear-btn:hover {
+      background-color: #2563eb !important;
+      color: #ffffff !important;
+      border-color: #3b82f6 !important;
+    }
+
+    /* ===== HIGH CONTRAST MODE — FILTER BAR ===== */
+
+    /* Filter bar container */
+    .high-contrast #filters-form {
+      background-color: #ffffff !important;
+      border-radius: 1rem !important;
+    }
+    .high-contrast .bg-white.border.border-gray-200.rounded-2xl {
+      background-color: #ffffff !important;
+      border: 3px solid #000000 !important;
+      border-radius: 1rem !important;
+      overflow: visible !important;
+    }
+    .high-contrast .bg-gray-50 {
+      background-color: #ffffff !important;
+    }
+
+    /* Search input: always white bg, black text, visible border */
+    .high-contrast #search-q,
+    .high-contrast #search-q:focus,
+    .high-contrast #search-q:hover {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 3px solid #000000 !important;
+      caret-color: #000000 !important;
+      z-index: 1 !important;
+    }
+
+    /* Search icon container — must sit above the input */
+    .high-contrast #filters-form .pointer-events-none {
+      z-index: 2 !important;
+    }
+
+    /* Search submit button — must sit above the input */
+    .high-contrast #filters-form button[type="submit"],
+    .high-contrast #filters-form button[aria-label="Search"] {
+      z-index: 3 !important;
+    }
+    .high-contrast #search-q::placeholder {
+      color: #555555 !important;
+      opacity: 1 !important;
+    }
+
+    /* Search icon — always black and visible */
+    .high-contrast #filters-form i,
+    .high-contrast #filters-form svg,
+    .high-contrast #filters-form .pointer-events-none i,
+    .high-contrast #filters-form .pointer-events-none svg {
+      color: #000000 !important;
+      stroke: #000000 !important;
+      opacity: 1 !important;
+    }
+
+    /* Search submit button */
+    .high-contrast #filters-form button[type="submit"] {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 2px solid #000000 !important;
+    }
+    .high-contrast #filters-form button[type="submit"] i,
+    .high-contrast #filters-form button[type="submit"] svg {
+      color: #ffffff !important;
+      stroke: #ffffff !important;
+    }
+    .high-contrast #filters-form button[type="submit"]:hover {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .high-contrast #filters-form button[type="submit"]:hover i,
+    .high-contrast #filters-form button[type="submit"]:hover svg {
+      color: #000000 !important;
+      stroke: #000000 !important;
+    }
+
+    /* Category select, Sort select — all dropdowns */
+    .high-contrast #filters-form select,
+    .high-contrast #category-filter,
+    .high-contrast #sort-filter {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 3px solid #000000 !important;
+      font-weight: 700 !important;
+    }
+    .high-contrast #filters-form select:hover,
+    .high-contrast #filters-form select:focus {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+
+    /* Type button and Price button */
+    .high-contrast #filters-form #type-btn,
+    .high-contrast #filters-form #price-btn,
+    .high-contrast #filters-form #price-btn.border-blue-400 {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 3px solid #000000 !important;
+      font-weight: 700 !important;
+    }
+    /* Icons and text inside navbar buttons */
+    .high-contrast #filters-form #type-btn i,
+    .high-contrast #filters-form #type-btn svg,
+    .high-contrast #filters-form #type-btn span,
+    .high-contrast #filters-form #price-btn i,
+    .high-contrast #filters-form #price-btn svg,
+    .high-contrast #filters-form #price-btn span,
+    .high-contrast #filters-form #price-text {
+      color: #000000 !important;
+      stroke: #000000 !important;
+    }
+    
+    /* Hover states: Invert colors correctly */
+    .high-contrast #filters-form #type-btn:hover,
+    .high-contrast #filters-form #price-btn:hover {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+    .high-contrast #filters-form #type-btn:hover i,
+    .high-contrast #filters-form #type-btn:hover svg,
+    .high-contrast #filters-form #type-btn:hover span,
+    .high-contrast #filters-form #price-btn:hover i,
+    .high-contrast #filters-form #price-btn:hover svg,
+    .high-contrast #filters-form #price-btn:hover span,
+    .high-contrast #filters-form #price-btn:hover #price-text {
+      color: #ffffff !important;
+      stroke: #ffffff !important;
+    }
+
+    /* Type dropdown and Price dropdown containers */
+    .high-contrast #type-menu,
+    .high-contrast #price-menu {
+      background-color: #ffffff !important;
+      border: 3px solid #000000 !important;
+      color: #000000 !important;
+      z-index: 9999 !important;
+    }
+    .high-contrast #type-menu *,
+    .high-contrast #price-menu * {
+      color: #000000 !important;
+    }
+
+    /* Labels inside dropdowns */
+    .high-contrast #type-menu label,
+    .high-contrast #price-menu label {
+      color: #000000 !important;
+      font-weight: 700 !important;
+      opacity: 1 !important;
+    }
+
+    /* Radio inputs in type menu */
+    .high-contrast #type-menu input[type="radio"] {
+      border: 2px solid #000000 !important;
+      background-color: #ffffff !important;
+    }
+    .high-contrast #type-menu input[type="radio"]:checked {
+      background-color: #000000 !important;
+      border-color: #000000 !important;
+    }
+
+    /* Hover on radio labels */
+    .high-contrast #type-menu label:hover,
+    .high-contrast #price-menu label:hover {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+    .high-contrast #type-menu label:hover span,
+    .high-contrast #type-menu label:hover * {
+      color: #ffffff !important;
+    }
+
+    /* City search input inside type menu */
+    .high-contrast #type-city-search {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 2px solid #000000 !important;
+    }
+
+    /* Price slider — tracks */
+    .high-contrast .range-slider .track-bg {
+      background-color: #ffffff !important;
+      border: 2px solid #000000 !important;
+      height: 6px !important;
+      z-index: 1 !important;
+      pointer-events: none !important;
+    }
+    .high-contrast .range-slider .track-fill {
+      background-color: #000000 !important;
+      height: 6px !important;
+      z-index: 2 !important;
+    }
+
+    /* Price slider — inputs (Force them on top) */
+    .high-contrast .range-slider input[type=range] {
+      z-index: 20 !important;
+      background: transparent !important;
+    }
+
+    /* Price slider — thumbs */
+    .high-contrast .range-slider input[type=range]::-webkit-slider-thumb {
+      background: #000000 !important;
+      border: 3px solid #000000 !important;
+      box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #000000 !important;
+      position: relative !important;
+      z-index: 30 !important;
+    }
+    .high-contrast .range-slider input[type=range]::-moz-range-thumb {
+      background: #000000 !important;
+      border: 3px solid #000000 !important;
+      box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #000000 !important;
+      position: relative !important;
+      z-index: 30 !important;
+    }
+
+    /* Price display box */
+    .high-contrast #price-display {
+      color: #000000 !important;
+      font-weight: 900 !important;
+    }
+    .high-contrast #price-menu .border {
+      border-color: #000000 !important;
+    }
+
+    /* Apply and Cancel buttons inside dropdowns */
+    .high-contrast #type-apply,
+    .high-contrast #price-apply {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 2px solid #000000 !important;
+      font-weight: 800 !important;
+    }
+    .high-contrast #type-apply:hover,
+    .high-contrast #price-apply:hover {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+    }
+    .high-contrast #price-cancel {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border: 2px solid #000000 !important;
+      font-weight: 800 !important;
+    }
+    .high-contrast #price-cancel:hover {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+    }
+
+    /* Map Marker and Cloud Button Fixes */
+    .high-contrast #cloud-toggle-btn {
+        background-color: #000000 !important;
+        border: 2px solid #ffffff !important;
+        color: #ffffff !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        z-index: 500 !important;
+    }
+    .high-contrast #cloud-toggle-btn i,
+    .high-contrast #cloud-toggle-btn svg {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+    
+    .high-contrast #remote-info-pop:not(.hidden) {
+        display: block !important;
+        background-color: #ffffff !important;
+        border: 3px solid #000000 !important;
+        color: #000000 !important;
+        z-index: 500 !important;
+    }
+    .high-contrast #remote-info-pop > div {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+    .high-contrast #remote-info-pop p,
+    .high-contrast #remote-info-pop span,
+    .high-contrast #remote-info-pop div {
+        color: #000000 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    .high-contrast #remote-info-pop i,
+    .high-contrast #remote-info-pop svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Map Pins in High Contrast */
+    .high-contrast .maplibregl-marker .rounded-full.border-white {
+        background-color: #000000 !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 0 0 2px #000000 !important;
+    }
+    .high-contrast .maplibregl-marker .animate-ping {
+        background-color: #000000 !important;
+        opacity: 0.5 !important;
+    }
+
+    /* Map Popup High Contrast Fixes */
+    .high-contrast .custom-task-popup .maplibregl-popup-content {
+        background-color: #ffffff !important;
+        border: 3px solid #000000 !important;
+        color: #000000 !important;
+    }
+    .high-contrast .custom-task-popup .maplibregl-popup-content * {
+        color: #000000 !important;
+    }
+    .high-contrast .custom-task-popup .maplibregl-popup-content a {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+    .high-contrast .custom-task-popup .maplibregl-popup-content a:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    /* Fix for Buttons in Cards */
+    .high-contrast .task-card a.bg-violet-50,
+    .high-contrast .task-card a.bg-blue-600,
+    .high-contrast .task-card button.bg-blue-600 {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+    }
+    .high-contrast .task-card a.bg-violet-50 *,
+    .high-contrast .task-card a.bg-blue-600 * {
+        color: #ffffff !important;
+    }
+
+    /* General Eye/View Icon visibility */
+    .high-contrast .task-card [data-feather="eye"],
+    .high-contrast .task-card [data-feather="flag"] {
+        color: #000000 !important;
+        stroke: #000000 !important;
+    }
+    .high-contrast .task-card a.bg-violet-50 [data-feather="eye"] {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+
+    /* Cancel Offer button in task cards */
+    .high-contrast .task-card form button.bg-red-50,
+    .high-contrast .task-card form button[class*="bg-red-50"],
+    .high-contrast .task-card form button[class*="text-red-600"] {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 3px solid #000000 !important;
+        font-weight: 800 !important;
+    }
+    .high-contrast .task-card form button.bg-red-50 i,
+    .high-contrast .task-card form button.bg-red-50 svg,
+    .high-contrast .task-card form button[class*="text-red-600"] i,
+    .high-contrast .task-card form button[class*="text-red-600"] svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
+    }
+    .high-contrast .task-card form button.bg-red-50:hover,
+    .high-contrast .task-card form button[class*="text-red-600"]:hover {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    .high-contrast .task-card form button.bg-red-50:hover i,
+    .high-contrast .task-card form button.bg-red-50:hover svg,
+    .high-contrast .task-card form button[class*="text-red-600"]:hover i,
+    .high-contrast .task-card form button[class*="text-red-600"]:hover svg {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+
+    /* Search submit button magnifying glass — force white icon on black bg */
+    .high-contrast #filters-form button[type="submit"] svg,
+    .high-contrast #filters-form button[type="submit"] i,
+    .high-contrast #filters-form button[aria-label="Search"] svg,
+    .high-contrast #filters-form button[aria-label="Search"] i {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+        fill: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
   </style>
 
   <!-- MapLibre GL -->
@@ -316,9 +756,9 @@
                         aria-label="Select Category"
                         class="appearance-none pl-3 pr-8 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:ring-2 focus:ring-blue-100 outline-none cursor-pointer transition-all">
                   <option value="">{{ __('tasks_page.all_categories') }}</option>
-                  @foreach($categories ?? [] as $category)
-                    <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
-                      {{ $category->name }}
+                  @foreach(collect($categories ?? []) as $cat)
+                    <option value="{{ $cat->id ?? '' }}" @selected(($filters['category'] ?? '') == ($cat->id ?? ''))>
+                      {{ __('categories.' . ($cat->name ?? '')) }}
                     </option>
                   @endforeach
                 </select>
@@ -337,7 +777,7 @@
                     @foreach($selectedCategoryJobs ?? [] as $job)
                         @if(is_object($job))
                             <option value="{{ $job->id }}" @selected(($filters['job'] ?? '') == $job->id)>
-                                {{ $job->name }}
+                                {{ __('jobs.' . $job->name) }}
                             </option>
                         @endif
                     @endforeach
@@ -468,7 +908,7 @@
                             @endif
                             ·
                             @if($filters['category'] ?? '')
-                                {{ $categories->firstWhere('id', $filters['category'])->name ?? __('tasks_page.all_categories') }}
+                                {{ collect($categories ?? [])->firstWhere('id', $filters['category'])?->name ?? __('tasks_page.all_categories') }}
                             @else
                                 {{ __('tasks_page.all_categories') }}
                             @endif
@@ -515,9 +955,9 @@
               <div class="relative">
                   <select name="category" id="mobile-category" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
                       <option value="">{{ __('tasks_page.all_categories') }}</option>
-                      @foreach($categories ?? [] as $category)
-                          <option value="{{ $category->id }}" @selected(($filters['category'] ?? '') == $category->id)>
-                              {{ __('categories.' . $category->name) }}
+                      @foreach(collect($categories ?? []) as $cat)
+                          <option value="{{ $cat->id ?? '' }}" @selected(($filters['category'] ?? '') == ($cat->id ?? ''))>
+                              {{ __('categories.' . ($cat->name ?? '')) }}
                           </option>
                       @endforeach
                   </select>
@@ -677,7 +1117,7 @@
                           </a>
                       @else
                           @if($isMyTask)
-                              <a href="{{ route('my-tasks') }}#task-{{ $task->id }}" class="text-xs font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                              <a href="{{ route('my-tasks') }}#task-{{ $task->id }}" class="btn text-xs font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
                                   <i data-feather="eye" class="w-3 h-3"></i> {{ __('tasks_page.view_details') }}
                               </a>
                           @elseif($hasOffer)
@@ -695,7 +1135,7 @@
                                      {{ __('tasks_page.make_offer') }}
                                  </button>
                               @else
-                                 <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
+                                 <a href="{{ route('tasks.show', $task->id) }}" class="btn text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
                                      {{ __('tasks_page.make_offer') }}
                                  </a>
                               @endif
@@ -705,8 +1145,8 @@
               </div>
             </div>
           @empty
-            <div class="h-full bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center flex flex-col items-center justify-center space-y-4 shadow-sm">
-              <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-2">
+            <div class="h-full bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center flex flex-col items-center justify-center space-y-4 shadow-sm tasks-empty-container">
+              <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-2 tasks-empty-icon">
                  <i data-feather="search" class="w-10 h-10 text-blue-300"></i>
               </div>
               <div class="space-y-2">
@@ -715,7 +1155,7 @@
                   {{ __('tasks_page.no_tasks_desc') }}
                 </p>
               </div>
-              <a href="{{ route('tasks') }}" class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-100 bg-blue-50/50 px-8 py-3 rounded-full transition-all mt-4 shadow-sm hover:shadow-md">
+              <a href="{{ route('tasks') }}" class="tasks-clear-btn inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-100 bg-blue-50/50 px-8 py-3 rounded-full transition-all mt-4 shadow-sm hover:shadow-md">
                 <i data-feather="refresh-cw" class="w-4 h-4"></i>
                 {{ __('tasks_page.clear_filters') }}
               </a>
@@ -736,15 +1176,17 @@
         
         <!-- Remote Tasks Pulsing Icon (Top Right) -->
         @if($remoteCount > 0)
-            <div class="absolute top-4 right-4 z-20">
+            <div class="absolute top-4 right-4 z-[500]">
                 <div class="relative">
                     {{-- Minimalist Cloud Icon with Pulse --}}
                     <button type="button" 
+                            id="cloud-toggle-btn"
                             onclick="toggleRemoteInfo()"
-                            class="w-8 h-8 bg-white shadow-xl border border-blue-50 rounded-full flex items-center justify-center text-blue-600 transition-all duration-300 relative z-30 animate-cloud-pulse">
-                        <i data-feather="cloud" class="w-4 h-4"></i>
+                            class="w-10 h-10 bg-white shadow-xl border border-blue-50 rounded-full flex items-center justify-center text-blue-600 transition-all duration-300 relative z-[500] animate-cloud-pulse cursor-pointer">
+                        <i data-feather="cloud" class="w-5 h-5 pointer-events-none"></i>
+
                         {{-- Task Count Badge --}}
-                        <div class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                        <div class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm pointer-events-none">
                             {{ $remoteCount }}
                         </div>
                     </button>
@@ -858,7 +1300,7 @@
 
               <!-- Footer Button -->
               <div class="mt-2">
-                <a href="{{ route('profile') }}" class="block w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-center rounded-full transition-colors text-sm">
+                <a href="{{ route('profile') }}" class="btn block w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-center rounded-full transition-colors text-sm border-2 border-transparent">
                     {{ __('tasks_page.continue') }}
                 </a>
               </div>
@@ -973,7 +1415,7 @@
                 </div>
                 <div class="font-bold text-sm text-gray-900 mb-1 leading-tight">${t.title}</div>
                 <div class="text-blue-600 font-extrabold text-sm mb-3">€${t.price.toLocaleString()}</div>
-                <a href="${finalUrl}" class="block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">{{ __('tasks_page.view_details') }}</a>
+                <a href="${finalUrl}" class="btn block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">{{ __('tasks_page.view_details') }}</a>
             </div>
         `;
 
@@ -1013,22 +1455,7 @@
             });
         }
 
-        // Hover Effect: Marker -> Card
-        el.addEventListener('mouseenter', () => {
-            if(card) {
-                const ringColor = t.is_my_task ? 'ring-violet-50' : 'ring-blue-50';
-                const borderColor = t.is_my_task ? 'border-violet-400' : 'border-blue-400';
-                card.classList.add(borderColor, 'ring-4', ringColor, 'shadow-xl', '-translate-y-1');
-                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        });
-        el.addEventListener('mouseleave', () => {
-            if(card) {
-                const ringColor = t.is_my_task ? 'ring-violet-50' : 'ring-blue-50';
-                const borderColor = t.is_my_task ? 'border-violet-400' : 'border-blue-400';
-                card.classList.remove(borderColor, 'ring-4', ringColor, 'shadow-xl', '-translate-y-1');
-            }
-        });
+      
       });
 
       // Map fixed position (Budapest) - commented out bounds fitting

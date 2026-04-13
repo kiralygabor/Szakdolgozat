@@ -21,12 +21,16 @@ return new class extends Migration
             $table->string('email', 150);
             $table->string('password', 255);
             $table->string('google_id')->nullable();
+            $table->string('facebook_id')->nullable()->unique();
             $table->rememberToken();
             $table->boolean('verified')->default(false);
             $table->boolean('email_notifications')->default(true);
             $table->boolean('email_task_digest')->default(false);
             $table->boolean('email_direct_quotes')->default(true);
             $table->string('locale', 5)->default('en');
+            $table->string('theme')->default('system');
+            $table->boolean('reduced_motion')->default(false);
+            $table->boolean('high_contrast')->default(false);
             $table->timestamps();
         });
     }

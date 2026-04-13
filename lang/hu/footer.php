@@ -20,4 +20,6 @@ return [
     'moving' => 'Költöztetés',
     'assembly' => 'Összeszerelés',
     'tech' => 'Technológia',
+    'contact_support' => 'Kapcsolat / Támogatás',
+    'help_faq' => 'Súgó / GYIK',
 ];

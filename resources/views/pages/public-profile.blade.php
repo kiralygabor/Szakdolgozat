@@ -22,17 +22,37 @@
         color: #ffffff !important;
         border: 2px solid #ffffff !important;
     }
+    
+    .high-contrast .profile-req-btn {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        text-decoration: none !important;
+    }
+    .high-contrast .profile-req-btn:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
     .high-contrast .bg-blue-50.text-blue-700 *,
     .high-contrast .bg-amber-50.text-amber-700 * {
         color: #ffffff !important;
     }
-    .high-contrast .text-blue-600,
-    .high-contrast .text-blue-700 {
+    .high-contrast :not(.bg-blue-50) > .text-blue-600,
+    .high-contrast :not(.bg-blue-50) > .text-blue-700 {
         color: #000000 !important;
         fill: #000000 !important;
     }
+    .high-contrast .bg-blue-50 .text-blue-600,
+    .high-contrast .bg-blue-50 .text-blue-700 {
+        color: #ffffff !important;
+        fill: #ffffff !important;
+    }
     .high-contrast .fill-current {
         fill: #000000 !important;
+    }
+    .high-contrast .bg-blue-50 .fill-current {
+        fill: #ffffff !important;
     }
     .high-contrast .border-dashed {
         border-color: #000000 !important;
@@ -78,6 +98,81 @@
 
     /* Fix the specific borders the user mentioned */
     html.dark .border-blue-100 { border-color: #334155 !important; }
+
+    /* --- Modal Specific Styles (Airtasker Look) --- */
+    .step-icon-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #F8FAFC; /* Very light slate */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #64748B; /* Slate 500 */
+        flex-shrink: 0;
+    }
+    .step-add-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #2563EB; /* Blue 600 */
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
+        flex-shrink: 0;
+    }
+    .step-add-btn:hover {
+        background-color: #1d4ed8;
+    }
+
+    /* Modal List Items High Contrast Overrides */
+    .high-contrast #profile-steps-modal a:hover {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    .high-contrast #profile-steps-modal a:hover .step-icon-circle,
+    .high-contrast #profile-steps-modal a:hover .step-add-btn {
+        background-color: #ffffff !important;
+        border-color: #ffffff !important;
+    }
+    .high-contrast #profile-steps-modal a:hover .step-icon-circle i,
+    .high-contrast #profile-steps-modal a:hover .step-icon-circle svg,
+    .high-contrast #profile-steps-modal a:hover .step-add-btn i,
+    .high-contrast #profile-steps-modal a:hover .step-add-btn svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
+    }
+    .high-contrast #profile-steps-modal a {
+        border: 2px solid transparent !important;
+    }
+    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn {
+        background-color: #000000 !important;
+        border: 2px solid #000000 !important;
+    }
+    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle i,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle svg,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn i,
+    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn svg {
+        color: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+    
+    .high-contrast #profile-steps-modal .mt-2 a {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        text-decoration: none !important;
+    }
+    .high-contrast #profile-steps-modal .mt-2 a:hover {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    html.dark .step-icon-circle { background-color: #334155 !important; color: #cbd5e1 !important; }
+    html.dark .modal-overlay .bg-white { background-color: #1e293b !important; }
 </style>
 <div class="bg-gray-50 min-h-screen py-12 px-6 pb-24">
     <div class="max-w-7xl mx-auto">
@@ -118,7 +213,7 @@
                             <div class="flex flex-wrap justify-center md:justify-start items-center gap-4 mt-2 text-gray-500 font-medium">
                                 <div class="flex items-center gap-1">
                                     <i data-feather="map-pin" class="w-3.5 h-3.5 text-blue-600"></i>
-                                    <span class="text-sm">{{ $user->city->name ?? 'Remote' }}</span>
+                                    <span class="text-sm">{{ $user->city->name ?? __('public_profile.remote') }}</span>
                                 </div>
                                 <div class="flex items-center gap-1">
                                     <i data-feather="calendar" class="w-3.5 h-3.5 text-blue-600"></i>
@@ -174,7 +269,10 @@
                                 <input type="hidden" name="stars" id="stars-input" value="5">
                             </div>
                             <div class="mb-6">
-                                <textarea name="comment" rows="3" class="w-full rounded-xl border-gray-100 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-sm" placeholder="{{ __('public_profile.comment_placeholder_generic') }}" required></textarea>
+                                <textarea name="comment" rows="3" class="w-full rounded-xl border-gray-100 bg-gray-50 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all text-sm @error('comment') border-red-500 ring-red-50 @enderror" placeholder="{{ __('public_profile.comment_placeholder_generic') }}" required></textarea>
+                                @error('comment')
+                                    <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-sm shadow-blue-100">
                                 {{ __('public_profile.post_review') }}
@@ -240,16 +338,120 @@
             <h4 class="font-bold text-gray-900 text-base">{{ __('public_profile.work_with_footer', ['name' => $user->first_name]) }}</h4>
             <p class="text-sm text-gray-500 hidden md:block">{{ __('public_profile.work_with_footer_action') }}</p>
         </div>
-        <a href="{{ route('post-task', ['for_user' => $user->id]) }}" class="bg-blue-600 text-white px-8 py-3.5 rounded-full font-bold hover:bg-blue-700 active:scale-95 transition-all text-sm whitespace-nowrap">
-            {{ __('public_profile.request_quote') }}
-        </a>
+        @if(count($missingSteps) > 0)
+            <button onclick="showProfileStepsModal()" class="btn bg-blue-600 text-white px-8 py-3.5 rounded-full font-bold hover:bg-blue-700 active:scale-95 transition-all text-sm whitespace-nowrap border-2 border-transparent profile-req-btn">
+                {{ __('public_profile.request_quote') }}
+            </button>
+        @else
+            <a href="{{ route('post-task', ['for_user' => $user->id]) }}" class="btn bg-blue-600 text-white px-8 py-3.5 rounded-full font-bold hover:bg-blue-700 active:scale-95 transition-all text-sm whitespace-nowrap border-2 border-transparent profile-req-btn">
+                {{ __('public_profile.request_quote') }}
+            </a>
+        @endif
     </div>
 </div>
 @endif
- 
+
+{{-- Account Completion Modal (Reused from tasks page) --}}
+@if(count($missingSteps) > 0)
+<div id="profile-steps-modal" class="fixed inset-0 z-[100] hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeProfileStepsModal()"></div>
+    
+    <!-- Modal Panel -->
+    <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
+        <div class="bg-white w-full max-w-[420px] rounded-3xl shadow-2xl pointer-events-auto transform transition-all overflow-hidden">
+            <!-- Close Header -->
+            <div class="flex justify-end p-4 absolute right-0 top-0 z-10">
+                <button onclick="closeProfileStepsModal()" class="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600">
+                    <i data-feather="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-8 pt-10">
+                <!-- Visual Icon (Top Center) -->
+                <div class="flex justify-center mb-6">
+                    <div class="relative">
+                        <div class="w-20 h-20 rounded-2xl bg-blue-50 flex items-center justify-center">
+                            <!-- Blue Shield -->
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#2563EB" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            
+                            <!-- Decorative Element -->
+                            <div class="absolute -top-1 -right-1 bg-white p-1 rounded-full shadow-sm">
+                                <div class="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Header Text -->
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('tasks_page.before_offer_title') }}</h2>
+                    <p class="text-gray-500 text-[15px] leading-relaxed">
+                        {{ __('tasks_page.before_offer_desc') }}
+                    </p>
+                </div>
+
+                <!-- Steps List -->
+                <div class="space-y-2 mb-8">
+                    @foreach($missingSteps as $step)
+                        <!-- Single List Item -->
+                        <a href="{{ route('profile') }}" class="flex items-center justify-between py-2 group cursor-pointer hover:bg-gray-50 rounded-xl px-2 transition-colors no-underline">
+                            <div class="flex items-center gap-4">
+                                <!-- Left Icon Circle -->
+                                <div class="step-icon-circle">
+                                    <i data-feather="{{ $step['icon'] }}" class="w-5 h-5"></i>
+                                </div>
+                                <!-- Text -->
+                                <span class="text-gray-700 font-medium text-[15px]">{{ $step['text'] }}</span>
+                            </div>
+                            
+                            <!-- Right Plus Button -->
+                            <div class="step-add-btn">
+                                <i data-feather="plus" class="w-4 h-4"></i>
+                            </div>
+                        </a>
+                    @endforeach
+                </div>
+
+                <!-- Footer Button -->
+                <div class="mt-2">
+                  <a href="{{ route('profile') }}" class="btn block w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-center rounded-full transition-colors text-sm border-2 border-transparent">
+                      {{ __('tasks_page.continue') }}
+                  </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 @include('components.user-report-modal')
- 
+
 <script>
+    function showProfileStepsModal() {
+        const modal = document.getElementById('profile-steps-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (window.feather) feather.replace();
+        }
+    }
+
+    function closeProfileStepsModal() {
+        const modal = document.getElementById('profile-steps-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         if(window.feather) feather.replace();
     });

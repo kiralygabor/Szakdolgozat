@@ -3,29 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
-use App\Models\Advertisment;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'advertisement_id' => 'required|exists:advertisements,id',
             'description' => 'required|string|min:10|max:1000',
-            'reported_account_id' => 'required|exists:users,id'
+            'reported_account_id' => 'required|exists:users,id',
         ]);
 
-        $targetUser = \App\Models\User::findOrFail($validated['reported_account_id']);
+        $targetUser = User::findOrFail($validated['reported_account_id']);
 
-        $report = Report::create([
+        Report::create([
             'advertisement_id' => $validated['advertisement_id'],
             'description' => $validated['description'],
             'reporter_account_id' => auth()->user()->account_id,
             'reported_account_id' => $targetUser->account_id,
-            'status' => 'open'
+            'status' => 'open',
         ]);
 
-        return redirect()->back()->with('success', 'Report submitted successfully. Our team will review it shortly.');
+        return back()->with('success', __('Report submitted successfully.'));
     }
 }

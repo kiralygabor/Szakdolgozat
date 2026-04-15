@@ -3,29 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserReport extends Model
 {
-    // Only use created_at timestamp
     const UPDATED_AT = null;
 
     protected $fillable = [
         'description',
         'reporter_account_id',
         'reported_account_id',
-        'status'
+        'status',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
     ];
 
-    public function reporter()
+    public function reporter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reporter_account_id', 'account_id');
     }
 
-    public function reportedUser()
+    public function reportedUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reported_account_id', 'account_id');
     }

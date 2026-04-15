@@ -24,5 +24,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Str::mixin(new MaskEmailMixin());
+
+        \App\Models\Advertisement::observe(\App\Observers\AdvertisementObserver::class);
     }
 }

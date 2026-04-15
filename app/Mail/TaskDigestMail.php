@@ -12,22 +12,12 @@ class TaskDigestMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $tasksByCategory;
+    public function __construct(
+        public User $user,
+        public Collection $tasksByCategory
+    ) {}
 
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(User $user, Collection $tasksByCategory)
-    {
-        $this->user = $user;
-        $this->tasksByCategory = $tasksByCategory;
-    }
-
-    /**
-     * Build the message.
-     */
-    public function build()
+    public function build(): self
     {
         return $this->subject(__('emails.task_digest.subject'))
             ->view('emails.task-digest');

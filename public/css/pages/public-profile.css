@@ -1,0 +1,118 @@
+/* Public Profile Design Tokens */
+.public-profile-container {
+    --profile-bg: var(--bg-primary);
+    --profile-surface: var(--bg-secondary);
+    --profile-border: var(--border-base);
+    --profile-text-main: var(--text-primary);
+    --profile-text-muted: var(--text-secondary);
+    --profile-accent: var(--primary-accent);
+    --profile-header-h: 12rem;
+}
+
+/* Base Utility Classes mapped to components */
+.public-card {
+    background-color: var(--profile-bg);
+    border: 1px solid var(--profile-border);
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.profile-bg { background-color: var(--profile-bg); }
+.public-header-hero {
+    background: linear-gradient(135deg, var(--profile-accent), #4f46e5);
+    height: 8rem;
+    border-bottom: 4px solid var(--profile-bg);
+}
+
+.profile-text-main { color: var(--profile-text-main); }
+.profile-text-muted { color: var(--profile-text-muted); }
+.profile-border-color { border-color: var(--profile-border); }
+
+/* Components */
+.rating-badge-container {
+    background-color: var(--profile-accent);
+    color: #ffffff;
+}
+
+.star-icon {
+    color: var(--profile-accent); /* Primary blue */
+}
+.star-icon.fill-current { fill: var(--profile-accent); }
+.star-icon.empty { color: var(--profile-border); }
+
+.profile-info-badge {
+    background-color: var(--profile-surface);
+    color: var(--profile-text-muted);
+    border: 1px solid var(--profile-border);
+}
+
+.sticky-footer-bar {
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--profile-border);
+    box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+/* --- Modal Specific Styles (Airtasker Look) --- */
+.step-icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--profile-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--profile-text-muted);
+    flex-shrink: 0;
+}
+.step-add-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--profile-accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+.step-add-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* High Contrast Mode Adjustments */
+.high-contrast .public-profile-container {
+    --profile-bg: #ffffff;
+    --profile-surface: #ffffff;
+    --profile-border: #000000;
+    --profile-text-main: #000000;
+    --profile-text-muted: #000000;
+    --profile-accent: #000000;
+}
+
+.high-contrast .public-header-hero {
+    background: #000000 !important;
+}
+
+.high-contrast .rating-badge-container {
+    background: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+
+.high-contrast .rating-badge-container span,
+.high-contrast .rating-badge-container i {
+    color: #ffffff !important;
+}
+
+.high-contrast .star-icon {
+    color: #000000 !important;
+}
+
+.high-contrast .profile-req-btn {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+}

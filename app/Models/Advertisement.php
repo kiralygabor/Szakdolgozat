@@ -8,9 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property int $employer_id
+ * @property int|null $employee_id
+ * @property TaskStatus $status
+ */
 class Advertisement extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'reviews_id',
         'employer_id',
@@ -29,7 +38,6 @@ class Advertisement extends Model
         'photos',
         'jobs_id',
         'is_direct',
-        'views',
     ];
 
     protected $casts = [
@@ -42,6 +50,7 @@ class Advertisement extends Model
         'photos' => 'array',
         'preferred_time' => 'array',
         'is_direct' => 'boolean',
+        'status' => TaskStatus::class,
     ];
 
     // ── Relationships ────────────────────────────────────────
@@ -83,19 +92,53 @@ class Advertisement extends Model
         return $query->where('status', TaskStatus::Open)->whereNull('employee_id');
     }
 
-    public function scopeSearch(Builder $query, ?string $term): Builder
+    public function scopeApplyFilters(Builder $query, ?string $term, int $minPrice, int $maxPrice): Builder
     {
-        if (empty($term)) {
+        if (!empty($term)) {
+            $query->where(function (Builder $q) use ($term) {
+                $q->where('title', 'like', "%{$term}%")
+                  ->orWhere('description', 'like', "%{$term}%");
+            });
+        }
+
+        return $query->whereBetween('price', [$minPrice, $maxPrice]);
+    }
+
+    public function scopeForCategory(Builder $query, ?int $categoryId): Builder
+    {
+        if (!$categoryId) {
             return $query;
         }
 
-        return $query->where(function (Builder $q) use ($term) {
-            $q->where('title', 'like', "%{$term}%")
-              ->orWhere('description', 'like', "%{$term}%");
+        return $query->whereHas('job', fn($sub) => $sub->where('categories_id', $categoryId));
+    }
+
+    public function scopeForMyTasks(Builder $query, int $userId, string $viewMode): Builder
+    {
+        return $query->where(function (Builder $q) use ($userId, $viewMode) {
+            if ($viewMode === 'applied') {
+                $q->whereHas('offers', fn($sub) => $sub->where('user_id', $userId));
+            } elseif ($viewMode === 'direct') {
+                $q->where('is_direct', true)
+                  ->where(fn($sub) => $sub->where('employer_id', $userId)->orWhere('employee_id', $userId));
+            } else {
+                $q->where('employer_id', $userId)->where('is_direct', false);
+            }
         });
     }
 
-    // ── Domain Helpers (avoid negative conditionals) ─────────
+    public function scopeByStatusFilter(Builder $query, string $status): Builder
+    {
+        if ($status === 'pending' || $status === 'assigned') {
+            return $query->where('status', TaskStatus::Assigned);
+        } elseif ($status === 'completed') {
+            return $query->where('status', TaskStatus::Completed);
+        }
+
+        return $query->where('status', TaskStatus::Open);
+    }
+
+    // ── Domain Helpers ───────────────────────────────────────
 
     public function isOwner(int $userId): bool
     {
@@ -104,7 +147,17 @@ class Advertisement extends Model
 
     public function isOpen(): bool
     {
-        return $this->status === TaskStatus::Open->value;
+        return $this->status === TaskStatus::Open;
+    }
+
+    public function isAssigned(): bool
+    {
+        return $this->status === TaskStatus::Assigned;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->status === TaskStatus::Completed;
     }
 
     public function hasEmployee(): bool

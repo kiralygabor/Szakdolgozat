@@ -3,98 +3,89 @@
 @section('title', __('notifications_page.title'))
 
 @section('content')
-<style>
-  /* --- High Contrast Mode --- */
-  .high-contrast section {
-    background-color: #ffffff !important;
-  }
-  .high-contrast .bg-white {
-    background-color: #ffffff !important;
-    border: 2px solid #000000 !important;
-  }
-  .high-contrast .border-gray-200,
-  .high-contrast .border-b {
-    border-color: #000000 !important;
-    border-width: 2px !important;
-  }
-  .high-contrast .text-gray-600,
-  .high-contrast .text-gray-900,
-  .high-contrast .text-gray-400 {
-    color: #000000 !important;
-    opacity: 1 !important;
-  }
-  .high-contrast #mark-all-read {
-    color: #000000 !important;
-    text-decoration: underline !important;
-    font-weight: 700 !important;
-  }
-  .high-contrast .bg-indigo-600 {
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    border: 2px solid #000000 !important;
-  }
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/notifications.css') }}">
+@endpush
 
-  html.dark .bg-white { background-color: #1e293b !important; }
-  html.dark .border-gray-200 { border-color: #334155 !important; }
-  html.dark .divide-gray-200 > * + * { border-color: #334155 !important; }
-  html.dark .hover\:bg-gray-50:hover { background-color: #334155 !important; }
-</style>
+<section class="py-12 notifications-container">
+  <div class="max-w-4xl mx-auto px-6">
+    
+    <!-- Page Header -->
+    <div class="notif-header-section flex items-center justify-between">
+      <h1 class="text-3xl font-extrabold tracking-tight notif-title-glow">
+        {{ __('notifications_page.title') }}
+      </h1>
+      
+      @if(($notifications ?? collect())->isNotEmpty())
+        <button id="mark-all-read" class="mark-all-read-trigger text-sm font-bold text-[var(--primary-accent)] hover:text-[var(--primary-hover)] flex items-center gap-2 px-4 py-2 rounded-full hover:bg-[var(--primary-accent-soft)] transition-all">
+          <i data-feather="check-done" class="w-4 h-4"></i>
+          {{ __('notifications_page.mark_all_read') }}
+        </button>
+      @endif
+    </div>
 
-<section class="py-8">
-  <div class="max-w-5xl mx-auto px-6">
-    <h1 class="text-3xl font-bold text-gray-900 mb-6">{{ __('notifications_page.title') }}</h1>
-
-    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm">
-      <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-        <span class="text-sm text-gray-600">{{ __('notifications_page.latest_updates') }}</span>
-        <a href="#" id="mark-all-read" class="text-sm text-blue-600 hover:underline">{{ __('notifications_page.mark_all_read') }}</a>
+    <!-- Notifications List Card -->
+    <div class="notif-card-modern">
+      <div class="notif-card-header">
+        <span class="text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)] opacity-60">
+          {{ __('notifications_page.latest_updates') }}
+        </span>
       </div>
-      <div class="divide-y divide-gray-200">
+
+      <div class="divide-y divide-[var(--border-base)]">
         @forelse($notifications ?? [] as $n)
-          <a href="{{ $n->data['link'] ?? '#' }}" class="p-4 flex items-start gap-3 hover:bg-gray-50 no-underline transition-colors {{ $n->read_at ? 'opacity-60' : 'bg-blue-50/20' }}">
-            <div class="w-10 h-10 rounded-full {{ ($n->data['type'] ?? '') === 'success' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600' }} flex items-center justify-center flex-shrink-0">
-              <i data-feather="{{ ($n->data['type'] ?? '') === 'success' ? 'check-circle' : 'bell' }}" class="w-5 h-5"></i>
+          <a href="{{ $n->data['link'] ?? '#' }}" class="notif-item-modern {{ $n->read_at ? '' : 'unread' }}">
+            <div class="notif-icon-wrapper">
+              @php
+                $icon = 'bell';
+                if (($n->data['type'] ?? '') === 'success') $icon = 'check-circle';
+                if (($n->data['type'] ?? '') === 'message') $icon = 'message-square';
+                if (($n->data['type'] ?? '') === 'offer') $icon = 'tag';
+              @endphp
+              <i data-feather="{{ $icon }}" class="w-6 h-6"></i>
             </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-gray-900 font-bold mb-0 truncate">{{ $n->data['title'] ?? __('notifications_page.default_title') }}</p>
-              <p class="text-sm text-gray-600 mb-0 line-clamp-2">{{ $n->data['message'] ?? '' }}</p>
-              <div class="text-[10px] text-gray-400 mt-1 uppercase font-semibold tracking-wider">{{ $n->created_at?->diffForHumans() }}</div>
+
+            <div class="notif-content">
+              <h3 class="notif-title">{{ $n->data['title'] ?? __('notifications_page.default_title') }}</h3>
+              <p class="notif-message">{{ $n->data['message'] ?? '' }}</p>
+              <div class="notif-time">{{ $n->created_at?->diffForHumans() }}</div>
+            </div>
+            
+            <div class="flex items-center">
+              <i data-feather="chevron-right" class="w-5 h-5 text-[var(--text-secondary)] opacity-20"></i>
             </div>
           </a>
         @empty
-          <div class="p-8 text-center">
-            <p class="text-gray-600 mb-4">{{ __('notifications_page.empty_state') }}</p>
-            <a href="{{ route('tasks') }}" class="btn inline-flex items-center px-5 py-2.5 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 no-underline">{{ __('notifications_page.browse_tasks') }}</a>
+          <div class="notif-empty-state">
+            <div class="notif-empty-icon">
+              <i data-feather="bell-off" class="w-10 h-10"></i>
+            </div>
+            <h2 class="text-xl font-bold text-[var(--text-primary)] mb-2">{{ __('notifications_page.empty_state') }}</h2>
+            <p class="text-[var(--text-secondary)] mb-8 max-w-sm mx-auto">
+              You're all caught up! When you receive new offers or messages, they will appear here.
+            </p>
+            <a href="{{ route('tasks') }}" class="btn inline-flex items-center px-8 py-3 rounded-full bg-[var(--primary-accent)] text-white font-bold hover:bg-[var(--primary-hover)] transition-all transform hover:-translate-y-1 shadow-xl shadow-[var(--primary-accent-glow)]">
+              {{ __('notifications_page.browse_tasks') }}
+            </a>
           </div>
         @endforelse
       </div>
     </div>
   </div>
-  </section>
-  <script>
-    document.getElementById('mark-all-read').addEventListener('click', function(e) {
+</section>
+
+<script type="module">
+  document.querySelectorAll('.mark-all-read-trigger').forEach(el => {
+    el.addEventListener('click', async (e) => {
       e.preventDefault();
-      
-      fetch('{{ route("notifications.mark-read") }}', {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': '{{ csrf_token() }}',
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({})
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          window.location.reload();
-        }
-      })
-      .catch(error => {
-        console.error('Error marking notifications as read:', error);
-      });
+      if (typeof window.markNotificationsRead === 'function') {
+        const success = await window.markNotificationsRead();
+        if (success) window.location.reload();
+      }
     });
-  </script>
+  });
+  
+  // Refresh feather icons
+  if (window.feather) feather.replace();
+</script>
 @endsection
-
-

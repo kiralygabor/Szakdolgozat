@@ -1,10 +1,27 @@
 @extends('layout')
 
+@section('title', __('tasks_page.title') ?? 'Browse Tasks')
+
+@push('styles')
+    <link href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <link href="{{ asset('css/pages/tasks.css') }}" rel="stylesheet">
+@endpush
+
 @section('content')
   @php
     $source = ($tasks instanceof \Illuminate\Pagination\AbstractPaginator) ? $tasks->items() : ($tasks ?? []);
+    
+    // Sort logic: My Tasks (2) > Tasks I've offered on (1) > Others (0)
+    $sortedSource = collect($source)->sortByDesc(function($task) {
+        if (!Auth::check()) return 0;
+        if ((int)$task->employer_id === Auth::id()) return 2;
+        if ($task->offers && $task->offers->contains('user_id', Auth::id())) return 1;
+        return 0;
+    })->values()->all();
+
     $remoteCount = 0;
-    $taskPoints = collect($source)->map(function($t) use (&$remoteCount) {
+    
+    $taskPoints = collect($sortedSource)->map(function($t) use (&$remoteCount) {
       $loc = (string)($t->location ?? $t->employer->city->name ?? '');
       // Detect online/remote tasks
       $isRemote = $t->task_type === 'online' || 
@@ -24,704 +41,15 @@
           'is_my_task' => Auth::check() && $t->employer_id === Auth::id()
       ];
     })->filter(fn($r) => $r['id'] && $r['location'] && !$r['is_remote'])->values();
+
+    $missingSteps = auth()->check() ? auth()->user()->getMissingProfileSteps() : [];
   @endphp
 
-  <style>
-    /* Custom Scrollbar */
-    .custom-scroll::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background-color: #cbd5e1;
-      border-radius: 9999px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb:hover {
-      background-color: #94a3b8;
-    }
-
-    /* Remote Cloud Pulse Animation */
-    @keyframes cloud-pulse {
-      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
-      70% { transform: scale(1.08); box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
-      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-    }
-    .animate-cloud-pulse {
-      animation: cloud-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
-    }
-
-    /* Map Styling */
-    #map {
-      width: 100%;
-      height: 100%;
-      border-radius: 0.75rem;
-    }
-
-    /* Dual Range Slider — Airtasker Style */
-    .range-slider {
-      position: relative;
-      width: 100%;
-      height: 30px;
-    }
-    .range-slider .track-bg {
-      position: absolute;
-      width: 100%;
-      height: 6px;
-      background: #e0e0e0;
-      border-radius: 3px;
-      top: 50%;
-      transform: translateY(-50%);
-      left: 0;
-    }
-    .range-slider .track-fill {
-      position: absolute;
-      height: 6px;
-      background: #2563eb;
-      border-radius: 3px;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-    }
-    .range-slider input[type=range] {
-      -webkit-appearance: none;
-      appearance: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: transparent;
-      pointer-events: none;
-      margin: 0;
-      padding: 0;
-      outline: none;
-      left: 0;
-    }
-    .range-slider input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 21px;
-      height: 21px;
-      background: #ffffff;
-      border-radius: 50%;
-      border: 2px solid #2563eb;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-      cursor: pointer;
-      pointer-events: all;
-      position: relative;
-      z-index: 3;
-      transition: box-shadow 0.15s;
-      margin-top: -8px;
-    }
-    .range-slider input[type=range]::-webkit-slider-thumb:hover {
-      box-shadow: 0 0 0 4px rgba(37,99,235,0.15), 0 1px 3px rgba(0,0,0,0.15);
-    }
-    .range-slider input[type=range]::-webkit-slider-thumb:active {
-      box-shadow: 0 0 0 6px rgba(37,99,235,0.2), 0 1px 3px rgba(0,0,0,0.15);
-    }
-    .range-slider input[type=range]::-moz-range-thumb {
-      width: 21px;
-      height: 21px;
-      background: #ffffff;
-      border-radius: 50%;
-      border: 2px solid #2563eb;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-      cursor: pointer;
-      pointer-events: all;
-      margin-top: -8px;
-    }
-    .range-slider input[type=range]::-webkit-slider-runnable-track {
-      height: 6px;
-      background: transparent;
-    }
-    .range-slider input[type=range]::-moz-range-track {
-      height: 6px;
-      background: transparent;
-    }
-    .range-slider input[id*="price-min"] {
-      z-index: 2;
-    }
-    .range-slider input[id*="price-max"] {
-      z-index: 3;
-    }
-
-    /* --- Modal Specific Styles (Airtasker Look) --- */
-    .step-icon-circle {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #F8FAFC; /* Very light slate */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #64748B; /* Slate 500 */
-        flex-shrink: 0;
-    }
-    .step-add-btn {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background-color: #2563EB; /* Blue 600 */
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background-color 0.2s;
-        flex-shrink: 0;
-    }
-    .step-add-btn:hover {
-        background-color: #1d4ed8;
-    }
-
-    /* Modal List Items High Contrast Overrides */
-    .high-contrast #profile-steps-modal a:hover {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-    }
-    .high-contrast #profile-steps-modal a:hover .step-icon-circle,
-    .high-contrast #profile-steps-modal a:hover .step-add-btn {
-        background-color: #ffffff !important;
-        border-color: #ffffff !important;
-    }
-    .high-contrast #profile-steps-modal a:hover .step-icon-circle i,
-    .high-contrast #profile-steps-modal a:hover .step-icon-circle svg,
-    .high-contrast #profile-steps-modal a:hover .step-add-btn i,
-    .high-contrast #profile-steps-modal a:hover .step-add-btn svg {
-        color: #000000 !important;
-        stroke: #000000 !important;
-    }
-    .high-contrast #profile-steps-modal a {
-        border: 2px solid transparent !important;
-    }
-    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle,
-    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn {
-        background-color: #000000 !important;
-        border: 2px solid #000000 !important;
-    }
-    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle i,
-    .high-contrast #profile-steps-modal a:not(:hover) .step-icon-circle svg,
-    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn i,
-    .high-contrast #profile-steps-modal a:not(:hover) .step-add-btn svg {
-        color: #ffffff !important;
-        stroke: #ffffff !important;
-    }
-    
-    .high-contrast #profile-steps-modal .mt-2 a {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-        border: 2px solid #000000 !important;
-        text-decoration: none !important;
-    }
-    .high-contrast #profile-steps-modal .mt-2 a:hover {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-    }
-
-    /* Map Customizations */
-    .custom-task-popup .maplibregl-popup-content {
-      border-radius: 1rem;
-      padding: 0;
-      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-      border: 1px solid rgba(0,0,0,0.05);
-      overflow: hidden;
-    }
-    .custom-task-popup .maplibregl-popup-tip {
-      display: none;
-    }
-    .task-card {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .browse-container {
-        height: 750px;
-    }
-    @media (max-width: 768px) {
-        .browse-container { height: auto }
-    }
-    /* Filter Bar — Reset Bootstrap form margins for perfect centering */
-    #filters-form,
-    #filters-form select,
-    #filters-form input,
-    #filters-form button,
-    #filters-form label,
-    #filters-form div {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
-    /* Dark Mode Overrides for Tasks Page */
-    html.dark .custom-task-popup .maplibregl-popup-content { background-color: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
-    html.dark #type-menu, html.dark #price-menu { background-color: #1e293b !important; border-color: #334155 !important; }
-    html.dark .range-slider { height: 30px !important; position: relative !important; background: transparent !important; }
-    html.dark .range-slider .track-bg { background-color: #475569 !important; height: 6px !important; width: 100% !important; z-index: 1 !important; display: block !important; top: 50% !important; transform: translateY(-50%) !important; position: absolute !important; }
-    html.dark .range-slider .track-fill { background-color: #2563eb !important; height: 6px !important; z-index: 2 !important; display: block !important; top: 50% !important; transform: translateY(-50%) !important; position: absolute !important; }
-    html.dark .range-slider input[type=range] { background: transparent !important; border: none !important; z-index: 5 !important; height: 100% !important; pointer-events: none !important; margin: 0 !important; padding: 0 !important; position: absolute !important; top: 0 !important; }
-    html.dark .range-slider input[type=range]::-webkit-slider-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; appearance: none; -webkit-appearance: none; width: 21px !important; height: 21px !important; border-radius: 50% !important; cursor: pointer !important; position: relative !important; z-index: 10 !important; margin-top: -8px !important; pointer-events: all !important; }
-    html.dark .range-slider input[type=range]::-moz-range-thumb { background: #ffffff !important; border: 2px solid #2563eb !important; width: 21px !important; height: 21px !important; border-radius: 50% !important; cursor: pointer !important; z-index: 10 !important; pointer-events: all !important; margin-top: -8px !important; }
-    html.dark .step-icon-circle { background-color: #334155 !important; color: #cbd5e1 !important; }
-    html.dark .modal-overlay .bg-white { background-color: #1e293b !important; }
-    html.dark #mobile-filters-modal.bg-white { background-color: #0f172a !important; }
-    
-    /* Search Bar and Filter Container */
-    html.dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
-    html.dark .hover\:bg-gray-50:hover, 
-    html.dark .hover\:bg-blue-50:hover,
-    html.dark [class*="hover:bg-gray-50"]:hover,
-    html.dark [class*="hover:bg-blue-50"]:hover { background-color: #334155 !important; color: #f8fafc !important; }
-    
-    html.dark #type-city-dropdown div:hover { background-color: #334155 !important; color: #f8fafc !important; }
-    html.dark #search-q, html.dark #type-city-search, html.dark #mobile-city-search-input { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
-    html.dark #search-q:focus, html.dark #type-city-search:focus { background-color: #1e293b !important; border-color: #6366f1 !important; }
-
-    /* Borders and Dividers */
-    html.dark .border, 
-    html.dark .border-t, 
-    html.dark .border-b, 
-    html.dark .border-l, 
-    html.dark .border-r { border-color: #334155 !important; }
-    html.dark .divide-y > * + * { border-color: #334155 !important; }
-
-    /* Radio Inputs in Menus */
-    html.dark input[type="radio"] { background-color: #1e293b !important; border-color: #475569 !important; }
-    html.dark input[type="radio"]:checked { background-color: #6366f1 !important; border-color: #6366f1 !important; }
-
-
-    /* Task Cards - Specific States */
-    html.dark .task-card { background-color: #1e293b !important; border-color: #334155 !important; }
-    html.dark .bg-violet-50 { background-color: rgba(139, 92, 246, 0.1) !important; color: #ddd6fe !important; }
-    html.dark .border-violet-300 { border-color: #5b21b6 !important; }
-    html.dark .ring-violet-100 { --tw-ring-color: rgba(139, 92, 246, 0.2) !important; }
-    html.dark .bg-violet-100 { background-color: #4c1d95 !important; color: #ddd6fe !important; }
-    html.dark .text-violet-700 { color: #c4b5fd !important; }
-    
-    html.dark .bg-blue-50 { background-color: rgba(37, 99, 235, 0.1) !important; color: #bfdbfe !important; }
-    html.dark .border-blue-300 { border-color: #1e40af !important; }
-    html.dark .bg-blue-100 { background-color: #1e3a8a !important; color: #bfdbfe !important; }
-    
-    html.dark .bg-gray-100 { background-color: #334155 !important; color: #f8fafc !important; }
-    html.dark .bg-gray-50 { background-color: #0f172a !important; color: #e2e8f0 !important; }
-    html.dark .border-gray-200 { border-color: #334155 !important; }
-    html.dark .text-gray-900 { color: #f8fafc !important; }
-    html.dark .text-gray-800 { color: #f1f5f9 !important; }
-    html.dark .text-gray-700 { color: #e2e8f0 !important; }
-    html.dark .text-gray-600 { color: #cbd5e1 !important; }
-    html.dark .text-gray-500 { color: #94a3b8 !important; }
-    html.dark .text-gray-400 { color: #64748b !important; }
-    
-    html.dark select { background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; }
-    html.dark input { background-color: #1e293b !important; color: #f8fafc !important; border-color: #334155 !important; }
-    
-    html.dark .maplibregl-popup-content a { background-color: #4f46e5 !important; color: white !important; }
-    html.dark .maplibregl-popup-content .text-gray-900 { color: #f8fafc !important; }
-    html.dark .maplibregl-popup-content .text-blue-600 { color: #93c5fd !important; }
-
-    /* Dark Mode: No Tasks Found Button */
-    html.dark .tasks-empty-container { background-color: #0f172a !important; border-color: #1e293b !important; }
-    html.dark .tasks-empty-icon { background-color: #1e293b !important; }
-    html.dark .tasks-clear-btn {
-      background-color: #1e3a8a !important; /* Blue 900 */
-      border-color: #1e40af !important; /* Blue 800 */
-      color: #bfdbfe !important; /* Blue 200 */
-    }
-    html.dark .tasks-clear-btn:hover {
-      background-color: #2563eb !important;
-      color: #ffffff !important;
-      border-color: #3b82f6 !important;
-    }
-
-    /* ===== HIGH CONTRAST MODE — FILTER BAR ===== */
-
-    /* Filter bar container */
-    .high-contrast #filters-form {
-      background-color: #ffffff !important;
-      border-radius: 1rem !important;
-    }
-    .high-contrast .bg-white.border.border-gray-200.rounded-2xl {
-      background-color: #ffffff !important;
-      border: 3px solid #000000 !important;
-      border-radius: 1rem !important;
-      overflow: visible !important;
-    }
-    .high-contrast .bg-gray-50 {
-      background-color: #ffffff !important;
-    }
-
-    /* Search input: always white bg, black text, visible border */
-    .high-contrast #search-q,
-    .high-contrast #search-q:focus,
-    .high-contrast #search-q:hover {
-      background-color: #ffffff !important;
-      color: #000000 !important;
-      border: 3px solid #000000 !important;
-      caret-color: #000000 !important;
-      z-index: 1 !important;
-    }
-
-    /* Search icon container — must sit above the input */
-    .high-contrast #filters-form .pointer-events-none {
-      z-index: 2 !important;
-    }
-
-    /* Search submit button — must sit above the input */
-    .high-contrast #filters-form button[type="submit"],
-    .high-contrast #filters-form button[aria-label="Search"] {
-      z-index: 3 !important;
-    }
-    .high-contrast #search-q::placeholder {
-      color: #555555 !important;
-      opacity: 1 !important;
-    }
-
-    /* Search icon — always black and visible */
-    .high-contrast #filters-form i,
-    .high-contrast #filters-form svg,
-    .high-contrast #filters-form .pointer-events-none i,
-    .high-contrast #filters-form .pointer-events-none svg {
-      color: #000000 !important;
-      stroke: #000000 !important;
-      opacity: 1 !important;
-    }
-
-    /* Search submit button */
-    .high-contrast #filters-form button[type="submit"] {
-      background-color: #000000 !important;
-      color: #ffffff !important;
-      border: 2px solid #000000 !important;
-    }
-    .high-contrast #filters-form button[type="submit"] i,
-    .high-contrast #filters-form button[type="submit"] svg {
-      color: #ffffff !important;
-      stroke: #ffffff !important;
-    }
-    .high-contrast #filters-form button[type="submit"]:hover {
-      background-color: #ffffff !important;
-      color: #000000 !important;
-    }
-    .high-contrast #filters-form button[type="submit"]:hover i,
-    .high-contrast #filters-form button[type="submit"]:hover svg {
-      color: #000000 !important;
-      stroke: #000000 !important;
-    }
-
-    /* Category select, Sort select — all dropdowns */
-    .high-contrast #filters-form select,
-    .high-contrast #category-filter,
-    .high-contrast #sort-filter {
-      background-color: #ffffff !important;
-      color: #000000 !important;
-      border: 3px solid #000000 !important;
-      font-weight: 700 !important;
-    }
-    .high-contrast #filters-form select:hover,
-    .high-contrast #filters-form select:focus {
-      background-color: #000000 !important;
-      color: #ffffff !important;
-    }
-
-    /* Type button and Price button */
-    .high-contrast #filters-form #type-btn,
-    .high-contrast #filters-form #price-btn,
-    .high-contrast #filters-form #price-btn.border-blue-400 {
-      background-color: #ffffff !important;
-      color: #000000 !important;
-      border: 3px solid #000000 !important;
-      font-weight: 700 !important;
-    }
-    /* Icons and text inside navbar buttons */
-    .high-contrast #filters-form #type-btn i,
-    .high-contrast #filters-form #type-btn svg,
-    .high-contrast #filters-form #type-btn span,
-    .high-contrast #filters-form #price-btn i,
-    .high-contrast #filters-form #price-btn svg,
-    .high-contrast #filters-form #price-btn span,
-    .high-contrast #filters-form #price-text {
-      color: #000000 !important;
-      stroke: #000000 !important;
-    }
-    
-    /* Hover states: Invert colors correctly */
-    .high-contrast #filters-form #type-btn:hover,
-    .high-contrast #filters-form #price-btn:hover {
-      background-color: #000000 !important;
-      color: #ffffff !important;
-    }
-    .high-contrast #filters-form #type-btn:hover i,
-    .high-contrast #filters-form #type-btn:hover svg,
-    .high-contrast #filters-form #type-btn:hover span,
-    .high-contrast #filters-form #price-btn:hover i,
-    .high-contrast #filters-form #price-btn:hover svg,
-    .high-contrast #filters-form #price-btn:hover span,
-    .high-contrast #filters-form #price-btn:hover #price-text {
-      color: #ffffff !important;
-      stroke: #ffffff !important;
-    }
-
-    /* Type dropdown and Price dropdown containers */
-    .high-contrast #type-menu,
-    .high-contrast #price-menu {
-      background-color: #ffffff !important;
-      border: 3px solid #000000 !important;
-      color: #000000 !important;
-      z-index: 9999 !important;
-    }
-    .high-contrast #type-menu *,
-    .high-contrast #price-menu * {
-      color: #000000 !important;
-    }
-
-    /* Labels inside dropdowns */
-    .high-contrast #type-menu label,
-    .high-contrast #price-menu label {
-      color: #000000 !important;
-      font-weight: 700 !important;
-      opacity: 1 !important;
-    }
-
-    /* Radio inputs in type menu */
-    .high-contrast #type-menu input[type="radio"] {
-      border: 2px solid #000000 !important;
-      background-color: #ffffff !important;
-    }
-    .high-contrast #type-menu input[type="radio"]:checked {
-      background-color: #000000 !important;
-      border-color: #000000 !important;
-    }
-
-    /* Hover on radio labels */
-    .high-contrast #type-menu label:hover,
-    .high-contrast #price-menu label:hover {
-      background-color: #000000 !important;
-      color: #ffffff !important;
-    }
-    .high-contrast #type-menu label:hover span,
-    .high-contrast #type-menu label:hover * {
-      color: #ffffff !important;
-    }
-
-    /* City search input inside type menu */
-    .high-contrast #type-city-search {
-      background-color: #ffffff !important;
-      color: #000000 !important;
-      border: 2px solid #000000 !important;
-    }
-
-    /* Price slider — tracks */
-    .high-contrast .range-slider .track-bg {
-      background-color: #ffffff !important;
-      border: 2px solid #000000 !important;
-      height: 6px !important;
-      z-index: 1 !important;
-      pointer-events: none !important;
-    }
-    .high-contrast .range-slider .track-fill {
-      background-color: #000000 !important;
-      height: 6px !important;
-      z-index: 2 !important;
-    }
-
-    /* Price slider — inputs (Force them on top) */
-    .high-contrast .range-slider input[type=range] {
-      z-index: 20 !important;
-      background: transparent !important;
-    }
-
-    /* Price slider — thumbs */
-    .high-contrast .range-slider input[type=range]::-webkit-slider-thumb {
-      background: #000000 !important;
-      border: 3px solid #000000 !important;
-      box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #000000 !important;
-      position: relative !important;
-      z-index: 30 !important;
-    }
-    .high-contrast .range-slider input[type=range]::-moz-range-thumb {
-      background: #000000 !important;
-      border: 3px solid #000000 !important;
-      box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #000000 !important;
-      position: relative !important;
-      z-index: 30 !important;
-    }
-
-    /* Price display box */
-    .high-contrast #price-display {
-      color: #000000 !important;
-      font-weight: 900 !important;
-    }
-    .high-contrast #price-menu .border {
-      border-color: #000000 !important;
-    }
-
-    /* Apply and Cancel buttons inside dropdowns */
-    .high-contrast #type-apply,
-    .high-contrast #price-apply {
-      background-color: #000000 !important;
-      color: #ffffff !important;
-      border: 2px solid #000000 !important;
-      font-weight: 800 !important;
-    }
-    .high-contrast #type-apply:hover,
-    .high-contrast #price-apply:hover {
-      background-color: #ffffff !important;
-      color: #000000 !important;
-    }
-    .high-contrast #price-cancel {
-      background-color: #ffffff !important;
-      color: #000000 !important;
-      border: 2px solid #000000 !important;
-      font-weight: 800 !important;
-    }
-    .high-contrast #price-cancel:hover {
-      background-color: #000000 !important;
-      color: #ffffff !important;
-    }
-
-    /* Map Marker and Cloud Button Fixes */
-    .high-contrast #cloud-toggle-btn {
-        background-color: #000000 !important;
-        border: 2px solid #ffffff !important;
-        color: #ffffff !important;
-        pointer-events: auto !important;
-        cursor: pointer !important;
-        z-index: 500 !important;
-    }
-    .high-contrast #cloud-toggle-btn i,
-    .high-contrast #cloud-toggle-btn svg {
-        color: #ffffff !important;
-        stroke: #ffffff !important;
-    }
-    
-    .high-contrast #remote-info-pop:not(.hidden) {
-        display: block !important;
-        background-color: #ffffff !important;
-        border: 3px solid #000000 !important;
-        color: #000000 !important;
-        z-index: 500 !important;
-    }
-    .high-contrast #remote-info-pop > div {
-        background-color: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
-    .high-contrast #remote-info-pop p,
-    .high-contrast #remote-info-pop span,
-    .high-contrast #remote-info-pop div {
-        color: #000000 !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-    .high-contrast #remote-info-pop i,
-    .high-contrast #remote-info-pop svg {
-        color: #000000 !important;
-        stroke: #000000 !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    /* Map Pins in High Contrast */
-    .high-contrast .maplibregl-marker .rounded-full.border-white {
-        background-color: #000000 !important;
-        border: 2px solid #ffffff !important;
-        box-shadow: 0 0 0 2px #000000 !important;
-    }
-    .high-contrast .maplibregl-marker .animate-ping {
-        background-color: #000000 !important;
-        opacity: 0.5 !important;
-    }
-
-    /* Map Popup High Contrast Fixes */
-    .high-contrast .custom-task-popup .maplibregl-popup-content {
-        background-color: #ffffff !important;
-        border: 3px solid #000000 !important;
-        color: #000000 !important;
-    }
-    .high-contrast .custom-task-popup .maplibregl-popup-content * {
-        color: #000000 !important;
-    }
-    .high-contrast .custom-task-popup .maplibregl-popup-content a {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-        border: 2px solid #000000 !important;
-    }
-    .high-contrast .custom-task-popup .maplibregl-popup-content a:hover {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-    }
-
-    /* Fix for Buttons in Cards */
-    .high-contrast .task-card a.bg-violet-50,
-    .high-contrast .task-card a.bg-blue-600,
-    .high-contrast .task-card button.bg-blue-600 {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-        border: 2px solid #000000 !important;
-    }
-    .high-contrast .task-card a.bg-violet-50 *,
-    .high-contrast .task-card a.bg-blue-600 * {
-        color: #ffffff !important;
-    }
-
-    /* General Eye/View Icon visibility */
-    .high-contrast .task-card [data-feather="eye"],
-    .high-contrast .task-card [data-feather="flag"] {
-        color: #000000 !important;
-        stroke: #000000 !important;
-    }
-    .high-contrast .task-card a.bg-violet-50 [data-feather="eye"] {
-        color: #ffffff !important;
-        stroke: #ffffff !important;
-    }
-
-    /* Cancel Offer button in task cards */
-    .high-contrast .task-card form button.bg-red-50,
-    .high-contrast .task-card form button[class*="bg-red-50"],
-    .high-contrast .task-card form button[class*="text-red-600"] {
-        background-color: #ffffff !important;
-        color: #000000 !important;
-        border: 3px solid #000000 !important;
-        font-weight: 800 !important;
-    }
-    .high-contrast .task-card form button.bg-red-50 i,
-    .high-contrast .task-card form button.bg-red-50 svg,
-    .high-contrast .task-card form button[class*="text-red-600"] i,
-    .high-contrast .task-card form button[class*="text-red-600"] svg {
-        color: #000000 !important;
-        stroke: #000000 !important;
-    }
-    .high-contrast .task-card form button.bg-red-50:hover,
-    .high-contrast .task-card form button[class*="text-red-600"]:hover {
-        background-color: #000000 !important;
-        color: #ffffff !important;
-    }
-    .high-contrast .task-card form button.bg-red-50:hover i,
-    .high-contrast .task-card form button.bg-red-50:hover svg,
-    .high-contrast .task-card form button[class*="text-red-600"]:hover i,
-    .high-contrast .task-card form button[class*="text-red-600"]:hover svg {
-        color: #ffffff !important;
-        stroke: #ffffff !important;
-    }
-
-    /* Search submit button magnifying glass — force white icon on black bg */
-    .high-contrast #filters-form button[type="submit"] svg,
-    .high-contrast #filters-form button[type="submit"] i,
-    .high-contrast #filters-form button[aria-label="Search"] svg,
-    .high-contrast #filters-form button[aria-label="Search"] i {
-        color: #ffffff !important;
-        stroke: #ffffff !important;
-        fill: none !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-
-  </style>
-
-  <!-- MapLibre GL -->
-  <link href="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.css" rel="stylesheet" />
-  <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
- 
   <!-- FILTERS NAVBAR -->
   <section class="bg-gray-50 z-20 relative pt-4">
     <div class="max-w-7xl mx-auto px-4 md:px-6">
       <div class="bg-white border border-gray-200 rounded-2xl shadow-sm">
+        
         <!-- Desktop Form (Hidden on mobile) -->
         <form method="GET" action="{{ route('tasks') }}" id="filters-form"
               class="flex items-center gap-4 px-6 py-2.5 hidden md:flex">
@@ -849,7 +177,7 @@
                 <label class="block text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2" style="letter-spacing:.05em;">{{ __('tasks_page.budget_range') }}</label>
 
                 {{-- Price display box --}}
-                <div class="border border-gray-300 rounded-md px-3 py-2 mb-5 text-center">
+                <div class="border border-gray-300 rounded-md px-3 py-2 mb-5 text-center bg-gray-50">
                   <span id="price-display" class="text-[15px] font-semibold text-gray-800">
                     €{{ number_format((int)($filters['min_price'] ?? 5), 0, '.', ',') }} - €{{ number_format((int)($filters['max_price'] ?? 5000), 0, '.', ',') }}
                   </span>
@@ -857,18 +185,18 @@
 
                 {{-- Slider --}}
                 <div class="range-slider" style="margin-bottom: 20px;">
-                   <div class="track-bg"></div>
-                   <div id="price-track" class="track-fill"></div>
-                   <input id="price-min" name="min_price" type="range" min="5" max="5000" step="5"
+                   <div class="track-bg relative h-1.5 bg-gray-200 rounded-full w-full top-1/2 -translate-y-1/2"></div>
+                   <div id="price-track" class="track-fill absolute h-1.5 bg-blue-600 rounded-full top-1/2 -translate-y-1/2 pointer-events-none"></div>
+                   <input id="price-min" name="min_price" type="range" min="5" max="5000" step="5" class="absolute w-full top-0 appearance-none bg-transparent pointer-events-none" style="z-index:3"
                           value="{{ max(5, (int)($filters['min_price'] ?? 5)) }}">
-                   <input id="price-max" name="max_price" type="range" min="5" max="5000" step="5"
+                   <input id="price-max" name="max_price" type="range" min="5" max="5000" step="5" class="absolute w-full top-0 appearance-none bg-transparent pointer-events-none" style="z-index:4"
                           value="{{ min(5000, (int)($filters['max_price'] ?? 5000)) }}">
                 </div>
 
                 {{-- Buttons --}}
                 <div class="flex items-center justify-between gap-3 pt-3 border-t border-gray-100">
-                  <button type="button" id="price-cancel" class="flex-1 py-2 text-sm font-semibold text-gray-600 hover:text-gray-800 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors">{{ __('tasks_page.cancel') }}</button>
-                  <button type="button" id="price-apply" class="flex-1 py-2 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">{{ __('tasks_page.apply_price') }}</button>
+                  <button type="button" id="price-cancel" class="flex-1 py-1.5 text-sm font-semibold text-gray-600 hover:text-gray-800 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors">{{ __('tasks_page.cancel') }}</button>
+                  <button type="button" id="price-apply" class="flex-1 py-1.5 text-sm font-bold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">{{ __('tasks_page.apply_price') }}</button>
                 </div>
               </div>
             </div>
@@ -929,21 +257,21 @@
       <!-- Modal Header -->
       <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <h2 class="text-base font-bold text-gray-800">{{ __('tasks_page.filters') }}</h2>
-          <button type="button" id="close-mobile-filters" class="p-2 -mr-2 bg-gray-50 rounded-full text-gray-400">
-              <i data-feather="x" class="w-5 h-5"></i>
+          <button type="button" id="close-mobile-filters" class="p-2 -mr-2 bg-gray-50 rounded-full text-gray-400 border border-gray-200">
+              <i data-feather="x" class="w-4 h-4"></i>
           </button>
       </div>
 
       <!-- Modal Content -->
-      <form id="mobile-filters-form" method="GET" action="{{ route('tasks') }}" class="flex-1 overflow-y-auto px-6 pt-2 pb-6 space-y-7 custom-scroll">
+      <form id="mobile-filters-form" method="GET" action="{{ route('tasks') }}" class="flex-1 overflow-y-auto px-6 pt-5 pb-6 space-y-7 custom-scroll">
           
           <!-- Task Name Search -->
           <div>
               <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.task_name') }}</label>
               <div class="relative">
                   <input type="text" name="q" placeholder="{{ __('tasks_page.search_placeholder') }}" value="{{ $filters['q'] ?? '' }}" 
-                         class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
-                  <div class="absolute right-5 top-1/2 -translate-y-1/2">
+                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
+                  <div class="absolute right-4 top-1/2 -translate-y-1/2">
                       <i data-feather="search" class="w-4 h-4 text-gray-400"></i>
                   </div>
               </div>
@@ -953,7 +281,7 @@
           <div>
               <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.category') }}</label>
               <div class="relative">
-                  <select name="category" id="mobile-category" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
+                  <select name="category" id="mobile-category" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
                       <option value="">{{ __('tasks_page.all_categories') }}</option>
                       @foreach(collect($categories ?? []) as $cat)
                           <option value="{{ $cat->id ?? '' }}" @selected(($filters['category'] ?? '') == ($cat->id ?? ''))>
@@ -961,87 +289,57 @@
                           </option>
                       @endforeach
                   </select>
-                  <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none">
-                      <i data-feather="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                  <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                      <i data-feather="chevron-down" class="w-4 h-4 text-gray-400"></i>
                   </div>
               </div>
           </div>
 
-          <!-- To be done -->
+          <!-- Mode -->
           <div>
               <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.to_be_done') }}</label>
-              <div class="flex p-1.5 bg-gray-100 rounded-2xl border border-gray-200">
-                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'in_person' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="in_person">{{ __('tasks_page.mode_in_person') }}</button>
-                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'remote' ? 'bg-blue-900 text-white shadow-md' : 'text-gray-500' }}" data-value="remote">{{ __('tasks_page.mode_remote') }}</button>
-                  <button type="button" class="mobile-type-tab flex-1 py-3 text-[13px] font-bold rounded-xl transition-all {{ ($filters['type'] ?? 'all') === 'all' ? 'bg-white shadow-md text-blue-600' : 'text-gray-500' }}" data-value="all">{{ __('tasks_page.mode_any') }}</button>
+              <div class="flex p-1.5 bg-gray-100 rounded-xl border border-gray-200">
+                  <button type="button" class="mobile-type-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all {{ ($filters['type'] ?? 'all') === 'in_person' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500' }}" data-value="in_person">{{ __('tasks_page.mode_in_person') }}</button>
+                  <button type="button" class="mobile-type-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all {{ ($filters['type'] ?? 'all') === 'remote' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500' }}" data-value="remote">{{ __('tasks_page.mode_remote') }}</button>
+                  <button type="button" class="mobile-type-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all {{ ($filters['type'] ?? 'all') === 'all' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500' }}" data-value="all">{{ __('tasks_page.mode_any') }}</button>
               </div>
               <input type="hidden" name="type" id="mobile-type-hidden" value="{{ $filters['type'] ?? 'all' }}">
           </div>
 
-          <!-- Suburb -->
+          <!-- Price -->
           <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.suburb') }}</label>
-              <div class="relative">
-                  <input type="text" id="mobile-city-search-input" placeholder="{{ __('tasks_page.search_city_placeholder') }}" value="{{ $filters['city_search'] ?? '' }}" class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
-                  <div class="absolute right-5 top-1/2 -translate-y-1/2">
-                      <i data-feather="map-pin" class="w-4 h-4 text-gray-400"></i>
-                  </div>
-                  <div id="mobile-city-results" class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl z-[110] hidden max-h-56 overflow-y-auto"></div>
-              </div>
-              <input type="hidden" name="city_search" id="mobile-city-hidden" value="{{ $filters['city_search'] ?? '' }}">
-          </div>
-
-          <!-- Task Price -->
-          <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-6">{{ __('tasks_page.price_label') }}</label>
-              <div class="text-center mb-8">
-                  <span id="mobile-price-text" class="text-[15px] font-extrabold text-blue-600 bg-blue-50 px-5 py-2.5 rounded-full border border-blue-200">
-                      €{{ number_format($filters['min_price'] ?? 1000) }} - €{{ number_format($filters['max_price'] ?? 20000) }}
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">{{ __('tasks_page.price_label') }}</label>
+              <div class="text-center mb-6">
+                  <span id="mobile-price-text" class="text-sm font-extrabold text-blue-600 bg-blue-50 px-4 py-2 rounded-full border border-blue-200">
+                      €{{ number_format((int)($filters['min_price'] ?? 5)) }} - €{{ number_format((int)($filters['max_price'] ?? 5000)) }}
                   </span>
               </div>
               <div class="px-2">
-                  <div class="range-slider">
-                      <div class="track-bg h-2"></div>
-                      <div id="mobile-price-track" class="track-fill h-2"></div>
-                      <input id="mobile-price-min" name="min_price" type="range" min="5" max="5000" step="5" value="{{ $filters['min_price'] ?? 5 }}">
-                      <input id="mobile-price-max" name="max_price" type="range" min="5" max="5000" step="5" value="{{ $filters['max_price'] ?? 5000 }}">
-                  </div>
-              </div>
-          </div>
-
-           <!-- Sort -->
-          <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.sort_by') }}</label>
-              <div class="relative">
-                  <select name="sort" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-2xl px-5 py-4 text-[15px] font-semibold text-gray-800 focus:bg-white focus:border-blue-500 outline-none">
-                      <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>{{ __('tasks_page.sort_recent') }}</option>
-                      <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>{{ __('tasks_page.sort_closest') }}</option>
-                      <option value="due" @selected(($filters['sort'] ?? '')==='due')>{{ __('tasks_page.sort_due') }}</option>
-                      <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>{{ __('tasks_page.sort_price_asc') }}</option>
-                      <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>{{ __('tasks_page.sort_price_desc') }}</option>
-                  </select>
-                  <div class="absolute inset-y-0 right-5 flex items-center pointer-events-none">
-                      <i data-feather="chevron-down" class="w-5 h-5 text-gray-400"></i>
+                  <div class="range-slider relative">
+                      <div class="track-bg relative h-1.5 bg-gray-200 rounded-full w-full top-1/2 -translate-y-1/2"></div>
+                      <div id="mobile-price-track" class="track-fill absolute h-1.5 bg-blue-600 rounded-full top-1/2 -translate-y-1/2 pointer-events-none"></div>
+                      <input id="mobile-price-min" name="min_price" type="range" class="absolute w-full top-0 appearance-none bg-transparent pointer-events-none" style="z-index:3" min="5" max="5000" step="5" value="{{ $filters['min_price'] ?? 5 }}">
+                      <input id="mobile-price-max" name="max_price" type="range" class="absolute w-full top-0 appearance-none bg-transparent pointer-events-none" style="z-index:4" min="5" max="5000" step="5" value="{{ $filters['max_price'] ?? 5000 }}">
                   </div>
               </div>
           </div>
       </form>
 
       <!-- Modal Footer -->
-      <div class="p-6 border-t border-gray-100 flex gap-4 bg-white">
-          <button type="button" id="clear-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-all">{{ __('tasks_page.cancel') }}</button>
-          <button type="button" id="apply-mobile-filters" class="flex-1 py-4 text-[15px] font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg shadow-blue-100 transition-all">{{ __('tasks_page.apply_filter') }}</button>
+      <div class="p-4 border-t border-gray-100 flex gap-3 bg-white">
+          <button type="button" id="clear-mobile-filters" class="flex-1 py-3 text-sm font-bold text-gray-600 bg-gray-50 hover:bg-gray-100 border border-gray-300 rounded-xl transition-all">{{ __('tasks_page.cancel') }}</button>
+          <button type="button" id="apply-mobile-filters" class="flex-1 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-100 transition-all">{{ __('tasks_page.apply_filter') }}</button>
       </div>
   </div>
- 
+
   <!-- Main Content -->
  <section class="bg-gray-50 pt-6 md:pt-10 h-auto overflow-hidden">
-   <div class="flex flex-col md:flex-row max-w-7xl mx-auto px-4 md:px-6 gap-4 md:gap-6 pb-6 browse-container">
+   <div class="flex flex-col md:flex-row max-w-7xl mx-auto px-4 md:px-6 gap-4 md:gap-6 pb-6" style="height: 750px;">
      
       <!-- Left: Tasks Pane -->
-     <div id="tasks-pane" class="flex flex-col w-full md:w-[360px] shrink-0 h-[600px] md:h-full">
-        <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-3 pb-4">
-          @forelse ($tasks ?? [] as $task)
+     <div id="tasks-pane" class="flex flex-col w-full md:w-[360px] shrink-0 h-full">
+        <div class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-3 pb-8">
+          @forelse ($sortedSource as $task)
             @php
                 $isMyTask = Auth::check() && $task->employer_id === Auth::id();
                 $hasOffer = Auth::check() && $task->offers->contains('user_id', Auth::id());
@@ -1059,29 +357,29 @@
               @if($isMyTask || $hasOffer)
                 <div class="flex flex-wrap items-center gap-2 mb-1.5">
                     @if($isMyTask)
-                        <span class="inline-flex items-center justify-center bg-violet-100 text-violet-700 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider" title="{{ __('tasks_page.my_task') }}">
+                        <span class="inline-flex items-center justify-center bg-violet-100 text-violet-700 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider title="{{ __('tasks_page.my_task') }}">
                             {{ __('tasks_page.my_task') }}
                         </span>
                     @endif
                     @if($hasOffer)
                         <span class="inline-flex items-center justify-center bg-blue-100 text-blue-600 rounded-full p-1" title="You made an offer">
-                            <i data-feather="check-circle" class="w-3.5 h-3.5"></i>
+                            <i data-feather="check-circle" class="w-3 h-3"></i>
                         </span>
                     @endif
                 </div>
               @endif
 
               {{-- Title and Price Row --}}
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600" style="margin-left: 8px;">
+              <div class="flex justify-between items-start mb-2 gap-4">
+                <h3 class="text-sm font-bold text-gray-800 leading-tight group-hover:text-blue-600 transition-colors flex-1 ml-2">
                     {{ $task->title }}
                 </h3>
-                <span class="text-green-600 text-sm font-bold whitespace-nowrap ml-2">
+                <span class="text-green-600 text-sm font-bold whitespace-nowrap mr-1">
                    €{{ number_format($task->price, 0) }}
                 </span>
               </div>
  
-              <p class="text-gray-500 text-xs mb-3 line-clamp-2 leading-relaxed" style="margin-left: 8px;">
+              <p class="text-gray-500 text-xs mb-3 line-clamp-2 leading-relaxed ml-2">
                   {{ $task->description }}
               </p>
  
@@ -1090,53 +388,52 @@
                      {{ $task->category ? __('categories.' . $task->category->name) : __('tasks_page.general') }}
                   </span>
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-medium">
-                     📍 {{ $task->location === 'Remote' ? __('tasks_page.remote') : $task->location }}
+                     <i data-feather="map-pin" class="w-3 h-3 text-gray-400"></i> {{ $task->location === 'Remote' ? __('tasks_page.remote') : $task->location }}
                   </span>
                </div>
  
-              <div class="pt-2 border-t border-gray-50 flex justify-between items-center">
+              <div class="pt-3 border-t border-gray-100 flex justify-between items-center mt-auto">
                  <div class="flex items-center gap-2">
                      <a href="{{ route('public-profile', $task->employer_id) }}" class="shrink-0 group/avatar" title="{{ $task->employer->first_name ?? 'User' }}">
                          <img src="{{ $task->employer->avatar_url ?? '' }}" alt="{{ $task->employer->first_name ?? 'User' }}" class="w-7 h-7 rounded-full object-cover border-2 border-gray-100 shadow-sm group-hover/avatar:border-blue-400 group-hover/avatar:shadow-md transition-all duration-200">
                      </a>
-                     <span class="text-[10px] text-gray-400">
+                     <span class="text-[10px] text-gray-400 font-medium">
                         {{ $task->created_at?->diffForHumans() }}
                      </span>
                  </div>
                   <div class="flex items-center gap-2">
                       @auth
                           @if(!$isMyTask)
-                            <button type="button" onclick="openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="text-xs font-semibold text-gray-600 hover:text-red-700 transition-colors p-2" aria-label="Report this task" title="Report this task">
+                            <button type="button" onclick="event.stopPropagation(); openReportModal({{ $task->id }}, {{ $task->employer_id }})" class="relative z-20 text-xs font-semibold text-gray-400 hover:text-red-600 transition-colors p-1.5 rounded-full hover:bg-red-50" aria-label="Report this task" title="Report this task">
                                 <i data-feather="flag" class="w-3.5 h-3.5"></i>
                             </button>
                           @endif
                       @endauth
                       @guest
-                          <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:underline">
-                             {{ __('tasks_page.signin_to_offer') }}
+                          <a href="{{ route('login', ['returnUrl' => route('tasks.show', $task->id)]) }}" class="text-xs font-semibold text-blue-600 hover:text-blue-800 underline-offset-2 hover:underline transition-all">
+                             {{ __('tasks_page.signin_to_offer') ?? 'Sign in to offer' }}
                           </a>
                       @else
                           @if($isMyTask)
-                              <a href="{{ route('my-tasks') }}#task-{{ $task->id }}" class="btn text-xs font-semibold text-violet-600 bg-violet-50 hover:bg-violet-100 border border-violet-200 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                                  <i data-feather="eye" class="w-3 h-3"></i> {{ __('tasks_page.view_details') }}
+                              <a href="{{ route('my-tasks') }}#task-{{ $task->id }}" class="text-xs font-semibold text-violet-700 bg-violet-100 hover:bg-violet-200 border border-transparent px-3 py-1.5 rounded-full transition-colors flex items-center gap-1 shadow-sm hover:shadow">
+                                  <i data-feather="eye" class="w-3 h-3"></i> {{ __('tasks_page.view_details') ?? 'Details' }}
                               </a>
                           @elseif($hasOffer)
                              <form method="POST" action="{{ route('tasks.offers.destroy', $task->id) }}" class="inline m-0 p-0">
                                  @csrf
                                  @method('DELETE')
-                                 <button type="submit" class="text-xs font-semibold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap inline-flex items-center gap-1">
-                                     <i data-feather="x" class="w-3 h-3"></i> {{ __('tasks_page.cancel_offer') }}
+                                 <button type="submit" class="text-xs font-semibold text-red-700 bg-red-100 hover:bg-red-600 hover:text-white border border-transparent hover:border-red-600 px-3 py-1.5 rounded-full transition-all whitespace-nowrap inline-flex items-center gap-1 shadow-sm hover:shadow">
+                                     <i data-feather="x" class="w-3 h-3"></i> {{ __('tasks_page.cancel_offer') ?? 'Cancel Offer' }}
                                  </button>
                              </form>
                           @else
-                              <!-- Logic: if they have missing steps, show button that opens modal. Otherwise regular link. -->
                               @if(count($missingSteps) > 0)
-                                 <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                     {{ __('tasks_page.make_offer') }}
+                                 <button type="button" class="js-open-offer-requirements text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-full transition-all shadow-sm hover:shadow">
+                                     {{ __('tasks_page.make_offer') ?? 'Make offer' }}
                                  </button>
                               @else
-                                 <a href="{{ route('tasks.show', $task->id) }}" class="btn text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-full transition-colors">
-                                     {{ __('tasks_page.make_offer') }}
+                                 <a href="{{ route('tasks.show', $task->id) }}" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-4 py-1.5 rounded-full transition-all shadow-sm hover:shadow inline-block">
+                                     {{ __('tasks_page.make_offer') ?? 'Make offer' }}
                                  </a>
                               @endif
                           @endif
@@ -1145,17 +442,17 @@
               </div>
             </div>
           @empty
-            <div class="h-full bg-white rounded-2xl border border-dashed border-gray-200 p-10 text-center flex flex-col items-center justify-center space-y-4 shadow-sm tasks-empty-container">
-              <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-2 tasks-empty-icon">
-                 <i data-feather="search" class="w-10 h-10 text-blue-300"></i>
+            <div class="h-full bg-white rounded-2xl border border-dashed border-gray-300 p-10 text-center flex flex-col items-center justify-center space-y-4 shadow-sm tasks-empty-container">
+              <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mb-2 tasks-empty-icon">
+                 <i data-feather="search" class="w-8 h-8 text-blue-400"></i>
               </div>
               <div class="space-y-2">
-                <h3 class="text-xl font-bold text-slate-800">{{ __('tasks_page.no_tasks_found') }}</h3>
-                <p class="text-base text-slate-500 leading-relaxed max-w-[280px] mx-auto">
+                <h3 class="text-lg font-bold text-gray-800">{{ __('tasks_page.no_tasks_found') }}</h3>
+                <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto">
                   {{ __('tasks_page.no_tasks_desc') }}
                 </p>
               </div>
-              <a href="{{ route('tasks') }}" class="tasks-clear-btn inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-100 bg-blue-50/50 px-8 py-3 rounded-full transition-all mt-4 shadow-sm hover:shadow-md">
+              <a href="{{ route('tasks') }}" class="tasks-clear-btn inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-700 hover:text-white bg-blue-50 px-6 py-2.5 rounded-full transition-all mt-4 border border-blue-100 shadow-sm">
                 <i data-feather="refresh-cw" class="w-4 h-4"></i>
                 {{ __('tasks_page.clear_filters') }}
               </a>
@@ -1171,58 +468,34 @@
       </div>
  
     <!-- Right: Map (Hidden on mobile) -->
-      <div class="hidden md:flex flex-1 bg-gray-200 rounded-xl overflow-hidden shadow-inner border border-gray-300 relative">
+      <div class="hidden md:flex flex-1 bg-gray-200 rounded-2xl overflow-hidden shadow-inner border border-gray-300 relative group">
         <div id="map"></div>
         
         <!-- Remote Tasks Pulsing Icon (Top Right) -->
         @if($remoteCount > 0)
-            <div class="absolute top-4 right-4 z-[500]">
+            <div class="absolute top-4 right-4 z-30">
                 <div class="relative">
-                    {{-- Minimalist Cloud Icon with Pulse --}}
                     <button type="button" 
                             id="cloud-toggle-btn"
                             onclick="toggleRemoteInfo()"
-                            class="w-10 h-10 bg-white shadow-xl border border-blue-50 rounded-full flex items-center justify-center text-blue-600 transition-all duration-300 relative z-[500] animate-cloud-pulse cursor-pointer">
-                        <i data-feather="cloud" class="w-5 h-5 pointer-events-none"></i>
-
-                        {{-- Task Count Badge --}}
-                        <div class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm pointer-events-none">
+                            class="w-11 h-11 bg-gradient-to-br from-white to-blue-50 shadow-xl shadow-blue-900/10 border border-blue-100 rounded-full flex items-center justify-center text-blue-600 transition-all duration-300 relative animate-cloud-pulse cursor-pointer hover:scale-110 active:scale-95 group/cloud">
+                        <i data-feather="cloud" class="w-5 h-5 group-hover/cloud:fill-blue-600 transition-colors"></i>
+                        <div class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm pointer-events-none">
                             {{ $remoteCount }}
                         </div>
                     </button>
 
-                    {{-- Detailed Info Card (Reveals on Click) --}}
-                    <div id="remote-info-pop" class="hidden absolute right-0 top-full mt-3 animate-fade-in-up z-40">
-                        <div class="bg-white/95 backdrop-blur-sm border border-blue-50 text-gray-800 rounded-2xl shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)] p-4 min-w-[200px] border-t-4 border-t-blue-500">
+                    <div id="remote-info-pop" class="hidden absolute right-0 top-full mt-2 z-40 animate-fade-in-up">
+                        <div class="bg-white border border-gray-100 text-gray-800 rounded-xl shadow-xl p-4 min-w-[220px] border-t-4 border-t-blue-500">
                            <div class="flex items-center gap-2 mb-2">
                                <i data-feather="info" class="w-3.5 h-3.5 text-blue-500"></i>
-                               <div class="text-[10px] font-black text-blue-500 uppercase tracking-[0.15em]">{{ __('tasks_page.digital_opps') }}</div>
+                               <div class="text-[10px] font-black text-blue-500 uppercase tracking-widest">{{ __('tasks_page.digital_opps') ?? 'Digital Opps' }}</div>
                            </div>
-                           <p class="text-[12px] font-medium leading-relaxed text-slate-600">
-                               {!! __('tasks_page.remote_tasks_info', ['count' => '<span class="text-blue-600 font-bold">' . $remoteCount . '</span>']) !!}
+                           <p class="text-[11px] font-medium leading-relaxed text-gray-600">
+                               {!! __('tasks_page.remote_tasks_info', ['count' => '<span class="text-blue-600 font-bold">' . $remoteCount . '</span>']) ?? 'There are <span class="text-blue-600 font-bold">' . $remoteCount . '</span> remote tasks available.' !!}
                            </p>
                         </div>
                     </div>
-
-                    <script>
-                        function toggleRemoteInfo() {
-                            const el = document.getElementById('remote-info-pop');
-                            const isHidden = el.classList.contains('hidden');
-                            
-                            // Close all other instances if needed
-                            el.classList.toggle('hidden');
-                            
-                            if (isHidden) {
-                                // Refresh icons in the newly shown card
-                                if (window.feather) window.feather.replace();
-                                
-                                // Auto-hide after 5 seconds
-                                setTimeout(() => {
-                                    el.classList.add('hidden');
-                                }, 5000);
-                            }
-                        }
-                    </script>
                 </div>
             </div>
         @endif
@@ -1233,545 +506,35 @@
     </div>
   </section>
 
-
-
-  <!-- MODAL: BEFORE YOU MAKE AN OFFER -->
-  <!-- We use 'hidden' class by default. JS removes it to show. -->
-  <div id="profile-steps-modal" class="fixed inset-0 modal-overlay flex items-center justify-center z-[60] hidden transition-opacity duration-300">
-      <div class="bg-white w-full max-w-[480px] rounded-2xl shadow-2xl relative mx-4 animate-fade-in-up overflow-hidden">
-          
-          <!-- Close X Button -->
-          <button type="button" id="profile-steps-close" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10 p-1">
-              <i data-feather="x" class="w-6 h-6"></i>
-          </button>
-
-          <!-- Modal Content -->
-          <div class="pt-8 pb-6 px-8">
-              
-            <!-- Illustration: Trust & Verification -->
-              <div class="flex justify-center mb-6">
-                  <div class="relative w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center">
-                      <!-- Blue Shield -->
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#2563EB" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                      
-                      <!-- Decorative Element (Small lock or star top right) -->
-                      <div class="absolute -top-1 -right-1 bg-white p-1 rounded-full shadow-sm">
-                          <div class="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                              </svg>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <!-- Header Text -->
-              <div class="text-center mb-6">
-                  <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ __('tasks_page.before_offer_title') }}</h2>
-                  <p class="text-gray-500 text-[15px] leading-relaxed">
-                      {{ __('tasks_page.before_offer_desc') }}
-                  </p>
-              </div>
-
-              <!-- Steps List -->
-              <div class="space-y-2 mb-8">
-                  @foreach($missingSteps as $step)
-
-                      <!-- Single List Item -->
-                      <a href="{{ route('profile') }}" class="flex items-center justify-between py-2 group cursor-pointer hover:bg-gray-50 rounded-xl px-2 transition-colors no-underline">
-                          <div class="flex items-center gap-4">
-                              <!-- Left Icon Circle -->
-                              <div class="step-icon-circle">
-                                  <i data-feather="{{ $step['icon'] }}" class="w-5 h-5"></i>
-                              </div>
-                              <!-- Text -->
-                              <span class="text-gray-700 font-medium text-[15px]">{{ $step['text'] }}</span>
-                          </div>
-                          
-                          <!-- Right Plus Button -->
-                          <div class="step-add-btn">
-                              <i data-feather="plus" class="w-4 h-4"></i>
-                          </div>
-                      </a>
-                  @endforeach
-              </div>
-
-              <!-- Footer Button -->
-              <div class="mt-2">
-                <a href="{{ route('profile') }}" class="btn block w-full py-3 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-center rounded-full transition-colors text-sm border-2 border-transparent">
-                    {{ __('tasks_page.continue') }}
-                </a>
-              </div>
-          </div>
-      </div>
-  </div>
-
-  <script>
-    // 1. Initialize Feather Icons
-    function refreshIcons() {
-        if (window.feather && typeof window.feather.replace === 'function') {
-            window.feather.replace();
-        }
-    }
-    refreshIcons();
-    
-    // 2. Map Setup
-    const map = new maplibregl.Map({
-      container: 'map',
-      style: {
-        version: 8,
-        sources: {
-          'osm-tiles': {
-            type: 'raster',
-            tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
-            tileSize: 256,
-            attribution: '© OpenStreetMap'
-          }
-        },
-        layers: [{
-          id: 'osm-tiles',
-          type: 'raster',
-          source: 'osm-tiles',
-          minzoom: 0,
-          maxzoom: 19
-        }]
-      },
-      center: [19.1483, 47.1629], // Centered broad view of entire Hungary
-      zoom: 6.4
-    });
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right');
-
-    // 3. Map Data & Markers
-    const tasksData = @json($taskPoints);
-
-    const cityCache = {
-      get(name){ try { return JSON.parse(localStorage.getItem('geocode:'+name)); } catch { return null; } },
-      set(name, coords){ try { localStorage.setItem('geocode:'+name, JSON.stringify(coords)); } catch {} }
-    };
-
-    async function geocodeCity(name){
-      if (!name) return null;
-      const cached = cityCache.get(name);
-      if (cached) return cached;
-      try {
-        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(name)}&limit=1`);
-        const data = await res.json();
-        if (data && data[0]) {
-          const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-          cityCache.set(name, coords);
-          return coords;
-        }
-      } catch (e) {}
-      return null;
-    }
-
-    (async function plotTasks(){
-      const locations = [...new Set(tasksData.map(t => t.location))];
-      const locationToCoords = {};
-      for (const loc of locations) {
-        const coords = await geocodeCity(loc);
-        if (coords) locationToCoords[loc] = coords;
-        await new Promise(r => setTimeout(r, 400));
-      }
-
-      const bounds = new maplibregl.LngLatBounds();
-      const markers = {};
-
-      tasksData.forEach(t => {
-        const baseCoords = locationToCoords[t.location];
-        if (!baseCoords) return;
-
-        // Apply slight jitter to separate markers in same city
-        const jitter = 0.008;
-        const lng = baseCoords.lng + (Math.random() - 0.5) * jitter;
-        const lat = baseCoords.lat + (Math.random() - 0.5) * jitter;
-
-        const el = document.createElement('div');
-        el.className = 'map-marker-container group';
-        el.style.cursor = 'pointer';
-
-        const mColor = t.is_my_task ? '#9333EA' : '#2563EB';
-        const pColor = t.is_my_task ? '#9333EA22' : '#2563EB22';
-
-        el.innerHTML = `
-            <div class="relative flex items-center justify-center">
-                <div class="absolute w-8 h-8 rounded-full animate-ping opacity-75" style="background-color: ${pColor}"></div>
-                <div class="w-4 h-4 rounded-full border-2 border-white shadow-lg relative z-10 transition-all duration-300" 
-                     style="background-color: ${mColor}"></div>
-            </div>
-        `;
-
-        const loginUrl = "{{ route('login') }}?returnUrl=" + encodeURIComponent('/tasks/' + t.id);
-        const detailsUrl = t.is_my_task ? '/my-tasks#task-'+t.id : '/tasks/'+t.id;
-        const finalUrl = window.isAuthenticated ? detailsUrl : loginUrl;
-
-        const popupHTML = `
-            <div class="p-3 min-w-[180px]">
-                <div class="flex items-center justify-between gap-2 mb-1">
-                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">${t.location}</div>
-                    ${t.is_my_task ? '<span class="px-1.5 py-0.5 bg-violet-100 text-violet-700 text-[9px] font-bold uppercase rounded-md">{{ __('tasks_page.my_task') }}</span>' : ''}
-                </div>
-                <div class="font-bold text-sm text-gray-900 mb-1 leading-tight">${t.title}</div>
-                <div class="text-blue-600 font-extrabold text-sm mb-3">€${t.price.toLocaleString()}</div>
-                <a href="${finalUrl}" class="btn block w-full py-2 text-center ${t.is_my_task ? 'bg-violet-600 hover:bg-violet-700' : 'bg-blue-600 hover:bg-blue-700'} text-white text-[11px] font-bold rounded-lg transition-colors no-underline">{{ __('tasks_page.view_details') }}</a>
-            </div>
-        `;
-
-        const marker = new maplibregl.Marker({ element: el })
-          .setLngLat([lng, lat])
-          .setPopup(new maplibregl.Popup({ 
-              offset: 15, 
-              closeButton: false,
-              className: 'custom-task-popup'
-          }).setHTML(popupHTML))
-          .addTo(map);
-        
-        markers[t.id] = marker;
-        bounds.extend([lng, lat]);
-
-        // Hover Effect: Card -> Marker
-        const card = document.getElementById(`task-card-${t.id}`);
-        if(card) {
-            const hColor = t.is_my_task ? '#3730A3' : '#1D4ED8'; 
-            card.addEventListener('mouseenter', () => {
-                const markerEl = el.querySelector('.z-10');
-                const pingEl = el.querySelector('.absolute');
-                if(pingEl) pingEl.classList.add('scale-150');
-                if(markerEl) {
-                    markerEl.classList.add('scale-150');
-                    markerEl.style.backgroundColor = hColor;
-                }
-            });
-            card.addEventListener('mouseleave', () => {
-                const markerEl = el.querySelector('.z-10');
-                const pingEl = el.querySelector('.absolute');
-                if(pingEl) pingEl.classList.remove('scale-150');
-                if(markerEl) {
-                    markerEl.classList.remove('scale-150');
-                    markerEl.style.backgroundColor = mColor;
-                }
-            });
-        }
-
-      
-      });
-
-      // Map fixed position (Budapest) - commented out bounds fitting
-      // if (!bounds.isEmpty()) map.fitBounds(bounds, { padding: 70, maxZoom: 13 });
-    })();
-
-    // 4. Dropdowns (Price/Type)
-    function setupDropdown(btnId, menuId) {
-        const btn = document.getElementById(btnId);
-        const menu = document.getElementById(menuId);
-        if(!btn || !menu) return;
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isHidden = menu.classList.contains('hidden');
-            document.querySelectorAll('[id$="-menu"]').forEach(el => el.classList.add('hidden'));
-            if(isHidden) menu.classList.remove('hidden');
-        });
-        menu.addEventListener('click', (e) => e.stopPropagation());
-        document.addEventListener('click', () => menu.classList.add('hidden'));
-    }
-    setupDropdown('price-btn', 'price-menu');
-    setupDropdown('type-btn', 'type-menu');
-
-    // Simplified category change logic - just submit to get new jobs
-    document.getElementById('category-filter')?.addEventListener('change', (e) => {
-        const jobFilter = document.getElementById('job-filter');
-        if (jobFilter) jobFilter.value = ''; // Reset job when category changes
-        document.getElementById('filters-form').submit();
-    });
-
-    ['sort-filter', 'job-filter'].forEach(id => {
-        document.getElementById(id)?.addEventListener('change', (e) => {
-            document.getElementById('filters-form').submit();
-        });
-    });
-
-    // 5. Dual-Thumb Price Range Slider (Airtasker style)
-    (function initPriceSlider() {
-        const minEl = document.getElementById('price-min');
-        const maxEl = document.getElementById('price-max');
-        const track = document.getElementById('price-track');
-        const priceDisplay = document.getElementById('price-display');
-        const priceText = document.getElementById('price-text');
-        const priceBtn = document.getElementById('price-btn');
-        const priceMenu = document.getElementById('price-menu');
-        if (!minEl || !maxEl) return;
-
-        const RANGE_MIN = 5;
-        const RANGE_MAX = 5000;
-        const GAP = 10;
-
-        function update(source) {
-            let minVal = parseInt(minEl.value);
-            let maxVal = parseInt(maxEl.value);
-
-            // Enforce minimum gap
-            if (minVal > maxVal - GAP) {
-                if (source === 'min') {
-                    minVal = maxVal - GAP;
-                    minEl.value = minVal;
-                } else {
-                    maxVal = minVal + GAP;
-                    maxEl.value = maxVal;
-                }
-            }
-
-            // Colored track between thumbs
-            const pMin = ((minVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
-            const pMax = ((maxVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
-            track.style.left = pMin + '%';
-            track.style.right = (100 - pMax) + '%';
-            track.style.width = 'auto';
-
-            // Update price display box inside dropdown
-            if (priceDisplay) {
-                priceDisplay.textContent = `€${minVal.toLocaleString()} - €${maxVal.toLocaleString()}`;
-            }
-        }
-
-        minEl.addEventListener('input', () => update('min'));
-        maxEl.addEventListener('input', () => update('max'));
-
-        // Initial update
-        update('min');
-
-        // Apply button — submit form & update button text
-        document.getElementById('price-apply').addEventListener('click', () => {
-            const minVal = parseInt(minEl.value);
-            const maxVal = parseInt(maxEl.value);
-            priceText.textContent = `€${minVal.toLocaleString()} - €${maxVal.toLocaleString()}`;
-            priceText.classList.add('text-blue-600');
-            priceBtn.classList.add('border-blue-400');
-            document.getElementById('filters-form').submit();
-        });
-
-        // Cancel button — reset slider to original values & close
-        document.getElementById('price-cancel').addEventListener('click', () => {
-            // Reset to whatever the page loaded with
-            minEl.value = {{ max(1000, (int)($filters['min_price'] ?? 1000)) }};
-            maxEl.value = {{ min(20000, (int)($filters['max_price'] ?? 20000)) }};
-            update('min');
-            priceMenu.classList.add('hidden');
-        });
-    })();
-
-    // 6. City Search
-    const typeCitySearch = document.getElementById('type-city-search');
-    const typeCityDropdown = document.getElementById('type-city-dropdown');
-    const hiddenCity = document.getElementById('city-search-hidden');
-    let searchTimeout;
-
-    if(typeCitySearch) {
-        typeCitySearch.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            const q = e.target.value;
-            if(q.length < 2) { typeCityDropdown.classList.add('hidden'); return; }
-            
-            searchTimeout = setTimeout(async () => {
-                try {
-                    const res = await fetch(`/api/cities?q=${q}`);
-                    const cities = await res.json();
-                    typeCityDropdown.innerHTML = '';
-                    if(cities.length) {
-                        typeCityDropdown.classList.remove('hidden');
-                        cities.slice(0,8).forEach(c => {
-                            const div = document.createElement('div');
-                            div.className = 'px-3 py-2 text-sm hover:bg-blue-50 cursor-pointer text-gray-700';
-                            div.textContent = c.name;
-                            div.onclick = () => {
-                                hiddenCity.value = c.name;
-                                document.getElementById('filters-form').submit();
-                            };
-                            typeCityDropdown.appendChild(div);
-                        });
-                    }
-                } catch(err){}
-            }, 300);
-        });
-    }
-
-    // 7. Modal Interaction Logic
-    document.addEventListener('DOMContentLoaded', function () {
-        const modal = document.getElementById('profile-steps-modal');
-        if (!modal) return;
-        const openButtons = document.querySelectorAll('.js-open-offer-requirements');
-        const closeBtn = document.getElementById('profile-steps-close');
-
-        function showModal() { 
-            modal.classList.remove('hidden'); 
-            refreshIcons(); // Re-render icons since they were hidden
-        }
-        function hideModal() { 
-            modal.classList.add('hidden'); 
-        }
-
-        // Open modal when "Make an offer" button is clicked
-        openButtons.forEach(btn => btn.addEventListener('click', (e) => { 
-            e.preventDefault(); 
-            showModal(); 
-        }));
-        
-        // Close on 'X'
-        if (closeBtn) closeBtn.addEventListener('click', hideModal);
-        
-        // Close on Background Click
-        modal.addEventListener('click', (e) => { 
-            if (e.target === modal) hideModal(); 
-        });
-    });
-    // 8. Search Input Enter Key
-    const searchInput = document.getElementById('search-q');
-    if (searchInput) {
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                searchInput.form.submit();
-            }
-        });
-    }
-
-    // 9. Mobile Filters Logic
-    (function initMobileFilters() {
-        const trigger = document.getElementById('mobile-filter-trigger');
-        const modal = document.getElementById('mobile-filters-modal');
-        const closeBtn = document.getElementById('close-mobile-filters');
-        const cancelBtn = document.getElementById('clear-mobile-filters');
-        const applyBtn = document.getElementById('apply-mobile-filters');
-        const form = document.getElementById('mobile-filters-form');
-
-        if (!trigger || !modal) return;
-
-        trigger.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden'; // Prevent scroll
-            refreshIcons();
-        });
-
-        const hideModal = () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            document.body.style.overflow = '';
-        };
-
-        [closeBtn, cancelBtn].forEach(btn => btn?.addEventListener('click', hideModal));
-
-        // Type Tabs
-        const typeTabs = document.querySelectorAll('.mobile-type-tab');
-        const typeHidden = document.getElementById('mobile-type-hidden');
-        typeTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                typeTabs.forEach(t => {
-                    t.classList.remove('bg-white', 'shadow-md', 'text-blue-600', 'bg-blue-900', 'text-white');
-                    t.classList.add('text-gray-500');
-                });
-                
-                const val = tab.dataset.value;
-                typeHidden.value = val;
-                
-                if (val === 'remote') {
-                    tab.classList.add('bg-blue-900', 'text-white', 'shadow-md');
-                    tab.classList.remove('text-gray-500');
-                } else {
-                    tab.classList.add('bg-white', 'shadow-md', 'text-blue-600');
-                    tab.classList.remove('text-gray-500');
-                }
-            });
-        });
-
-        // Price Slider (Mobile)
-        const minEl = document.getElementById('mobile-price-min');
-        const maxEl = document.getElementById('mobile-price-max');
-        const track = document.getElementById('mobile-price-track');
-        const priceText = document.getElementById('mobile-price-text');
-        
-        if (minEl && maxEl && track) {
-            const RANGE_MIN = 1000;
-            const RANGE_MAX = 20000;
-            const GAP = 100;
-
-            function updatePrice(source) {
-                let minVal = parseInt(minEl.value);
-                let maxVal = parseInt(maxEl.value);
-
-                if (minVal > maxVal - GAP) {
-                    if (source === 'min') {
-                        minVal = maxVal - GAP;
-                        minEl.value = minVal;
-                    } else {
-                        maxVal = minVal + GAP;
-                        maxEl.value = maxVal;
-                    }
-                }
-
-                const pMin = ((minVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
-                const pMax = ((maxVal - RANGE_MIN) / (RANGE_MAX - RANGE_MIN)) * 100;
-                
-                track.style.left = pMin + '%';
-                track.style.right = (100 - pMax) + '%';
-                track.style.width = 'auto';
-                
-                if (priceText) priceText.textContent = `€${minVal.toLocaleString()} - €${maxVal.toLocaleString()}`;
-            }
-
-            minEl.addEventListener('input', () => updatePrice('min'));
-            maxEl.addEventListener('input', () => updatePrice('max'));
-            updatePrice('min');
-        }
-
-        // City Search (Mobile)
-        const cityInput = document.getElementById('mobile-city-search-input');
-        const cityResults = document.getElementById('mobile-city-results');
-        const cityHidden = document.getElementById('mobile-city-hidden');
-        let mobileSearchTimeout;
-
-        if (cityInput) {
-            cityInput.addEventListener('input', (e) => {
-                clearTimeout(mobileSearchTimeout);
-                const q = e.target.value;
-                if (q.length < 2) { cityResults.classList.add('hidden'); return; }
-
-                mobileSearchTimeout = setTimeout(async () => {
-                    try {
-                        const res = await fetch(`/api/cities?q=${q}`);
-                        const cities = await res.json();
-                        cityResults.innerHTML = '';
-                        if (cities.length) {
-                            cityResults.classList.remove('hidden');
-                            cities.slice(0, 8).forEach(c => {
-                                const div = document.createElement('div');
-                                div.className = 'px-5 py-4 text-[14px] font-medium hover:bg-blue-50 cursor-pointer text-gray-700 border-b border-gray-50 last:border-0';
-                                div.innerHTML = `<i data-feather="map-pin" class="w-3.5 h-3.5 inline mr-2 text-gray-400"></i> ${c.name}`;
-                                div.onclick = () => {
-                                    cityInput.value = c.name;
-                                    cityHidden.value = c.name;
-                                    cityResults.classList.add('hidden');
-                                    refreshIcons();
-                                };
-                                cityResults.appendChild(div);
-                            });
-                            refreshIcons();
-                        } else {
-                            cityResults.classList.add('hidden');
-                        }
-                    } catch (err) {}
-                }, 300);
-            });
-        }
-
-        applyBtn.addEventListener('click', () => {
-            form.submit();
-        });
-    })();
-  </script>
-
-  <!-- Include Report Modal -->
+  <!-- Modals -->
+  @include('partials.profile-steps-modal')
   @include('components.report-modal')
 
-  @endsection
+  @push('scripts')
+  <script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
+  <script>
+    // Pass original values matching what tasks.js needs
+    window.TASKS_CONFIG = {
+        taskPoints: @json($taskPoints),
+        translations: {
+            myTask: '{{ __("tasks_page.my_task") }}',
+            viewDetails: '{{ __("tasks_page.view_details") }}'
+        },
+        urls: {
+            login: '{{ route("login") }}'
+        },
+        filters: {
+            min_price: {{ max(5, (int)($filters['min_price'] ?? 5)) }},
+            max_price: {{ min(5000, (int)($filters['max_price'] ?? 5000)) }}
+        }
+    };
+  </script>
+  <script type="module">
+      import { TaskReportManager } from '{{ asset('js/components/task-report-manager.js') }}';
+      document.addEventListener('DOMContentLoaded', () => {
+          new TaskReportManager();
+      });
+  </script>
+  <script src="{{ asset('js/pages/tasks.js') }}"></script>
+  @endpush
+@endsection

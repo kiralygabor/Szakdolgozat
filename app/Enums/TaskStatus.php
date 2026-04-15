@@ -7,6 +7,7 @@ enum TaskStatus: string
     case Open = 'open';
     case Assigned = 'assigned';
     case Completed = 'completed';
+    case Expired = 'expired';
 
     public function label(): string
     {
@@ -14,6 +15,7 @@ enum TaskStatus: string
             self::Open => 'Open',
             self::Assigned => 'Assigned',
             self::Completed => 'Completed',
+            self::Expired => 'Expired',
         };
     }
 }

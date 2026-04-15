@@ -33,6 +33,7 @@ return new class extends Migration
             $table->boolean('is_direct')->default(false);
             
             $table->timestamps();
+            $table->softDeletes();
             $table->index('created_at');
         });
     }

@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ReportStatus;
+use App\Models\UserReport;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserReportController extends Controller
 {
-    public function store(Request $request)
+    public function store(\App\Http\Requests\Report\StoreUserReportRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'description' => 'required|string|min:10|max:1000',
-            'reported_account_id' => 'required|exists:users,account_id'
-        ]);
+        $validated = $request->validated();
 
-        \App\Models\UserReport::create([
+        UserReport::create([
             'description' => $validated['description'],
-            'reporter_account_id' => auth()->user()->account_id,
+            'reporter_account_id' => Auth::user()->account_id,
             'reported_account_id' => $validated['reported_account_id'],
-            'status' => 'open'
+            'status' => ReportStatus::Open,
         ]);
 
-        return redirect()->back()->with('success', 'User reported successfully. Our team will review it shortly.');
+        return back()->with('success', __('User reported successfully. Our team will review it shortly.'));
     }
 }

@@ -7,18 +7,20 @@ use Illuminate\Support\Facades\Http;
 
 class ReCaptcha implements Rule
 {
-    public function passes($attribute, $value)
+    private const VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify';
+
+    public function passes($attribute, $value): bool
     {
-        $response = Http::post("https://www.google.com/recaptcha/api/siteverify", [
-            'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
-            'response' => $value
+        $response = Http::post(self::VERIFY_URL, [
+            'secret' => config('services.recaptcha.secret'),
+            'response' => $value,
         ]);
 
-        return $response->json()['success'] ?? false;
+        return $response->json('success', false);
     }
 
-    public function message()
+    public function message(): string
     {
-        return 'The Google reCAPTCHA verification failed.';
+        return __('The Google reCAPTCHA verification failed.');
     }
 }

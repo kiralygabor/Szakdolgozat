@@ -1,23 +1,7 @@
 <!-- Report Modal -->
 <div id="report-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden transition-opacity duration-300">
     <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl relative mx-4 animate-fade-in-up high-contrast:border-4 high-contrast:border-black">
-        <style>
-            .high-contrast #report-modal .bg-white {
-                background-color: #ffffff !important;
-                border: 4px solid #000000 !important;
-            }
-            .high-contrast #report-modal h2, 
-            .high-contrast #report-modal p,
-            .high-contrast #report-modal label {
-                color: #000000 !important;
-                opacity: 1 !important;
-            }
-            .high-contrast #report-modal textarea {
-                border: 2px solid #000000 !important;
-                background-color: #ffffff !important;
-                color: #000000 !important;
-            }
-        </style>
+
         
         <!-- Close Button -->
         <button type="button" onclick="closeReportModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10 p-1">
@@ -88,27 +72,3 @@
     </div>
 </div>
 
-<script>
-function openReportModal(advertisementId, reportedAccountId) {
-    document.getElementById('report-advertisement-id').value = advertisementId;
-    document.getElementById('report-reported-account-id').value = reportedAccountId;
-    document.getElementById('report-description').value = '';
-    document.getElementById('report-modal').classList.remove('hidden');
-    
-    // Refresh feather icons
-    if (window.feather && typeof window.feather.replace === 'function') {
-        window.feather.replace();
-    }
-}
-
-function closeReportModal() {
-    document.getElementById('report-modal').classList.add('hidden');
-}
-
-// Close on background click
-document.getElementById('report-modal')?.addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeReportModal();
-    }
-});
-</script>

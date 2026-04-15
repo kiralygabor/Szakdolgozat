@@ -2,44 +2,35 @@
 
 namespace App\Notifications;
 
+use App\Models\Advertisement;
+use App\Models\Offer;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewOfferNotification extends Notification
+class NewOfferNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $offer;
-    public $task;
-    public $user;
+    public function __construct(
+        protected Offer $offer,
+        protected Advertisement $task,
+        protected User $offerUser
+    ) {}
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct($offer, $task, $user)
-    {
-        $this->offer = $offer;
-        $this->task = $task;
-        $this->user = $user;
-    }
-
-    /**
-     * Get the notification's delivery channels.
-     */
     public function via(object $notifiable): array
     {
         $channels = ['database'];
+
         if ($notifiable->email_notifications) {
             $channels[] = 'mail';
         }
+
         return $channels;
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
     public function toMail(object $notifiable): MailMessage
     {
         $url = route('my-tasks', ['task_id' => $this->task->id]);
@@ -51,20 +42,21 @@ class NewOfferNotification extends Notification
                 'notifiable' => $notifiable,
                 'offer' => $this->offer,
                 'task' => $this->task,
-                'sender' => $this->user,
+                'sender' => $this->offerUser,
                 'url' => $url,
-                'locale' => $locale
+                'locale' => $locale,
             ]);
     }
 
-    /**
-     * Get the array representation of the notification.
-     */
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => __('notifications.new_offer.database_title', ['user' => $this->user->first_name]),
-            'message' => __('notifications.new_offer.database_message', ['user' => $this->user->first_name, 'price' => $this->offer->price, 'task' => $this->task->title]),
+            'title' => __('notifications.new_offer.database_title', ['user' => $this->offerUser->first_name]),
+            'message' => __('notifications.new_offer.database_message', [
+                'user' => $this->offerUser->first_name,
+                'price' => $this->offer->price,
+                'task' => $this->task->title,
+            ]),
             'link' => route('my-tasks', ['task_id' => $this->task->id]),
             'offer_id' => $this->offer->id,
             'task_id' => $this->task->id,

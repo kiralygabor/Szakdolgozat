@@ -1,0 +1,184 @@
+/* Smooth fade in/out for the delete button */
+.delete-overlay {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.8);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Apply hover only directly on the bubble container, not the full width row */
+.message-bubble-container:hover .delete-overlay {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+/* Tighten footer for messages page */
+footer {
+    padding-top: 2rem !important;
+}
+
+/* --- High Contrast Overrides --- */
+.high-contrast .bg-white,
+.high-contrast .bg-gray-50,
+.high-contrast aside,
+.high-contrast main {
+    background-color: #ffffff !important;
+    border-color: #000000 !important;
+}
+
+.high-contrast .border,
+.high-contrast .border-r,
+.high-contrast .border-b,
+.high-contrast .border-t,
+.high-contrast [class*="md:border"] {
+    border-color: #000000 !important;
+    border-width: 3px !important;
+}
+
+/* Avoid double borders in the middle and ensure outer wrapper has solid borders */
+.high-contrast aside { border-right: 3px solid #000000 !important; }
+.high-contrast main { border-left: none !important; border-right: 3px solid #000000 !important; }
+.high-contrast .max-w-7xl > .bg-white { border: 3px solid #000000 !important; }
+
+.high-contrast #message-input,
+.high-contrast aside input {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+}
+.high-contrast #message-input:hover,
+.high-contrast #message-input:focus,
+.high-contrast aside input:hover,
+.high-contrast aside input:focus {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-width: 3px !important;
+}
+
+.high-contrast .message-bubble {
+    border: 2px solid #000000 !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+}
+.high-contrast .message-bubble.bg-blue-600 {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+.high-contrast .message-bubble.bg-blue-600 * {
+    color: #ffffff !important;
+}
+
+.high-contrast .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #000000 !important;
+    border: 1px solid #ffffff !important;
+}
+.high-contrast .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #ffffff !important;
+    border-left: 1px solid #000000 !important;
+}
+
+.high-contrast aside a.bg-blue-50 {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+}
+.high-contrast aside a.bg-blue-50 * {
+    color: #ffffff !important;
+}
+.high-contrast aside a:hover:not(.bg-blue-50) {
+    background-color: #eeeeee !important;
+    text-decoration: underline !important;
+}
+
+.high-contrast #chat-options-dropdown {
+    background-color: #ffffff !important;
+    border: 3px solid #000000 !important;
+}
+.high-contrast #chat-options-dropdown * {
+    color: #000000 !important;
+}
+.high-contrast #chat-options-dropdown a:hover,
+.high-contrast #chat-options-dropdown button:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+/* Fix for the 'Browse Tasks' button and empty states */
+.high-contrast .bg-blue-600.text-white,
+.high-contrast a.bg-blue-600 {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+
+.high-contrast .text-blue-500,
+.high-contrast .text-gray-400,
+.high-contrast .text-gray-500 {
+    color: #000000 !important;
+    opacity: 1 !important;
+}
+
+.high-contrast .ring-white {
+    --tw-ring-color: #000000 !important;
+}
+
+.high-contrast .bg-blue-50\/50 {
+    background-color: #ffffff !important;
+    border: 1px solid #000000 !important;
+}
+
+/* ========== DARK MODE OVERRIDES ========== */
+html.dark .bg-gray-50 { background-color: #0f172a !important; }
+
+/* Outer container & card */
+html.dark .bg-white { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark .border-gray-200, html.dark .border-gray-100, html.dark .border-gray-50 { border-color: #334155 !important; }
+
+/* Sidebar */
+html.dark aside { background-color: #1e293b !important; }
+html.dark aside input { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
+
+/* Conversation list items */
+html.dark aside a:hover { background-color: #334155 !important; }
+html.dark aside a.bg-blue-50 { background-color: rgba(37, 99, 235, 0.15) !important; }
+
+/* Main chat area - LIGHTER than the sidebar */
+html.dark main { background-color: #273449 !important; }
+html.dark #messages-container { background-color: #273449 !important; }
+
+/* Chat header & input area */
+html.dark main .border-b, html.dark main .border-t { border-color: #334155 !important; }
+html.dark main > div:first-child { background-color: #1e293b !important; }
+html.dark main > div:last-child { background-color: #1e293b !important; }
+
+/* Message input */
+html.dark #message-input { background-color: #0f172a !important; color: #f8fafc !important; border-color: #334155 !important; }
+html.dark #message-input:focus { background-color: #1e293b !important; }
+
+/* Received message bubbles */
+html.dark .message-bubble.bg-white { background-color: #1e293b !important; border-color: #334155 !important; color: #f8fafc !important; }
+html.dark .message-bubble.bg-gray-50 { background-color: #334155 !important; border-color: #475569 !important; }
+html.dark .message-bubble.bg-gray-100 { background-color: #334155 !important; border-color: #475569 !important; }
+
+/* Text colors */
+html.dark .text-gray-900 { color: #f8fafc !important; }
+html.dark .text-gray-800 { color: #f1f5f9 !important; }
+html.dark .text-gray-700 { color: #e2e8f0 !important; }
+html.dark .text-gray-600 { color: #cbd5e1 !important; }
+html.dark .text-gray-500 { color: #94a3b8 !important; }
+html.dark .text-gray-400 { color: #64748b !important; }
+
+/* Dropdown */
+html.dark #chat-options-dropdown { background-color: #1e293b !important; border-color: #334155 !important; }
+html.dark #chat-options-dropdown a:hover,
+html.dark #chat-options-dropdown button:hover { background-color: #334155 !important; }
+
+/* Empty state */
+html.dark .ring-white { --tw-ring-color: #1e293b !important; }
+html.dark .bg-blue-50\/50 { background-color: rgba(37, 99, 235, 0.15) !important; }
+
+/* Scrollbar */
+html.dark .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #475569 !important; }

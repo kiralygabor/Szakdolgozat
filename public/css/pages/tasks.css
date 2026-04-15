@@ -1,0 +1,801 @@
+/* ==========================================================================
+   Browse Tasks Page — Styles
+   ========================================================================== */
+
+/* --- Layout --- */
+.browse-container {
+    height: 750px;
+}
+
+@media (max-width: 768px) {
+    .browse-container {
+        height: auto;
+    }
+}
+
+/* Filter Bar — Reset form margins */
+#filters-form,
+#filters-form select,
+#filters-form input,
+#filters-form button,
+#filters-form label,
+#filters-form div {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* --- Custom Scrollbar (Tasks Pane) --- */
+.custom-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 9999px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+.dark .custom-scroll::-webkit-scrollbar-thumb {
+    background-color: #475569;
+}
+
+/* --- Task Card --- */
+.task-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Cloud Pulse Animation --- */
+@keyframes cloud-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+    }
+
+    70% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    }
+}
+
+.animate-cloud-pulse {
+    animation: cloud-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+/* --- Map --- */
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.75rem;
+}
+
+/* --- Dual Range Slider — Airtasker Style --- */
+.range-slider {
+    position: relative;
+    width: 100%;
+    height: 30px;
+}
+
+.range-slider .track-bg {
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+}
+
+.range-slider .track-fill {
+    position: absolute;
+    height: 6px;
+    background: #2563eb;
+    border-radius: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.range-slider input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    position: absolute;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    left: -10.5px;
+    /* Offset by half the thumb width */
+    width: calc(100% + 21px);
+    /* Extend exactly by the thumb width so centers touch the edge */
+    height: 0px !important;
+    /* Collapse input height to perfectly pinpoint the center line */
+    background: transparent;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
+.range-slider input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 21px;
+    height: 21px;
+    background: #ffffff;
+    border-radius: 50%;
+    border: 2px solid #2563eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    pointer-events: all;
+    position: relative;
+    z-index: 3;
+    transition: box-shadow 0.15s;
+    margin-top: -4px;
+    /* Decreased negative margin so Webkit pushes the circle ~3px lower perfectly onto the line */
+}
+
+.range-slider input[type=range]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.range-slider input[type=range]::-webkit-slider-thumb:active {
+    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.2), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.range-slider input[type=range]::-moz-range-thumb {
+    width: 21px;
+    height: 21px;
+    background: #ffffff;
+    border-radius: 50%;
+    border: 2px solid #2563eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    pointer-events: all;
+    margin-top: 0;
+    /* Mozilla handles thumb centering automatically */
+}
+
+.range-slider input[type=range]::-webkit-slider-runnable-track,
+.range-slider input[type=range]::-moz-range-track {
+    height: 6px;
+    background: transparent;
+}
+
+.range-slider input[id*="price-min"] {
+    z-index: 2;
+}
+
+.range-slider input[id*="price-max"] {
+    z-index: 3;
+}
+
+/* --- Map Popup --- */
+.custom-task-popup .maplibregl-popup-content {
+    border-radius: 1rem;
+    padding: 0;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    background: white;
+}
+
+.custom-task-popup .maplibregl-popup-tip {
+    display: none;
+}
+
+/* --- Profile Steps Modal --- */
+.step-icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.step-add-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.step-add-btn:hover {
+    background-color: #1d4ed8;
+}
+
+/* --- Dark Mode Cloud Pulse --- */
+@keyframes cloud-pulse-dark {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+    }
+    70% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 12px rgba(59, 130, 246, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
+html.dark #cloud-toggle-btn {
+    background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+    border-color: #334155 !important;
+    color: #60a5fa !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .animate-cloud-pulse {
+    animation: cloud-pulse-dark 2s infinite cubic-bezier(0.4, 0, 0.6, 1) !important;
+}
+
+html.dark #cloud-toggle-btn:hover {
+    background: #334155 !important;
+    color: #93c5fd !important;
+}
+
+html.dark #cloud-toggle-btn span.bg-blue-600 {
+    background-color: #3b82f6 !important;
+    border-color: #1e293b !important;
+}
+
+/* --- Dark Mode Overrides --- */
+html.dark .custom-task-popup .maplibregl-popup-content {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+html.dark #type-menu,
+html.dark #price-menu {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html.dark .range-slider {
+    background: transparent !important;
+}
+
+html.dark .range-slider .track-bg {
+    background-color: #475569 !important;
+}
+
+html.dark .range-slider .track-fill {
+    background-color: #2563eb !important;
+}
+
+html.dark .range-slider input[type=range]::-webkit-slider-thumb,
+html.dark .range-slider input[type=range]::-moz-range-thumb {
+    background: #ffffff !important;
+    border-color: #2563eb !important;
+}
+
+html.dark .step-icon-circle {
+    background-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+html.dark .modal-overlay .bg-white {
+    background-color: #1e293b !important;
+}
+
+html.dark #mobile-filters-modal.bg-white {
+    background-color: #0f172a !important;
+}
+
+html.dark .bg-white {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html.dark .hover\:bg-gray-50:hover,
+html.dark .hover\:bg-blue-50:hover,
+html.dark [class*="hover:bg-gray-50"]:hover,
+html.dark [class*="hover:bg-blue-50"]:hover {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+html.dark #type-city-dropdown div:hover {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+html.dark #search-q,
+html.dark #type-city-search,
+html.dark #mobile-city-search-input {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+html.dark #search-q:focus,
+html.dark #type-city-search:focus {
+    background-color: #1e293b !important;
+    border-color: #6366f1 !important;
+}
+
+html.dark .border,
+html.dark .border-t,
+html.dark .border-b,
+html.dark .border-l,
+html.dark .border-r {
+    border-color: #334155 !important;
+}
+
+html.dark .divide-y>*+* {
+    border-color: #334155 !important;
+}
+
+html.dark input[type="radio"] {
+    background-color: #1e293b !important;
+    border-color: #475569 !important;
+}
+
+html.dark input[type="radio"]:checked {
+    background-color: #6366f1 !important;
+    border-color: #6366f1 !important;
+}
+
+html.dark .task-card {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html.dark .bg-violet-50 {
+    background-color: rgba(139, 92, 246, 0.1) !important;
+    color: #ddd6fe !important;
+}
+
+html.dark .border-violet-300 {
+    border-color: #5b21b6 !important;
+}
+
+html.dark .ring-violet-100 {
+    --tw-ring-color: rgba(139, 92, 246, 0.2) !important;
+}
+
+html.dark .bg-violet-100 {
+    background-color: #4c1d95 !important;
+    color: #ddd6fe !important;
+}
+
+html.dark .text-violet-700 {
+    color: #c4b5fd !important;
+}
+
+html.dark .bg-blue-50 {
+    background-color: rgba(37, 99, 235, 0.1) !important;
+    color: #bfdbfe !important;
+}
+
+html.dark .border-blue-300 {
+    border-color: #1e40af !important;
+}
+
+html.dark .bg-blue-100 {
+    background-color: #1e3a8a !important;
+    color: #bfdbfe !important;
+}
+
+html.dark .bg-gray-100 {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+html.dark .bg-gray-50 {
+    background-color: #0f172a !important;
+    color: #e2e8f0 !important;
+}
+
+html.dark .text-gray-900,
+html.dark .text-gray-800 {
+    color: #f8fafc !important;
+}
+
+html.dark .text-gray-700 {
+    color: #e2e8f0 !important;
+}
+
+html.dark .text-gray-600 {
+    color: #cbd5e1 !important;
+}
+
+html.dark .text-gray-500 {
+    color: #94a3b8 !important;
+}
+
+html.dark .text-gray-400 {
+    color: #64748b !important;
+}
+
+html.dark select,
+html.dark input {
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+html.dark .maplibregl-popup-content a {
+    background-color: #4f46e5 !important;
+    color: white !important;
+}
+
+html.dark .maplibregl-popup-content .text-gray-900 {
+    color: #f8fafc !important;
+}
+
+html.dark .maplibregl-popup-content .text-blue-600 {
+    color: #93c5fd !important;
+}
+
+html.dark .tasks-empty-container {
+    background-color: #0f172a !important;
+    border-color: #1e293b !important;
+}
+
+html.dark .tasks-empty-icon {
+    background-color: #1e293b !important;
+}
+
+html.dark .tasks-clear-btn {
+    background-color: #1e3a8a !important;
+    border-color: #1e40af !important;
+    color: #bfdbfe !important;
+}
+
+html.dark .tasks-clear-btn:hover {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #3b82f6 !important;
+}
+
+/* --- High Contrast Overrides --- */
+.high-contrast #filters-form {
+    background-color: #ffffff !important;
+    border-radius: 1rem !important;
+}
+
+.high-contrast .bg-white.border.border-gray-200.rounded-2xl {
+    background-color: #ffffff !important;
+    border: 3px solid #000000 !important;
+    overflow: visible !important;
+}
+
+.high-contrast .bg-gray-50 {
+    background-color: #ffffff !important;
+}
+
+.high-contrast #search-q,
+.high-contrast #search-q:focus,
+.high-contrast #search-q:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    z-index: 1 !important;
+}
+
+.high-contrast #filters-form button[type="submit"] {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+    z-index: 3 !important;
+}
+
+.high-contrast #filters-form button[type="submit"] i,
+.high-contrast #filters-form button[type="submit"] svg {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+.high-contrast #filters-form select,
+.high-contrast #category-filter,
+.high-contrast #sort-filter {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    font-weight: 700 !important;
+}
+
+.high-contrast #filters-form #type-btn,
+.high-contrast #filters-form #price-btn {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 3px solid #000000 !important;
+    font-weight: 700 !important;
+}
+
+.high-contrast #filters-form #type-btn:hover,
+.high-contrast #filters-form #price-btn:hover,
+.high-contrast #filters-form select:hover,
+.high-contrast #category-filter:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+.high-contrast #filters-form #type-btn:hover *,
+.high-contrast #filters-form #price-btn:hover * {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+.high-contrast #type-menu,
+.high-contrast #price-menu {
+    background-color: #ffffff !important;
+    border: 3px solid #000000 !important;
+    color: #000000 !important;
+    z-index: 9999 !important;
+}
+
+.high-contrast #type-menu *,
+.high-contrast #price-menu * {
+    color: #000000 !important;
+}
+
+.high-contrast #type-menu input[type="radio"] {
+    border: 2px solid #000000 !important;
+}
+
+.high-contrast #type-menu input[type="radio"]:checked {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+.high-contrast .range-slider .track-bg {
+    background-color: #ffffff !important;
+    border: 2px solid #000000 !important;
+    z-index: 1 !important;
+    height: 6px !important;
+}
+
+.high-contrast .range-slider .track-fill {
+    background-color: #000000 !important;
+    z-index: 2 !important;
+    height: 6px !important;
+}
+
+.high-contrast .range-slider input[type=range] {
+    z-index: 20 !important;
+}
+
+.high-contrast .range-slider input[type=range]::-webkit-slider-thumb {
+    background: #000000 !important;
+    border: 3px solid #000000 !important;
+    box-shadow: 0 0 0 3px #ffffff, 0 0 0 5px #000000 !important;
+    z-index: 30 !important;
+}
+
+.high-contrast #type-apply,
+.high-contrast #price-apply {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+
+.high-contrast #price-cancel {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+
+/* High Contrast Cloud Pulse */
+@keyframes cloud-pulse-hc {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+.high-contrast #cloud-toggle-btn,
+.high-contrast button#cloud-toggle-btn {
+    background: #000000 !important;
+    background-color: #000000 !important;
+    background-image: none !important;
+    border: 2.5px solid #ffffff !important;
+    color: #ffffff !important;
+    z-index: 500 !important;
+    animation: cloud-pulse-hc 2s infinite cubic-bezier(0.4, 0, 0.6, 1) !important;
+    box-shadow: none !important;
+}
+
+.high-contrast #cloud-toggle-btn i,
+.high-contrast #cloud-toggle-btn svg,
+.high-contrast #cloud-toggle-btn :not(span) {
+    fill: transparent !important;
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* Map High Contrast Hardening */
+.high-contrast #map {
+    filter: grayscale(1) contrast(1.2) brightness(1.1) !important;
+}
+
+.high-contrast .map-marker-container .z-10 {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 0 2px #000000 !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.high-contrast .map-marker-container .animate-ping {
+    background-color: #ffffff !important;
+    border: 1px solid #000000 !important;
+    opacity: 0.6 !important;
+}
+
+.high-contrast .map-marker-container:hover .z-10 {
+    background-color: #ffffff !important;
+    border-color: #000000 !important;
+    box-shadow: 0 0 0 2px #ffffff !important;
+}
+
+.high-contrast #cloud-toggle-btn:hover,
+.high-contrast button#cloud-toggle-btn:hover {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+.high-contrast #cloud-toggle-btn:hover i,
+.high-contrast #cloud-toggle-btn:hover svg {
+    fill: transparent !important;
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
+.high-contrast #cloud-toggle-btn:hover span {
+    background-color: #000000 !important;
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+/* Cloud Notification Badge */
+/* Universal Badge */
+.high-contrast #cloud-toggle-btn span,
+.high-contrast #cloud-toggle-btn span.relative,
+.high-contrast button#cloud-toggle-btn span {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1.5px solid #000000 !important;
+    z-index: 600 !important;
+    opacity: 1 !important;
+    display: flex !important;
+}
+
+.high-contrast #cloud-toggle-btn span.animate-ping {
+    display: none !important;
+}
+
+.high-contrast #remote-info-pop:not(.hidden) {
+    display: block !important;
+    background-color: #ffffff !important;
+    border: 3px solid #000000 !important;
+    color: #000000 !important;
+    z-index: 500 !important;
+}
+
+.high-contrast #remote-info-pop p,
+.high-contrast #remote-info-pop span,
+.high-contrast #remote-info-pop div {
+    color: #000000 !important;
+}
+
+.high-contrast .custom-task-popup .maplibregl-popup-content {
+    background-color: #ffffff !important;
+    border: 3px solid #000000 !important;
+    color: #000000 !important;
+}
+
+.high-contrast .custom-task-popup .maplibregl-popup-content a {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+.high-contrast .custom-task-popup .bg-violet-100 {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid #ffffff !important;
+    display: inline-block !important;
+}
+
+.high-contrast .task-card a.bg-violet-50,
+.high-contrast .task-card a.bg-violet-100,
+.high-contrast .task-card a.bg-blue-600,
+.high-contrast .task-card a.bg-indigo-600,
+.high-contrast .task-card button.bg-blue-600 {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+
+.high-contrast .task-card a[class*="bg-violet-"] *,
+.high-contrast .task-card a[class*="bg-blue-"] *,
+.high-contrast .task-card a[class*="bg-indigo-"] *,
+.high-contrast .task-card button[class*="bg-blue-"] *,
+.high-contrast .task-card button[class*="bg-red-"] *,
+.high-contrast .task-card button[onclick*="openReportModal"] * {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+.high-contrast .task-card button.bg-red-100,
+.high-contrast .task-card button.bg-red-600,
+.high-contrast .task-card button[onclick*="openReportModal"] {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+    opacity: 1 !important;
+}
+
+.high-contrast .task-card button.bg-red-100:hover,
+.high-contrast .task-card button.bg-red-600:hover,
+.high-contrast .task-card button[onclick*="openReportModal"]:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+.high-contrast .task-card button.bg-red-100:hover *,
+.high-contrast .task-card button.bg-red-600:hover *,
+.high-contrast .task-card button[onclick*="openReportModal"]:hover * {
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
+.high-contrast #profile-steps-modal a:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+.high-contrast #profile-steps-modal a:hover .step-icon-circle,
+.high-contrast #profile-steps-modal a:hover .step-add-btn {
+    background-color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+.high-contrast #profile-steps-modal a:hover .step-icon-circle i,
+.high-contrast #profile-steps-modal a:hover .step-add-btn i {
+    color: #000000 !important;
+    stroke: #000000 !important;
+}
+
+.high-contrast #profile-steps-modal .mt-2 a {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}

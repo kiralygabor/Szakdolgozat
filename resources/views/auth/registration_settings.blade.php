@@ -2,7 +2,7 @@
  
 @section('navbar')
 <!-- Override Navbar to be empty/minimal as per design (or just standard) -->
-<nav class="bg-white border-b border-gray-200 shadow-sm w-full z-50">
+<nav class="bg-[var(--bg-primary)] border-b border-[var(--border-base)] shadow-sm w-full z-50">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex items-center">
              <a href="{{ route('index') }}" class="flex items-center logo-link">
@@ -12,60 +12,64 @@
         <div class="flex items-center gap-3">
             <!-- Settings dropdown -->
             <div class="relative">
-                <button id="settings-button" class="p-2 rounded-full hover:bg-gray-200 transition" type="button">
+                <button id="settings-button" class="p-2 rounded-full hover:bg-[var(--bg-hover)] transition text-[var(--text-primary)]" type="button" aria-label="Toggle accessibility settings">
                     <i data-feather="settings"></i>
                 </button>
-                <div id="settings-menu" class="hidden absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out">
-                    <div class="flex flex-col">
-                        <div class="group relative">
-                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-                                <i data-feather="chevron-left" class="w-4 h-4"></i>
-                                {{ __('navbar.theme') }}
-                            </div>
-                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="light">{{ __('navbar.light') }}</div>
-                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="dark">{{ __('navbar.dark') }}</div>
-                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-theme="system">{{ __('navbar.system_default') }}</div>
-                            </div>
-                        </div>
-                        <div class="group relative">
-                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-                                <i data-feather="chevron-left" class="w-4 h-4"></i>
-                                {{ __('navbar.language') }}
-                            </div>
-                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="en">{{ __('navbar.english') }}</div>
-                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer" data-lang="hu">{{ __('navbar.hungarian') }}</div>
+                <div id="settings-menu" class="hidden absolute right-0 mt-2 w-56 bg-[var(--nav-dropdown-bg)] border border-[var(--nav-dropdown-border)] rounded-lg shadow-lg z-[60] opacity-0 translate-y-2 transition-all duration-200 ease-out p-1">
+                    <div class="flex flex-col" role="none">
+                        <div class="group relative" role="none">
+                            <button type="button" class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                                <i data-feather="chevron-left" class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
+                                <i data-feather="sun" class="w-4 h-4 text-[var(--nav-muted)]"></i>
+                                <span>{{ __('navbar.theme') }}</span>
+                            </button>
+                            <div class="submenu hidden absolute top-0 right-full w-48 bg-[var(--nav-dropdown-bg)] border border-[var(--nav-dropdown-border)] rounded-lg shadow-lg group-hover:block p-1 z-50" role="menu">
+                                <button type="button" class="w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--nav-dropdown-hover)] rounded-lg transition-colors" data-theme="light" role="menuitem">{{ __('navbar.light') }}</button>
+                                <button type="button" class="w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--nav-dropdown-hover)] rounded-lg transition-colors" data-theme="dark" role="menuitem">{{ __('navbar.dark') }}</button>
+                                <button type="button" class="w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--nav-dropdown-hover)] rounded-lg transition-colors" data-theme="system" role="menuitem">{{ __('navbar.system_default') }}</button>
                             </div>
                         </div>
-                        <div class="group relative" id="nav-accessibility-section">
-                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-                                <i data-feather="chevron-left" class="w-4 h-4" aria-hidden="true"></i>
-                                {{ __('navbar.accessibility') }}
+                        <div class="group relative" role="none">
+                            <button type="button" class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                                <i data-feather="chevron-left" class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
+                                <i data-feather="globe" class="w-4 h-4 text-[var(--nav-muted)]"></i>
+                                <span>{{ __('navbar.language') }}</span>
+                            </button>
+                            <div class="submenu hidden absolute top-0 right-full w-48 bg-[var(--nav-dropdown-bg)] border border-[var(--nav-dropdown-border)] rounded-lg shadow-lg group-hover:block p-1 z-50" role="menu">
+                                <button type="button" class="w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--nav-dropdown-hover)] rounded-lg transition-colors" data-lang="en" role="menuitem">{{ __('navbar.english') }}</button>
+                                <button type="button" class="w-full text-left px-3 py-2 text-sm text-[var(--text-primary)] hover:bg-[var(--nav-dropdown-hover)] rounded-lg transition-colors" data-lang="hu" role="menuitem">{{ __('navbar.hungarian') }}</button>
                             </div>
-                            <div class="submenu absolute top-0 right-full w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto p-1">
-                                <button type="button" onclick="toggleAccessibilitySetting('reduced-motion')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
+                        </div>
+                        <div class="group relative" role="none">
+                            <button type="button" class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                                <i data-feather="chevron-left" class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
+                                <i data-feather="eye" class="w-4 h-4 text-[var(--nav-muted)]"></i>
+                                <span>{{ __('navbar.accessibility') }}</span>
+                            </button>
+                            <div class="submenu hidden absolute top-0 right-full w-56 bg-[var(--nav-dropdown-bg)] border border-[var(--nav-dropdown-border)] rounded-lg shadow-lg group-hover:block p-1 z-50" role="menu">
+                                <button type="button" data-acc-toggle="reduced-motion" class="w-full text-left px-3 py-2 hover:bg-[var(--nav-dropdown-hover)] rounded flex items-center justify-between text-sm transition-colors text-[var(--text-primary)]" role="menuitem">
                                     <span>{{ __('navbar.reduced_motion') }}</span>
-                                    <div id="nav-reduced-motion-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
-                                        <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
+                                    <div id="nav-reduced-motion-indicator" class="acc-slider-track w-8 h-4 bg-[var(--border-base)] rounded-full relative">
+                                        <div class="acc-slider-dot absolute w-3 h-3 bg-[var(--nav-bg)] rounded-full border border-[var(--nav-border)] shadow-sm"></div>
                                     </div>
                                 </button>
-                                <button type="button" onclick="toggleAccessibilitySetting('high-contrast')" class="w-full text-left px-3 py-2 hover:bg-gray-100 rounded flex items-center justify-between text-sm">
+                                <button type="button" data-acc-toggle="high-contrast" class="w-full text-left px-3 py-2 hover:bg-[var(--nav-dropdown-hover)] rounded flex items-center justify-between text-sm transition-colors text-[var(--text-primary)]" role="menuitem">
                                     <span>{{ __('navbar.high_contrast') }}</span>
-                                    <div id="nav-high-contrast-indicator" class="w-8 h-4 bg-gray-200 rounded-full relative transition-colors">
-                                        <div class="dot absolute top-0.5 left-0.5 w-3 h-3 bg-white rounded-full transition-transform"></div>
+                                    <div id="nav-high-contrast-indicator" class="acc-slider-track w-8 h-4 bg-[var(--border-base)] rounded-full relative">
+                                        <div class="acc-slider-dot absolute w-3 h-3 bg-[var(--nav-bg)] rounded-full border border-[var(--nav-border)] shadow-sm"></div>
                                     </div>
                                 </button>
                             </div>
                         </div>
-                        <div class="group relative">
-                            <div class="py-2 px-4 text-gray-700 font-semibold hover:bg-gray-100 cursor-pointer flex items-center gap-2">
-                                <i data-feather="chevron-left" class="w-4 h-4"></i>
-                                {{ __('navbar.extras') }}
-                            </div>
-                            <div class="submenu absolute top-0 right-full w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 scale-95 transform transition-all duration-200 ease-out pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto">
-                                <a href="{{ route('help-faq') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 no-underline">{{ __('navbar.help_faq') ?? 'Help / FAQ' }}</a>
-                                <a href="{{ route('contact-support') }}" target="_blank" class="block px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700 no-underline">{{ __('navbar.contact_support') ?? 'Contact / Support' }}</a>
+                        <div class="group relative" role="none">
+                            <button type="button" class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                                <i data-feather="chevron-left" class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
+                                <i data-feather="more-horizontal" class="w-4 h-4 text-[var(--nav-muted)]"></i>
+                                <span>{{ __('navbar.extras') }}</span>
+                            </button>
+                            <div class="submenu hidden absolute top-0 right-full w-48 bg-[var(--nav-dropdown-bg)] border border-[var(--nav-dropdown-border)] rounded-lg shadow-lg group-hover:block p-1 z-50" role="menu">
+                                <a href="{{ route('help-faq') }}" target="_blank" class="block px-3 py-2 hover:bg-[var(--nav-dropdown-hover)] rounded-lg transition-colors text-[var(--text-primary)] no-underline text-sm" role="menuitem">{{ __('navbar.help_faq') ?? 'Help / FAQ' }}</a>
+                                <a href="{{ route('contact-support') }}" target="_blank" class="block px-3 py-2 hover:bg-[var(--nav-dropdown-hover)] rounded-lg transition-colors text-[var(--text-primary)] no-underline text-sm" role="menuitem">{{ __('navbar.contact_support') ?? 'Contact / Support' }}</a>
                             </div>
                         </div>
                     </div>
@@ -76,60 +80,57 @@
 @endsection
  
 @section('content')
-<div class="min-h-screen bg-white flex flex-col items-center pt-10 pb-20">
+<div class="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center pt-10 pb-20">
     <div class="w-full max-w-xl px-6">
        
         <!-- Header -->
         <div class="flex items-center justify-center relative mb-10">
-            <a href="{{ route('register') }}" class="absolute left-0 text-gray-400 hover:text-gray-600">
+            <a href="{{ route('register') }}" class="absolute left-0 text-[var(--text-muted)] hover:text-[var(--text-primary)]">
                 <i data-feather="chevron-left" class="w-6 h-6"></i>
             </a>
-            <h1 class="text-3xl font-bold text-blue-900">{{ __('profile_page.registration.setup_account') }}</h1>
+            <h1 class="text-3xl font-bold text-[var(--primary-accent)]">{{ __('profile_page.registration.setup_account') }}</h1>
         </div>
  
         <form method="POST" action="{{ route('registration_settings.post') }}" id="setup-form">
             @csrf
-           
-            <!-- Hidden fields no longer needed (now nullable in DB) -->
-
- 
+            
             <!-- First Name -->
             <div class="mb-6">
-                <label for="first_name" class="block text-sm font-bold text-blue-900 mb-2">{{ __('profile_page.registration.first_name') }}</label>
+                <label for="first_name" class="block text-sm font-bold text-[var(--primary-accent)] mb-2">{{ __('profile_page.registration.first_name') }}</label>
                 <input type="text" id="first_name" name="first_name"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                       class="w-full px-4 py-3 rounded-lg border border-[var(--border-base)] bg-[var(--bg-secondary)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--primary-accent)] outline-none transition-colors"
                        placeholder="John" required value="{{ old('first_name') }}">
                 @error('first_name')
-                    <p class="text-sm text-orange-500 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-[var(--details-error)] mt-1">{{ $message }}</p>
                 @enderror
             </div>
  
             <!-- Last Name -->
             <div class="mb-6">
-                <label for="last_name" class="block text-sm font-bold text-blue-900 mb-2">{{ __('profile_page.registration.last_name') }}</label>
+                <label for="last_name" class="block text-sm font-bold text-[var(--primary-accent)] mb-2">{{ __('profile_page.registration.last_name') }}</label>
                 <input type="text" id="last_name" name="last_name"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                       class="w-full px-4 py-3 rounded-lg border border-[var(--border-base)] bg-[var(--bg-secondary)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--primary-accent)] outline-none transition-colors"
                        placeholder="Doe" required value="{{ old('last_name') }}">
                 @error('last_name')
-                    <p class="text-sm text-orange-500 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-[var(--details-error)] mt-1">{{ $message }}</p>
                 @enderror
             </div>
  
             <!-- Home Suburb (City Search) -->
             <div class="mb-8 relative">
-                <label for="city_search" class="block text-sm font-bold text-blue-900 mb-2">{{ __('profile_page.registration.home_suburb') }}</label>
+                <label for="city_search" class="block text-sm font-bold text-[var(--primary-accent)] mb-2">{{ __('profile_page.registration.home_suburb') }}</label>
                 <input type="text" id="city_search"
-                       class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                       class="w-full px-4 py-3 rounded-lg border border-[var(--border-base)] bg-[var(--bg-secondary)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--primary-accent)] outline-none transition-colors"
                        placeholder="{{ __('profile_page.registration.suburb_placeholder') }}" autocomplete="off">
                
                 <!-- Hidden inputs for ID submission -->
                 <input type="hidden" name="city_id" id="city_id" value="{{ old('city_id') }}">
                 <input type="hidden" name="county_id" id="county_id" value="{{ old('county_id') }}">
  
-                <div id="city_dropdown" class="absolute left-0 right-0 mt-1 max-h-60 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-xl hidden z-20"></div>
+                <div id="city_dropdown" class="absolute left-0 right-0 mt-1 max-h-60 overflow-y-auto bg-[var(--bg-primary)] border border-[var(--border-base)] rounded-lg shadow-xl hidden z-20"></div>
                
                 @error('city_id')
-                    <p class="text-sm text-orange-500 mt-1">{{ __('profile_page.registration.invalid_suburb') }}</p>
+                    <p class="text-sm text-[var(--details-error)] mt-1">{{ __('profile_page.registration.invalid_suburb') }}</p>
                 @enderror
             </div>
  
@@ -138,27 +139,27 @@
             <div class="space-y-4 mb-8">
                
                 <label class="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" name="terms_consent" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" required>
-                    <span class="text-sm text-gray-600 leading-snug">
+                    <input type="checkbox" name="terms_consent" class="w-5 h-5 text-[var(--primary-accent)] border-[var(--border-base)] rounded focus:ring-[var(--primary-accent)]" required>
+                    <span class="text-sm text-[var(--text-muted)] leading-snug">
                         {!! __('profile_page.registration.agree_terms', ['terms_url' => route('terms'), 'guidelines_url' => route('guidelines'), 'privacy_url' => route('privacy')]) !!}
                     </span>
                 </label>
  
                 <label class="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" name="email_notifications" value="1" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" checked>
-                    <span class="text-sm text-gray-600 leading-snug">
+                    <input type="checkbox" name="email_notifications" value="1" class="w-5 h-5 text-[var(--primary-accent)] border-[var(--border-base)] rounded focus:ring-[var(--primary-accent)]" checked>
+                    <span class="text-sm text-[var(--text-muted)] leading-snug">
                         {{ __('profile_page.registration.email_updates') }}
                     </span>
                 </label>
  
                 <!-- category selection (shown only if digest is enabled) -->
                 <div id="category_selection" class="hidden pl-8 mt-2">
-                    <p class="text-xs font-bold text-blue-900 mb-2 uppercase tracking-wide">{{ __('profile_page.registration.select_categories') }}</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 border border-blue-50 rounded-lg bg-blue-50/30">
+                    <p class="text-xs font-bold text-[var(--text-primary)] mb-2 uppercase tracking-wide">{{ __('profile_page.registration.select_categories') }}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-2 border border-[var(--border-base)] rounded-lg bg-[var(--bg-secondary)]">
                         @foreach($categories as $cat)
-                        <label class="flex items-center gap-2 cursor-pointer hover:bg-white p-1 rounded transition-colors">
-                            <input type="checkbox" name="tracked_categories[]" value="{{ $cat->id }}" class="w-4 h-4 text-blue-600 border-gray-300 rounded">
-                            <span class="text-sm text-gray-600">{{ __('categories.' . $cat->name) }}</span>
+                        <label class="flex items-center gap-2 cursor-pointer hover:bg-[var(--bg-primary)] p-1 rounded transition-colors">
+                            <input type="checkbox" name="tracked_categories[]" value="{{ $cat->id }}" class="w-4 h-4 text-[var(--primary-accent)] border-[var(--border-base)] rounded">
+                            <span class="text-sm text-[var(--text-muted)]">{{ __('categories.' . $cat->name) }}</span>
                         </label>
                         @endforeach
                     </div>
@@ -166,7 +167,7 @@
             </div>
  
             <!-- Submit Button -->
-            <button type="submit" class="w-full py-4 bg-gray-200 text-gray-500 font-bold rounded-full text-lg hover:bg-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" id="submit-btn">
+            <button type="submit" class="w-full py-4 bg-[var(--border-base)] text-[var(--text-muted)] font-bold rounded-full text-lg hover:bg-[var(--bg-hover)] transition-all disabled:opacity-50 disabled:cursor-not-allowed" id="submit-btn">
                 {{ __('profile_page.registration.complete_account') }}
             </button>
  
@@ -174,107 +175,63 @@
     </div>
 </div>
  
-<script>
-    // Feather Icons
-    if (window.feather && typeof window.feather.replace === 'function') {
-        window.feather.replace();
-    }
- 
- 
- 
-    // City Autocomplete Logic
-    const cityInput = document.getElementById('city_search');
-    const cityDropdown = document.getElementById('city_dropdown');
+<script type="module">
+    import { Autocomplete } from '{{ asset('js/modules/autocomplete.js') }}';
+    import { Config } from '{{ asset('js/modules/config.js') }}';
+
+    // 1. Initialize Autocomplete
     const cityIdInput = document.getElementById('city_id');
     const countyIdInput = document.getElementById('county_id');
+    const cityInput = document.getElementById('city_search');
     const submitBtn = document.getElementById('submit-btn');
-    let searchTimeout;
- 
-    cityInput.addEventListener('input', function(e) {
-        clearTimeout(searchTimeout);
-        const q = e.target.value.trim();
-       
-        // Reset IDs if user types
-        cityIdInput.value = '';
-        countyIdInput.value = '';
-        updateSubmitButton();
- 
-        if (q.length < 2) {
-            cityDropdown.classList.add('hidden');
-            return;
-        }
- 
-        searchTimeout = setTimeout(async () => {
-            try {
-                const res = await fetch(`/api/cities?q=${encodeURIComponent(q)}`);
-                const cities = await res.json();
-               
-                cityDropdown.innerHTML = '';
-                if (cities.length > 0) {
-                    cityDropdown.classList.remove('hidden');
-                    cities.forEach(city => {
-                        const div = document.createElement('div');
-                        div.className = 'px-4 py-3 hover:bg-blue-50 cursor-pointer text-gray-700 text-sm border-b border-gray-100 last:border-0';
-                        div.textContent = city.name;
-                        div.onclick = () => {
-                            cityInput.value = city.name;
-                            cityIdInput.value = city.id;
-                            countyIdInput.value = city.county_id; // Using the new field
-                            cityDropdown.classList.add('hidden');
-                            updateSubmitButton();
-                        };
-                        cityDropdown.appendChild(div);
-                    });
-                } else {
-                    cityDropdown.classList.add('hidden');
-                }
-            } catch (err) {
-                console.error(err);
-            }
-        }, 300);
-    });
- 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!cityInput.contains(e.target) && !cityDropdown.contains(e.target)) {
-            cityDropdown.classList.add('hidden');
+
+    new Autocomplete({
+        input: cityInput,
+        dropdown: document.getElementById('city_dropdown'),
+        endpoint: Config.api.cities,
+        onSelect: (city) => {
+            cityIdInput.value = city.id;
+            countyIdInput.value = city.county_id;
+            updateSubmitState();
+        },
+        onClear: () => {
+            cityIdInput.value = '';
+            countyIdInput.value = '';
+            updateSubmitState();
         }
     });
- 
-    // Form Validation for Button State
+
+    // 2. Form Validation Logic
     const form = document.getElementById('setup-form');
-    const inputs = form.querySelectorAll('input[required]');
-   
-    function updateSubmitButton() {
-        let isValid = true;
-        inputs.forEach(input => {
-            if (input.type === 'checkbox') {
-                if (!input.checked) isValid = false;
-            } else {
-                if (!input.value.trim()) isValid = false;
-            }
+    const requiredInputs = form.querySelectorAll('input[required]');
+
+    function updateSubmitState() {
+        const isFormFilled = Array.from(requiredInputs).every(input => {
+            return input.type === 'checkbox' ? input.checked : input.value.trim() !== '';
         });
-       
-        // Also check hidden city_id
-        if (!cityIdInput.value) isValid = false;
- 
+
+        const isLocationSelected = !!cityIdInput.value;
+        const isValid = isFormFilled && isLocationSelected;
+
+        submitBtn.disabled = !isValid;
+        
+        // Dynamic styling using theme-aware variables
         if (isValid) {
-            submitBtn.classList.remove('bg-gray-200', 'text-gray-500');
-            submitBtn.classList.add('bg-blue-600', 'text-white', 'hover:bg-blue-700');
-            submitBtn.disabled = false;
+            submitBtn.classList.remove('bg-[var(--border-base)]', 'text-[var(--text-muted)]');
+            submitBtn.classList.add('bg-[var(--primary-accent)]', 'text-white', 'hover:bg-[var(--primary-hover)]');
         } else {
-            submitBtn.classList.add('bg-gray-200', 'text-gray-500');
-            submitBtn.classList.remove('bg-blue-600', 'text-white', 'hover:bg-blue-700');
-            submitBtn.disabled = true;
+            submitBtn.classList.add('bg-[var(--border-base)]', 'text-[var(--text-muted)]');
+            submitBtn.classList.remove('bg-[var(--primary-accent)]', 'text-white', 'hover:bg-[var(--primary-hover)]');
         }
     }
- 
-    inputs.forEach(input => {
-        input.addEventListener('input', updateSubmitButton);
-        input.addEventListener('change', updateSubmitButton);
-    });
- 
+
+    form.addEventListener('input', updateSubmitState);
+    form.addEventListener('change', updateSubmitState);
+
+    // Bootstrap feathered icons
+    if (window.feather) feather.replace();
+
     // Initial check
-    updateSubmitButton();
+    updateSubmitState();
 </script>
 @endsection

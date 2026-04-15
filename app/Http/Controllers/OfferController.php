@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Enums\OfferStatus;
-use App\Enums\TaskStatus;
 use App\Models\Advertisement;
+use App\Models\Conversation;
 use App\Models\Offer;
-use App\Notifications\NewOfferNotification;
-use App\Notifications\OfferAcceptedNotification;
-use App\Notifications\OfferCancelledNotification;
+use App\Services\OfferService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OfferController extends Controller
 {
-    public function store(Request $request, Advertisement $task): RedirectResponse
+    public function __construct(
+        protected OfferService $offerService
+    ) {}
+
+    public function store(\App\Http\Requests\Offer\StoreOfferRequest $request, Advertisement $task): RedirectResponse
     {
         $user = Auth::user();
 
@@ -24,25 +27,18 @@ class OfferController extends Controller
                 ->with('error', __('You cannot make an offer on your own task.'));
         }
 
+        if ($task->offers()->where('user_id', $user->id)->exists()) {
+            return back()->with('error', __('You have already made an offer on this task.'));
+        }
+
         if (!$task->isOpen()) {
             return redirect()->route('tasks.show', $task)
                 ->with('error', __('This task is no longer accepting offers.'));
         }
 
-        $data = $request->validate([
-            'offer_price' => ['required', 'integer', 'min:1'],
-            'message' => ['required', 'string', 'max:5000'],
-        ]);
+        $data = $request->validated();
 
-        $offer = Offer::create([
-            'advertisement_id' => $task->id,
-            'user_id' => $user->id,
-            'price' => $data['offer_price'],
-            'message' => $data['message'],
-            'status' => OfferStatus::Pending,
-        ]);
-
-        $task->employer->notify(new NewOfferNotification($offer, $task, $user));
+        $this->offerService->placeOffer($task, $data, $user);
 
         if ($task->is_direct) {
             return redirect()->route('my-tasks', ['view' => 'direct', 'task_id' => $task->id])
@@ -55,20 +51,14 @@ class OfferController extends Controller
 
     public function accept(Offer $offer): RedirectResponse
     {
+        $this->authorize('accept', $offer);
         $task = $offer->task;
 
-        if (!$task->isOwner(Auth::id())) {
-            abort(403);
-        }
-
-        $offer->update(['status' => OfferStatus::Accepted]);
-
-        $task->update([
-            'status' => TaskStatus::Assigned,
-            'employee_id' => $offer->user_id,
-        ]);
-
-        $offer->user->notify(new OfferAcceptedNotification($task, Auth::user()));
+        DB::transaction(function () use ($offer, $task) {
+            $this->offerService->acceptOffer($offer);
+            $task->offers()->where('id', '!=', $offer->id)->update(['status' => OfferStatus::Declined]);
+            Conversation::findOrCreateBetween($task->employer_id, $offer->user_id);
+        });
 
         $redirectParams = ['status' => 'pending', 'task_id' => $task->id];
         if ($task->is_direct) {
@@ -81,20 +71,16 @@ class OfferController extends Controller
 
     public function acceptDirect(Advertisement $task): RedirectResponse
     {
-        $user = Auth::user();
-
-        $isRequestedTasker = (int) $task->employee_id === (int) $user->id;
-        if (!$isRequestedTasker) {
-            abort(403, 'You are not the requested tasker for this task.');
-        }
+        $this->authorize('acceptDirect', $task);
 
         if (!$task->isOpen()) {
             return back()->with('error', __('This task is no longer open.'));
         }
 
-        $task->update(['status' => TaskStatus::Assigned]);
+        $user = Auth::user();
 
-        $task->employer->notify(new OfferAcceptedNotification($task, $user));
+        $this->offerService->acceptDirectOffer($task, $user);
+        Conversation::findOrCreateBetween($task->employer_id, $user->id);
 
         return redirect()->route('my-tasks', ['view' => 'direct', 'status' => 'pending', 'task_id' => $task->id])
             ->with('success', __('You accepted the task! You can now message the employer.'));
@@ -102,20 +88,7 @@ class OfferController extends Controller
 
     public function destroy(Advertisement $task): RedirectResponse
     {
-        $offer = Offer::where('advertisement_id', $task->id)
-            ->where('user_id', Auth::id())
-            ->first();
-
-        if (!$offer) {
-            return back()->with('error', __('Offer not found.'));
-        }
-
-        $offerPrice = $offer->price;
-        $employer = $task->employer;
-
-        $offer->delete();
-
-        $employer->notify(new OfferCancelledNotification($task, Auth::user(), $offerPrice));
+        $this->offerService->cancelOffer($task, Auth::user());
 
         return back()->with('success', __('Your offer has been cancelled.'));
     }

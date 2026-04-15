@@ -87,7 +87,7 @@ return [
         'home_suburb' => 'Enter your home suburb *',
         'suburb_placeholder' => 'Enter a suburb',
         'invalid_suburb' => 'Please select a valid suburb from the list.',
-        'agree_terms' => 'I agree to the <a href=":terms_url" target="_blank" class="text-blue-600 hover:underline">Terms & Conditions</a>, <a href=":guidelines_url" target="_blank" class="text-blue-600 hover:underline">Community Guidelines</a>, and <a href=":privacy_url" target="_blank" class="text-blue-600 hover:underline">Privacy Policy</a> *',
+        'agree_terms' => 'I agree to the <a href=":terms_url" target="_blank" class="text-[var(--primary-accent)] hover:underline font-semibold">Terms & Conditions</a>, <a href=":guidelines_url" target="_blank" class="text-[var(--primary-accent)] hover:underline font-semibold">Community Guidelines</a>, and <a href=":privacy_url" target="_blank" class="text-[var(--primary-accent)] hover:underline font-semibold">Privacy Policy</a> *',
         'email_updates' => 'Email me when I receive an offer on my task or when my offer is accepted',
         'select_categories' => 'Select categories to track:',
         'complete_account' => 'Complete my account',

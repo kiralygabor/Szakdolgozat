@@ -70,26 +70,3 @@
     </div>
 </div>
 
-<script>
-function openUserReportModal(reportedAccountId) {
-    document.getElementById('user-report-reported-account-id').value = reportedAccountId;
-    document.getElementById('user-report-description').value = '';
-    document.getElementById('user-report-modal').classList.remove('hidden');
-    
-    // Refresh feather icons
-    if (window.feather && typeof window.feather.replace === 'function') {
-        window.feather.replace();
-    }
-}
-
-function closeUserReportModal() {
-    document.getElementById('user-report-modal').classList.add('hidden');
-}
-
-// Close on background click
-document.getElementById('user-report-modal')?.addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeUserReportModal();
-    }
-});
-</script>

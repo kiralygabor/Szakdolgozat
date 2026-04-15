@@ -2,218 +2,156 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use App\Models\Category;
+use Illuminate\Validation\Rules\Password as PasswordRule;
+use App\Models\County;
 use App\Models\User;
 use App\Models\VerifyUser;
-use App\Models\County;
 use App\Mail\VerifyMail;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    /**
-     * Show login form
-     */
+    public function __construct(
+        protected \App\Services\AuthService $authService
+    ) {}
+
     public function index(): View
     {
         return view('auth.login');
     }
 
-    /**
-     * Show registration form
-     */
     public function registration(): View
     {
         $prefill = session('registration_form', []);
+
         return view('auth.registration', compact('prefill'));
     }
 
-    public function registration_settings(): View
+    public function registrationSettings(): View
     {
-        $counties = \App\Models\County::orderBy('name')->get();
-        $categories = \App\Models\Category::orderBy('name')->get();
+        $counties = County::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
+
         return view('auth.registration_settings', compact('counties', 'categories'));
     }
 
-    /**
-     * Handle login request
-     */
-    public function postLogin(Request $request): RedirectResponse
+    public function postLogin(\App\Http\Requests\Auth\LoginEmailRequest $request): RedirectResponse
     {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
 
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('rememberMe'); // true if checked
+        $remember = $request->has('rememberMe');
 
-        if (Auth::attempt($credentials, $remember)) {
+        if (!Auth::attempt($credentials, $remember)) {
+            return back()->withErrors(['email' => __('auth_pages.errors.invalid_credentials')]);
+        }
+
+        $user = Auth::user();
+
+        if (!$user->verified) {
+            Auth::logout();
+            session(['pending_user_id' => $user->id]);
+
+            return redirect()->route('verify.code.form')
+                ->with('status', __('auth_pages.status.verify_code_sent'));
+        }
+
+        // Regenerate session ID to prevent session fixation attacks
+        $request->session()->regenerate();
+
+        return redirect()->route('index')
+            ->withSuccess(__('auth_pages.status.login_success'));
+    }
+
+    public function postRegistration(\App\Http\Requests\Auth\RegistrationStep1Request $request): RedirectResponse
+    {
+
+        if (!User::where('email', $request->email)->exists()) {
+            // Store hashed password in session to avoid plaintext exposure
+            session(['registration_form' => [
+                'email' => $request->email,
+                'password_hash' => Hash::make($request->password),
+            ]]);
+
+            return redirect('registration_settings');
+        }
+
+        if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
 
-            // Block unverified users
             if (!$user->verified) {
                 Auth::logout();
-
-                // store user ID for later verification
                 session(['pending_user_id' => $user->id]);
 
                 return redirect()->route('verify.code.form')
-                    ->with('status', __('auth_pages.status.verify_code_sent'));
+                    ->with('status', __('auth_pages.status.email_already_registered'));
             }
 
             return redirect()->route('index')
-                ->withSuccess(__('auth_pages.status.login_success'));
+                ->withSuccess(__('auth_pages.status.email_in_use_logged_in'));
         }
 
-        return back()->withErrors(['email' => __('auth_pages.errors.invalid_credentials')]);
+        return back()->withInput()->withErrors(['email' => __('auth_pages.errors.email_in_use')]);
     }
 
-    /**
-     * Handle registration request
-     */
-    public function postRegistration(Request $request): RedirectResponse
+    public function postRegistrationSettings(\App\Http\Requests\Auth\RegistrationSettingsRequest $request): RedirectResponse
     {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        $validated = $request->validated();
 
-        // If email already exists, attempt to log in instead
-        if (User::where('email', $request->email)->exists()) {
-            if (Auth::attempt($request->only('email', 'password'))) {
-                $user = Auth::user();
-
-                if (!$user->verified) {
-                    Auth::logout();
-                    session(['pending_user_id' => $user->id]);
-                    return redirect()->route('verify.code.form')
-                        ->with('status', __('auth_pages.status.email_already_registered'));
-                }
-
-                return redirect()->route('index')
-                    ->withSuccess(__('auth_pages.status.email_in_use_logged_in'));
-            }
-
-            return back()->withInput()->withErrors(['email' => __('auth_pages.errors.email_in_use')]);
-        }
-
-        session(['registration_form' => [
-            'email' => $request->email,
-            'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation,
-        ]]);
-
-        return redirect('registration_settings');
-    }
-
-    protected function create(array $data): User
-    {
-        return User::create([
-            'email'    => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-    }
-
-    /**
-     * Registration settings
-     */
-    public function postRegistrationSettings(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'first_name'    => 'required|string|max:100',
-            'last_name'     => 'required|string|max:100',
-            'birthdate'     => 'nullable|date',
-            'phone_number'  => 'nullable|string|max:20',
-            'county_id'     => 'required|integer|exists:counties,id',
-            'city_id'       => 'required|integer|exists:cities,id',
-        ]);
         $registration = session('registration_form');
 
-        if (!$registration || empty($registration['email']) || empty($registration['password'])) {
+        $hasMissingRegistrationData = !$registration || empty($registration['email']) || empty($registration['password_hash']);
+        if ($hasMissingRegistrationData) {
             return redirect('registration')->with('error', __('auth_pages.errors.complete_step_1'));
         }
 
-        // Ensure email is still unique in case something changed meanwhile
         if (User::where('email', $registration['email'])->exists()) {
             return redirect('registration')->withErrors(['email' => __('auth_pages.errors.email_taken')]);
         }
 
-        // Generate a unique account ID (AC prefix + random digits)
-        do {
-            $accountId = 'AC' . str_pad((string)mt_rand(1, 999999), 4, '0', STR_PAD_LEFT);
-        } while (User::where('account_id', $accountId)->exists());
+        $user = $this->authService->registerUser(
+            $registration,
+            $validated,
+            $request->has('email_notifications'),
+            $request->has('email_task_digest'),
+            $request->input('tracked_categories')
+        );
 
-        $user = User::create([
-            'email'           => $registration['email'],
-            'password'        => Hash::make($registration['password']),
-            'account_id'      => $accountId,
-            'first_name'      => $validated['first_name'],
-            'last_name'       => $validated['last_name'],
-            'birthdate'       => $validated['birthdate'] ?? null,
-            'phone_number'    => $validated['phone_number'] ?? null,
-            'city_id'         => (int) $validated['city_id'],
-            'avatar'          => 'assets/img/default.jpg',
-            'email_notifications' => $request->has('email_notifications'),
-            'email_task_digest' => $request->has('email_task_digest'),
-            'locale'          => session('locale', config('app.locale', 'en')),
-        ]);
-
-        // Sync tracked categories if opted in
-        if ($request->has('email_task_digest') && $request->has('tracked_categories')) {
-            $user->trackedCategories()->sync($request->input('tracked_categories'));
-        }
-
-        // Create verification token
-        $verifyUser = VerifyUser::create([
-            'user_id' => $user->id,
-            'token'   => rand(100000, 999999),
-        ]);
-
-        // Send verification email
-        Mail::to($user->email)->locale($user->preferredLocale())->send(new VerifyMail($user, $verifyUser->token));
-
-        // Clear registration data from session
         session()->forget('registration_form');
-
         session(['pending_user_id' => $user->id]);
 
         return redirect()->route('verify.code.form')
             ->with('status', __('auth_pages.status.verification_sent'));
     }
 
-    /**
-     * Show verify code page
-     */
     public function showVerifyCodeForm(): View|RedirectResponse
-{
-    
-    if (!session('pending_user_id')) {
-        return redirect()->route('login')
-            ->withErrors(['email' => __('auth_pages.errors.session_expired')]);
+    {
+        $pendingUserId = session('pending_user_id');
+
+        if (!$pendingUserId) {
+            return redirect()->route('login')
+                ->withErrors(['email' => __('auth_pages.errors.session_expired')]);
+        }
+
+        $user = User::find($pendingUserId);
+
+        if (!$user) {
+            return redirect()->route('login')
+                ->withErrors(['email' => __('auth_pages.errors.user_not_found')]);
+        }
+
+        return view('auth.verify-code', compact('user'));
     }
 
-    $user = User::find(session('pending_user_id'));
-
-    if (!$user) {
-        return redirect()->route('login')
-            ->withErrors(['email' => __('auth_pages.errors.user_not_found')]);
-    }
-
-    return view('auth.verify-code', compact('user'));
-}
-
-    /**
-     * Verify code
-     */
     public function verifyCode(Request $request): RedirectResponse
     {
         $request->validate([
@@ -225,51 +163,36 @@ class AuthController extends Controller
             return back()->withErrors(['code' => __('auth_pages.errors.session_expired')]);
         }
 
-        $verifyUser = VerifyUser::where('user_id', $userId)
-            ->where('token', $request->code)
-            ->first();
+        $user = User::findOrFail($userId);
 
-        if (!$verifyUser) {
+        if (!$this->authService->verifyUser($user, $request->code)) {
             return back()->withErrors(['code' => __('auth_pages.errors.invalid_code')]);
         }
-
-        $user = $verifyUser->user;
-        $user->verified = true;
-        $user->save();
 
         session()->forget('pending_user_id');
 
         return redirect('/login')->with('status', __('auth_pages.status.account_verified'));
     }
 
-    /**
-     * Resend verification code
-     */
     public function resendCode(): RedirectResponse
     {
         $userId = session('pending_user_id');
         if (!$userId) {
-            return redirect()->route('login')->withErrors(['email' => 'Session expired. Please login again.']);
+            return redirect()->route('login')
+                ->withErrors(['email' => __('auth_pages.errors.session_expired')]);
         }
 
         $user = User::find($userId);
         if (!$user) {
-            return redirect()->route('login')->withErrors(['email' => 'User not found.']);
+            return redirect()->route('login')
+                ->withErrors(['email' => __('auth_pages.errors.user_not_found')]);
         }
 
-        $verifyUser = VerifyUser::updateOrCreate(
-            ['user_id' => $user->id],
-            ['token' => rand(100000, 999999)]
-        );
-
-        Mail::to($user->email)->locale($user->preferredLocale())->send(new VerifyMail($user, $verifyUser->token));
+        $this->authService->sendVerificationCode($user);
 
         return back()->with('status', __('auth_pages.status.new_code_sent'));
     }
 
-    /**
-     * Forgot password + reset methods
-     */
     public function showForgotPasswordForm(): View
     {
         return view('auth.forgot-password');
@@ -296,7 +219,7 @@ class AuthController extends Controller
         $request->validate([
             'token'    => 'required',
             'email'    => 'required|email',
-            'password' => 'required|min:6|confirmed',
+            'password' => ['required', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()],
         ]);
 
         $status = Password::reset(
@@ -316,16 +239,14 @@ class AuthController extends Controller
             : back()->withErrors(['email' => [__($status)]]);
     }
 
-    
-
-    /**
-     * Logout
-     */
-    public function logout(): RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
-        Session::flush();
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('index');
     }
+
 }

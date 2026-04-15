@@ -87,7 +87,7 @@ return [
         'home_suburb' => 'Adja meg a lakóhelyét *',
         'suburb_placeholder' => 'Város megadása',
         'invalid_suburb' => 'Kérjük, válasszon egy érvényes várost a listából.',
-        'agree_terms' => 'Elfogadom az <a href=":terms_url" target="_blank" class="text-blue-600 hover:underline">Általános Szerződési Feltételeket</a>, a <a href=":guidelines_url" target="_blank" class="text-blue-600 hover:underline">Közösségi Irányelveket</a> és az <a href=":privacy_url" target="_blank" class="text-blue-600 hover:underline">Adatvédelmi Nyilatkozatot</a> *',
+        'agree_terms' => 'Elfogadom az <a href=":terms_url" target="_blank" class="text-[var(--primary-accent)] hover:underline font-semibold">Általános Szerződési Feltételeket</a>, a <a href=":guidelines_url" target="_blank" class="text-[var(--primary-accent)] hover:underline font-semibold">Közösségi Irányelveket</a> és az <a href=":privacy_url" target="_blank" class="text-[var(--primary-accent)] hover:underline font-semibold">Adatvédelmi Nyilatkozatot</a> *',
         'email_updates' => 'Kérek e-mail értesítést, ha ajánlat érkezik a feladatomra, vagy ha az ajánlatomat elfogadják',
         'select_categories' => 'Követett kategóriák',
         'complete_account' => 'Fiók létrehozása',

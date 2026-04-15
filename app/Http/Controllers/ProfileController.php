@@ -40,6 +40,11 @@ class ProfileController extends Controller
 
     public function updateNotifications(Request $request): RedirectResponse
     {
+        $request->validate([
+            'tracked_categories'   => 'nullable|array',
+            'tracked_categories.*' => 'integer|exists:categories,id',
+        ]);
+
         $user = Auth::user();
 
         $user->email_notifications = $request->has('email_notifications');
@@ -58,13 +63,9 @@ class ProfileController extends Controller
             ->with('success', __('Settings updated.'));
     }
 
-    public function updateSettings(Request $request): JsonResponse
+    public function updateSettings(\App\Http\Requests\Profile\UpdateSettingsRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'theme' => 'nullable|string|in:light,dark,system',
-            'reduced_motion' => 'nullable|boolean',
-            'high_contrast' => 'nullable|boolean',
-        ]);
+        $validated = $request->validated();
 
         Auth::user()->update($validated);
 

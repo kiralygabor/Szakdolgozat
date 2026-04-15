@@ -8,11 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SetLocale
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
         $locale = session('locale');
@@ -28,7 +23,8 @@ class SetLocale
             $locale = config('app.locale', 'en');
         }
 
-        if (in_array($locale, ['en', 'hu'])) {
+        $supportedLocales = config('app.supported_locales', ['en', 'hu']);
+        if (in_array($locale, $supportedLocales)) {
             app()->setLocale($locale);
         }
 

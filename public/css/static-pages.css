@@ -1,0 +1,40 @@
+    /* Static Content Pages (Legal, Support, etc.) */
+    .static-container {
+      --static-bg: var(--bg-secondary);
+      --static-card-bg: var(--bg-primary);
+      --static-text-main: var(--text-primary);
+      --static-text-muted: var(--text-secondary);
+      --static-accent: var(--primary-accent);
+      --static-border: var(--border-base);
+    }
+
+    .high-contrast .static-container {
+      --static-bg: #ffffff;
+      --static-card-bg: #ffffff;
+      --static-text-main: #000000;
+      --static-text-muted: #000000;
+      --static-accent: #000000;
+      --static-border: #000000;
+    }
+
+    .high-contrast code,
+    .high-contrast .prose,
+    .high-contrast .prose *,
+    .high-contrast .static-text-main,
+    .high-contrast .static-accent {
+      color: #000000 !important;
+    }
+
+    .high-contrast code {
+      background: #f1f5f9 !important;
+      border: 1px solid #000000 !important;
+      padding: 0.1rem 0.3rem !important;
+    }
+
+    .static-bg { background-color: var(--static-bg); }
+    .static-card { background-color: var(--static-card-bg); border: 1px solid var(--static-border); }
+    .static-text-main { color: var(--static-text-main); }
+    .static-text-muted { color: var(--static-text-muted); }
+    .static-accent { color: var(--static-accent); }
+    .static-border-color { border-color: var(--static-border); }
+    

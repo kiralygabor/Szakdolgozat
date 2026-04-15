@@ -15,6 +15,10 @@ class Offer extends Model
         'status',
     ];
 
+    protected $casts = [
+        'status' => \App\Enums\OfferStatus::class,
+    ];
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(Advertisement::class, 'advertisement_id');

@@ -2,56 +2,35 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\ResetPasswordNotification;
-use App\Utils\GeneratesAccountId;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property int $id
+ * @property string $email
+ */
 class User extends Authenticatable implements HasLocalePreference
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string  $token
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPasswordNotification($token, app()->getLocale()));
-    }
-
-    /**
-     * Get the user's preferred locale.
-     */
-    public function preferredLocale(): string
-    {
-        return $this->locale ?? config('app.locale');
-    }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
          'first_name',
          'last_name',
          'birthdate',
          'phone_number',
          'email',
-         'password',
          'account_id',
          'city_id',
          'avatar',
          'google_id',
          'facebook_id',
-         'verified',
          'email_notifications',
          'email_task_digest',
          'email_direct_quotes',
@@ -61,26 +40,17 @@ class User extends Authenticatable implements HasLocalePreference
          'high_contrast',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'birthdate' => 'date:Y-m-d',
+            'verified' => 'boolean',
             'password' => 'hashed',
             'email_notifications' => 'boolean',
             'email_task_digest' => 'boolean',
@@ -90,6 +60,16 @@ class User extends Authenticatable implements HasLocalePreference
         ];
     }
 
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token, app()->getLocale()));
+    }
+
+    public function preferredLocale(): string
+    {
+        return $this->locale ?? config('app.locale');
+    }
+
     // ── Domain Helpers ────────────────────────────────────────
 
     public function hasIncompleteProfile(): bool
@@ -97,48 +77,26 @@ class User extends Authenticatable implements HasLocalePreference
         return empty($this->avatar) || empty($this->city_id);
     }
 
-    // ── Relationships ────────────────────────────────────────
-
-    public function city()
+    public function getMissingProfileSteps(): array
     {
-        return $this->belongsTo(City::class);
+        $steps = [];
+        
+        if (empty($this->avatar) || str_contains($this->avatar, 'default.jpg')) {
+            $steps[] = ['text' => __('tasks_page.missing_steps.picture', [], $this->preferredLocale()), 'icon' => 'user'];
+        }
+        if (empty($this->birthdate)) {
+            $steps[] = ['text' => __('tasks_page.missing_steps.birthdate', [], $this->preferredLocale()), 'icon' => 'calendar'];
+        }
+        if (empty($this->phone_number)) {
+            $steps[] = ['text' => __('tasks_page.missing_steps.mobile', [], $this->preferredLocale()), 'icon' => 'smartphone'];
+        }
+        if (empty($this->city_id)) {
+            $steps[] = ['text' => __('tasks_page.missing_steps.location', [], $this->preferredLocale()), 'icon' => 'map-pin'];
+        }
+
+        return $steps;
     }
 
-    public function verifyUser()
-    {
-        return $this->hasOne(VerifyUser::class);
-    }
-
-    public function category()
-    {
-        return $this->hasOne(Category::class);
-    }
-    public function advertisements()
-    {
-        return $this->hasMany(Advertisement::class, 'employer_id', 'id');
-    }
-
-    public function trackedCategories()
-    {
-        return $this->belongsToMany(Category::class, 'tracked_categories')
-            ->withPivot('last_digest_sent_at')
-            ->withTimestamps();
-    }
-
-    public function reviewsReceived()
-    {
-        return $this->hasMany(Review::class, 'target_user_id');
-    }
-
-    public function getRatingAttribute()
-    {
-        $avg = $this->reviewsReceived()->avg('stars');
-        return $avg ? round($avg, 1) : 0;
-    }
-
-    /**
-     * Get the full URL for the user's avatar.
-     */
     public function getAvatarUrlAttribute(): string
     {
         if (!$this->avatar) {
@@ -153,7 +111,47 @@ class User extends Authenticatable implements HasLocalePreference
             return asset($this->avatar);
         }
 
-        // If it's a storage path (like 'avatars/xxx.png'), use Storage::url
-        return asset('storage/' . ltrim($this->avatar, '/'));
+        return url('storage/' . ltrim($this->avatar, '/'));
+    }
+
+    public function getRatingAttribute(): float
+    {
+        $average = $this->reviewsReceived()->avg('stars');
+
+        return $average ? round($average, 1) : 0;
+    }
+
+    // ── Relationships ────────────────────────────────────────
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function verifyUser(): HasOne
+    {
+        return $this->hasOne(VerifyUser::class);
+    }
+
+    public function category(): HasOne
+    {
+        return $this->hasOne(Category::class);
+    }
+
+    public function advertisements(): HasMany
+    {
+        return $this->hasMany(Advertisement::class, 'employer_id', 'id');
+    }
+
+    public function trackedCategories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'tracked_categories')
+            ->withPivot('last_digest_sent_at')
+            ->withTimestamps();
+    }
+
+    public function reviewsReceived(): HasMany
+    {
+        return $this->hasMany(Review::class, 'target_user_id');
     }
 }

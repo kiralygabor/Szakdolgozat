@@ -10,21 +10,29 @@ use App\Models\Job;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PagesController extends Controller
 {
-    /**
-     * Home page with category/job showcase.
-     */
+    private const SHOWCASE_ITEMS_PER_CATEGORY = 6;
+    private const ACTIVE_TASKS_LIMIT = 3;
+    private const MIN_SEARCH_LENGTH = 2;
+    private const CITY_RESULTS_LIMIT = 20;
+    private const ITEMS_PER_PAGE = 20;
+
+    private const EXCLUDED_CATEGORIES = [
+        'Renovations & Construction',
+        'Events',
+        'Renovation & Construction',
+        'Events & Creative',
+    ];
+
     public function index(): View
     {
-        $excludedCategories = ['Renovations & Construction', 'Events', 'Renovation & Construction', 'Events & Creative'];
-
-        $categories = Category::whereNotIn('name', $excludedCategories)
+        $categories = Category::whereNotIn('name', self::EXCLUDED_CATEGORIES)
             ->whereHas('advertisements', function ($query) {
                 $query->open();
             })
@@ -36,7 +44,7 @@ class PagesController extends Controller
             ->map(function ($category) {
                 return [
                     'category' => $category,
-                    'jobs' => $category->advertisements->take(6),
+                    'jobs' => $category->advertisements->take(self::SHOWCASE_ITEMS_PER_CATEGORY),
                 ];
             });
 
@@ -45,9 +53,6 @@ class PagesController extends Controller
         ]);
     }
 
-    /**
-     * Browse categories.
-     */
     public function category(): View
     {
         $categories = Category::orderByRaw("name = 'Other' ASC, name ASC")->get();
@@ -59,41 +64,41 @@ class PagesController extends Controller
         return view('pages.category', compact('categories', 'jobsByCategory'));
     }
 
-    /**
-     * Display the My Tasks dashboard.
-     */
     public function myTasks(Request $request): View
     {
         $userId = Auth::id();
         $viewMode = $request->query('view', 'posted');
         $status = (string) $request->query('status', 'posted');
 
-        $query = Advertisement::query()
+        $tasks = Advertisement::query()
             ->with(['job.category', 'employer.city', 'offers.user', 'employee'])
-            ->withCount(['offers', 'distinctViews as views_count']);
+            ->withCount(['offers', 'distinctViews as views_count'])
+            ->forMyTasks($userId, $viewMode)
+            ->byStatusFilter($status)
+            ->latest()
+            ->paginate(self::ITEMS_PER_PAGE)
+            ->withQueryString();
 
-        // Context Switching (Posted, Applied, Direct)
-        if ($viewMode === 'applied') {
-            $query->whereHas('offers', fn($q) => $q->where('user_id', $userId));
-        } elseif ($viewMode === 'direct') {
-            $query->where('is_direct', true)->where(fn($q) => $q->where('employer_id', $userId)->orWhere('employee_id', $userId));
-        } else {
-            $query->where('employer_id', $userId)->where('is_direct', false);
+        $focusedTask = null;
+        if ($request->has('task_id')) {
+            $focusedId = (int) $request->query('task_id');
+            // Try to find it in the current set first for efficiency
+            $focusedTask = $tasks->getCollection()->firstWhere('id', $focusedId);
+            
+            // If not in current page, fetch it specifically (optional, but good for UX)
+            if (!$focusedTask) {
+                $focusedTask = Advertisement::with(['job.category', 'employer.city', 'offers.user', 'employee'])
+                    ->withCount(['offers', 'distinctViews as views_count'])
+                    ->find($focusedId);
+            }
         }
 
-        // Status Filtering
-        if ($status === 'pending' || $status === 'assigned') {
-            $query->where('status', TaskStatus::Assigned);
-        } elseif ($status === 'completed') {
-            $query->where('status', TaskStatus::Completed);
-        } else {
-            $query->where('status', TaskStatus::Open);
-        }
-
-        $tasks = $query->latest()->paginate(20)->withQueryString();
-
+        $allCategories = Category::with('jobs')->orderBy('name')->get();
+        
         return view('pages.mytasks', [
             'tasks' => $tasks,
+            'focusedTask' => $focusedTask,
+            'allCategories' => $allCategories,
             'viewMode' => $viewMode,
             'filters' => [
                 'q' => (string) $request->query('q', ''),
@@ -101,64 +106,99 @@ class PagesController extends Controller
                 'view' => $viewMode,
             ],
         ]);
+
     }
 
-    /**
-     * External notifications view.
-     */
     public function notifications(): View
     {
-        $notifications = Auth::user()->notifications()->latest()->get();
+        $notifications = Auth::user()->unreadNotifications()->latest()->get();
+
         return view('pages.notifications', compact('notifications'));
     }
 
-    /**
-     * Public user profile show page.
-     */
     public function publicProfile($id): View
     {
-        $user = User::with(['city', 'reviewsReceived.reviewer'])->findOrFail($id);
-        
-        // Active tasks by this user
-        $activeTasks = Advertisement::where('employer_id', $user->id)->open()->latest()->take(3)->get();
+        $user = User::with(['city', 'reviewsReceived.reviewer'])->findOrFail((int) $id);
+        $activeTasks = Advertisement::where('employer_id', $user->id)
+            ->open()
+            ->latest()
+            ->take(self::ACTIVE_TASKS_LIMIT)
+            ->get();
+
+        $canReview = false;
+        if (Auth::check() && Auth::id() !== $user->id) {
+            $alreadyReviewed = Review::where('reviewer_id', Auth::id())
+                ->where('target_user_id', $user->id)
+                ->exists();
+
+            if (!$alreadyReviewed) {
+                $canReview = Advertisement::where(function($q) use ($user) {
+                    $q->where('employer_id', $user->id)->where('employee_id', Auth::id());
+                })->orWhere(function($q) use ($user) {
+                    $q->where('employer_id', Auth::id())->where('employee_id', $user->id);
+                })->where('status', TaskStatus::Completed)->exists();
+            }
+        }
 
         return view('pages.public-profile', [
             'user' => $user,
             'activeTasks' => $activeTasks,
             'reviews' => $user->reviewsReceived()->latest()->get(),
+            'canReview' => $canReview,
         ]);
     }
 
-    /**
-     * AJAX City Search endpoint.
-     */
     public function searchCities(Request $request): JsonResponse
     {
         $search = $request->string('q', '');
-        if (strlen($search) < 2) return response()->json([]);
+
+        if (strlen($search) < self::MIN_SEARCH_LENGTH) {
+            return response()->json([]);
+        }
 
         $cities = City::where('name', 'like', $search . '%')
             ->orWhere('name', 'like', '% ' . $search . '%')
             ->orderBy('name')
-            ->limit(20)
+            ->limit(self::CITY_RESULTS_LIMIT)
             ->get(['id', 'name', 'county_id']);
 
         return response()->json($cities);
     }
 
-    /**
-     * Helper to store a profile review.
-     */
-    public function storeReview(Request $request, $id): RedirectResponse
+    public function storeReview(\App\Http\Requests\Task\ReviewEmployerRequest $request, $id): RedirectResponse
     {
-        $request->validate([
-            'stars' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string|max:500',
-        ]);
+        $request->validated();
+
+        $targetUserId = (int) $id;
+
+        // Prevent self-reviews
+        if (Auth::id() === $targetUserId) {
+            return back()->with('error', __('You cannot review yourself.'));
+        }
+
+        // Prevent duplicate reviews
+        $alreadyReviewed = Review::where('reviewer_id', Auth::id())
+            ->where('target_user_id', $targetUserId)
+            ->exists();
+
+        if ($alreadyReviewed) {
+            return back()->with('error', __('You have already reviewed this user.'));
+        }
+
+        // Verify they have done a job together
+        $hasCompletedJob = Advertisement::where(function($q) use ($targetUserId) {
+                $q->where('employer_id', $targetUserId)->where('employee_id', Auth::id());
+            })->orWhere(function($q) use ($targetUserId) {
+                $q->where('employer_id', Auth::id())->where('employee_id', $targetUserId);
+            })->where('status', TaskStatus::Completed)->exists();
+
+        if (!$hasCompletedJob) {
+            return back()->with('error', __('You must complete at least one job with this user to leave a review.'));
+        }
 
         Review::create([
             'reviewer_id' => Auth::id(),
-            'target_user_id' => $id,
+            'target_user_id' => $targetUserId,
             'stars' => $request->input('stars'),
             'comment' => $request->input('comment'),
         ]);
@@ -166,12 +206,10 @@ class PagesController extends Controller
         return back()->with('success', __('Review submitted successfully.'));
     }
 
-    /**
-     * Mark all notifications as read.
-     */
     public function markAllRead(): JsonResponse
     {
         Auth::user()->unreadNotifications->markAsRead();
+
         return response()->json(['success' => true]);
     }
 }

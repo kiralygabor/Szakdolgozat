@@ -67,4 +67,8 @@ return [
     ],
     'requesting_quote_from' => 'Ajánlatkérés tőle:',
     'requesting_quote_desc' => 'Ez a feladat kifejezetten neki lesz elküldve.',
+    'validation' => [
+        'date' => 'megadott dátum',
+        'today' => 'mai nap'
+    ],
 ];

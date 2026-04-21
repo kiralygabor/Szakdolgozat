@@ -23,17 +23,37 @@ export class ProfileManager {
     }
 
     /**
-     * Handle tab switching via URL and bootstrap
+     * Handle manual tab switching to ensure focus and accessibility control
      */
     initTabs() {
+        const tabs = document.querySelectorAll('.sub-menu-link[data-section]');
+        const panes = document.querySelectorAll('.tab-pane');
+
+        const switchTab = (sectionId) => {
+            tabs.forEach(t => t.classList.toggle('active', t.getAttribute('data-section') === sectionId));
+            panes.forEach(p => {
+                const isActive = p.id === sectionId;
+                p.classList.toggle('show', isActive);
+                p.classList.toggle('active', isActive);
+            });
+            // Update URL without reload if possible
+            const url = new URL(window.location);
+            url.searchParams.set('tab', sectionId);
+            window.history.replaceState({}, '', url);
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchTab(tab.getAttribute('data-section'));
+            });
+        });
+
+        // Initialize from URL param
         const urlParams = new URLSearchParams(window.location.search);
         const tabParam = urlParams.get('tab');
         if (tabParam) {
-            const tabEl = document.getElementById(`${tabParam}-tab`);
-            if (tabEl && typeof bootstrap !== 'undefined') {
-                const bstab = new bootstrap.Tab(tabEl);
-                bstab.show();
-            }
+            switchTab(tabParam);
         }
     }
 
@@ -53,6 +73,17 @@ export class ProfileManager {
                 reader.readAsDataURL(file);
             }
         });
+
+        // Keyboard support for the label-based upload button
+        const label = document.querySelector('label[for="avatarInput"]');
+        if (label) {
+            label.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    input.click();
+                }
+            });
+        }
     }
 
     /**
@@ -113,16 +144,20 @@ export class ProfileManager {
             });
         }
 
-        applyBtn.addEventListener('click', () => {
+        applyBtn.addEventListener('click', async () => {
             const theme = themeSelect?.value || 'light';
             const isAccEnabled = masterAcc ? masterAcc.checked : false;
             const rm = isAccEnabled ? (rmToggle?.checked || false) : false;
             const hc = isAccEnabled ? (hcToggle?.checked || false) : false;
 
-            // Apply locally
-            ThemeEngine.applyTheme(theme);
-            ThemeEngine.applyAcc('reduced-motion', rm);
-            ThemeEngine.applyAcc('high-contrast', hc);
+            // Apply locally and save to DB
+            // We use Promise.all to save everything together if possible, 
+            // though currently saveSettings sends separate requests.
+            await Promise.all([
+                ThemeEngine.applyTheme(theme),
+                ThemeEngine.applyAcc('reduced-motion', rm),
+                ThemeEngine.applyAcc('high-contrast', hc)
+            ]);
 
             // Handle language redirect
             if (langSelect) {

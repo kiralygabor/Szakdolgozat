@@ -81,7 +81,6 @@
         @guest
           <div class="mobile-guest-btns flex items-center gap-2">
             <a href="{{ route('login') }}" class="mobile-login-btn px-4 py-1.5 rounded-lg bg-[var(--primary-accent)] text-white text-sm font-medium no-underline">{{ __('navbar.login') }}</a>
-            <a href="{{ route('register') }}" class="mobile-signup-btn px-4 py-1.5 rounded-lg border border-[var(--primary-accent)] text-[var(--primary-accent)] text-sm font-medium no-underline">{{ __('navbar.sign_up') }}</a>
           </div>
         @endguest
       </div>
@@ -120,7 +119,7 @@
             <i data-feather="message-square" class="w-4 h-4"></i> {{ __('navbar.messages') ?? 'Messages' }}
           </a>
 
-          <a href="{{ route('post-task') }}" class="check-login-trigger mobile-sidebar-cta btn w-full bg-[var(--primary-accent)] text-white font-bold py-3 rounded-xl mt-4 text-center">
+          <a href="{{ route('post-task') }}" class="check-login-trigger mobile-sidebar-cta btn w-full bg-[var(--primary-accent)] text-white font-bold py-3 rounded-xl mt-4 text-center transition-colors duration-200">
             {{ __('navbar.post_task') }}
           </a>
 
@@ -162,10 +161,10 @@
         </div>
 
         @guest
-          <div class="mobile-sidebar-guest-container p-4 space-y-3">
-            <a href="{{ route('login') }}" class="mobile-sidebar-cta btn w-full bg-[var(--primary-accent)] text-white font-bold py-3 rounded-xl block text-center">
+          <div class="mobile-sidebar-guest-container p-4 space-y-3 flex flex-col items-center">
+            <a href="{{ route('login') }}" class="mobile-sidebar-cta btn w-full bg-[var(--primary-accent)] text-white font-bold py-3 rounded-xl block text-center transition-colors duration-200">
               {{ __('navbar.login') }}</a>
-            <a href="{{ route('register') }}" class="mobile-sidebar-cta btn w-full border border-[var(--primary-accent)] text-[var(--primary-accent)] font-bold py-3 rounded-xl block text-center">
+            <a href="{{ route('register') }}" class="mobile-sidebar-cta btn w-full border border-[var(--primary-accent)] text-[var(--primary-accent)] font-bold py-3 rounded-xl block text-center transition-colors duration-200">
               {{ __('navbar.sign_up') }}</a>
           </div>
         @endguest
@@ -186,7 +185,7 @@
           <!-- CENTER & RIGHT: Center Links and Auth (aligned with Section location) -->
           <div class="flex-1 flex justify-between items-center md:pl-10">
             <div class="flex items-center space-x-5">
-              <a href="{{ route('post-task') }}" class="check-login-trigger px-4 py-2 rounded-lg bg-[var(--primary-accent)] hover:bg-[var(--primary-hover)] text-white font-semibold btn transition-colors">
+              <a href="{{ route('post-task') }}" class="check-login-trigger px-4 py-2 rounded-lg bg-[var(--primary-accent)] hover:bg-[var(--primary-hover)] focus:bg-[var(--primary-hover)] focus:text-white focus:ring-0 focus:outline focus:outline-4 focus:outline-offset-2 focus:outline-[var(--primary-accent)] text-white font-semibold btn transition-colors">
                 {{ __('navbar.post_task') }}
               </a>
 
@@ -453,7 +452,7 @@
                   <div class="flex flex-col" role="none">
                     <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                        class="submenu-trigger w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
                         <i data-feather="chevron-left"
                           class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
                         <i data-feather="sun" class="w-4 h-4 text-[var(--nav-muted)]"></i>
@@ -473,7 +472,7 @@
                     <!-- Language -->
                     <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                        class="submenu-trigger w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
                         <i data-feather="chevron-left"
                           class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
                         <i data-feather="globe" class="w-4 h-4 text-[var(--nav-muted)]"></i>
@@ -491,7 +490,7 @@
                     <!-- Accessibility -->
                     <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                        class="submenu-trigger w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
                         <i data-feather="chevron-left"
                           class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
                         <i data-feather="eye" class="w-4 h-4 text-[var(--nav-muted)]"></i>
@@ -506,7 +505,7 @@
                           <span>{{ __('navbar.reduced_motion') }}</span>
                           <div id="nav-reduced-motion-indicator"
                             class="acc-slider-track w-8 h-4 bg-[var(--border-base)] rounded-full relative">
-                            <div class="acc-slider-circle absolute bg-[var(--nav-bg)] rounded-full">
+                            <div class="acc-slider-circle absolute rounded-full">
                             </div>
                           </div>
                         </button>
@@ -516,7 +515,7 @@
                           <span>{{ __('navbar.high_contrast') }}</span>
                           <div id="nav-high-contrast-indicator"
                             class="acc-slider-track w-8 h-4 bg-[var(--border-base)] rounded-full relative">
-                            <div class="acc-slider-circle absolute bg-[var(--nav-bg)] rounded-full">
+                            <div class="acc-slider-circle absolute rounded-full">
                             </div>
                           </div>
                         </button>
@@ -525,7 +524,7 @@
                     <!-- Extras -->
                     <div class="group relative" role="none">
                       <button type="button"
-                        class="w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
+                        class="submenu-trigger w-full text-left py-2.5 px-3 text-[var(--text-primary)] font-semibold hover:bg-[var(--nav-dropdown-hover)] rounded-lg flex items-center gap-3 transition-colors">
                         <i data-feather="chevron-left"
                           class="w-4 h-4 text-[var(--nav-muted)] group-hover:-translate-x-0.5 transition-transform"></i>
                         <i data-feather="more-horizontal" class="w-4 h-4 text-[var(--nav-muted)]"></i>

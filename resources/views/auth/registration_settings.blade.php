@@ -50,13 +50,13 @@
                                 <button type="button" data-acc-toggle="reduced-motion" class="w-full text-left px-3 py-2 hover:bg-[var(--nav-dropdown-hover)] rounded flex items-center justify-between text-sm transition-colors text-[var(--text-primary)]" role="menuitem">
                                     <span>{{ __('navbar.reduced_motion') }}</span>
                                     <div id="nav-reduced-motion-indicator" class="acc-slider-track w-8 h-4 bg-[var(--border-base)] rounded-full relative">
-                                        <div class="acc-slider-dot absolute w-3 h-3 bg-[var(--nav-bg)] rounded-full border border-[var(--nav-border)] shadow-sm"></div>
+                                        <div class="acc-slider-circle absolute rounded-full"></div>
                                     </div>
                                 </button>
                                 <button type="button" data-acc-toggle="high-contrast" class="w-full text-left px-3 py-2 hover:bg-[var(--nav-dropdown-hover)] rounded flex items-center justify-between text-sm transition-colors text-[var(--text-primary)]" role="menuitem">
                                     <span>{{ __('navbar.high_contrast') }}</span>
                                     <div id="nav-high-contrast-indicator" class="acc-slider-track w-8 h-4 bg-[var(--border-base)] rounded-full relative">
-                                        <div class="acc-slider-dot absolute w-3 h-3 bg-[var(--nav-bg)] rounded-full border border-[var(--nav-border)] shadow-sm"></div>
+                                        <div class="acc-slider-circle absolute rounded-full"></div>
                                     </div>
                                 </button>
                             </div>
@@ -93,7 +93,7 @@
  
         <form method="POST" action="{{ route('registration_settings.post') }}" id="setup-form">
             @csrf
-            
+           
             <!-- First Name -->
             <div class="mb-6">
                 <label for="first_name" class="block text-sm font-bold text-[var(--primary-accent)] mb-2">{{ __('profile_page.registration.first_name') }}</label>
@@ -178,13 +178,13 @@
 <script type="module">
     import { Autocomplete } from '{{ asset('js/modules/autocomplete.js') }}';
     import { Config } from '{{ asset('js/modules/config.js') }}';
-
+ 
     // 1. Initialize Autocomplete
     const cityIdInput = document.getElementById('city_id');
     const countyIdInput = document.getElementById('county_id');
     const cityInput = document.getElementById('city_search');
     const submitBtn = document.getElementById('submit-btn');
-
+ 
     new Autocomplete({
         input: cityInput,
         dropdown: document.getElementById('city_dropdown'),
@@ -200,21 +200,21 @@
             updateSubmitState();
         }
     });
-
+ 
     // 2. Form Validation Logic
     const form = document.getElementById('setup-form');
     const requiredInputs = form.querySelectorAll('input[required]');
-
+ 
     function updateSubmitState() {
         const isFormFilled = Array.from(requiredInputs).every(input => {
             return input.type === 'checkbox' ? input.checked : input.value.trim() !== '';
         });
-
+ 
         const isLocationSelected = !!cityIdInput.value;
         const isValid = isFormFilled && isLocationSelected;
-
+ 
         submitBtn.disabled = !isValid;
-        
+       
         // Dynamic styling using theme-aware variables
         if (isValid) {
             submitBtn.classList.remove('bg-[var(--border-base)]', 'text-[var(--text-muted)]');
@@ -224,13 +224,13 @@
             submitBtn.classList.remove('bg-[var(--primary-accent)]', 'text-white', 'hover:bg-[var(--primary-hover)]');
         }
     }
-
+ 
     form.addEventListener('input', updateSubmitState);
     form.addEventListener('change', updateSubmitState);
-
+ 
     // Bootstrap feathered icons
     if (window.feather) feather.replace();
-
+ 
     // Initial check
     updateSubmitState();
 </script>

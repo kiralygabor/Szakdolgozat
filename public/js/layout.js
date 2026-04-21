@@ -121,7 +121,7 @@ function initThemeSystems() {
             const current = (window.userSettings && type.replace('-', '_') in window.userSettings)
                 ? window.userSettings[type.replace('-', '_')]
                 : document.documentElement.classList.contains(type);
-            
+
             const newVal = !current;
             if (type === 'high-contrast' && newVal) {
                 ThemeEngine.applyTheme('light');
@@ -145,6 +145,9 @@ function initThemeSystems() {
  */
 function initSharedHandlers() {
     window.logout = () => {
+        document.cookie = "theme=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "contrast=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "reduced_motion=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         const form = document.getElementById('universal-logout-form');
         if (form) form.submit();
     };
@@ -305,7 +308,7 @@ function initNavbarHandlers() {
             const current = (window.userSettings && type.replace('-', '_') in window.userSettings)
                 ? window.userSettings[type.replace('-', '_')]
                 : document.documentElement.classList.contains(type);
-            
+
             const newVal = !current;
             if (type === 'high-contrast' && newVal) {
                 ThemeEngine.applyTheme('light');
@@ -320,5 +323,24 @@ function initNavbarHandlers() {
     // 4. Mark All Read
     document.querySelectorAll('.mark-all-read-trigger').forEach(el => {
         el.addEventListener('click', () => window.markNotificationsRead());
+    });
+
+    // 5. Settings Submenu Triggers (Keyboard Support)
+    document.querySelectorAll('.submenu-trigger').forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            const submenu = trigger.nextElementSibling;
+            if (submenu && submenu.classList.contains('submenu')) {
+                // If this is a click from keyboard (Enter), toggle it
+                // We don't preventDefault so that click-based interactions still work
+                const wasShowing = submenu.classList.contains('show-submenu');
+
+                // Close others
+                document.querySelectorAll('.submenu.show-submenu').forEach(s => s.classList.remove('show-submenu'));
+
+                if (!wasShowing) {
+                    submenu.classList.add('show-submenu');
+                }
+            }
+        });
     });
 }

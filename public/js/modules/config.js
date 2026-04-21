@@ -5,7 +5,7 @@ export const Config = {
     // API Endpoints
     api: {
         cities: '/api/cities',
-        settings: '/profile/settings-update', // Unified endpoint
+        settings: '/profile/settings', // Unified endpoint
         notificationsMarkRead: '/notifications/mark-read'
     },
 

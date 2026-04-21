@@ -1,3 +1,5 @@
+import { Autocomplete } from '../modules/autocomplete.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     if (window.feather) window.feather.replace();
 
@@ -58,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('modal-offer-name').innerText = data.name;
         document.getElementById('modal-offer-rating').innerText = data.rating;
-        // In the template, we pass the translated "ago" if needed, or assume it's part of 'time'
         document.getElementById('modal-offer-time').innerText = data.timeText || data.time;
         document.getElementById('modal-offer-price').innerText = '€' + data.price;
         document.getElementById('modal-offer-message').innerText = data.message;
@@ -142,10 +143,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon.classList.add('text-gray-300');
                     icon.style.fill = 'none';
                 }
+                icon.setAttribute('aria-checked', i <= value ? 'true' : 'false');
             }
         }
-        if(window.feather) window.feather.replace();
     };
+
+    // Robust delegation for stars
+    document.addEventListener('click', function(e) {
+        const star = e.target.closest('[id^="star-"]');
+        if (star) {
+            const val = parseInt(star.id.replace('star-', ''));
+            window.setRating(val);
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            const star = e.target.closest('[id^="star-"]');
+            if (star) {
+                e.preventDefault();
+                const val = parseInt(star.id.replace('star-', ''));
+                window.setRating(val);
+            }
+        }
+    });
 
     // --- Edit Task Modal Logic ---
     window.openEditTaskModal = function() {
@@ -154,6 +175,12 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
             if (window.feather) feather.replace();
+
+            // Shift focus into the modal immediately to prevent focus leakage
+            const titleInput = document.getElementById('editTaskTitle');
+            if (titleInput) {
+                setTimeout(() => titleInput.focus(), 50);
+            }
         }
     };
 
@@ -175,7 +202,6 @@ document.addEventListener('DOMContentLoaded', function() {
             editJobSelect.innerHTML = `<option value="">${selectServiceLabel}</option>`;
             if (!catId) return;
             
-            // Assume allCategories is globally available or passed to window
             if (window.TASK_DATA && window.TASK_DATA.allCategories) {
                 const category = window.TASK_DATA.allCategories.find(c => c.id == catId);
                 if (category && category.jobs) {
@@ -195,16 +221,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const editTypeSelect = document.getElementById('editTypeSelect');
     const editLocationContainer = document.getElementById('editLocationContainer');
     const editLocationInput = document.getElementById('editLocationInput');
+    
     if (editTypeSelect && editLocationContainer) {
         editTypeSelect.addEventListener('change', function() {
             if (this.value === 'online') {
                 editLocationContainer.classList.add('hidden');
-                if (editLocationInput) editLocationInput.value = 'Online';
+                // As requested: "make it so on the location is remote if the task type is online"
+                if (editLocationInput) editLocationInput.value = 'Remote';
             } else {
                 editLocationContainer.classList.remove('hidden');
-                if (editLocationInput && editLocationInput.value === 'Online') editLocationInput.value = '';
+                if (editLocationInput && editLocationInput.value === 'Remote') editLocationInput.value = '';
             }
         });
+    }
+
+    // Location Autocomplete for Edit Modal
+    if (editLocationInput) {
+        const editLocationResults = document.getElementById('edit-location-results');
+        if (editLocationResults) {
+            new Autocomplete({
+                input: editLocationInput,
+                dropdown: editLocationResults,
+                endpoint: '/api/cities',
+                onSelect: (item) => {
+                    editLocationInput.value = item.name;
+                }
+            });
+        }
     }
 
     // Date / Time Selectors
@@ -288,21 +331,69 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 editTimeOptions.classList.add('hidden');
                 document.querySelectorAll('.modal-time-option input').forEach(ip => { ip.checked = false; });
-                document.querySelectorAll('.modal-time-option').forEach(lb => { lb.classList.remove('selected'); });
+                document.querySelectorAll('.modal-time-option').forEach(lb => { lb.classList.remove('selected'); lb.setAttribute('aria-checked', 'false'); });
+            }
+        });
+
+        // Keyboard support for the main checkbox
+        editNeedTimeCheckbox.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.checked = !this.checked;
+                this.dispatchEvent(new Event('change'));
             }
         });
     }
     
+    // Time Option Toggling Logic
     document.querySelectorAll('.modal-time-option').forEach(label => {
+        const checkbox = label.querySelector('input[type="checkbox"]');
+        
+        const syncUI = () => {
+            label.classList.toggle('selected', checkbox.checked);
+            label.setAttribute('aria-checked', checkbox.checked ? 'true' : 'false');
+        };
+
         label.addEventListener('click', function(e) {
-            setTimeout(() => {
-                const checkbox = this.querySelector('input[type="checkbox"]');
-                if (checkbox.checked) {
-                    this.classList.add('selected');
-                } else {
-                    this.classList.remove('selected');
-                }
-            }, 10);
+            if (e.target !== checkbox) {
+                e.preventDefault();
+                checkbox.checked = !checkbox.checked;
+                syncUI();
+            } else {
+                syncUI();
+            }
+        });
+
+        label.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                checkbox.checked = !checkbox.checked;
+                syncUI();
+            }
+        });
+    });
+
+    // --- Budget Validation Logic ---
+    const budgetFields = [
+        document.getElementById('editTaskPrice'),
+        document.getElementById('directQuotePrice')
+    ];
+
+    budgetFields.forEach(field => {
+        if (!field) return;
+
+        field.addEventListener('input', function() {
+            const val = parseFloat(this.value);
+            if (val > 5000) {
+                this.value = 5000;
+            }
+        });
+
+        field.addEventListener('blur', function() {
+            const val = parseFloat(this.value);
+            if (this.value !== "" && val < 5) {
+                this.value = 5;
+            }
         });
     });
 
@@ -310,6 +401,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
             const target = e.target;
+            if (target.classList.contains('modal-time-option')) return;
+
             if (target.getAttribute('role') === 'button' || target.getAttribute('tabindex') === '0') {
                 if (target.tagName !== 'BUTTON' && target.tagName !== 'A' && target.tagName !== 'INPUT') {
                     e.preventDefault();

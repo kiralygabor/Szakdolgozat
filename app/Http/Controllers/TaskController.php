@@ -34,7 +34,9 @@ class TaskController extends Controller
             ->with(['category', 'employer.city', 'offers'])
             ->applyFilters($request->query('q'), $minPrice, $maxPrice)
             ->forCategory($request->input('category'))
-            ->latest()
+            ->byTaskType($request->input('type'))
+            ->byLocation($request->input('city_search'))
+            ->applySorting($request->input('sort'))
             ->paginate(self::ITEMS_PER_PAGE)
             ->withQueryString();
 
@@ -84,7 +86,7 @@ class TaskController extends Controller
     public function update(StoreTaskRequest $request, Advertisement $task): RedirectResponse
     {
         $this->authorize('update', $task);
-        $task->update($request->validated());
+        $this->taskService->updateTask($task, $request->validated());
 
         return back()->with('success', __('Task updated successfully.'));
     }

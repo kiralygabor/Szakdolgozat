@@ -90,7 +90,7 @@
                         <a href="{{ route('public-profile', $chatUser->id) }}" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition border-b border-gray-50 no-underline">
                             <i data-feather="user" class="w-4 h-4"></i> {{ __('messages_page.view_profile') }}
                         </a>
-                        <button onclick="openUserReportModal({{ $chatUser->id }})" class="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-0 bg-transparent text-left">
+                        <button onclick="openUserReportModal('{{ $chatUser->account_id }}')" class="w-full flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition border-0 bg-transparent text-left">
                             <i data-feather="flag" class="w-4 h-4"></i> {{ __('messages_page.report_user') }}
                         </button>
                     </div>

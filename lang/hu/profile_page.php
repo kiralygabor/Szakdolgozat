@@ -39,6 +39,7 @@ return [
         'high_contrast' => 'Magas kontraszt',
         'high_contrast_desc' => 'Színkontraszt növelése a jobb olvashatóság érdekében.',
         'apply' => 'Alkalmaz',
+        'apply_success' => 'A beállítások sikeresen alkalmazva!',
     ],
     'security' => [
         'title' => 'Biztonság',

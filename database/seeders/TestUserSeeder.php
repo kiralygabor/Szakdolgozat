@@ -13,25 +13,28 @@ class TestUserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'),
-            'account_id' => 'TESTUSER001',
-            'verified' => true,
-            'phone_number' => '1234567890',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'first_name' => 'Teszt',
+                'last_name' => 'Elek',
+                'password' => Hash::make('password'),
+                'account_id' => 'TESTUSER001',
+                'verified' => true,
+                'phone_number' => '+36111111111',
+            ]
+        );
 
-        User::create([
-            'first_name' => 'Test',
-            'last_name' => 'User2',
-            'email' => 'test2@example.com',
-            'password' => Hash::make('password2'),
-            'account_id' => 'TESTUSER002',
-            'verified' => true,
-            'phone_number' => '1234567890',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test2@example.com'],
+            [
+                'first_name' => 'Próba',
+                'last_name' => 'Péter',
+                'password' => Hash::make('password2'),
+                'account_id' => 'TESTUSER002',
+                'verified' => true,
+                'phone_number' => '+36222222222',
+            ]
+        );
     }
 }
- 

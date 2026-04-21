@@ -26,11 +26,11 @@
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a href="{{ route('post-task') }}"
-          class="btn px-8 py-4 bg-[var(--primary-accent)] hover:bg-[var(--primary-hover)] rounded-full text-lg font-semibold shadow-lg transition text-white">
+          class="btn px-8 py-4 bg-[var(--primary-accent)] hover:bg-[var(--primary-hover)] focus:bg-[var(--primary-hover)] focus:text-white focus:ring-0 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-white rounded-full text-lg font-semibold shadow-lg transition text-white">
           {{ __('index.post_task') }}
         </a>
         <a href="{{ route('tasks') }}"
-          class="btn px-8 py-4 bg-[var(--bg-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)] rounded-full text-lg font-semibold shadow-lg transition border border-[var(--border-base)]">
+          class="btn px-8 py-4 bg-[var(--bg-primary)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)] focus:bg-[var(--bg-hover)] focus:text-[var(--text-primary)] focus:ring-0 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-white rounded-full text-lg font-semibold shadow-lg transition border border-[var(--border-base)]">
           {{ __('index.browse_tasks') }}
         </a>
       </div>
@@ -98,7 +98,7 @@
 
         <div class="mt-16">
           <a href="{{ route('post-task') }}"
-            class="btn inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white transition-all duration-200 bg-[var(--primary-accent)] rounded-full hover:bg-[var(--primary-hover)] shadow-lg hover:-translate-y-1">
+            class="btn inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white transition-all duration-200 bg-[var(--primary-accent)] rounded-full hover:bg-[var(--primary-hover)] focus:bg-[var(--primary-hover)] focus:text-white focus:ring-0 focus:outline focus:outline-4 focus:outline-offset-4 focus:outline-[var(--primary-accent)] dark:focus:outline-white shadow-lg hover:-translate-y-1">
             {{ __('index.start_for_free') }}
           </a>
         </div>

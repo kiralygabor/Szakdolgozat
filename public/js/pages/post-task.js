@@ -84,11 +84,19 @@ export class PostTaskManager {
         }
 
         // Times
-        this.needTimeCheckbox.addEventListener('click', () => {
+        this.needTimeCheckbox.addEventListener('change', () => {
             this.timeOfDayOptions.classList.toggle('hidden', !this.needTimeCheckbox.checked);
             if (!this.needTimeCheckbox.checked) {
                 document.querySelectorAll('input[name="preferred_time[]"]').forEach(cb => cb.checked = false);
                 this.timeOptions.forEach(opt => opt.classList.remove('selected'));
+            }
+        });
+
+        this.needTimeCheckbox.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.needTimeCheckbox.checked = !this.needTimeCheckbox.checked;
+                this.needTimeCheckbox.dispatchEvent(new Event('change'));
             }
         });
         this.timeOptions.forEach(option => {
@@ -121,6 +129,12 @@ export class PostTaskManager {
         // Step 3: Details & Photos
         this.taskDetails.addEventListener('input', () => this.validateCurrent());
         this.photoUploadPlus.addEventListener('click', () => this.photoSelectorInput.click());
+        this.photoUploadPlus.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.photoSelectorInput.click();
+            }
+        });
         this.photoSelectorInput.addEventListener('change', (e) => this.handlePhotoSelection(e));
 
         // Step 4: Budget
@@ -133,9 +147,18 @@ export class PostTaskManager {
     showStep(i) {
         this.stepIndex = i;
         this.panes.forEach((p, idx) => p.classList.toggle('hidden', idx !== i));
+        
+        // Navigation buttons visibility and focusability
         this.backBtn.disabled = i === 0;
-        this.nextBtn.classList.toggle('hidden', i === this.panes.length - 1);
-        this.submitBtn.classList.toggle('hidden', i !== this.panes.length - 1);
+        this.backBtn.setAttribute('tabindex', i === 0 ? '-1' : '0');
+
+        const isLast = i === this.panes.length - 1;
+        this.nextBtn.classList.toggle('hidden', isLast);
+        this.nextBtn.setAttribute('tabindex', isLast ? '-1' : '0');
+
+        this.submitBtn.classList.toggle('hidden', !isLast);
+        this.submitBtn.setAttribute('tabindex', !isLast ? '-1' : '0');
+
         this.updateSidebar(i);
         this.validateCurrent();
         if (window.feather) window.feather.replace();
@@ -233,6 +256,7 @@ export class PostTaskManager {
                 if (currentVal !== "" && (currentN < 5 || currentN > 5000)) {
                     this.budgetError.classList.remove('hidden');
                     this.budgetWrapper.classList.add('is-invalid');
+                    if (window.feather) window.feather.replace();
                 }
             }, 800);
             return false;
@@ -306,10 +330,25 @@ export class PostTaskManager {
         this.isLocationSelected = false;
         clearTimeout(this.searchTimeout);
         const q = e.target.value.trim();
+        
+        // Input keyboard navigation
+        const inputKeydown = (event) => {
+            if (event.key === 'ArrowDown') {
+                const first = this.pickupSuburbDropdown.querySelector('.location-autocomplete-item');
+                if (first) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            }
+        };
+        this.pickupSuburb.removeEventListener('keydown', inputKeydown);
+        this.pickupSuburb.addEventListener('keydown', inputKeydown);
+
         if (q.length < 2) {
             this.pickupSuburbDropdown.classList.add('hidden');
             return;
         }
+
         this.searchTimeout = setTimeout(async () => {
             try {
                 const res = await fetch(`/api/cities?q=${encodeURIComponent(q)}`);
@@ -319,16 +358,40 @@ export class PostTaskManager {
                     this.pickupSuburbDropdown.classList.add('hidden');
                     return;
                 }
-                cities.slice(0, 8).forEach(c => {
+                
+                cities.slice(0, 8).forEach((c, index) => {
                     const d = document.createElement('div');
                     d.className = 'location-autocomplete-item';
                     d.textContent = c.name;
-                    d.onclick = () => {
+                    d.setAttribute('tabindex', '0');
+                    d.setAttribute('role', 'option');
+
+                    const select = () => {
                         this.pickupSuburb.value = c.name;
                         this.isLocationSelected = true;
                         this.pickupSuburbDropdown.classList.add('hidden');
                         this.validateCurrent();
+                        this.pickupSuburb.focus();
                     };
+
+                    d.onclick = select;
+                    d.addEventListener('keydown', (event) => {
+                        const items = Array.from(this.pickupSuburbDropdown.querySelectorAll('.location-autocomplete-item'));
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            select();
+                        } else if (event.key === 'ArrowDown') {
+                            event.preventDefault();
+                            (items[index + 1] || items[0]).focus();
+                        } else if (event.key === 'ArrowUp') {
+                            event.preventDefault();
+                            (items[index - 1] || this.pickupSuburb).focus();
+                        } else if (event.key === 'Escape') {
+                            this.pickupSuburbDropdown.classList.add('hidden');
+                            this.pickupSuburb.focus();
+                        }
+                    });
+                    
                     this.pickupSuburbDropdown.appendChild(d);
                 });
                 this.pickupSuburbDropdown.classList.remove('hidden');
@@ -382,6 +445,18 @@ export class PostTaskManager {
             e.preventDefault();
             return;
         }
+
+        const missingStepsCount = this.config.missingStepsCount || 0;
+        if (missingStepsCount > 0) {
+            e.preventDefault();
+            const modal = document.getElementById('profile-steps-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                if (window.feather) window.feather.replace();
+            }
+            return;
+        }
+
         const isOnline = this.onlineOption.classList.contains('selected');
         document.getElementById('input_task_type').value = isOnline ? 'online' : 'in-person';
         const flexibleActive = this.flexibleBtn && this.flexibleBtn.getAttribute('data-active') === 'true';
@@ -395,7 +470,12 @@ export class PostTaskManager {
 
     showDateError(msg) {
         const err = document.getElementById('clientDateError');
-        if (err) { err.textContent = msg; err.classList.remove('hidden'); }
+        const text = document.getElementById('clientDateErrorText');
+        if (err && text) { 
+            text.textContent = msg; 
+            err.classList.remove('hidden'); 
+            if (window.feather) window.feather.replace();
+        }
     }
 
     hideDateError() {

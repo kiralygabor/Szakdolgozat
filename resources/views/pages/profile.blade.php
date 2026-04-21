@@ -17,21 +17,21 @@
                 <h5>{{ __('profile_page.sidebar.settings') }}</h5>
             </div>
  
-                <nav class="nav flex-column nav-pills settings-nav" id="settingsTab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link sub-menu-link" href="{{ url('/index') }}"><i class="fas fa-arrow-left fa-fw me-2"></i> {{ __('profile_page.sidebar.back_home') }}</a>
+                <nav class="nav flex-column nav-pills settings-nav" id="settingsTab" aria-orientation="vertical">
+                    <a class="nav-link sub-menu-link" href="{{ url('/index') }}" tabindex="0"><i class="fas fa-arrow-left fa-fw me-2"></i> {{ __('profile_page.sidebar.back_home') }}</a>
                     <div class="my-2 border-bottom border-[var(--settings-border)]"></div>
                    
                     @auth
-                    <a class="nav-link sub-menu-link" href="{{ route('my-tasks') }}"><i class="fas fa-columns fa-fw me-2"></i> {{ __('profile_page.sidebar.dashboard') }}</a>
-                    <a class="nav-link sub-menu-link" id="notification-tab" data-bs-toggle="pill" href="#notification" role="tab"><i class="fas fa-bell fa-fw me-2"></i> {{ __('profile_page.sidebar.notifications') }}</a>
+                    <a class="nav-link sub-menu-link" href="{{ route('my-tasks') }}" tabindex="0"><i class="fas fa-columns fa-fw me-2"></i> {{ __('profile_page.sidebar.dashboard') }}</a>
+                    <a class="nav-link sub-menu-link" id="notification-tab" data-section="notification" href="#notification" tabindex="0"><i class="fas fa-bell fa-fw me-2"></i> {{ __('profile_page.sidebar.notifications') }}</a>
                
                     <!-- Active Tab styling matches the screenshot logic -->
-                    <a class="nav-link sub-menu-link {{ auth()->check() ? 'active' : '' }}" id="profile-tab" data-bs-toggle="pill" href="#profile" role="tab"><i class="fas fa-user fa-fw me-2"></i> {{ __('profile_page.sidebar.profile') }}</a>
+                    <a class="nav-link sub-menu-link {{ auth()->check() ? 'active' : '' }}" id="profile-tab" data-section="profile" href="#profile" tabindex="0"><i class="fas fa-user fa-fw me-2"></i> {{ __('profile_page.sidebar.profile') }}</a>
                     @endauth
-                    <a class="nav-link sub-menu-link {{ !auth()->check() ? 'active' : '' }}" id="account-tab" data-bs-toggle="pill" href="#account" role="tab"><i class="fas fa-cog fa-fw me-2"></i> {{ __('profile_page.sidebar.settings') }}</a>
+                    <a class="nav-link sub-menu-link {{ !auth()->check() ? 'active' : '' }}" id="account-tab" data-section="account" href="#account" tabindex="0"><i class="fas fa-cog fa-fw me-2"></i> {{ __('profile_page.sidebar.settings') }}</a>
                     @auth
-                    <a class="nav-link sub-menu-link" id="security-tab" data-bs-toggle="pill" href="#security" role="tab"><i class="fas fa-shield-alt fa-fw me-2"></i> {{ __('profile_page.sidebar.security') }}</a>
-                    <a class="nav-link sub-menu-link" id="billing-tab" data-bs-toggle="pill" href="#billing" role="tab"><i class="fas fa-credit-card fa-fw me-2"></i> {{ __('profile_page.sidebar.billing') }}</a>
+                    <a class="nav-link sub-menu-link" id="security-tab" data-section="security" href="#security" tabindex="0"><i class="fas fa-shield-alt fa-fw me-2"></i> {{ __('profile_page.sidebar.security') }}</a>
+                    <a class="nav-link sub-menu-link" id="billing-tab" data-section="billing" href="#billing" tabindex="0"><i class="fas fa-credit-card fa-fw me-2"></i> {{ __('profile_page.sidebar.billing') }}</a>
                     @endauth
             </nav>
         </div>
@@ -73,7 +73,7 @@
  
                                 <!-- Action Buttons -->
                                 <div class="d-flex flex-column gap-2">
-                                    <label class="btn btn-primary btn-primary-custom px-4 mb-0" for="avatarInput">{{ __('profile_page.profile.upload_photo') }}</label>
+                                    <label class="btn btn-primary btn-primary-custom px-4 mb-0" for="avatarInput" tabindex="0" role="button">{{ __('profile_page.profile.upload_photo') }}</label>
                                     <small class="text-muted">{{ __('profile_page.profile.upload_help') }}</small>
                                 </div>
                             </div>
@@ -136,8 +136,8 @@
                         <div class="mb-4 custom-input-group">
                             <label for="phone" class="form-label">{{ __('profile_page.profile.phone') }}</label>
                             
-                            <div class="relative">
-                                <div class="phone-selector-container">
+                            <div class="relative w-full">
+                                <div class="phone-selector-container w-full">
                                     <button id="dropdown-phone-button" type="button" class="phone-dropdown-btn">
                                         <div id="selected-flag" class="flex items-center">
                                             <!-- Default: Hungary Flag -->
@@ -147,7 +147,7 @@
                                         <svg class="w-4 h-4 ms-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/></svg>
                                     </button>
                                     
-                                    <input type="tel" id="phone" name="phone_number" class="phone-input-field" 
+                                    <input type="tel" id="phone" name="phone_number" class="phone-input-field w-full" 
                                            value="{{ old('phone_number', $user->phone_number ?? '') }}" 
                                            placeholder="30 123 4567">
                                 </div>

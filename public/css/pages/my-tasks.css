@@ -129,6 +129,13 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
+.pill-action:focus-visible {
+    outline: none !important;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3) !important;
+    background: #EFF6FF;
+}
+
 .pill-action.danger:hover {
     border-color: #FECACA;
     color: #E11D48;
@@ -146,11 +153,17 @@
 .data-text p { font-size: 15px; font-weight: 500; color: #111827; }
 
 /* Description UI */
-.description-toggle { margin-top: 18px; background: transparent; border: none; cursor: pointer; text-align: left; width: 100%; transition: opacity 0.2s; }
+.description-toggle { margin-top: 18px; background: transparent; border: none; cursor: pointer; text-align: left; width: 100%; transition: all 0.2s; padding: 4px; border-radius: 8px; }
 .description-toggle:hover { opacity: 0.8; }
+.description-toggle:focus-visible {
+    outline: none !important;
+    background-color: #F8FAFC;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25) !important;
+}
 .task-description-truncated { font-size: 14px; color: #1F2933; line-height: 1.6em; margin-bottom: 4px; }
 .description-arrow { width: 16px; height: 16px; color: #2563EB; transition: transform 0.2s; display: inline-block; }
 .description-toggle:hover .description-arrow { transform: translateY(3px); }
+.description-toggle:focus-visible .description-arrow { transform: translateY(3px); color: #1D4ED8; }
 
 /* --- MODERN TABS (Posted/Applied) --- */
 .modern-tabs-wrapper {

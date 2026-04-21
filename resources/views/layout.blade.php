@@ -54,21 +54,29 @@
       return null;
     };
 
-    const cookieTheme = getCookie('theme');
-    const savedTheme = cookieTheme || (window.userSettings && window.userSettings.theme) || 'light';
-    
+    let savedTheme, savedReducedMotion, savedHighContrast;
+ 
+    if (window.isAuthenticated && window.userSettings) {
+        // Authenticated users ALWAYS pull from their DB-backed userSettings array.
+        savedTheme = window.userSettings.theme || 'light';
+        savedReducedMotion = window.userSettings.reduced_motion || false;
+        savedHighContrast = window.userSettings.high_contrast || false;
+ 
+        // Force-sync cookies to match DB immediately so no old guest-cookies linger
+        document.cookie = `theme=${savedTheme}; path=/; max-age=31536000`;
+        document.cookie = `contrast=${savedHighContrast ? 'high' : 'standard'}; path=/; max-age=31536000`;
+        document.cookie = `reduced_motion=${savedReducedMotion}; path=/; max-age=31536000`;
+    } else {
+        // Guests rely on local cookies
+        savedTheme = getCookie('theme') || 'light';
+        savedReducedMotion = getCookie('reduced_motion') === 'true';
+        savedHighContrast = getCookie('contrast') === 'high';
+    }
     if (savedTheme === 'dark' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-
-    // Apply accessibility settings early
-    const cookieRM = getCookie('reduced_motion');
-    const cookieHC = getCookie('contrast');
-
-    const savedReducedMotion = cookieRM !== null ? (cookieRM === 'true') : (window.userSettings && window.userSettings.reduced_motion) || false;
-    const savedHighContrast = cookieHC !== null ? (cookieHC === 'high') : (window.userSettings && window.userSettings.high_contrast) || false;
     
     if (savedReducedMotion) {
         document.documentElement.classList.add('reduced-motion');

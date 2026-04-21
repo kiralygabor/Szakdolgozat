@@ -205,8 +205,6 @@
             <div class="hidden lg:block h-8 w-px bg-gray-300 mx-4" aria-hidden="true"></div>
             <select name="sort" id="sort-filter" aria-label="Sort tasks by" class="bg-transparent py-2 text-sm font-medium text-gray-700 hover:text-gray-900 cursor-pointer outline-none">
                 <option value="recent" @selected(($filters['sort'] ?? 'recent')==='recent')>{{ __('tasks_page.sort_recent') }}</option>
-                <option value="closest" @selected(($filters['sort'] ?? '')==='closest')>{{ __('tasks_page.sort_closest') }}</option>
-                <option value="due" @selected(($filters['sort'] ?? '')==='due')>{{ __('tasks_page.sort_due') }}</option>
                 <option value="lowest_price" @selected(($filters['sort'] ?? '')==='lowest_price')>{{ __('tasks_page.sort_price_asc') }}</option>
                 <option value="highest_price" @selected(($filters['sort'] ?? '')==='highest_price')>{{ __('tasks_page.sort_price_desc') }}</option>
             </select>
@@ -304,6 +302,20 @@
                   <button type="button" class="mobile-type-tab flex-1 py-2 text-xs font-bold rounded-lg transition-all {{ ($filters['type'] ?? 'all') === 'all' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500' }}" data-value="all">{{ __('tasks_page.mode_any') }}</button>
               </div>
               <input type="hidden" name="type" id="mobile-type-hidden" value="{{ $filters['type'] ?? 'all' }}">
+          </div>
+
+          <!-- Location -->
+          <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">{{ __('tasks_page.location_label') }}</label>
+              <div class="relative">
+                  <input type="text" id="mobile-city-search-input" placeholder="{{ __('tasks_page.search_city_placeholder') }}" value="{{ $filters['city_search'] ?? '' }}"
+                         class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm font-semibold text-gray-800 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none">
+                  <div class="absolute right-4 top-1/2 -translate-y-1/2">
+                      <i data-feather="map-pin" class="w-4 h-4 text-gray-400"></i>
+                  </div>
+                  <div id="mobile-city-results" class="mt-2 max-h-40 overflow-y-auto hidden border rounded-xl shadow-inner bg-white z-50"></div>
+                  <input type="hidden" name="city_search" id="mobile-city-hidden" value="{{ $filters['city_search'] ?? '' }}">
+              </div>
           </div>
 
           <!-- Price -->
@@ -535,6 +547,6 @@
           new TaskReportManager();
       });
   </script>
-  <script src="{{ asset('js/pages/tasks.js') }}"></script>
+  <script type="module" src="{{ asset('js/pages/tasks.js') }}"></script>
   @endpush
 @endsection

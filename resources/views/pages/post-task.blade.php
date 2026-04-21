@@ -104,7 +104,7 @@
                   <i data-feather="calendar" class="w-5 h-5"></i>
                 </button>
                 <div class="date-dropdown-calendar" id="beforeDateCalendar">
-                  <input type="date" name="required_before_date" id="beforeDateValue" value="{{ old('required_before_date') }}" />
+                  <input type="date" name="required_before_date" id="beforeDateValue" value="{{ old('required_before_date') }}" tabindex="-1" />
                 </div>
               </div>
               <div class="date-dropdown flex-1 min-w-[200px]">
@@ -113,21 +113,23 @@
                   <i data-feather="calendar" class="w-5 h-5"></i>
                 </button>
                 <div class="date-dropdown-calendar" id="onDateCalendar">
-                  <input type="date" name="required_date" id="onDateValue" value="{{ old('required_date') }}" />
+                  <input type="date" name="required_date" id="onDateValue" value="{{ old('required_date') }}" tabindex="-1" />
                 </div>
 
               </div>
-              <button type="button" class="pill-btn shrink-0" data-option="flexible">{{ __('post-task.step1.flexible') }}</button>
+              <button type="button" class="pill-btn shrink-0" data-option="flexible" tabindex="0">{{ __('post-task.step1.flexible') }}</button>
             </div>
-            <p id="clientDateError" class="text-sm details-text-danger mt-2 hidden"></p>
-          </div>
+            <div id="clientDateError" class="form-error-alert hidden">
+              <i data-feather="alert-circle" class="w-5 h-5 shrink-0"></i>
+              <span id="clientDateErrorText"></span>
+            </div>
 
-          <div class="mt-8">
-            <label class="flex items-center gap-2 text-sm font-bold details-text-main mb-4 cursor-pointer">
-              <input type="checkbox" id="needTimeCheckbox" class="w-5 h-5 rounded border-gray-300 text-[var(--primary-accent)] focus:ring-[var(--primary-accent)]" />
-              <span>{{ __('post-task.step1.certain_time') }}</span>
-            </label>
-            <div id="timeOfDayOptions" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
+            <div class="mt-8">
+              <label class="flex items-center gap-2 text-sm font-bold details-text-main mb-4 cursor-pointer">
+                <input type="checkbox" id="needTimeCheckbox" class="w-5 h-5 rounded border-gray-300 text-[var(--primary-accent)] focus:ring-[var(--primary-accent)]" tabindex="0" />
+                <span>{{ __('post-task.step1.certain_time') }}</span>
+              </label>
+              <div id="timeOfDayOptions" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
               @foreach(['morning', 'midday', 'afternoon', 'evening'] as $time)
                 <label class="time-option group" data-time="{{ $time }}" tabindex="0">
                   <input type="checkbox" name="preferred_time[]" value="{{ $time }}" class="hidden">
@@ -138,6 +140,7 @@
                   <span class="text-xs details-text-muted">{{ __('post-task.step1.' . $time . '_range') }}</span>
                 </label>
               @endforeach
+            </div>
             </div>
           </div>
         </div>
@@ -211,22 +214,23 @@
                      class="flex-1 h-14 px-4 outline-none text-xl font-bold details-main-bg details-text-main" 
                      placeholder="0.00" value="{{ old('price') }}">
             </div>
-            <div id="budgetError" class="invalid-feedback-custom hidden">
-              {{ __('post-task.step4.budget_error') }}
+            <div id="budgetError" class="form-error-alert mt-4 hidden">
+              <i data-feather="alert-circle" class="w-5 h-5 shrink-0"></i>
+              <span>{{ __('post-task.step4.budget_error') }}</span>
             </div>
           </div>
         </div>
 
         <!-- Navigation Buttons -->
         <div class="flex items-center justify-between mt-12 pt-8 border-t details-border-color">
-          <button type="button" id="backBtn" class="px-8 py-3 rounded-full font-bold step-nav-btn-back disabled:opacity-30" disabled>
+          <button type="button" id="backBtn" class="px-8 py-3 rounded-full font-bold step-nav-btn-back disabled:opacity-30" disabled tabindex="-1">
             {{ __('post-task.nav.back') }}
           </button>
           <div class="flex gap-4">
             <button type="button" id="nextBtn" class="px-10 py-3 rounded-full font-bold step-nav-btn-next disabled:opacity-50" disabled>
               {{ __('post-task.nav.next') }}
             </button>
-            <button type="submit" id="submitBtn" class="px-10 py-3 rounded-full font-bold step-nav-btn-next hidden disabled:opacity-50">
+            <button type="submit" id="submitBtn" class="px-10 py-3 rounded-full font-bold step-nav-btn-next hidden disabled:opacity-50" tabindex="-1">
               {{ __('post-task.nav.get_quotes') }}
             </button>
           </div>
@@ -257,7 +261,13 @@
     @endphp
     const categoriesData = @json($categoriesJson);
 
+    window.closeProfileStepsModal = () => {
+        const modal = document.getElementById('profile-steps-modal');
+        if (modal) modal.classList.add('hidden');
+    };
+
     new PostTaskManager({
+        missingStepsCount: {{ count(auth()->check() ? auth()->user()->getMissingProfileSteps() : []) }},
         locale: "{{ app()->getLocale() == 'hu' ? 'hu-HU' : 'en-US' }}",
         categories: categoriesData,
         oldTimes: @json(old('preferred_time', [])),
@@ -268,11 +278,12 @@
             beforeDate: "{{ __('post-task.step1.before_date') }}",
             servicePlaceholder: "{{ __('post-task.step1.service_placeholder_select') }}",
             submitting: "{{ __('post-task.nav.submitting') ?? 'Submitting...' }}",
-            dateError: "{{ __('validation.after_or_equal', ['attribute' => 'date', 'date' => 'today']) }}"
+            dateError: "{{ __('validation.after_or_equal', ['attribute' => __('post-task.validation.date'), 'date' => __('post-task.validation.today')]) }}"
         }
     });
 
     // State restoration is handled inside PostTaskManager constructor
   });
 </script>
+@include('partials.profile-steps-modal')
 @endsection

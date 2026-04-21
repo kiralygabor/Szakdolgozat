@@ -55,7 +55,7 @@
                                
                                 @if(auth()->id() !== $user->id)
                                     {{-- Report Flag beside Join Date --}}
-                                    <button onclick="openUserReportModal({{ $user->id }})" class="flex items-center gap-1 profile-text-muted hover:text-[var(--details-error)] transition-colors border-l pl-4 profile-border-color">
+                                    <button onclick="openUserReportModal('{{ $user->account_id }}')" class="flex items-center gap-1 profile-text-muted hover:text-[var(--details-error)] transition-colors border-l pl-4 profile-border-color">
                                         <i data-feather="flag" class="w-3.5 h-3.5"></i>
                                         <span class="text-sm font-semibold">{{ __('public_profile.report_user') }}</span>
                                     </button>
@@ -132,7 +132,7 @@
                                 <label class="block text-[10px] font-bold profile-text-muted uppercase tracking-widest mb-3">{{ __('public_profile.rating') }}</label>
                                 <div class="flex gap-2" id="star-rating">
                                     @for($i=1; $i<=5; $i++)
-                                        <button type="button" class="cursor-pointer" data-rating="{{ $i }}">
+                                        <button type="button" class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[var(--profile-accent)] rounded-lg p-1 transition-all" data-rating="{{ $i }}" aria-label="{{ __('mytasks.modals.rate_stars', ['count' => $i]) }}" role="radio" aria-checked="false">
                                             <i data-feather="star" class="w-6 h-6 star-icon transition-transform hover:scale-110"></i>
                                         </button>
                                     @endfor

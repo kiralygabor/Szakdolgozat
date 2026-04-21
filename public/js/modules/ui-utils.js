@@ -112,7 +112,8 @@ export const ThemeEngine = {
         document.cookie = `theme=${mode}; path=/; max-age=${60 * 60 * 24 * 365}`;
 
         if (window.userSettings) window.userSettings.theme = mode;
-        if (!skipSave && isAuth) this.saveSettings({ theme: mode });
+        if (!skipSave && isAuth) return this.saveSettings({ theme: mode });
+        return Promise.resolve();
     },
 
     applyAcc(type, val, skipSave = false) {
@@ -132,13 +133,14 @@ export const ThemeEngine = {
 
         if (window.userSettings) window.userSettings[type.replace('-', '_')] = val;
 
+        this.updateIndicator(type, val);
+
         if (!skipSave && isAuth) {
             const settings = {};
             settings[type.replace('-', '_')] = val;
-            this.saveSettings(settings);
+            return this.saveSettings(settings);
         }
-
-        this.updateIndicator(type, val);
+        return Promise.resolve();
     },
 
     updateIndicator(type, val) {
@@ -241,14 +243,42 @@ export const StarRating = {
     init(container, input, options = {}) {
         if (!container || !input) return;
         
-        const stars = container.querySelectorAll('[data-rating]');
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const val = star.getAttribute('data-rating');
-                this.setRating(val, stars, input);
-                if (options.onChange) options.onChange(val);
-            });
+        this.options = {
+            selectedClass: options.selectedClass || 'text-yellow-500',
+            unselectedClass: options.unselectedClass || 'text-gray-300',
+            onChange: options.onChange || null
+        };
 
+        container.setAttribute('role', 'radiogroup');
+        const stars = container.querySelectorAll('[data-rating]');
+        
+        const handleRating = (star) => {
+            const val = star.getAttribute('data-rating');
+            this.setRating(val, stars, input);
+            if (this.options.onChange) this.options.onChange(val);
+        };
+
+        // Delegation for Click and Keydown
+        container.addEventListener('click', (e) => {
+            const star = e.target.closest('[data-rating]');
+            if (star) {
+                e.preventDefault();
+                handleRating(star);
+            }
+        });
+
+        container.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const star = e.target.closest('[data-rating]');
+                if (star) {
+                    e.preventDefault();
+                    handleRating(star);
+                }
+            }
+        });
+
+        // Mouse events for precise highlighting
+        stars.forEach(star => {
             star.addEventListener('mouseenter', () => {
                 const val = star.getAttribute('data-rating');
                 this.highlight(val, stars);
@@ -258,6 +288,9 @@ export const StarRating = {
         container.addEventListener('mouseleave', () => {
             this.highlight(input.value, stars);
         });
+
+        // Set initial state
+        this.highlight(input.value, stars);
     },
 
     setRating(val, stars, input) {
@@ -266,15 +299,25 @@ export const StarRating = {
     },
 
     highlight(val, stars) {
+        const rating = parseFloat(val);
         stars.forEach(star => {
-            const starVal = star.getAttribute('data-rating');
-            const isSelected = starVal <= val;
+            const starVal = parseFloat(star.getAttribute('data-rating'));
+            const isSelected = starVal <= rating;
             
-            star.classList.toggle('text-yellow-500', isSelected);
-            star.classList.toggle('text-gray-300', !isSelected);
+            if (this.options) {
+                star.classList.toggle(this.options.selectedClass, isSelected);
+                star.classList.toggle(this.options.unselectedClass, !isSelected);
+            } else {
+                // Fallback for direct calls without init options
+                star.classList.toggle('text-yellow-500', isSelected);
+                star.classList.toggle('text-gray-300', !isSelected);
+            }
+            
+            star.setAttribute('aria-checked', isSelected ? 'true' : 'false');
             
             if (window.feather) {
-                star.style.fill = isSelected ? 'currentColor' : 'none';
+                const svg = star.querySelector('svg') || star;
+                svg.style.fill = isSelected ? 'currentColor' : 'none';
             }
         });
     }

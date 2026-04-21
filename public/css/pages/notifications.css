@@ -133,6 +133,12 @@
     transform: translateX(4px);
 }
 
+.notif-item-modern:focus {
+    outline: none;
+    background: var(--bg-hover);
+    box-shadow: inset 4px 0 0 var(--notif-accent);
+}
+
 .notif-item-modern.unread {
     background: var(--notif-accent-soft);
 }
@@ -246,4 +252,23 @@ html.dark .notif-item-modern:hover {
 
 html.dark .notif-icon-wrapper {
     background: #232f45;
+}
+
+/* Empty State Button Focus */
+.notif-empty-state a.btn:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 4px var(--notif-glow) !important;
+    border: 2px solid var(--primary-accent) !important;
+    background-color: var(--primary-accent) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    display: inline-flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.mark-all-read-trigger:focus {
+    outline: none;
+    background-color: var(--primary-accent-soft);
+    box-shadow: 0 0 0 3px var(--primary-accent-focus);
 }

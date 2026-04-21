@@ -21,7 +21,10 @@ export class PublicProfileManager {
         const container = document.getElementById('star-rating');
         const input = document.getElementById('stars-input');
         if (container && input) {
-            StarRating.init(container, input);
+            StarRating.init(container, input, {
+                selectedClass: 'fill-current',
+                unselectedClass: 'empty'
+            });
         }
     }
 

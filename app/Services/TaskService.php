@@ -31,6 +31,17 @@ class TaskService
         return $task;
     }
 
+    public function updateTask(Advertisement $task, array $data): void
+    {
+        if (isset($data['photos']) && is_array($data['photos'])) {
+            $newPhotos = $this->storeFiles($data['photos'], 'task-photos');
+            $existingPhotos = $task->photos ?? [];
+            $data['photos'] = array_merge($existingPhotos, $newPhotos);
+        }
+
+        $task->update($data);
+    }
+
     public function completeTask(Advertisement $task, array $reviewData): void
     {
         $task->update(['status' => TaskStatus::Completed]);

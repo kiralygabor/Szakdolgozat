@@ -67,4 +67,8 @@ return [
     ],
     'requesting_quote_from' => 'Requesting a quote from',
     'requesting_quote_desc' => 'This task will be sent specifically to them.',
+    'validation' => [
+        'date' => 'selected date',
+        'today' => 'today'
+    ],
 ];

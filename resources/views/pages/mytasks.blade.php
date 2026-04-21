@@ -474,7 +474,7 @@
                             <div class="data-icon"><i data-feather="map-pin"></i></div>
                             <div class="data-text">
                                 <h4>{{ __('mytasks.details.location') }}</h4>
-                                <p>{{ optional(optional($activeTask->employer)->city)->name ?? 'Remote' }}</p>
+                                <p>{{ $activeTask->location ?? 'Remote' }}</p>
                             </div>
                         </div>
                         <div class="data-row">
@@ -645,7 +645,7 @@
                                 @csrf
                                 <div class="mb-4">
                                     <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('mytasks.modals.your_price_label') }}</label>
-                                    <input type="number" name="offer_price" id="direct-quote-price" min="1" class="w-full border border-gray-300 rounded-xl p-3 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="{{ __('mytasks.modals.your_price') }}">
+                                    <input type="number" name="offer_price" id="directQuotePrice" min="5" max="5000" class="w-full border border-gray-300 rounded-xl p-3 text-lg font-bold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" required placeholder="{{ __('mytasks.modals.your_price') }}">
                                 </div>
                                 <div class="mb-6">
                                     <label class="block text-sm font-bold text-gray-700 mb-2">{{ __('mytasks.modals.message_label') }}</label>
@@ -677,7 +677,7 @@
                                     {{-- Title --}}
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.task_title') }}</label>
-                                        <input type="text" name="title" value="{{ old('title', $activeTask->title) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
+                                        <input type="text" id="editTaskTitle" name="title" value="{{ old('title', $activeTask->title) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
                                     </div>
                                     
                                     {{-- Category & Job --}}
@@ -714,16 +714,17 @@
                                                 <option value="online" {{ $activeTask->task_type === 'online' ? 'selected' : '' }}>{{ __('mytasks.modals.online') }}</option>
                                             </select>
                                         </div>
-                                        <div id="editLocationContainer" class="{{ $activeTask->task_type === 'online' ? 'hidden' : '' }}">
+                                        <div id="editLocationContainer" class="relative {{ $activeTask->task_type === 'online' ? 'hidden' : '' }}">
                                             <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.location') }}</label>
-                                            <input type="text" name="location" id="editLocationInput" value="{{ old('location', $activeTask->location) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition">
+                                            <input type="text" name="location" id="editLocationInput" value="{{ old('location', $activeTask->location) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" autocomplete="off">
+                                            <div id="edit-location-results" class="absolute z-[110] w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl hidden overflow-hidden"></div>
                                         </div>
                                     </div>
                                     
                                     {{-- Budget --}}
                                     <div>
                                         <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('mytasks.modals.budget') }} (€)</label>
-                                        <input type="number" name="price" min="5" max="9999" value="{{ old('price', $activeTask->price) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
+                                        <input type="number" name="price" id="editTaskPrice" min="5" max="5000" value="{{ old('price', $activeTask->price) }}" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-blue-600 transition" required>
                                     </div>
                                     
                                     <div class="border-b border-gray-100 pb-5">
@@ -738,7 +739,7 @@
                                                         <span id="editBeforeDateLabel" data-placeholder="{{ __('post-task.step1.before_date') }}">{{ $activeTask->required_before_date && !$activeTask->is_date_flexible ? Carbon\Carbon::parse($activeTask->required_before_date)->format('M d, Y') : __('post-task.step1.before_date') }}</span>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                                                     </button>
-                                                    <input type="date" name="required_before_date" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10" id="editBeforeDateValue" value="{{ $activeTask->required_before_date?->format('Y-m-d') }}" style="{{ $activeTask->required_before_date && !$activeTask->is_date_flexible ? '' : 'pointer-events: none;' }}" />
+                                                    <input type="date" name="required_before_date" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10" id="editBeforeDateValue" tabindex="-1" value="{{ $activeTask->required_before_date?->format('Y-m-d') }}" style="{{ $activeTask->required_before_date && !$activeTask->is_date_flexible ? '' : 'pointer-events: none;' }}" />
                                                 </div>
 
                                                 <div class="relative flex-1 min-w-[140px]">
@@ -746,7 +747,7 @@
                                                         <span id="editOnDateLabel" data-placeholder="{{ __('post-task.step1.on_date') }}">{{ $activeTask->required_date && !$activeTask->is_date_flexible ? Carbon\Carbon::parse($activeTask->required_date)->format('M d, Y') : __('post-task.step1.on_date') }}</span>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                                                     </button>
-                                                    <input type="date" name="required_date" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10" id="editOnDateValue" value="{{ $activeTask->required_date?->format('Y-m-d') }}" style="{{ $activeTask->required_date && !$activeTask->is_date_flexible ? '' : 'pointer-events: none;' }}" />
+                                                    <input type="date" name="required_date" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10" id="editOnDateValue" tabindex="-1" value="{{ $activeTask->required_date?->format('Y-m-d') }}" style="{{ $activeTask->required_date && !$activeTask->is_date_flexible ? '' : 'pointer-events: none;' }}" />
                                                 </div>
 
                                                 <button type="button" class="modal-pill-btn" id="editFlexibleBtn" data-active="{{ $activeTask->is_date_flexible ? 'true' : 'false' }}">
@@ -767,22 +768,22 @@
 
                                             <div id="editTimeOfDayOptions" class="grid grid-cols-2 sm:grid-cols-4 gap-2 {{ $hasTime ? '' : 'hidden' }}">
                                                 @php $ptimes = $activeTask->preferred_time ?? []; @endphp
-                                                <label class="modal-time-option {{ in_array('morning', $ptimes) ? 'selected' : '' }}" data-time="morning">
+                                                <label class="modal-time-option {{ in_array('morning', $ptimes) ? 'selected' : '' }}" data-time="morning" tabindex="0" role="checkbox" aria-checked="{{ in_array('morning', $ptimes) ? 'true' : 'false' }}">
                                                     <input type="checkbox" name="preferred_time[]" value="morning" class="hidden" {{ in_array('morning', $ptimes) ? 'checked' : '' }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="2" x2="12" y2="9"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="8 6 12 2 16 6"></polyline></svg>
                                                     <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.morning') }}</span>
                                                 </label>
-                                                <label class="modal-time-option {{ in_array('midday', $ptimes) ? 'selected' : '' }}" data-time="midday">
+                                                <label class="modal-time-option {{ in_array('midday', $ptimes) ? 'selected' : '' }}" data-time="midday" tabindex="0" role="checkbox" aria-checked="{{ in_array('midday', $ptimes) ? 'true' : 'false' }}">
                                                     <input type="checkbox" name="preferred_time[]" value="midday" class="hidden" {{ in_array('midday', $ptimes) ? 'checked' : '' }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                                                     <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.midday') }}</span>
                                                 </label>
-                                                <label class="modal-time-option {{ in_array('afternoon', $ptimes) ? 'selected' : '' }}" data-time="afternoon">
+                                                <label class="modal-time-option {{ in_array('afternoon', $ptimes) ? 'selected' : '' }}" data-time="afternoon" tabindex="0" role="checkbox" aria-checked="{{ in_array('afternoon', $ptimes) ? 'true' : 'false' }}">
                                                     <input type="checkbox" name="preferred_time[]" value="afternoon" class="hidden" {{ in_array('afternoon', $ptimes) ? 'checked' : '' }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line><line x1="1" y1="18" x2="3" y2="18"></line><line x1="21" y1="18" x2="23" y2="18"></line><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line><line x1="23" y1="22" x2="1" y2="22"></line><polyline points="16 5 12 9 8 5"></polyline></svg>
                                                     <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.afternoon') }}</span>
                                                 </label>
-                                                <label class="modal-time-option {{ in_array('evening', $ptimes) ? 'selected' : '' }}" data-time="evening">
+                                                <label class="modal-time-option {{ in_array('evening', $ptimes) ? 'selected' : '' }}" data-time="evening" tabindex="0" role="checkbox" aria-checked="{{ in_array('evening', $ptimes) ? 'true' : 'false' }}">
                                                     <input type="checkbox" name="preferred_time[]" value="evening" class="hidden" {{ in_array('evening', $ptimes) ? 'checked' : '' }}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                                                     <span class="font-bold text-xs text-gray-800">{{ __('post-task.step1.evening') }}</span>
@@ -894,5 +895,5 @@
 
 @push('scripts')
     <script src="https://unpkg.com/feather-icons"></script>
-    <script src="{{ asset('js/pages/my-tasks.js') }}"></script>
+    <script type="module" src="{{ asset('js/pages/my-tasks.js') }}"></script>
 @endpush

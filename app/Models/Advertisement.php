@@ -138,6 +138,27 @@ class Advertisement extends Model
         return $query->where('status', TaskStatus::Open);
     }
 
+    public function scopeByTaskType(Builder $query, ?string $type): Builder
+    {
+        if (!$type || $type === 'all') {
+            return $query;
+        }
+
+        // Map 'remote' filter value to 'online' task_type
+        $dbType = ($type === 'remote') ? 'online' : 'in_person';
+
+        return $query->where('task_type', $dbType);
+    }
+
+    public function scopeByLocation(Builder $query, ?string $location): Builder
+    {
+        if (!$location) {
+            return $query;
+        }
+
+        return $query->where('location', 'like', "%{$location}%");
+    }
+
     // ── Domain Helpers ───────────────────────────────────────
 
     public function isOwner(int $userId): bool
@@ -158,6 +179,15 @@ class Advertisement extends Model
     public function isCompleted(): bool
     {
         return $this->status === TaskStatus::Completed;
+    }
+
+    public function scopeApplySorting(Builder $query, ?string $sort): Builder
+    {
+        return match ($sort) {
+            'lowest_price' => $query->orderBy('price', 'asc'),
+            'highest_price' => $query->orderBy('price', 'desc'),
+            default => $query->orderBy('created_at', 'desc'),
+        };
     }
 
     public function hasEmployee(): bool

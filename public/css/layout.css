@@ -164,6 +164,12 @@ a {
   transform: translateY(0) !important;
 }
 
+/* Keyboard/manual submenu visibility */
+.submenu.show-submenu {
+  display: block !important;
+  opacity: 1 !important;
+}
+
 .user-pic {
   width: 40px;
   border-radius: 50%;
@@ -337,7 +343,7 @@ a {
 }
 
 .acc-slider-track.active .acc-slider-circle {
-  left: 24px !important;
+  left: 20px !important;
 }
 
 /* High Contrast Toggle UI overrides */
@@ -345,42 +351,6 @@ a {
   border: 2px solid #000000 !important;
   background-color: #ffffff !important;
   height: 18px !important;
-}
-
-.high-contrast .acc-slider-track.active {
-  background-color: #000000 !important;
-}
-
-/* Enforce black/white colors with high specificity */
-.high-contrast .acc-slider-track .acc-slider-circle,
-.high-contrast #nav-reduced-motion-indicator .acc-slider-circle,
-.high-contrast #nav-high-contrast-indicator .acc-slider-circle {
-  background-color: #000000 !important;
-  top: 2px !important;
-  border: none !important;
-}
-
-.high-contrast .acc-slider-track.active .acc-slider-circle,
-.high-contrast #nav-reduced-motion-indicator.active .acc-slider-circle,
-.high-contrast #nav-high-contrast-indicator.active .acc-slider-circle {
-  background-color: #ffffff !important;
-}
-
-/* Remove unintended hover effects on slider elements in HC */
-.high-contrast button:hover .acc-slider-track {
-  background-color: #ffffff !important;
-}
-
-.high-contrast button:hover .acc-slider-track.active {
-  background-color: #000000 !important;
-}
-
-.high-contrast button:hover .acc-slider-circle {
-  background-color: inherit !important;
-}
-
-.high-contrast button:hover .acc-slider-track.active .acc-slider-circle {
-  background-color: #ffffff !important;
 }
 
 /* ===== MOBILE NAVBAR ===== */
@@ -505,8 +475,8 @@ footer .text-gray-400 {
 .high-contrast [class*="text-indigo-"],
 .high-contrast [class*="text-blue-"],
 .high-contrast [class*="text-violet-"] {
-    color: #000000 !important;
-    font-weight: 800 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
 }
 
 /* === 3. CATEGORY & FEATURE CARDS: High visibility === */
@@ -595,7 +565,7 @@ footer .text-gray-400 {
 }
 
 .high-contrast .index-hero-text-color *,
-.high-contrast .bg-gray-900 *, 
+.high-contrast .bg-gray-900 *,
 .high-contrast [class*="bg-indigo-600"] *,
 .high-contrast [class*="bg-violet-600"] *,
 .high-contrast .app-card-gradient * {
@@ -605,8 +575,8 @@ footer .text-gray-400 {
 /* Specific Hero Title Override */
 .high-contrast .bg-gray-900 h1 span,
 .high-contrast .bg-gray-900 p span {
-    color: #ffffff !important;
-    text-shadow: none !important;
+  color: #ffffff !important;
+  text-shadow: none !important;
 }
 
 /* === 5. BUTTONS (Secondary): Strong borders === */
@@ -757,46 +727,46 @@ footer .text-gray-400 {
 
 /* Notifications Dropdown HC Hardening */
 .high-contrast #notification-dropdown {
-    background-color: #ffffff !important;
-    border: 4px solid #000000 !important;
-    box-shadow: none !important;
+  background-color: #ffffff !important;
+  border: 4px solid #000000 !important;
+  box-shadow: none !important;
 }
 
 .high-contrast #notification-dropdown .bg-\[var\(--nav-dropdown-hover\)\/30\],
 .high-contrast #notification-dropdown .bg-\[var\(--nav-dropdown-hover\)\] {
-    background-color: #ffffff !important;
-    border-bottom: 2px solid #000000 !important;
+  background-color: #ffffff !important;
+  border-bottom: 2px solid #000000 !important;
 }
 
 .high-contrast #notification-dropdown .p-3.bg-\[var\(--nav-dropdown-hover\)\] {
-    background-color: #ffffff !important;
-    border-top: 2px solid #000000 !important;
+  background-color: #ffffff !important;
+  border-top: 2px solid #000000 !important;
 }
 
 .high-contrast #notification-dropdown a:not(.btn) {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    text-decoration: underline !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  text-decoration: underline !important;
 }
 
 .high-contrast #notification-dropdown a:not(.btn):hover {
-    background-color: #000000 !important;
-    color: #ffffff !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .high-contrast #notification-dropdown a:not(.btn):hover * {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 .high-contrast #notification-dropdown .bg-\[var\(--primary-accent\)\]\/5 {
-    background-color: #ffffff !important;
-    box-shadow: inset 8px 0 0 #000000 !important;
+  background-color: #ffffff !important;
+  box-shadow: inset 8px 0 0 #000000 !important;
 }
 
 .high-contrast #notification-dropdown .unread-badge {
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    border: 1px solid #ffffff !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
 }
 
 .high-contrast .maplibregl-popup-content .bg-blue-600,
@@ -873,22 +843,22 @@ footer .text-gray-400 {
 /* Global Hover Compatibility - Ensure text inverts to white when bg-hover is black */
 .high-contrast .hover\:bg-\[var\(--bg-hover\)\]:hover,
 .high-contrast .hover\:bg-\[var\(--nav-dropdown-hover\)\]:hover {
-    background-color: #000000 !important;
-    color: #ffffff !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .high-contrast .hover\:bg-\[var\(--bg-hover\)\]:hover *,
 .high-contrast .hover\:bg-\[var\(--nav-dropdown-hover\)\]:hover * {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 /* Force standard white background for autofilled fields in HC */
 .high-contrast input:-webkit-autofill,
-.high-contrast input:-webkit-autofill:hover, 
+.high-contrast input:-webkit-autofill:hover,
 .high-contrast input:-webkit-autofill:focus {
-    -webkit-text-fill-color: #000000 !important;
-    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
-    transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #000000 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* Global Logo & Social Icon Hardening */
@@ -896,13 +866,13 @@ footer .text-gray-400 {
 .high-contrast .btn-outline img,
 .high-contrast a[href*="google"] img,
 .high-contrast a[href*="facebook"] img {
-    filter: grayscale(1) brightness(0) !important;
+  filter: grayscale(1) brightness(0) !important;
 }
 
 .high-contrast .fa-facebook,
 .high-contrast .fa-google,
 .high-contrast .fa-apple {
-    color: #000000 !important;
+  color: #000000 !important;
 }
 
 /* Buttons in High Contrast - Force standard block look for clarity */
@@ -1042,7 +1012,7 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
   box-shadow: none !important;
 }
 
-.high-contrast #settings-menu div:not([id*="-indicator"]):not(.dot),
+.high-contrast #settings-menu div:not([id*="-indicator"]):not(.acc-slider-circle),
 .high-contrast #settings-menu button {
   background-color: #ffffff !important;
   color: #000000 !important;
@@ -1053,8 +1023,8 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
 }
 
 /* Hover state: Parent item or current button/div turns black */
-.high-contrast #settings-menu div:hover:not([id*="-indicator"]):not(.dot),
-.high-contrast #settings-menu button:hover:not([id*="-indicator"]):not(.dot),
+.high-contrast #settings-menu div:hover:not([id*="-indicator"]):not(.acc-slider-circle),
+.high-contrast #settings-menu button:hover:not([id*="-indicator"]):not(.acc-slider-circle),
 .high-contrast #settings-menu .group:hover>button,
 .high-contrast #settings-menu .group:hover>div:first-child {
   background-color: #000000 !important;
@@ -1071,7 +1041,7 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
 
 /* Keep non-hovered submenu items visible (black text on white bg) */
 .high-contrast #settings-menu .submenu button:not(:hover),
-.high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
+.high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.acc-slider-circle),
 .high-contrast #settings-menu .submenu a:not(:hover),
 .high-contrast #settings-menu .submenu a:not(:hover) * {
   color: #000000 !important;
@@ -1108,35 +1078,36 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
   opacity: 1 !important;
 }
 
-.high-contrast [id*="-indicator"].bg-blue-600 {
+.high-contrast [id*="-indicator"].active {
   background-color: #000000 !important;
 }
 
-.high-contrast [id*="-indicator"] .dot {
+.high-contrast [id*="-indicator"] .acc-slider-circle {
   background-color: #000000 !important;
-  border: 1px solid #ffffff;
+  border: 1px solid #ffffff !important;
   width: 0.75rem !important;
   height: 0.75rem !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  left: 1.5px !important;
+  top: 1px !important;
+  left: 1px !important;
+  transform: none !important;
+
 }
 
-.high-contrast [id*="-indicator"].bg-blue-600 .dot {
+.high-contrast [id*="-indicator"].active .acc-slider-circle {
   background-color: #ffffff !important;
-  border: 1px solid #000000;
-  transform: translateX(20px) translateY(-50%) !important;
+  border: 1px solid #000000 !important;
+  left: 21px !important;
 }
 
 /* Submenu items visibility */
-.high-contrast #settings-menu .submenu div:not(.dot):not([id*="-indicator"]),
+.high-contrast #settings-menu .submenu div:not(.acc-slider-circle):not([id*="-indicator"]),
 .high-contrast #settings-menu .submenu button:not([id*="-indicator"]) {
   background-color: #ffffff !important;
   color: #000000 !important;
 }
 
-.high-contrast #settings-menu .submenu div:hover:not(.dot):not([id*="-indicator"]),
-.high-contrast #settings-menu .submenu button:hover:not(.dot):not([id*="-indicator"]) {
+.high-contrast #settings-menu .submenu div:hover:not(.acc-slider-circle):not([id*="-indicator"]),
+.high-contrast #settings-menu .submenu button:hover:not(.acc-slider-circle):not([id*="-indicator"]) {
   background-color: #000000 !important;
   color: #ffffff !important;
 }
@@ -1189,8 +1160,8 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
 
 /* Global Reduced Motion Hover */
 /* Exclude MapLibre GL elements and critical UI buttons from transform overrides */
-.reduced-motion *:hover:not(.dot):not(img):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-map):not(.maplibregl-map *):not(.maplibregl-popup):not(.maplibregl-popup *):not(.maplibregl-canvas-container):not(.maplibregl-canvas-container *):not(.maplibregl-ctrl-group):not(.maplibregl-ctrl-group *):not(.animate-cloud-pulse),
-.reduced-motion .group:hover *:not(.dot):not(img):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-map):not(.maplibregl-map *):not(.animate-cloud-pulse),
+.reduced-motion *:hover:not(.acc-slider-circle):not(img):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-map):not(.maplibregl-map *):not(.maplibregl-popup):not(.maplibregl-popup *):not(.maplibregl-canvas-container):not(.maplibregl-canvas-container *):not(.maplibregl-ctrl-group):not(.maplibregl-ctrl-group *):not(.animate-cloud-pulse),
+.reduced-motion .group:hover *:not(.acc-slider-circle):not(img):not(.maplibregl-marker):not(.maplibregl-marker *):not(.maplibregl-map):not(.maplibregl-map *):not(.animate-cloud-pulse),
 .reduced-motion img:not(.maplibregl-map img),
 .reduced-motion img:hover:not(.maplibregl-map img) {
   transform: none !important;
@@ -1306,16 +1277,16 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
   border: 1px solid #ffffff !important;
 }
 
-.high-contrast svg, 
+.high-contrast svg,
 .high-contrast i {
-    stroke: currentColor !important;
+  stroke: currentColor !important;
 }
 
 /* Ensure Icons in badges/buttons stay visible */
 .high-contrast .cat-badge i,
 .high-contrast .feature-icon-box i,
 .high-contrast .bg-amber-400 i {
-    color: inherit !important;
+  color: inherit !important;
 }
 
 .high-contrast .bg-yellow-400 {
@@ -1386,7 +1357,7 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
 }
 
 .high-contrast .bg-green-50 {
-    border-color: #000000 !important;
+  border-color: #000000 !important;
 }
 
 .high-contrast .bg-gray-100 {
@@ -1429,7 +1400,7 @@ html.high-contrast .desktop-navbar .btn.bg-secondary-500:hover {
 /* Override: settings submenu items must keep black text unless directly hovered */
 .high-contrast #settings-menu .submenu button:not(:hover),
 .high-contrast #settings-menu .submenu button:not(:hover) span,
-.high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.dot),
+.high-contrast #settings-menu .submenu button:not(:hover) *:not([id*="-indicator"]):not(.acc-slider-circle),
 .high-contrast #settings-menu .submenu a:not(:hover),
 .high-contrast #settings-menu .submenu a:not(:hover) span {
   color: #000000 !important;
@@ -1695,22 +1666,16 @@ html.dark [id*="-indicator"] .dot {
 /* Mobile post-task button in sidebar */
 .mobile-sidebar-cta {
   display: block;
-  margin: 12px 20px;
-  padding: 12px;
   text-align: center;
-  background: #6366f1;
-  color: #fff;
   font-weight: 600;
   font-size: 15px;
-  border-radius: 10px;
   text-decoration: none;
-  transition: background 0.2s, transform 0.15s;
+  transition: background-color 0.2s, filter 0.2s, transform 0.15s;
 }
 
 .mobile-sidebar-cta:hover {
-  background: #4f46e5;
   transform: translateY(-1px);
-  color: #fff;
+  filter: brightness(1.1);
 }
 
 /* Mobile right-side profile dropdown */
@@ -2273,46 +2238,46 @@ footer .text-gray-400 {
 
 /* Profile Steps Modal HC Fixes */
 .high-contrast #profile-steps-modal .relative.w-20.h-20 {
-    background-color: #ffffff !important;
-    border: 2px solid #000000 !important;
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
 }
 
 .high-contrast #profile-steps-modal svg path[fill*="primary-accent"] {
-    fill: #000000 !important;
-    stroke: #000000 !important;
+  fill: #000000 !important;
+  stroke: #000000 !important;
 }
 
 .high-contrast #profile-steps-modal .bg-yellow-400 {
-    background-color: #000000 !important;
-    border: 1px solid #ffffff !important;
+  background-color: #000000 !important;
+  border: 1px solid #ffffff !important;
 }
 
 .high-contrast #profile-steps-modal .w-10.h-10 {
-    background-color: #ffffff !important;
-    border: 2px solid #000000 !important;
-    color: #000000 !important;
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
 }
 
 .high-contrast #profile-steps-modal .w-10.h-10 i {
-    color: #000000 !important;
+  color: #000000 !important;
 }
 
 .high-contrast #profile-steps-modal a:hover .w-10.h-10 {
-    background-color: #000000 !important;
-    color: #ffffff !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .high-contrast #profile-steps-modal a:hover .w-10.h-10 i {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 .high-contrast #profile-steps-modal .w-7.h-7 {
-    background-color: #ffffff !important;
-    border: 2px solid #000000 !important;
-    color: #000000 !important;
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
 }
 
 .high-contrast #profile-steps-modal a:hover .w-7.h-7 {
-    background-color: #000000 !important;
-    color: #ffffff !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }

@@ -2,6 +2,8 @@
  * Task Discovery & Exploration Logic
  * Extracted from tasks.blade.php for Clean Code
  */
+import { Autocomplete } from '../modules/autocomplete.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const { taskPoints, translations, urls, filters } = window.TASKS_CONFIG || {};
     const tasksData = taskPoints || [];
@@ -256,40 +258,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     })();
 
-    // 6. City Search
+    // 6. City Search (Using Autocomplete Module)
     const typeCitySearch = document.getElementById('type-city-search');
     const typeCityDropdown = document.getElementById('type-city-dropdown');
     const hiddenCity = document.getElementById('city-search-hidden');
-    let searchTimeout;
 
-    if(typeCitySearch) {
-        typeCitySearch.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            const q = e.target.value;
-            if(q.length < 2) { typeCityDropdown.classList.add('hidden'); return; }
-            
-            searchTimeout = setTimeout(async () => {
-                try {
-                    const res = await fetch(`/api/cities?q=${q}`);
-                    const cities = await res.json();
-                    typeCityDropdown.innerHTML = '';
-                    if(cities.length) {
-                        typeCityDropdown.classList.remove('hidden');
-                        cities.slice(0,8).forEach(c => {
-                            const div = document.createElement('div');
-                            div.className = 'px-3 py-2 text-sm hover:bg-blue-50 cursor-pointer text-gray-700';
-                            div.textContent = c.name;
-                            div.onclick = () => {
-                                hiddenCity.value = c.name;
-                                document.getElementById('filters-form').submit();
-                            };
-                            typeCityDropdown.appendChild(div);
-                        });
-                    }
-                } catch(err){}
-            }, 300);
+    if (typeCitySearch && typeCityDropdown) {
+        new Autocomplete({
+            input: typeCitySearch,
+            dropdown: typeCityDropdown,
+            endpoint: '/api/cities',
+            onSelect: (item) => {
+                if (hiddenCity) hiddenCity.value = item.name;
+            },
+            onClear: () => {
+                if (hiddenCity) hiddenCity.value = '';
+            }
         });
     }
+
+    // Handle the "Apply Filter" button in the Type dropdown
+    document.getElementById('type-apply')?.addEventListener('click', () => {
+        document.getElementById('filters-form').submit();
+    });
 
     // 7. Modal Interaction Logic
     const modal = document.getElementById('profile-steps-modal');
@@ -415,42 +406,20 @@ document.addEventListener('DOMContentLoaded', () => {
             updatePrice('min');
         }
 
+        // Mobile City Search (Using Autocomplete Module)
         const cityInput = document.getElementById('mobile-city-search-input');
         const cityResults = document.getElementById('mobile-city-results');
         const cityHidden = document.getElementById('mobile-city-hidden');
-        let mobileSearchTimeout;
 
-        if (cityInput) {
-            cityInput.addEventListener('input', (e) => {
-                clearTimeout(mobileSearchTimeout);
-                const q = e.target.value;
-                if (q.length < 2) { cityResults.classList.add('hidden'); return; }
-
-                mobileSearchTimeout = setTimeout(async () => {
-                    try {
-                        const res = await fetch(`/api/cities?q=${q}`);
-                        const cities = await res.json();
-                        cityResults.innerHTML = '';
-                        if (cities.length) {
-                            cityResults.classList.remove('hidden');
-                            cities.slice(0, 8).forEach(c => {
-                                const div = document.createElement('div');
-                                div.className = 'px-5 py-4 text-[14px] font-medium hover:bg-blue-50 cursor-pointer text-gray-700 border-b border-gray-50 last:border-0';
-                                div.innerHTML = `<i data-feather="map-pin" class="w-3.5 h-3.5 inline mr-2 text-gray-400"></i> ${c.name}`;
-                                div.onclick = () => {
-                                    cityInput.value = c.name;
-                                    cityHidden.value = c.name;
-                                    cityResults.classList.add('hidden');
-                                    refreshIcons();
-                                };
-                                cityResults.appendChild(div);
-                            });
-                            refreshIcons();
-                        } else {
-                            cityResults.classList.add('hidden');
-                        }
-                    } catch (err) {}
-                }, 300);
+        if (cityInput && cityResults) {
+            new Autocomplete({
+                input: cityInput,
+                dropdown: cityResults,
+                endpoint: '/api/cities',
+                onSelect: (item) => {
+                    if (cityHidden) cityHidden.value = item.name;
+                    refreshIcons();
+                }
             });
         }
 

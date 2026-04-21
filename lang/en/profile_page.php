@@ -39,6 +39,7 @@ return [
         'high_contrast' => 'High Contrast',
         'high_contrast_desc' => 'Increase color contrast for better readability.',
         'apply' => 'Apply',
+        'apply_success' => 'Settings applied successfully!',
     ],
     'security' => [
         'title' => 'Security',

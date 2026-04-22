@@ -1,0 +1,164 @@
+/* Task Details Page Specific Styling */
+.task-details-container {
+    --details-bg: var(--bg-primary);
+    --details-surface: var(--bg-secondary);
+    --details-border: var(--border-base);
+    --details-text-main: var(--text-primary);
+    --details-text-muted: var(--text-secondary);
+    --details-accent: var(--primary-accent);
+    --details-success: #10b981;
+    --alert-success-bg: rgba(16, 185, 129, 0.1);
+    --alert-success-text: #059669;
+    --alert-error-bg: rgba(244, 63, 94, 0.1);
+    --alert-error-text: #e11d48;
+}
+
+html.dark .task-details-container {
+    --details-success: #34d399;
+    --alert-success-bg: rgba(16, 185, 129, 0.15);
+    --alert-success-text: #34d399;
+    --alert-error-bg: rgba(239, 68, 68, 0.15);
+    --alert-error-text: #f87171;
+}
+
+.high-contrast .task-details-container {
+    --details-bg: #ffffff;
+    --details-surface: #ffffff;
+    --details-border: #000000;
+    --details-text-main: #000000;
+    --details-text-muted: #000000;
+    --details-accent: #000000;
+    --details-success: #000000;
+    --alert-success-bg: #ffffff;
+    --alert-success-text: #000000;
+    --alert-error-bg: #ffffff;
+    --alert-error-text: #000000;
+}
+
+/* Base Styles */
+.details-main-bg { background-color: var(--details-bg); }
+.details-surface-bg { background-color: var(--details-surface); }
+.details-border-color { border-color: var(--details-border); }
+.details-text-main { color: var(--details-text-main); }
+.details-text-muted { color: var(--details-text-muted); }
+
+/* Components */
+.details-card {
+    background-color: var(--details-bg);
+    border: 1px solid var(--details-border);
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.budget-box {
+    background-color: var(--details-bg);
+    border: 1px solid var(--details-border);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.high-contrast .budget-box,
+.high-contrast .details-card {
+    background-color: #ffffff !important;
+    border: 3px solid #000000 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+}
+
+.high-contrast .budget-box *,
+.high-contrast .details-card * {
+    color: #000000 !important;
+}
+
+.progress-track {
+    background-color: var(--details-border);
+}
+
+.progress-fill {
+    background-color: var(--details-success);
+}
+
+.status-badge-open {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--details-success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-badge-assigned {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.status-badge-completed {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--details-accent);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.details-alert-success {
+    background-color: var(--alert-success-bg);
+    color: var(--alert-success-text);
+    border: 1px solid var(--alert-success-text);
+    border-radius: 0.75rem;
+}
+
+.details-alert-error {
+    background-color: var(--alert-error-bg);
+    color: var(--alert-error-text);
+    border: 1px solid var(--alert-error-text);
+    border-radius: 0.75rem;
+}
+
+/* High Contrast Visibility Overrides */
+.high-contrast .progress-track {
+    background-color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+
+.high-contrast .progress-fill {
+    background-color: #000000 !important;
+}
+
+.high-contrast .budget-box button[type="submit"] {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 3px solid #000000 !important;
+}
+
+.high-contrast .budget-box button[type="submit"]:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+.high-contrast .budget-box button[type="submit"] span,
+.high-contrast .budget-box button[type="submit"] i {
+    color: inherit !important;
+}
+
+.high-contrast .status-badge-open,
+.high-contrast .status-badge-assigned,
+.high-contrast .status-badge-completed,
+.high-contrast div.status-badge-open,
+.high-contrast div.status-badge-assigned,
+.high-contrast div.status-badge-completed {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    font-weight: 800 !important;
+}
+
+.high-contrast .status-badge-open *,
+.high-contrast .status-badge-assigned *,
+.high-contrast .status-badge-completed * {
+    color: #000000 !important;
+}
+
+
+#details-toggle:focus-visible {
+    outline: none !important;
+    background-color: rgba(37, 99, 235, 0.08);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35) !important;
+    border-radius: 6px;
+    padding: 2px 6px;
+    margin: -2px -6px;
+}

@@ -1,0 +1,408 @@
+    /* --- ANIMATIONS --- */
+    @keyframes scrollUp {
+      0% {
+        transform: translateY(0);
+      }
+
+      100% {
+        transform: translateY(-50%);
+      }
+    }
+
+    @keyframes scrollDown {
+      0% {
+        transform: translateY(-50%);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .animate-scroll-up .task-column {
+      animation: scrollUp 40s linear infinite;
+    }
+
+    .animate-scroll-down .task-column {
+      animation: scrollDown 40s linear infinite;
+    }
+
+    .task-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes scroll-right {
+      0% {
+        transform: translateX(-50%);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .animate-scroll-left {
+      animation: scroll-left 40s linear infinite;
+    }
+
+    .animate-scroll-right {
+      animation: scroll-right 40s linear infinite;
+    }
+
+    /* Pause animation on hover (optional) */
+    .group:hover .animate-scroll-left,
+    .group:hover .animate-scroll-right {
+      animation-play-state: paused;
+    }
+
+    /* Edge fade mask */
+    .scroll-mask {
+      mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    }
+
+    /* --- GLOBAL THEME CONFIGURATION --- */
+    .index-container {
+      --index-bg: var(--bg-primary);
+      --index-section-alt: var(--bg-secondary);
+      --index-card-bg: var(--bg-primary);
+      --index-border: var(--border-base);
+      --index-text-main: var(--text-primary);
+      --index-text-muted: var(--text-secondary);
+      --index-hero-overlay: rgba(15, 23, 42, 0.65);
+      --index-hero-text: #ffffff;
+      
+      /* Semantic Colors for Categories */
+      --cat-blue-bg: var(--nav-dropdown-hover); --cat-blue-text: var(--primary-accent);
+      --cat-green-bg: #f0fdf4; --cat-green-text: #15803d;
+      --cat-purple-bg: #faf5ff; --cat-purple-text: #7e22ce;
+      --cat-orange-bg: #fff7ed; --cat-orange-text: #c2410c;
+      --cat-red-bg: #fef2f2; --cat-red-text: #b91c1c;
+      --cat-teal-bg: #f0fdfa; --cat-teal-text: #0f766e;
+      --cat-amber-bg: #fffbeb; --cat-amber-text: #92400e;
+    }
+
+    html.dark .index-container {
+      --index-hero-overlay: rgba(0, 0, 0, 0.9);
+      
+      --cat-green-bg: rgba(20, 83, 45, 0.4); --cat-green-text: #86efac;
+      --cat-purple-bg: rgba(88, 28, 135, 0.4); --cat-purple-text: #d8b4fe;
+      --cat-orange-bg: rgba(154, 52, 18, 0.4); --cat-orange-text: #fdba74;
+      --cat-red-bg: rgba(127, 29, 29, 0.4); --cat-red-text: #fca5a5;
+      --cat-teal-bg: rgba(19, 78, 74, 0.4); --cat-teal-text: #5eead4;
+      --cat-amber-bg: rgba(120, 53, 15, 0.4); --cat-amber-text: #fcd34d;
+    }
+
+    .high-contrast .index-container {
+      --index-hero-overlay: #000000;
+      --index-hero-text: #ffffff;
+      
+      --cat-blue-bg: #ffffff; --cat-blue-text: #000000;
+      --cat-green-bg: #ffffff; --cat-green-text: #000000;
+      --cat-purple-bg: #ffffff; --cat-purple-text: #000000;
+      --cat-orange-bg: #ffffff; --cat-orange-text: #000000;
+      --cat-red-bg: #ffffff; --cat-red-text: #000000;
+      --cat-teal-bg: #ffffff; --cat-teal-text: #000000;
+      --cat-amber-bg: #ffffff; --cat-amber-text: #000000;
+
+      --index-fog-from: #ffffff;
+    }
+
+    html.dark .index-container.high-contrast {
+        --index-fog-from: #ffffff;
+    }
+
+    /* Semantic Classes */
+    .index-section-bg { background-color: var(--index-bg); }
+    .index-section-alt { background-color: var(--index-section-alt); }
+    .index-text-main { color: var(--index-text-main); }
+    .index-text-muted { color: var(--index-text-muted); }
+    .index-border-color { border-color: var(--index-border); }
+    .index-hero-overlay-bg { background-color: var(--index-hero-overlay); }
+    .index-hero-text-color { color: var(--index-hero-text); }
+    .index-hero-text-color h1 { text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); }
+    .index-hero-text-color p { text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
+    
+    /* Fog Stop Colors - Using section-alt for seamless transition on the gray mockup background */
+    .index-fog-top { background: linear-gradient(to bottom, var(--index-section-alt) 0%, transparent 100%); z-index: 30; }
+    .index-fog-bottom { background: linear-gradient(to top, var(--index-section-alt) 0%, transparent 100%); z-index: 30; }
+    
+    .high-contrast .index-fog-top,
+    .high-contrast .index-fog-bottom {
+        background: transparent !important;
+        display: none !important;
+    }
+    
+    /* --- High Contrast Overrides (WCAG AAA) --- */
+    .high-contrast .index-hero-text-color h1,
+    .high-contrast .index-hero-text-color h1 *,
+    .high-contrast .index-hero-text-color p,
+    .high-contrast .index-hero-text-color p * {
+        color: #ffffff !important;
+        text-shadow: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    .high-contrast .index-hero-text-color a {
+        border-radius: 999px !important;
+        padding: 1rem 2rem !important;
+        font-weight: 900 !important;
+        text-align: center !important;
+        opacity: 1 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    /* Post a Task Button */
+    .high-contrast .index-hero-text-color a[href*="post-task"] {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 4px solid #ffffff !important;
+    }
+    .high-contrast .index-hero-text-color a[href*="post-task"] * {
+        color: #ffffff !important;
+    }
+
+    /* Browse Tasks Button */
+    .high-contrast .index-hero-text-color a[href*="tasks"] {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 4px solid #000000 !important;
+    }
+    .high-contrast .index-hero-text-color a[href*="tasks"] * {
+        color: #000000 !important;
+    }
+
+    .high-contrast span[class*="bg-white/20"] {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #ffffff !important;
+        opacity: 1 !important;
+    }
+    .high-contrast .feature-card,
+    .high-contrast .popular-task-card,
+    .high-contrast .popular-task-card div[class*="bg-white"] {
+        background-color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        box-shadow: none !important;
+        color: #000000 !important;
+    }
+
+    .high-contrast .feature-card *,
+    .high-contrast .popular-task-card *:not(.cat-badge) {
+        background-color: transparent !important;
+        color: #000000 !important;
+    }
+    
+    .high-contrast .popular-task-card [data-feather="star"],
+    .high-contrast .popular-task-card i[data-feather="star"] {
+        color: #000000 !important;
+        fill: #000000 !important;
+        opacity: 1 !important;
+    }
+
+    /* Category Badge Variations */
+    .cat-badge {
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cat-blue { background-color: var(--cat-blue-bg); color: var(--cat-blue-text); }
+    .cat-green { background-color: var(--cat-green-bg); color: var(--cat-green-text); }
+    .cat-purple { background-color: var(--cat-purple-bg); color: var(--cat-purple-text); }
+    .cat-orange { background-color: var(--cat-orange-bg); color: var(--cat-orange-text); }
+    .cat-red { background-color: var(--cat-red-bg); color: var(--cat-red-text); }
+    .cat-teal { background-color: var(--cat-teal-bg); color: var(--cat-teal-text); }
+    .cat-amber { background-color: var(--cat-amber-bg); color: var(--cat-amber-text); }
+
+    .high-contrast .cat-badge,
+    .high-contrast .popular-task-card .cat-badge,
+    .high-contrast .feature-card .cat-badge {
+        border: 2px solid #000000 !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        display: inline-flex !important;
+        opacity: 1 !important;
+        font-weight: 900 !important;
+    }
+    .high-contrast .cat-badge *,
+    .high-contrast .popular-task-card .cat-badge * {
+        color: #000000 !important;
+    }
+
+    .feature-icon-box {
+      width: 3.5rem; height: 3.5rem;
+      border-radius: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+    }
+    .feature-card:hover .feature-icon-box { background-color: var(--cat-blue-text); color: #ffffff; }
+
+    .high-contrast .feature-icon-box {
+        border: 3px solid #000000 !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    /* High Contrast Button Fixes */
+    .high-contrast .btn-indigo,
+    .high-contrast .btn-blue {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      border: 3px solid #ffffff !important;
+    }
+    
+    .high-contrast .btn-indigo:hover,
+    .high-contrast .btn-blue:hover {
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      border-color: #000000 !important;
+    }
+
+    /* --- TESTIMONIAL SLIDER STYLES --- */
+    .perspective-container {
+      position: relative;
+      overflow: hidden; /* Essential for sliding effects */
+    }
+    #testimonial-content {
+      opacity: 1;
+      transform: translateX(0);
+      will-change: transform, opacity;
+    }
+    /* Reduced Motion overrides */
+    .reduced-motion #testimonial-content {
+      animation: none !important;
+      transform: none !important;
+      transition: opacity 0.3s ease !important;
+    }
+
+    /* --- INDEX-SPECIFIC ACCESSIBILITY --- */
+    .reduced-motion .animate-scroll-up .task-column,
+    .reduced-motion .animate-scroll-down .task-column,
+    .reduced-motion .animate-scroll-left,
+    .reduced-motion .animate-scroll-right,
+    .reduced-motion .animate-bounce {
+      animation: none !important;
+      transform: none !important;
+    }
+
+    .high-contrast .skew-bg { display: none !important; }
+    .high-contrast .how-it-works-right { display: none !important; }
+    .high-contrast .how-it-works-inner { background: #000000 !important; border: 4px solid #ffffff !important; }
+    .high-contrast .how-it-works-inner * { color: #ffffff !important; }
+    .high-contrast .how-it-works-inner .index-section-bg,
+    .high-contrast .how-it-works-inner .index-section-alt { background: #000000 !important; border-color: #ffffff !important; }
+    
+    /* Branding and title spans visibility */
+    .high-contrast .index-hero-text-color h1 span,
+    .high-contrast .index-hero-text-color p span {
+        color: #ffffff !important;
+    }
+    
+    .high-contrast .index-section-alt h2 span,
+    .high-contrast .index-section-alt p span,
+    .high-contrast .popular-task-card h2 span,
+    .high-contrast .feature-card h3 span,
+    .high-contrast .index-text-main span {
+        color: #000000 !important;
+        font-weight: 900 !important;
+    }
+
+    /* App Card and Mockup Fixes */
+    .app-card-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    html.dark .app-card-gradient {
+      background: linear-gradient(135deg, #3730a3 0%, #5b21b6 100%);
+    }
+    .high-contrast .app-card-gradient {
+      background: #000000 !important;
+      border: 4px solid #000000 !important;
+    }
+
+    .high-contrast .mockup-notification {
+      background: #ffffff !important;
+      border: 3px solid #000000 !important;
+      opacity: 1 !important;
+      box-shadow: none !important;
+    }
+    .high-contrast .mockup-notification * {
+      color: #000000 !important;
+    }
+
+    /* Mockup Phone & Image Fixes */
+    .high-contrast img[src*="iphone-mockup"] {
+        filter: grayscale(1) brightness(1.5) contrast(1.2) !important;
+        border: 2px solid #ffffff !important;
+        border-radius: 3rem !important;
+    }
+    .high-contrast .mockup-success-badge {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+    }
+    .high-contrast .mockup-success-badge i {
+        color: #ffffff !important;
+    }
+
+    html.dark .mockup-notification {
+        background-color: rgba(15, 23, 42, 0.8) !important;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Home Decorative Patterns */
+    .home-dots-pattern {
+      background-image: radial-gradient(#94a3b8 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* Mockup Specifics */
+    .mockup-notif-1 {
+      animation-duration: 3s;
+      background-color: var(--index-card-bg);
+    }
+
+    .mockup-notif-2 {
+      animation-duration: 4s;
+      animation-delay: 1s;
+      background-color: var(--index-card-bg);
+    }
+
+    .mockup-success-badge {
+      background-color: var(--details-success-bg);
+      color: var(--details-success);
+    }
+
+    /* QR Code Scannability */
+    .qr-code-wrapper {
+        background-color: #ffffff !important;
+        border: 2px solid #ffffff !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .qr-code-wrapper img {
+        opacity: 1 !important;
+        mix-blend-mode: normal !important;
+        filter: none !important;
+    }
+
+    .high-contrast .qr-code-wrapper {
+        border-color: #000000 !important;
+        box-shadow: none !important;
+    }

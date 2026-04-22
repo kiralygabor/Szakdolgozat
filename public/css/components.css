@@ -1,0 +1,125 @@
+/* Shared Component Styles */
+
+/* --- High Contrast Modals --- */
+.high-contrast #report-modal .bg-white,
+.high-contrast #user-report-modal .bg-white {
+    background-color: #ffffff !important;
+    border: 4px solid #000000 !important;
+}
+
+.high-contrast #report-modal h2, 
+.high-contrast #report-modal p,
+.high-contrast #report-modal label,
+.high-contrast #user-report-modal h2, 
+.high-contrast #user-report-modal p,
+.high-contrast #user-report-modal label {
+    color: #000000 !important;
+    opacity: 1 !important;
+}
+
+.high-contrast #report-modal textarea,
+.high-contrast #user-report-modal textarea {
+    border: 2px solid #000000 !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* --- Common Animations --- */
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fade-in-up 0.4s ease-out forwards;
+}
+
+/* --- Navbar Semantic Elements --- */
+.notification-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 16px;
+    height: 16px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+}
+
+.unread-badge {
+    margin-left: auto;
+    background: #ef4444;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+}
+
+.logout-link-danger {
+    color: #dc2626 !important;
+}
+
+.navbar-btn-bordered {
+    border: 1.5px solid #334155 !important;
+}
+
+/* Theme Overrides for Navbar Elements */
+html.dark .notification-dot,
+html.dark .unread-badge {
+    border-color: #0f172a;
+}
+
+html.dark .navbar-btn-bordered {
+    border-color: #64748b !important;
+}
+
+.high-contrast .notification-dot,
+.high-contrast .unread-badge {
+    background: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+}
+
+.high-contrast .logout-link-danger {
+    color: #000 !important;
+    font-weight: 900 !important;
+    text-decoration: underline !important;
+}
+
+.high-contrast .navbar-btn-bordered {
+    border: 3px solid #000 !important;
+}
+
+.mobile-sidebar-guest-container {
+    padding: 16px 20px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: auto;
+}
+
+html.dark .mobile-sidebar-guest-container {
+    border-top-color: #334155;
+}
+/* --- Modal Visibility Controls --- */
+#report-modal.show,
+#user-report-modal.show {
+    display: flex !important;
+    opacity: 1 !important;
+}
+
+#report-modal.hidden,
+#user-report-modal.hidden {
+    display: none !important;
+}

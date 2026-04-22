@@ -15,6 +15,16 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CountiesSeeder::class,
+            CitiesSeeder::class,
+            CategoriesSeeder::class,
+            UsersSeeder::class,
+            ReviewsSeeder::class,
+            AdvertisementsSeeder::class,
+            JobsSeeder::class,
+            TestUserSeeder::class,
+            PenaltySeeder::class,
+            AdminSeeder::class,
+            ExtraDataSeeder::class,
             ]);
     }
 }

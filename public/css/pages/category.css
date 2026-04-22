@@ -1,0 +1,255 @@
+/* ==========================================================================
+   Category Page Styles
+   ========================================================================== */
+
+/* --- Custom Properties --- */
+:root {
+    --category-accent: #4f46e5;
+    --category-accent-light: #6366f1;
+    --category-border-width: 3px;
+    --category-transition-speed: 0.2s;
+    --category-image-height-mobile: 280px;
+    --category-image-height-desktop: 430px;
+}
+
+/* --- Scrollbar Utilities --- */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+}
+
+/* --- Mobile Scroll Hint --- */
+@media (max-width: 767px) {
+    .scroll-hint {
+        animation: scroll-hint 2s ease-in-out infinite;
+    }
+}
+
+@keyframes scroll-hint {
+    0%, 100% { transform: translateX(0); opacity: 0.5; }
+    50% { transform: translateX(5px); opacity: 1; }
+}
+
+/* --- Category Sidebar Buttons --- */
+.category-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: #4b5563;
+    border-left: var(--category-border-width) solid transparent;
+    border-radius: 0;
+    background: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--category-transition-speed) ease,
+                border-color var(--category-transition-speed) ease,
+                background-color var(--category-transition-speed) ease;
+}
+
+.category-btn:hover {
+    color: var(--category-accent);
+    background-color: rgba(79, 70, 229, 0.04);
+}
+
+.category-btn.is-active {
+    color: var(--category-accent);
+    font-weight: 600;
+    border-left-color: var(--category-accent);
+    background-color: rgba(79, 70, 229, 0.04);
+}
+
+/* Mobile: horizontal scroll layout overrides */
+@media (max-width: 767px) {
+    .category-btn {
+        width: max-content;
+        padding: 0.5rem 1rem;
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        border-radius: 0;
+    }
+
+    .category-btn.is-active {
+        border-bottom-color: var(--category-accent);
+    }
+
+    .category-btn:hover {
+        background-color: transparent;
+    }
+}
+
+/* --- Dark Mode: Category Sidebar --- */
+.dark .category-btn {
+    color: #94a3b8;
+}
+
+.dark .category-btn:hover {
+    color: #818cf8;
+    background-color: rgba(99, 102, 241, 0.08);
+}
+
+.dark .category-btn.is-active {
+    color: #818cf8;
+    border-left-color: #818cf8;
+    background-color: rgba(99, 102, 241, 0.08);
+}
+
+@media (max-width: 767px) {
+    .dark .category-btn.is-active {
+        border-bottom-color: #818cf8;
+    }
+}
+
+/* --- Separator Line --- */
+.category-sidebar-divider {
+    border-color: #e0e7ff;
+}
+
+.dark .category-sidebar-divider {
+    border-color: rgba(30, 58, 138, 0.2);
+}
+
+/* --- Mobile Fade Mask --- */
+#mobile-scroll-fade {
+    background-image: linear-gradient(to left, white, transparent);
+}
+
+.dark #mobile-scroll-fade {
+    background-image: linear-gradient(to left, #0f172a, transparent) !important;
+}
+
+/* --- Fade-In Animation --- */
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Service Card Transitions --- */
+.category-services-wrapper {
+    transition: all 0.3s ease;
+}
+
+/* Service Card Hardening for Dark Mode */
+.dark #jobs-list a {
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background-color: #1e293b !important;
+}
+
+.dark #jobs-list a:hover {
+    border-color: #6366f1 !important;
+    background-color: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* --- Role Toggle Button Base --- */
+.role-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   High Contrast Mode Overrides (WCAG AAA)
+   ========================================================================== */
+.high-contrast aside h3 {
+  color: #000000 !important;
+}
+
+.high-contrast .category-btn {
+  color: #000000 !important;
+  opacity: 1 !important;
+  border-left: 3px solid transparent !important;
+  background-color: transparent !important;
+}
+
+.high-contrast .category-btn:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast .category-btn.is-active {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-left-color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+/* Desktop Sidebar Border */
+.high-contrast aside .md\:block.absolute.w-px {
+  background-color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Scroll Hint */
+.high-contrast #mobile-scroll-hint span {
+  color: #000000 !important;
+}
+
+.high-contrast .scroll-hint div {
+  background-color: #000000 !important;
+}
+
+/* Service Card Hover Fixes */
+.high-contrast #jobs-list a {
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
+}
+
+.high-contrast #jobs-list a:hover {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+}
+
+.high-contrast #jobs-list a:hover span,
+.high-contrast #jobs-list a:hover i,
+.high-contrast #jobs-list a:hover svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  background-color: transparent !important;
+}
+
+.high-contrast #jobs-list a span:last-child {
+  border: 1px solid #000000 !important;
+}
+
+.high-contrast #jobs-list a:hover span:last-child {
+  border-color: #ffffff !important;
+}
+
+/* Role Toggle HC Fixes */
+.high-contrast .inline-flex.rounded-full {
+  background-color: #000000 !important;
+  border: 2px solid #000000 !important;
+  padding: 4px !important;
+}
+
+.high-contrast #btn-finder,
+.high-contrast #btn-tasker {
+  background-color: transparent !important;
+  color: #ffffff !important;
+  border: 2px solid transparent !important;
+  opacity: 1 !important;
+}
+
+.high-contrast #btn-finder:hover,
+.high-contrast #btn-tasker:hover {
+  text-decoration: underline !important;
+  color: #ffffff !important;
+}
+
+/* Specificity override for the 'active' classes injected by JS */
+.high-contrast #btn-finder.bg-blue-50,
+.high-contrast #btn-tasker.bg-blue-50,
+.high-contrast #btn-finder.dark\:bg-blue-900\/30,
+.high-contrast #btn-tasker.dark\:bg-blue-900\/30 {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+}

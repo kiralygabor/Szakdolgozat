@@ -1,0 +1,56 @@
+<?php
+
+return [
+    'new_offer' => [
+        'subject' => 'New Offer on ":task"',
+        'greeting' => 'Hello :name!',
+        'line1' => ':user has made a :price offer on :task.',
+        'line2' => 'Message from :user:',
+        'action' => 'View Offers',
+        'line3' => 'Log in to review and accept or decline this offer.',
+        'database_title' => ':user has sent an offer',
+        'database_message' => ':user made a :price offer for ":task"',
+    ],
+    'offer_cancelled' => [
+        'subject' => 'Offer Cancelled: :task',
+        'greeting' => 'Hello :name,',
+        'line1' => ':user has cancelled their €:price offer for your task: ":task".',
+        'line2' => 'No further action is required.',
+        'database_title' => 'Offer Cancelled',
+        'database_message' => ':user cancelled their €:price offer for ":task"',
+    ],
+    'offer_accepted' => [
+        'subject' => 'Your Offer Was Accepted!',
+        'greeting' => 'Great news, :name!',
+        'accepted_text' => 'accepted',
+        'line1' => ':user has :accepted your offer for the task :task.',
+        'line2' => 'You can now start working on this task and communicate with the employer through the messaging system.',
+        'action' => 'View Task',
+        'line3' => 'Good luck with the task!',
+        'database_title' => ':user has accepted your offer',
+        'database_message' => ':user accepted your offer for ":task"',
+    ],
+    'direct_quote' => [
+        'subject' => 'New Quote Request from :user',
+        'greeting' => 'Hello :name,',
+        'line1' => ':user has requested a quote from you for their task: ":task".',
+        'line2' => 'Budget: :price',
+        'action' => 'View Quote Details',
+        'line3' => 'Log in to review the request, accept, or discuss the details with the employer.',
+        'database_title' => 'New Quote Request',
+        'database_message' => ':user has requested a quote from you for: ":task".',
+    ],
+    'direct_quote_cancelled' => [
+        'subject' => 'Quote Request Cancelled by :user',
+        'greeting' => 'Hello :name,',
+        'line1' => ':user has cancelled their quote request for the task: ":task".',
+        'line2' => 'No further action is required for this request.',
+        'database_title' => 'Quote Request Cancelled',
+        'database_message' => ':user has cancelled their quote request for: ":task".',
+    ],
+    'new_message' => [
+        'database_title' => ':user has sent a message',
+        'sent_image' => 'Sent an image: :body',
+        'sent_attachment' => 'Sent an attachment: :body',
+    ],
+];

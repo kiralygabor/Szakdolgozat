@@ -19,7 +19,7 @@ class TestUserSeeder extends Seeder
                 'first_name' => 'Teszt',
                 'last_name' => 'Elek',
                 'password' => Hash::make('password'),
-                'account_id' => 'TESTUSER001',
+                'account_id' => 'AC1007',
                 'verified' => true,
                 'phone_number' => '+36111111111',
             ]
@@ -31,7 +31,7 @@ class TestUserSeeder extends Seeder
                 'first_name' => 'Próba',
                 'last_name' => 'Péter',
                 'password' => Hash::make('password2'),
-                'account_id' => 'TESTUSER002',
+                'account_id' => 'AC1008',
                 'verified' => true,
                 'phone_number' => '+36222222222',
             ]

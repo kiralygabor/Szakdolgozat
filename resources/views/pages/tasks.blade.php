@@ -541,12 +541,6 @@
         }
     };
   </script>
-  <script type="module">
-      import { TaskReportManager } from '{{ asset('js/components/task-report-manager.js') }}';
-      document.addEventListener('DOMContentLoaded', () => {
-          new TaskReportManager();
-      });
-  </script>
   <script type="module" src="{{ asset('js/pages/tasks.js') }}"></script>
   @endpush
 @endsection

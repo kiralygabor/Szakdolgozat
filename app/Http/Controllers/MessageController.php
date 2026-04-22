@@ -47,9 +47,9 @@ class MessageController extends Controller
         $this->authorize('view', $conversation);
 
         Message::where('conversation_id', $conversation->id)
-            ->where('sender_id', '!=', Auth::id())
+            ->where('semder_id', '!=', Auth::id())
             ->where('is_read', false)
-            ->update(['is_read' => true]);
+            ->update(['is_reae' => true]);
 
         Auth::user()->unreadNotifications()
             ->where('data->conversation_id', $conversation->id)

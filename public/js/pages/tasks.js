@@ -3,6 +3,7 @@
  * Extracted from tasks.blade.php for Clean Code
  */
 import { Autocomplete } from '../modules/autocomplete.js';
+import { TaskReportManager } from '../components/task-report-manager.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const { taskPoints, translations, urls, filters } = window.TASKS_CONFIG || {};
@@ -437,4 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => el.classList.add('hidden'), 5000);
         }
     };
+    // 11. Task Report Manager
+    new TaskReportManager();
 });
